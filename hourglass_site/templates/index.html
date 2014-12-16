@@ -1,4 +1,178 @@
 {% extends "base.html" %}
+
 {% block body %}
-Hello, world!
+<form id="search" class="search" role="form">
+  <h1 class="full-width">Search</h1>
+
+  <div class="primary">
+    <input id="labor_category" name="q" placeholder="Type a labor category" class="search" type="text">
+    <button class="submit">Search</button>
+  </div>
+
+  <h2 class="full-width">Filters</h2>
+
+  <div class="filters">
+
+    <div class="filter">
+      <label for="price">Price:</label>
+      <input id="price" name="price" type="number" min="0" max="1000" step="10" placeholder="suggest an average $?">
+    </div>
+
+    <div class="filter">
+      <label for="worksite">Worksite:</label>
+      <select id="worksite" name="worksite">
+        <option value="">(all)</option>
+        <option>Environmental</option>
+        <option>AIMS</option>
+        <option>Logistics</option>
+        <option>Language Services</option>
+        <option>PES</option>
+        <option>MOBIS</option>
+        <option>Consolidated</option>
+      </select>
+    </div>
+
+    <div class="filter">
+      <label for="min_education">Minimum Education Level:</label>
+      <select id="min_education" name="min_education">
+        <option value="">(none)</option>
+        <option value="BA">Bachelors Degree</option>
+        <option value="MA">Masters Degree</option>
+        <option value="PHD">Ph.D</option>
+      </select>
+    </div>
+
+    <div class="filter">
+      <label for="min_experience">Minimum Years of Experience:</label>
+      <input id="min_experience" name="min_experience" type="number" min="0" max="50" step="1" placeholder="suggest average?">
+    </div>
+
+    <!--
+    <div class="filter">
+      <label for="fiscal_year">Fiscal Year:</label>
+      <select id="fiscal_year" name="fiscal_year">
+      </select>
+    </div>
+    -->
+
+  </div>
+
+  <div class="graph">
+    <div id="price-range" class="range-graph">
+      <span class="tick min left">
+        low: $<b class="value"></b>
+      </span>
+      <span class="tick max left">
+        high: $<b class="value"></b>
+      </span>
+      <span class="tick average mark" style="top: 100%">
+        $<b class="value"></b> average
+      </span>
+    </div>
+  </div>
+
+  <p class="full-width"><a id="permalink">&infin; permalink</a></p>
+</form>
+
+<table id="results" class="results">
+</table>
+
+<script>
+(function(exports) {
+
+  var form = d3.select("#search"),
+      inputs = form.selectAll("*[name]"),
+      formatPrice = d3.format(",.2f"),
+      permalink = d3.select("#permalink"),
+      api = new hourglass.API(),
+      request;
+
+  form.on("submit", function onsubmit() {
+    // stop the form from submitting
+    d3.event.preventDefault();
+    submit();
+  });
+
+  inputs.on("change", submit);
+
+  initialize();
+
+  function initialize() {
+    // read the query string and set values accordingly
+    var data = hourglass.qs.parse(location.search);
+    inputs.each(function() {
+      if (data.hasOwnProperty(this.name)) {
+        this.value = data[this.name];
+      }
+    });
+    submit();
+  }
+
+  function submit() {
+    var data = getFormData();
+    console.log("submitting:", data);
+
+    form.classed("loading", true);
+
+    // cancel the outbound request if there is one
+    if (request) request.abort();
+    request = api.get({
+      uri: "rates", 
+      data: data
+    }, update);
+
+    permalink.attr("href", "?" + $.param(data));
+  }
+
+  function update(error, data) {
+    // ignore aborts
+    if (error && error.statusText === "abort") return;
+
+    console.log("update:", error, data);
+
+    form.classed("loading", false);
+    request = null;
+
+    if (data) {
+      updatePrices(data);
+    } else {
+      updatePrices({minimum: 0, maximum: 1, average: 0});
+    }
+  }
+
+  function updatePrices(data) {
+    var priceScale = d3.scale.linear()
+      .domain([data.maximum, data.minimum])
+      .range([0, 100]);
+
+    var prices = d3.select("#price-range");
+
+    prices.select(".min")
+      .call(setPrice, data.minimum);
+    prices.select(".max")
+      .call(setPrice, data.maximum);
+    prices.select(".average")
+      .call(setPrice, data.average)
+      .style("top", priceScale(data.average) + "%");
+
+    console.log(data.average, priceScale(data.average));
+
+    function setPrice(selection, price) {
+      selection.select(".value")
+        .text(formatPrice(+price));
+    }
+  }
+
+  function getFormData() {
+    var data = {};
+    inputs.each(function() {
+      if (this.disabled || this.value === "") return;
+      data[this.name] = this.value;
+    });
+    return data;
+  }
+
+})(this);
+</script>
+
 {% endblock %}
