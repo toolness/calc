@@ -1,0 +1,14 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Hourglass / {% block title %}Home{% endblock %}</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="{% static 'hourglass_site/style/screen.css' %}"/>
+    <script src="{% static 'hourglass_site/js/vendor/d3.v3.min.js' %}"></script>
+  </head>
+  <body>
+    {% block body %}
+    {% endblock %}
+  </body>
+</html>

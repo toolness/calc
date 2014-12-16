@@ -23,6 +23,10 @@ SECRET_KEY = 'i=-6!=jo-qh3sh!z=uo_2)5wf*_@ogw9eam3e0_53hp4)cp53!'
 DEBUG = True
 
 TEMPLATE_DEBUG = True
+TEMPLATE_DIRS = (
+    os.path.join(BASE_DIR, 'hourglass/templates'),
+    os.path.join(BASE_DIR, 'hourglass_site/templates'),
+)
 
 ALLOWED_HOSTS = []
 
@@ -36,6 +40,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'hourglass_site',
 
     'contracts',
     'api',
@@ -77,6 +83,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 PAGINATION = 200
 
