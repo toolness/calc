@@ -148,13 +148,13 @@
       .domain([data.maximum, data.minimum])
       .range([0, 100]);
 
-    var prices = d3.select("#price-range");
+    var graph = d3.select("#price-range");
 
-    prices.select(".min")
+    graph.select(".min")
       .call(setPrice, data.minimum);
-    prices.select(".max")
+    graph.select(".max")
       .call(setPrice, data.maximum);
-    prices.select(".average")
+    graph.select(".average")
       .call(setPrice, data.average)
       .style("top", priceScale(data.average) + "%");
 
