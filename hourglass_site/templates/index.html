@@ -121,20 +121,20 @@
   }
 
   function update(error, data) {
+    form.classed("loading", false);
+    request = null;
+
     if (error) {
       // ignore aborts
       if (error.statusText === "abort") {
         return;
       } else {
-        console.error("error:", error);
+        console.warn("error:", error);
         return showError("Whoops: " + error.responseText);
       }
     }
 
-    console.log("update:", error, data);
-
-    form.classed("loading", false);
-    request = null;
+    console.log("update:", data);
 
     if (data) {
       updatePrices(data);
