@@ -28,6 +28,10 @@ class Contract(models.Model):
     hourly_rate_year4 = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     hourly_rate_year5 = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     contractor_site = models.CharField(max_length=128, null=True, blank=True)
+    schedule = models.CharField(max_length=128, null=True, blank=True)
+    business_size = models.CharField(max_length=128, null=True, blank=True)
+    sin = models.TextField(null=True, blank=True)
+
 
     search_index = VectorField()
 

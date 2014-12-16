@@ -7,7 +7,7 @@ class ContractSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Contract
-        fields = ('idv_piid', 'vendor_name', 'labor_category', 'education_level', 'min_years_experience', 'hourly_rate_year1')
+        fields = ('idv_piid', 'vendor_name', 'labor_category', 'education_level', 'min_years_experience', 'hourly_rate_year1', 'schedule', 'contractor_site', 'business_size')
 
 class PaginatedContractSerializer(pagination.PaginationSerializer):
     class Meta:

@@ -45,6 +45,10 @@ class GetRates(APIView):
         min_experience = request.QUERY_PARAMS.get('min_experience', 0)
         max_experience = request.QUERY_PARAMS.get('max_experience', 100)
         min_education = request.QUERY_PARAMS.get('min_education', None)
+        schedule = request.QUERY_PARAMS.get('schedule', None)
+        site = request.QUERY_PARAMS.get('site', None)
+        small_business = request.QUERY_PARAMS.get('small_business', None)
+
 
         contracts = Contract.objects.filter(min_years_experience__gte=min_experience, min_years_experience__lte=max_experience)
 
@@ -55,5 +59,12 @@ class GetRates(APIView):
             for index, pair in enumerate(EDUCATION_CHOICES):
                 if min_education == pair[0]:
                     contracts = contracts.filter(education_level__in=[ed[0] for ed in EDUCATION_CHOICES[index:] ])
+
+        if schedule:
+            contracts = contracts.filter(schedule__iexact=schedule)
+        if site:
+            contracts = contracts.filter(contractor_site__icontains=site)
+        if small_business == 'true':
+            contracts = contracts.filter(business_size__icontains='s')
 
         return contracts

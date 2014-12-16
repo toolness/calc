@@ -43,4 +43,30 @@ The default pagination is set to 200. You can paginate using the page parameter.
 ```
 http://localhost:8000/api/rates/?q=translator&page=2
 ```
+
+Additionally, you can also now filter by the contract schedule of the transaction, whether or not the vendor is a small business, and whether or not the vendor works on the contractor or customer site.
+
+Here is an example with all three parameters (schedule, site, and small_business) included:
+```
+http://localhost:8000/api/rates/?schedule=mobis&site=customer&small_business=true
+```
+
+For schedules, there are 7 different values that will return results (case insensitive). They are:
+ 
+ - Environmental
+ - AIMS
+ - Logistics
+ - Language Services
+ - PES
+ - MOBIS
+ - Consolidated
+
+For site, there are only 3 values (also case insensitive):
+
+ - Customer
+ - Contractor
+ - both
+
+And the small_business parameter is just a boolean (true/false) value. 
+
 More to come soon!
