@@ -158,8 +158,6 @@
       .call(setPrice, data.average)
       .style("top", priceScale(data.average) + "%");
 
-    console.log(data.average, priceScale(data.average));
-
     function setPrice(selection, price) {
       selection.select(".value")
         .text(formatPrice(+price));
