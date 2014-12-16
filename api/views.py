@@ -50,7 +50,7 @@ class GetRates(APIView):
         small_business = request.QUERY_PARAMS.get('small_business', None)
 
 
-        contracts = Contract.objects.filter(min_years_experience__gte=min_experience, min_years_experience__lte=max_experience)
+        contracts = Contract.objects.filter(min_years_experience__gte=min_experience, min_years_experience__lte=max_experience).order_by('hourly_rate_year1')
 
         if query:
             contracts = contracts.search(query, raw=True)
