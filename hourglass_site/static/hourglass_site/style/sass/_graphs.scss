@@ -27,8 +27,8 @@ $mark-color: #000;
     width: auto;
     white-space: nowrap;
     left: 50%;
-    height: 1.4em; // TODO: parameterize
-    margin-top: -.7em; // TODO: parameterize
+    height: 1.6em; // TODO: parameterize
+    margin-top: -.8em; // TODO: parameterize
     padding-left: .5em;
 
     @include transition(top .5s ease-in);
