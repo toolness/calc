@@ -100,11 +100,7 @@
   function initialize() {
     // read the query string and set values accordingly
     var data = hourglass.qs.parse(location.search);
-    inputs.each(function() {
-      if (data.hasOwnProperty(this.name)) {
-        this.value = data[this.name];
-      }
-    });
+    setFormData(data);
     submit();
   }
 
@@ -125,8 +121,15 @@
   }
 
   function update(error, data) {
-    // ignore aborts
-    if (error && error.statusText === "abort") return;
+    if (error) {
+      // ignore aborts
+      if (error.statusText === "abort") {
+        return;
+      } else {
+        console.error("error:", error);
+        return showError("Whoops: " + error.responseText);
+      }
+    }
 
     console.log("update:", error, data);
 
@@ -170,6 +173,19 @@
       data[this.name] = this.value;
     });
     return data;
+  }
+
+  function setFormData(data) {
+    if (!data) return;
+    inputs.each(function() {
+      if (data.hasOwnProperty(this.name)) {
+        this.value = data[this.name];
+      }
+    });
+  }
+
+  function showError(error) {
+    alert(error);
   }
 
 })(this);
