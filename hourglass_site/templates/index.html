@@ -83,6 +83,11 @@
     </div>
   </div>
 
+  <div class="graph">
+    <div id="hourly-wages" class="bar-chart">
+    </div>
+  </div>
+
   <p class="full-width"><a id="permalink">&infin; permalink</a></p>
 </form>
 
@@ -95,6 +100,7 @@
   var form = d3.select("#search"),
       inputs = form.selectAll("*[name]"),
       formatPrice = d3.format(",.2f"),
+      formatCommas = d3.format(","),
       permalink = d3.select("#permalink"),
       api = new hourglass.API(),
       request;
@@ -150,8 +156,10 @@
 
     if (data) {
       updatePrices(data);
+      updateHourlyWages(data.hourly_wage_stats);
     } else {
       updatePrices({minimum: 0, maximum: 1, average: 0});
+      updateHourlyWages([]);
     }
   }
 
@@ -174,6 +182,11 @@
       selection.select(".value")
         .text(formatPrice(+price));
     }
+  }
+
+  function updateHourlyWages(stats) {
+    var graph = d3.select("#hourly-wages");
+    graph.text("got " + formatCommas(stats.length) + " hourly wages");
   }
 
   function getFormData() {
