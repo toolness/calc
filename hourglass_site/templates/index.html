@@ -1,12 +1,23 @@
 {% extends "base.html" %}
 
 {% block body %}
+<style scoped>
+  div.primary {
+    position: relative;
+  }
+
+  #permalink {
+    position: absolute;
+    right: 0;
+  }
+</style>
 <form id="search" class="search" role="form">
   <h1 class="full-width">Search</h1>
 
   <div class="primary">
     <input id="labor_category" name="q" placeholder="Type a labor category" class="search" type="text">
     <button class="submit">Search</button>
+    <a id="permalink">&infin; permalink</a>
   </div>
 
   <h2 class="full-width">Filters</h2>
@@ -67,6 +78,12 @@
     </div>
     -->
 
+    <!-- FIXME: this isn't a "filter" -->
+    <div class="status">
+      Matching rows: <span id="results-total">(none)</span>
+      <a href="#results-table">view first <span id="results-count">x</span> rows</a>
+    </div>
+
   </div>
 
   <div class="graph">
@@ -88,11 +105,20 @@
     <div id="hourly-wages" class="bar-chart">
     </div>
   </div>
-
-  <p class="full-width"><a id="permalink">&infin; permalink</a></p>
 </form>
 
-<table id="results" class="results">
+<table id="results-table" class="results">
+  <thead>
+    <tr>
+      <th data-key="price" data-format="$%,">Price</th>
+      <th class="wage" data-format="$%.2f">Rate</th>
+      <th data-key="education_level">Min. Education</th>
+      <th data-key="min_years_experience">Min. Experience</th>
+      <th data-key="site">Worksite</th>
+    </tr>
+  </thead>
+  <tbody>
+  </tbody>
 </table>
 
 <script>
@@ -104,7 +130,11 @@
       formatCommas = d3.format(","),
       permalink = d3.select("#permalink"),
       api = new hourglass.API(),
+      wageKey = "hourly_rate_year1",
       request;
+
+  d3.select("th.wage")
+    .attr("data-key", wageKey);
 
   form.on("submit", function onsubmit() {
     // stop the form from submitting
@@ -155,12 +185,20 @@
 
     console.log("update:", data);
 
+    d3.select("#results-total")
+      .text(data ? formatCommas(data.count) : "(none)");
+
     if (data) {
       updatePrices(data);
       updateHourlyWages(data.hourly_wage_stats, [data.minimum, data.maximum]);
+      data.results.sort(function(a, b) {
+        return d3.descending(+a[wageKey], +b[wageKey]);
+      });
+      updateResults(data.results);
     } else {
       updatePrices({minimum: 0, maximum: 1, average: 0});
       updateHourlyWages([], [0, 0]);
+      updateResults([]);
     }
   }
 
@@ -244,6 +282,52 @@
       });
   }
 
+  function updateResults(results) {
+    d3.select("#results-count")
+      .text(formatCommas(results.length));
+
+    var table = d3.select("#results-table"),
+        thead = table.select("thead"),
+        columns = thead.selectAll("th")
+          .datum(function() {
+            return {
+              key: this.getAttribute("data-key"),
+              format: getFormat(this.getAttribute("data-format"))
+            };
+          })
+          .data(),
+        tbody = table.select("tbody");
+
+    var tr = tbody.selectAll("tr")
+      .data(results);
+
+    tr.exit().remove();
+    tr.enter().append("tr")
+      .selectAll("td")
+        .data(columns)
+        .enter()
+        .append("td")
+          .attr("class", function(key) {
+            return "column-" + key;
+          });
+
+    tr.selectAll("td")
+      .data(function(d) {
+        return columns.map(function(column) {
+          var key = column.key,
+              value = d[key];
+          return {
+            column: column,
+            row: d,
+            key: key,
+            value: value,
+            string: column.format(value)
+          };
+        });
+      })
+      .text(function(d) { return d.string; });
+  }
+
   function getFormData() {
     var data = {};
     inputs.each(function() {
@@ -264,6 +348,21 @@
 
   function showError(error) {
     alert(error);
+  }
+
+  function getFormat(spec) {
+    if (!spec) return function(d) { return d; };
+
+    var index = spec.indexOf("%");
+    if (index === -1) {
+      return d3.format(spec);
+    }
+    var prefix = spec.substr(0, index),
+        format = d3.format(spec.substr(index + 1));
+    return function(str) {
+      if (!str) return "";
+      return prefix + format(+str);
+    };
   }
 
 })(this);

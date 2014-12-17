@@ -35,4 +35,11 @@ form.search {
     padding: 1em;
     margin-bottom: 1em;
   }
+
+  div.status {
+    @include span-columns(12);
+    @include omega();
+    background: #f9f9f9;
+    padding: .5em 1em;
+  }
 }
