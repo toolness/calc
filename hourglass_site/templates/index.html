@@ -101,11 +101,14 @@
       </div>
     </div>
 
+    <!--
     <div class="graph">
       <h6 class="title">Wages for years of experience</h6>
       <div id="hourly-wages" class="bar-chart">
       </div>
     </div>
+    -->
+
   </form>
 
   <table id="results-table" class="results">
@@ -192,14 +195,11 @@
 
     if (data) {
       updatePrices(data);
-      updateHourlyWages(data.hourly_wage_stats, [data.minimum, data.maximum]);
-      data.results.sort(function(a, b) {
-        return d3.descending(+a[wageKey], +b[wageKey]);
-      });
+      // updateHourlyWages(data.hourly_wage_stats, [data.minimum, data.maximum]);
       updateResults(data.results);
     } else {
       updatePrices({minimum: 0, maximum: 1, average: 0});
-      updateHourlyWages([], [0, 0]);
+      // updateHourlyWages([], [0, 0]);
       updateResults([]);
     }
   }
@@ -287,6 +287,12 @@
   function updateResults(results) {
     d3.select("#results-count")
       .text(formatCommas(results.length));
+
+    /*
+    results.sort(function(a, b) {
+      return d3.descending(+a[wageKey], +b[wageKey]);
+    });
+    */
 
     var table = d3.select("#results-table"),
         thead = table.select("thead"),
