@@ -28,7 +28,7 @@ class GetRates(APIView):
         serializer.data['minimum'] = contracts_all.aggregate(Min(wage_field))[wage_field + '__min']
         serializer.data['maximum'] = contracts_all.aggregate(Max(wage_field))[wage_field + '__max']
 
-        hourly_wage_stats = contracts_all.values('min_years_experience').annotate(average_wage=Avg(wage_field), min_wage=Min(wage_field), max_wage=Max(wage_field))
+        hourly_wage_stats = contracts_all.values('min_years_experience').annotate(average_wage=Avg(wage_field), min_wage=Min(wage_field), max_wage=Max(wage_field)).order_by()
 
         #Avg always returns float, so make it a fixed point string in each dict
         for item in hourly_wage_stats:
