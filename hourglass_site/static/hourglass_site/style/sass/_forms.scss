@@ -1,6 +1,4 @@
 form.search {
-  @include outer-container;
-
   .full-width {
     @include span-columns(12);
     @include omega();
