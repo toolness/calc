@@ -10,6 +10,10 @@
     position: absolute;
     right: 0;
   }
+
+  th.wide {
+    width: 30%;
+  }
 </style>
 <div class="container">
   <form id="search" class="search" role="form">
@@ -111,8 +115,8 @@
     </caption>
     <thead>
       <tr>
-        <th data-key="vendor_name">Vendor</th>
-        <th data-key="labor_category">Labor Category</th>
+        <th class="wide" data-key="vendor_name">Vendor</th>
+        <th class="wide" data-key="labor_category">Labor Category</th>
         <th class="wage" data-format="$%,.02f">Price</th>
         <th data-key="education_level">Min. Education</th>
         <th data-key="min_years_experience">Min. Experience</th>
@@ -312,8 +316,8 @@
         .data(columns)
         .enter()
         .append("td")
-          .attr("class", function(key) {
-            return "column-" + key;
+          .attr("class", function(column) {
+            return "column-" + column.key;
           });
 
     tr.selectAll("td")
