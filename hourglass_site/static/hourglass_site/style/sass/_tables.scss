@@ -1,0 +1,14 @@
+td, th, caption {
+  padding: .25em;
+  vertical-align: top;
+}
+
+tbody tr:nth-child(odd) td {
+  background: #f9f9f9;
+}
+
+table caption {
+  color: #666;
+  text-align: left;
+  font-weight: bold;
+}
