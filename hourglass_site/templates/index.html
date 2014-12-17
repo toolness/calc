@@ -79,12 +79,6 @@
       </div>
       -->
 
-      <!-- FIXME: this isn't a "filter" -->
-      <div class="status">
-        Matching rows: <span id="results-total">(none)</span>
-        <a href="#results-table">view first <span id="results-count">x</span> rows</a>
-      </div>
-
     </div>
 
     <div class="graph">
@@ -112,6 +106,9 @@
   </form>
 
   <table id="results-table" class="results">
+    <caption>
+      <span id="results-total">...</span> matching rows (showing <span id="results-count">...</span>)
+    </caption>
     <thead>
       <tr>
         <th data-key="vendor_name">Vendor</th>
