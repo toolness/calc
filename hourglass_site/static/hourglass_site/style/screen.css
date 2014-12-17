@@ -244,67 +244,68 @@ input[type="submit"] {
   vertical-align: middle;
   white-space: nowrap; }
 
-form.search {
+.container {
   max-width: 68em;
   margin-left: auto;
   margin-right: auto; }
-  form.search:after {
+  .container:after {
     content: "";
     display: table;
     clear: both; }
-  form.search .full-width {
-    float: left;
-    display: block;
-    margin-right: 2.35765%;
-    width: 100%;
+
+form.search .full-width {
+  float: left;
+  display: block;
+  margin-right: 2.35765%;
+  width: 100%;
+  margin-right: 0; }
+  form.search .full-width:last-child {
     margin-right: 0; }
-    form.search .full-width:last-child {
-      margin-right: 0; }
-  form.search div.primary input {
-    display: inline-block;
-    width: 20em; }
-  form.search div.filters {
+form.search div.primary input {
+  display: inline-block;
+  width: 20em; }
+form.search div.filters {
+  float: left;
+  display: block;
+  margin-right: 2.35765%;
+  width: 57.35098%; }
+  form.search div.filters:last-child {
+    margin-right: 0; }
+  form.search div.filters .filter {
     float: left;
     display: block;
     margin-right: 2.35765%;
-    width: 57.35098%; }
-    form.search div.filters:last-child {
+    width: 48.82117%;
+    padding: .5em 1em;
+    background: #eee;
+    margin-bottom: 1em;
+    min-height: 6em !important; }
+    form.search div.filters .filter:last-child {
       margin-right: 0; }
-    form.search div.filters .filter {
-      float: left;
-      display: block;
-      margin-right: 2.35765%;
-      width: 48.82117%;
-      padding: .5em 1em;
-      background: #eee;
-      margin-bottom: 1em;
-      min-height: 6em !important; }
-      form.search div.filters .filter:last-child {
-        margin-right: 0; }
-      form.search div.filters .filter:nth-child(2n) {
-        margin-right: 0; }
-      form.search div.filters .filter:nth-child(2n+1) {
-        clear: left; }
-  form.search div.graph {
-    float: left;
-    display: block;
-    margin-right: 2.35765%;
-    width: 40.29137%;
-    margin-right: 0;
-    padding: 1em;
-    margin-bottom: 1em; }
-    form.search div.graph:last-child {
+    form.search div.filters .filter:nth-child(2n) {
       margin-right: 0; }
-  form.search div.status {
-    float: left;
-    display: block;
-    margin-right: 2.35765%;
-    width: 100%;
-    margin-right: 0;
-    background: #f9f9f9;
-    padding: .5em 1em; }
-    form.search div.status:last-child {
-      margin-right: 0; }
+    form.search div.filters .filter:nth-child(2n+1) {
+      clear: left; }
+form.search div.graph {
+  float: left;
+  display: block;
+  margin-right: 2.35765%;
+  width: 40.29137%;
+  margin-right: 0;
+  padding: 1em;
+  margin-bottom: 1em; }
+  form.search div.graph:last-child {
+    margin-right: 0; }
+form.search div.status {
+  float: left;
+  display: block;
+  margin-right: 2.35765%;
+  width: 100%;
+  margin-right: 0;
+  background: #f9f9f9;
+  padding: .5em 1em; }
+  form.search div.status:last-child {
+    margin-right: 0; }
 
 .graph > .title {
   margin-bottom: .5em; }
