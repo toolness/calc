@@ -1,3 +1,14 @@
-from django.test import TestCase
+from django.test import TestCase, Client
 
-# Create your tests here.
+class ContractsTest(TestCase):
+    """ tests for the /api/rates endpoint """
+    fixtures = ['contracts.json']
+
+    def setUp(self):
+        self.c = Client()
+        self.path = '/api/rates/'
+
+    def test_empty_results(self):
+        resp = self.c.get(self.path, {'q': 'nsfr87y3487h3rufbf'})
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.data['results'], [])
