@@ -112,7 +112,7 @@
     <tr>
       <th data-key="vendor_name">Vendor</th>
       <th data-key="labor_category">Labor Category</th>
-      <th class="wage" data-format="$%,">Price</th>
+      <th class="wage" data-format="$%,.02f">Price</th>
       <th data-key="education_level">Min. Education</th>
       <th data-key="min_years_experience">Min. Experience</th>
     </tr>
@@ -126,7 +126,7 @@
 
   var form = d3.select("#search"),
       inputs = form.selectAll("*[name]"),
-      formatPrice = d3.format(",.2f"),
+      formatPrice = d3.format(",.02f"),
       formatCommas = d3.format(","),
       permalink = d3.select("#permalink"),
       api = new hourglass.API(),
