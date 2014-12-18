@@ -68,9 +68,13 @@
         if (i === -1) {
           data[part] = true;
         } else {
-          var key = part.substr(0, i),
-              val = part.substr(i + 1);
-          data[unescape(key)] = unescape(val);
+          var key = unescape(part.substr(0, i)),
+              val = unescape(part.substr(i + 1));
+          switch (val) {
+            case "true": val = true; break;
+            case "false": val = false; break;
+          }
+          data[key] = val;
         }
       });
       return data;
