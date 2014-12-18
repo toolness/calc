@@ -13,6 +13,17 @@
 
   hourglass.API.prototype = {
     /**
+     * get the fully qualified URL for a given request, specified either as a
+     * URI string or a "request" object with either a .url or .uri property.
+     */
+    url: function(request) {
+      var uri = (typeof request === "object")
+        ? request.uri || request.url
+        : request;
+      return (this.path + uri).replace(/\/\/+/g, "/");
+    },
+
+    /**
      * perform an API request, where `request` is a URI (string)
      * or an object with a `uri` property and an optional `data`
      * object containing query string parameters. The `callback`
@@ -27,13 +38,11 @@
      * });
      */
     get: function(request, callback) {
-      var url = (typeof request === "object")
-            ? request.uri || request.url
-            : request,
+      var url = this.url(request),
           data = extend({
             format: "json"
           }, request.data);
-      return $.getJSON(this.path + url, data)
+      return $.getJSON(url, data)
         .done(function(data) {
           return callback(null, data);
         })
