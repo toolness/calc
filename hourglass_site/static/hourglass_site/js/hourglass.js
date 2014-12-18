@@ -82,6 +82,18 @@
     format: $.param
   };
 
+  // identity function
+  hourglass.identity = function identity(d) {
+    return d;
+  };
+
+  // noop function
+  hourglass.noop = function noop() {
+  };
+
+  // export hourglass.extend()
+  hourglass.extend = extend;
+
   /**
    * private utility functions
    */
