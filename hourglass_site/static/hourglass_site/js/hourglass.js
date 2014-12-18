@@ -57,6 +57,8 @@
    */
 
   hourglass.qs = {
+
+    // parse a query string into a data object
     parse: function(str) {
       // return an empty object if there's no string or values
       if (!str || str === "?") return {};
@@ -79,7 +81,26 @@
       });
       return data;
     },
-    format: $.param
+
+    // format a query data object as a string
+    format: $.param,
+
+    // coerce a string into a query string data object
+    coerce: function(data) {
+      return (data && typeof data === "string")
+        ? hourglass.qs.parse(data)
+        : data || {};
+    },
+
+    // merge two or more query strings or data objects
+    // into a single data object
+    merge: function(data) {
+      data = hourglass.qs.coerce(data);
+      for (var i = 1; i < arguments.length; i++) {
+        hourglass.extend(data, hourglass.qs.coerce(arguments[i]));
+      }
+      return data;
+    }
   };
 
   // identity function

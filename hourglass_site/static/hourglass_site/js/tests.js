@@ -4,26 +4,73 @@ var test = QUnit.test,
 module("hourglass");
 
 test("extend()", function(assert) {
-  assert.deepEqual(hourglass.extend({}, null), {}, "handles nulls gracefully");
-  assert.deepEqual(hourglass.extend({foo: "bar"}, {baz: "qux"}), {foo: "bar", baz: "qux"}, "extends one object with another's keys");
-  assert.deepEqual(hourglass.extend({foo: "bar"}, {baz: "qux"}, {quux: "quuux"}), {foo: "bar", baz: "qux", quux: "quuux"}, "extends one object with two objects' keys");
+  var extend = hourglass.extend;
+  assert.deepEqual(
+    extend({}, null),
+    {},
+    "handles nulls gracefully");
+  assert.deepEqual(
+    extend({foo: "bar"}, {baz: "qux"}),
+    {foo: "bar", baz: "qux"},
+    "extends one object with another's keys");
+  assert.deepEqual(
+    extend({foo: "bar"}, {baz: "qux"}, {quux: "quuux"}),
+    {foo: "bar", baz: "qux", quux: "quuux"},
+    "extends one object with two objects' keys");
 });
 
 module("hourglass.qs");
 
 test("parse()", function(assert) {
-
-  assert.deepEqual(hourglass.qs.parse("foo=bar"), {foo: "bar"},
+  var parse = hourglass.qs.parse;
+  assert.deepEqual(
+    parse("foo=bar"),
+    {foo: "bar"},
     "parses a single value without ? prefix");
-  assert.deepEqual(hourglass.qs.parse("?foo=bar"), {foo: "bar"},
+  assert.deepEqual(
+    parse("?foo=bar"),
+    {foo: "bar"},
     "parses a single value with ? prefix");
-  assert.deepEqual(hourglass.qs.parse("?foo=bar&baz=qux"), {foo: "bar", baz: "qux"},
+  assert.deepEqual(
+    parse("?foo=bar&baz=qux"),
+    {foo: "bar", baz: "qux"},
     "parses two values");
-  assert.deepEqual(hourglass.qs.parse("?foo"), {foo: true},
+  assert.deepEqual(
+    parse("?foo"),
+    {foo: true},
     "parses empty values as true");
-  assert.deepEqual(hourglass.qs.parse("?foo=true&bar=false"), {foo: true, bar: false},
+  assert.deepEqual(
+    parse("?foo=true&bar=false"),
+    {foo: true, bar: false},
     "parses boolean values");
+});
 
+test("coerce()", function(assert) {
+  var coerce = hourglass.qs.coerce;
+  assert.deepEqual(
+    coerce({foo: "bar"}),
+    {foo: "bar"},
+    "passes through objects");
+  assert.deepEqual(
+    coerce("foo=bar"),
+    {foo: "bar"},
+    "parses strings");
+  assert.deepEqual(
+    coerce(null),
+    {},
+    "turns falsy values into objects");
+});
+
+test("merge()", function(assert) {
+  var merge = hourglass.qs.merge;
+  assert.deepEqual(
+    merge("foo=bar", {baz: "qux"}),
+    {foo: "bar", baz: "qux"},
+    "merges a string with an object");
+  assert.deepEqual(
+    merge("foo=bar", "?baz=qux"),
+    {foo: "bar", baz: "qux"},
+    "merges an object with a string");
 });
 
 module("hourglass.API");
