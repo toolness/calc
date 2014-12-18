@@ -1,0 +1,17 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Hourglass / JavaScript Unit Tests</title>
+    <link rel="stylesheet" href="//code.jquery.com/qunit/qunit-1.16.0.css">
+    <script src="{% static 'hourglass_site/js/vendor/jquery.min.js' %}"></script>
+    <script src="{% static 'hourglass_site/js/hourglass.js' %}"></script>
+  </head>
+  <body>
+    <div id="qunit"></div>
+    <div id="qunit-fixture"></div>
+    <script src="//code.jquery.com/qunit/qunit-1.16.0.js"></script>
+    <script src="{% static 'hourglass_site/js/tests.js' %}"></script>
+  </body>
+</html>
