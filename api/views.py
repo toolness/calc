@@ -3,12 +3,21 @@ from django.http import HttpResponse, HttpResponseBadRequest
 from django.core.paginator import Paginator
 from django.conf import settings
 from django.db.models import Avg, Max, Min, Count
+from decimal import Decimal
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from api.serializers import PaginatedContractSerializer
 from contracts.models import Contract, EDUCATION_CHOICES
+
+def convert_to_tsquery(query):
+    #converts multi-word phrases into AND boolean queries for postgresql
+    if ' ' in query:
+        words = query.split(' ')
+        return ' & '.join(words)
+    else:
+        return query
 
 class GetRates(APIView):
 
@@ -18,25 +27,23 @@ class GetRates(APIView):
         wage_field = 'hourly_rate_year1'
         
         contracts_all = self.get_queryset(request, wage_field)
-
-
-        paginator = Paginator(contracts_all, settings.PAGINATION)
-        contracts = paginator.page(page)
-
-        serializer = PaginatedContractSerializer(contracts)
+        page_stats = {}
 
         if contracts_all:
-            serializer.data['average'] = "{0:.2f}".format(contracts_all.aggregate(Avg(wage_field))[wage_field + '__avg'])
-            serializer.data['minimum'] = contracts_all.aggregate(Min(wage_field))[wage_field + '__min']
-            serializer.data['maximum'] = contracts_all.aggregate(Max(wage_field))[wage_field + '__max']
-
+            page_stats['average'] = Decimal(contracts_all.aggregate(Avg(wage_field))[wage_field + '__avg']).quantize(Decimal(10) ** -2)
+            page_stats['minimum'] = contracts_all.aggregate(Min(wage_field))[wage_field + '__min']
+            page_stats['maximum'] = contracts_all.aggregate(Max(wage_field))[wage_field + '__max']
             hourly_wage_stats = contracts_all.values('min_years_experience').annotate(average_wage=Avg(wage_field), min_wage=Min(wage_field), max_wage=Max(wage_field), num_contracts=Count('sin')).order_by()
 
             #Avg always returns float, so make it a fixed point string in each dict
             for item in hourly_wage_stats:
-                item['average_wage'] = "{0:.2f}".format(item['average_wage'])
+                item['average_wage'] = Decimal(item['average_wage']).quantize(Decimal(10) ** -2)
 
-            serializer.data['hourly_wage_stats'] = sorted(hourly_wage_stats, key=lambda mye: mye['min_years_experience'])
+            page_stats['hourly_wage_stats'] = sorted(hourly_wage_stats, key=lambda mye: mye['min_years_experience'])
+
+        paginator = Paginator(contracts_all, settings.PAGINATION)
+        contracts = paginator.page(page)
+        serializer = PaginatedContractSerializer(contracts, context=page_stats)
 
         return Response(serializer.data)
 
@@ -55,6 +62,7 @@ class GetRates(APIView):
         contracts = Contract.objects.filter(min_years_experience__gte=min_experience, min_years_experience__lte=max_experience).order_by(wage_field)
 
         if query:
+            query = convert_to_tsquery(query)
             contracts = contracts.search(query, raw=True)
 
         if min_education:
