@@ -1,8 +1,19 @@
 (function(hourglass) {
 
   /**
+   * The API class is used to access the Hourglass REST API. Usage:
+   *
    * var api = hourglass.API();
-   * api.get("
+   * api.get("uri", function(error, data) {
+   *   if (error) return console.log("error:", error.statusText);
+   * });
+   *
+   * // e.g. for paginated responses
+   * api.get({
+   *   uri: "rates",
+   *   data: {page: 2, ...}
+   * }, function(error, data) {
+   * });
    */
   hourglass.API = function(path) {
     if (!(this instanceof hourglass.API)) {
@@ -20,6 +31,7 @@
       var uri = (typeof request === "object")
         ? request.uri || request.url
         : request;
+      // TODO: merge request.data if provided and uri includes "?"
       return (this.path + uri).replace(/\/\/+/g, "/");
     },
 
@@ -39,9 +51,9 @@
      */
     get: function(request, callback) {
       var url = this.url(request),
-          data = extend({
+          data = hourglass.extend({
             format: "json"
-          }, request.data);
+          }, hourglass.qs.coerce(request.data));
       return $.getJSON(url, data)
         .done(function(data) {
           return callback(null, data);
