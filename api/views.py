@@ -11,13 +11,17 @@ from rest_framework.views import APIView
 from api.serializers import PaginatedContractSerializer
 from contracts.models import Contract, EDUCATION_CHOICES
 
-def convert_to_tsquery(query):
+def convert_to_tsquery(query, autocomplete=False):
     #converts multi-word phrases into AND boolean queries for postgresql
+    tsquery = query
     if ' ' in query:
         words = query.split(' ')
-        return ' & '.join(words)
-    else:
-        return query
+        tsquery = ' & '.join(words)
+
+    if autocomplete:
+        tsquery = tsquery + ':*'
+
+    return tsquery
 
 class GetRates(APIView):
 
@@ -80,3 +84,17 @@ class GetRates(APIView):
             contracts = contracts.filter(**{wage_field + '__exact': price})
 
         return contracts
+
+
+class GetAutocomplete(APIView):
+
+    def get(self, request, format=None):
+        q = request.QUERY_PARAMS.get('q', False)
+
+        if q:
+            data = Contract.objects.search(convert_to_tsquery(q, autocomplete=True), raw=True).values('labor_category').annotate(count=Count('labor_category')).order_by('-count')
+            return Response(data)
+
+
+
+
