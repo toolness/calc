@@ -308,8 +308,11 @@ form.search div.status {
     margin-right: 0; }
 
 td, th, caption {
-  padding: .25em;
+  padding: .25em .5em;
   vertical-align: top; }
+
+thead th {
+  vertical-align: bottom; }
 
 tbody tr:nth-child(odd) td {
   background: #f9f9f9; }

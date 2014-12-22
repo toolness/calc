@@ -11,8 +11,19 @@
     right: 0;
   }
 
-  th.wide {
-    width: 30%;
+  thead th {
+    vertical-align: bottom;
+  }
+
+  th.column-labor_category {        width: 25%; }
+  th.column-education_level {       width: 10%; }
+  th.column-min_years_experience {  width: 10%; }
+  th.column-wage {                  width:  8%; }
+  th.column-idv_piid {              width: 12%; }
+  th.column-vendor_name {           width: 35%; }
+
+  td.column-idv_piid {
+    white-space: nowrap;
   }
 </style>
 <div class="container">
@@ -115,11 +126,12 @@
     </caption>
     <thead>
       <tr>
-        <th class="wide" data-key="vendor_name">Vendor</th>
-        <th class="wide" data-key="labor_category">Labor Category</th>
+        <th data-key="labor_category">Labor Category</th>
+        <th data-key="education_level">Minimum Education</th>
+        <th data-key="min_years_experience">Minimum Experience</th>
         <th class="wage" data-format="$%,.02f">Price</th>
-        <th data-key="education_level">Min. Education</th>
-        <th data-key="min_years_experience">Min. Experience</th>
+        <th data-key="idv_piid">Contract #</th>
+        <th data-key="vendor_name">Vendor</th>
       </tr>
     </thead>
     <tbody>
@@ -303,6 +315,9 @@
               key: this.getAttribute("data-key"),
               format: getFormat(this.getAttribute("data-format"))
             };
+          })
+          .each(function(d) {
+            this.classList.add("column-" + d.key);
           })
           .data(),
         tbody = table.select("tbody");
