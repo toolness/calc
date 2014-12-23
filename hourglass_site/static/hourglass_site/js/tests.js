@@ -43,6 +43,14 @@ test("parse()", function(assert) {
     parse("?foo=true&bar=false"),
     {foo: true, bar: false},
     "parses boolean values");
+  assert.deepEqual(
+    parse("?foo=foo+bar"),
+    {foo: "foo bar"},
+    "parses '+' as space");
+  assert.deepEqual(
+    parse("?foo=foo%20bar"),
+    {foo: "foo bar"},
+    "parses '%20' as spaces");
 });
 
 test("coerce()", function(assert) {
