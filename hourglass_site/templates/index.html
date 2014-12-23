@@ -1,4 +1,9 @@
 {% extends "base.html" %}
+{% load staticfiles %}
+
+{% block head %}
+<script src="{% static 'hourglass_site/js/vendor/jquery.auto-complete.min.js' %}"></script>
+{% endblock %}
 
 {% block body %}
 <style scoped>
@@ -149,6 +154,7 @@
       permalink = d3.select("#permalink"),
       api = new hourglass.API(),
       wageKey = "hourly_rate_year1",
+      $search = $("#labor_category"),
       request;
 
   d3.select("th.wage")
@@ -169,6 +175,41 @@
     var data = hourglass.qs.parse(location.search);
     setFormData(data);
     submit();
+
+    var autoCompReq;
+    $search.autoComplete({
+      minChars: 2,
+      delay: 5,
+      cache: true,
+      source: function(term, done) {
+        // console.log("search:", term);
+        if (autoCompReq) autoCompReq.abort();
+        autoCompReq = api.get({
+          uri: "search",
+          data: {q: term},
+        }, function(error, result) {
+          autoCompReq = null;
+          if (error) return done([]);
+          var categories = result.slice(0, 20).map(function(d) {
+            return {
+              term: d.labor_category,
+              count: d.count
+            };
+          });
+          return done(categories);
+        });
+      },
+      renderItem: function(item, search) {
+        var re = new RegExp("(" + search.split(" ").join("|") + ")", "gi"),
+            term = item.term || item;
+        return [
+          '<div class="autocomplete-suggestion" data-val="' + term + '">',
+            '<span class="term">', term.replace(re, "<b>$1</b>"), '</span>',
+            '<span class="count">', item.count, '</span>',
+          '</div>'
+        ].join("");
+      }
+    });
   }
 
   function submit() {
