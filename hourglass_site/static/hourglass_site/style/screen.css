@@ -418,4 +418,24 @@ table caption {
         font-size: .5em;
         margin-left: .5em; }
 
+.autocomplete-suggestions {
+  position: absolute;
+  display: none;
+  z-index: 9999;
+  overflow: hidden;
+  background: #fff;
+  max-height: 300px;
+  overflow: hidden;
+  overflow-y: auto;
+  border: 1px solid #ccc; }
+  .autocomplete-suggestions .autocomplete-suggestion {
+    position: relative;
+    padding: .25em .5em; }
+    .autocomplete-suggestions .autocomplete-suggestion .count {
+      position: absolute;
+      right: .5em;
+      text-align: right; }
+    .autocomplete-suggestions .autocomplete-suggestion.selected {
+      background: #f9f9f9; }
+
 /*# sourceMappingURL=screen.css.map */
