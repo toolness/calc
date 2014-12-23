@@ -30,6 +30,12 @@
   td.column-idv_piid {
     white-space: nowrap;
   }
+
+  #export-data {
+    position: absolute;
+    right: 0;
+  }
+
 </style>
 <div class="container">
   <form id="search" class="search" role="form">
@@ -128,6 +134,7 @@
   <table id="results-table" class="results">
     <caption>
       <span id="results-total">...</span> matching rows (showing <span id="results-count">...</span>)
+      <a id="export-data" class="button" href="/rates/?format=csv">Export Data</a>
     </caption>
     <thead>
       <tr>
@@ -225,7 +232,17 @@
       data: data
     }, update);
 
-    permalink.attr("href", "?" + $.param(data));
+
+    var exportData = hourglass.extend({format: "csv"}, data);
+    d3.select("#export-data")
+      .attr("href", function() {
+        return [
+          this.href.split("?").shift(),
+          hourglass.qs.format(exportData)
+        ].join("?");
+      });
+
+    permalink.attr("href", "?" + hourglass.qs.format(data));
   }
 
   function update(error, data) {
