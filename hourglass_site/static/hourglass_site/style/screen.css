@@ -308,8 +308,11 @@ form.search div.status {
     margin-right: 0; }
 
 td, th, caption {
-  padding: .25em;
+  padding: .25em .5em;
   vertical-align: top; }
+
+thead th {
+  vertical-align: bottom; }
 
 tbody tr:nth-child(odd) td {
   background: #f9f9f9; }
@@ -414,5 +417,25 @@ table caption {
         color: #666;
         font-size: .5em;
         margin-left: .5em; }
+
+.autocomplete-suggestions {
+  position: absolute;
+  display: none;
+  z-index: 9999;
+  overflow: hidden;
+  background: #fff;
+  max-height: 300px;
+  overflow: hidden;
+  overflow-y: auto;
+  border: 1px solid #ccc; }
+  .autocomplete-suggestions .autocomplete-suggestion {
+    position: relative;
+    padding: .25em .5em; }
+    .autocomplete-suggestions .autocomplete-suggestion .count {
+      position: absolute;
+      right: .5em;
+      text-align: right; }
+    .autocomplete-suggestions .autocomplete-suggestion.selected {
+      background: #f9f9f9; }
 
 /*# sourceMappingURL=screen.css.map */

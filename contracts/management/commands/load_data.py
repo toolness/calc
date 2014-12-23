@@ -3,17 +3,28 @@ from django.conf import settings
 from contracts.models import Contract
 import csv
 import os
-from datetime import datetime
+from datetime import datetime, date
 
 class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
+        print("====== Begin load_data task ======")
+
         data_file = csv.reader(open(os.path.join(settings.BASE_DIR, 'contracts/docs/hourly_prices.csv'), 'r'))
+        
         #skip header row
         next(data_file)
-        
+
+        #used for removing expired contracts
+        today = date.today()
+
         for line in data_file:
+
+            #replace annoying msft carraige return
+            for num in range(0, len(line)):
+                line[num] = line[num].replace("_x000d_", "")
+
             try:  
                 if line[0]:
                     #create contract record, unique to vendor, labor cat
@@ -55,11 +66,19 @@ class Command(BaseCommand):
                         if rate and rate.strip() != '':
                             setattr(contract, 'hourly_rate_year' + str(count+2), contract.normalize_rate(rate))
                     
-                    
+                    if contract.contract_end > today and contract.contract_start < today:
+                        #it's a current contract, need to find which year we're in
+                        start_day = contract.contract_start
+                        for plus_year in range(0,5):
+                            if date(year=start_day.year + plus_year, month=start_day.month, day=start_day.day) < today:
+                                contract.current_price = getattr(contract, 'hourly_rate_year' + str(plus_year + 1))
+                        
                     contract.contractor_site = line[3]
-
                     contract.save()
+                    
             except Exception as e:
                 print(e)
                 print(line)
                 break
+
+        print("====== End load_data task ======")

@@ -1,4 +1,9 @@
 {% extends "base.html" %}
+{% load staticfiles %}
+
+{% block head %}
+<script src="{% static 'hourglass_site/js/vendor/jquery.auto-complete.min.js' %}"></script>
+{% endblock %}
 
 {% block body %}
 <style scoped>
@@ -11,8 +16,19 @@
     right: 0;
   }
 
-  th.wide {
-    width: 30%;
+  thead th {
+    vertical-align: bottom;
+  }
+
+  th.column-labor_category {        width: 25%; }
+  th.column-education_level {       width: 10%; }
+  th.column-min_years_experience {  width: 10%; }
+  th.column-wage {                  width:  8%; }
+  th.column-idv_piid {              width: 12%; }
+  th.column-vendor_name {           width: 35%; }
+
+  td.column-idv_piid {
+    white-space: nowrap;
   }
 </style>
 <div class="container">
@@ -115,11 +131,12 @@
     </caption>
     <thead>
       <tr>
-        <th class="wide" data-key="vendor_name">Vendor</th>
-        <th class="wide" data-key="labor_category">Labor Category</th>
+        <th data-key="labor_category">Labor Category</th>
+        <th data-key="education_level">Minimum Education</th>
+        <th data-key="min_years_experience">Minimum Experience</th>
         <th class="wage" data-format="$%,.02f">Price</th>
-        <th data-key="education_level">Min. Education</th>
-        <th data-key="min_years_experience">Min. Experience</th>
+        <th data-key="idv_piid">Contract #</th>
+        <th data-key="vendor_name">Vendor</th>
       </tr>
     </thead>
     <tbody>
@@ -137,6 +154,7 @@
       permalink = d3.select("#permalink"),
       api = new hourglass.API(),
       wageKey = "hourly_rate_year1",
+      $search = $("#labor_category"),
       request;
 
   d3.select("th.wage")
@@ -157,6 +175,41 @@
     var data = hourglass.qs.parse(location.search);
     setFormData(data);
     submit();
+
+    var autoCompReq;
+    $search.autoComplete({
+      minChars: 2,
+      delay: 5,
+      cache: true,
+      source: function(term, done) {
+        // console.log("search:", term);
+        if (autoCompReq) autoCompReq.abort();
+        autoCompReq = api.get({
+          uri: "search",
+          data: {q: term},
+        }, function(error, result) {
+          autoCompReq = null;
+          if (error) return done([]);
+          var categories = result.slice(0, 20).map(function(d) {
+            return {
+              term: d.labor_category,
+              count: d.count
+            };
+          });
+          return done(categories);
+        });
+      },
+      renderItem: function(item, search) {
+        var re = new RegExp("(" + search.split(" ").join("|") + ")", "gi"),
+            term = item.term || item;
+        return [
+          '<div class="autocomplete-suggestion" data-val="' + term + '">',
+            '<span class="term">', term.replace(re, "<b>$1</b>"), '</span>',
+            '<span class="count">', item.count, '</span>',
+          '</div>'
+        ].join("");
+      }
+    });
   }
 
   function submit() {
@@ -303,6 +356,9 @@
               key: this.getAttribute("data-key"),
               format: getFormat(this.getAttribute("data-format"))
             };
+          })
+          .each(function(d) {
+            this.classList.add("column-" + d.key);
           })
           .data(),
         tbody = table.select("tbody");
