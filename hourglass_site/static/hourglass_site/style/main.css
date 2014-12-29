@@ -1,6 +1,12 @@
 @import url(skeleton/normalize.css);
 @import url(skeleton/skeleton.css);
 
+* {
+          box-sizing: border-box;
+     -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+
 thead th {
   vertical-align: bottom; }
 
@@ -65,7 +71,7 @@ table caption {
 }
 
 .range-graph {
-  margin-top: 5rem;
+  margin: 5rem 0 2rem 0;
   height: 1rem;
   border-color: #999;
   border-style: solid;
@@ -131,6 +137,7 @@ table caption {
       bottom: 100%;
       padding-bottom: .7em;
       width: 10em;
+      margin-left: -5em;
       text-align: center;
     }
 
