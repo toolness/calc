@@ -4,3 +4,4 @@ local_settings.py
 *.swo
 *.DS_Store
 venv
+ghostdriver.log
