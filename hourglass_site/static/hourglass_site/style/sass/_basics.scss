@@ -5,3 +5,8 @@ ol { @extend %default-ol; }
 .container {
   @include outer-container();
 }
+
+button,
+a.button {
+  @include button();
+}
