@@ -7,17 +7,44 @@
 
 {% block body %}
 <style scoped>
-  div.primary {
+
+  thead th {
+    vertical-align: bottom;
+  }
+
+  * h5 {
+    margin: 0 !important;
+  }
+
+  .container {
+    margin-top: 2rem;
+  }
+
+  #search {
     position: relative;
   }
 
   #permalink {
-    position: absolute;
-    right: 0;
+    float: right;
   }
 
-  thead th {
-    vertical-align: bottom;
+  #price {
+    width: 8em;
+  }
+
+  .filters {
+    background: #f9f9f9;
+    padding: 1rem;
+    border-radius: 4px;
+  }
+
+  .graphs {
+    padding: 1rem 0;
+  }
+
+  .filters .filter {
+    width: 50%;
+    float: left;
   }
 
   th.column-labor_category {        width: 25%; }
@@ -38,102 +65,117 @@
 
 </style>
 <div class="container">
+  <h1>Hourglass</h1>
   <form id="search" class="search" role="form">
-    <h1 class="full-width">Search</h1>
-
-    <div class="primary">
-      <input id="labor_category" name="q" placeholder="Type a labor category" class="search" type="text">
-      <button class="submit">Search</button>
-      <a id="permalink">&infin; permalink</a>
-    </div>
-
-    <h2 class="full-width">Filters</h2>
-
-    <div class="filters">
-
-      <div class="filter">
-        <label for="price">Price:</label>
-        <input id="price" name="price" type="number" min="0" max="1000" step="10" placeholder="suggest an average $?">
+    <div id="primary" class="row">
+      <div class="six columns">
+        <input id="labor_category" name="q" placeholder="Type a labor category" class="search u-full-width" type="text">
       </div>
-
-      <div class="filter">
-        <label for="site">Worksite:</label>
-        <select id="site" name="site">
-          <option value="">(all)</option>
-          <option>customer</option>
-          <option>contractor</option>
-          <option>both</option>
-        </select>
+      <div class="two columns">
+        <button class="submit button-primary u-full-width">Search</button>
       </div>
-
-      <!--
-      <div class="filter">
-        <label for="schedule">Schedule:</label>
-        <select id="schedule" name="schedule">
-          <option value="">(all)</option>
-          <option>Environmental</option>
-          <option>AIMS</option>
-          <option>Logistics</option>
-          <option>Language Services</option>
-          <option>PES</option>
-          <option>MOBIS</option>
-          <option>Consolidated</option>
-        </select>
-      </div>
-      -->
-
-      <div class="filter">
-        <label for="min_education">Minimum Education Level:</label>
-        <select id="min_education" name="min_education">
-          <option value="">(none)</option>
-          <option value="BA">Bachelors Degree</option>
-          <option value="MA">Masters Degree</option>
-          <option value="PHD">Ph.D</option>
-        </select>
-      </div>
-
-      <div class="filter">
-        <label for="min_experience">Minimum Years of Experience:</label>
-        <input id="min_experience" name="min_experience" type="number" min="0" max="50" step="1" placeholder="suggest average?">
-      </div>
-
-      <!--
-      <div class="filter">
-        <label for="fiscal_year">Fiscal Year:</label>
-        <select id="fiscal_year" name="fiscal_year">
-        </select>
-      </div>
-      -->
-
-    </div>
-
-    <div class="graph">
-      <div id="price-range" class="range-graph">
-        <span class="tick min left">
-          low: $<b class="value"></b>
-        </span>
-        <span class="tick max left">
-          high: $<b class="value"></b>
-        </span>
-        <span class="tick average mark" style="top: 100%">
-          $<b class="value"></b> average
-        </span>
+      <div class="four columns">
+        <a id="permalink" class="button">&infin; permalink</a>
       </div>
     </div>
 
-    <!--
-    <div class="graph">
-      <h6 class="title">Wages for years of experience</h6>
-      <div id="hourly-wages" class="bar-chart">
-      </div>
-    </div>
-    -->
+    <!-- <h2>Filters</h2> -->
+
+    <div class="config row">
+      <div class="filters six columns">
+        <h5>Filters</h5>
+        <div class="filter">
+          <label for="price">Price:</label>
+          <input id="price" name="price" type="number" size="8" min="0" max="1000" step="10" placeholder="all prices">
+        </div>
+
+        <div class="filter">
+          <label for="site">Worksite:</label>
+          <select id="site" name="site">
+            <option value="">(all)</option>
+            <option>customer</option>
+            <option>contractor</option>
+            <option>both</option>
+          </select>
+        </div>
+
+        <!--
+        <div class="filter">
+          <label for="schedule">Schedule:</label>
+          <select id="schedule" name="schedule">
+            <option value="">(all)</option>
+            <option>Environmental</option>
+            <option>AIMS</option>
+            <option>Logistics</option>
+            <option>Language Services</option>
+            <option>PES</option>
+            <option>MOBIS</option>
+            <option>Consolidated</option>
+          </select>
+        </div>
+        -->
+
+        <div class="filter">
+          <label for="min_education">Min. Education Level:</label>
+          <select id="min_education" name="min_education">
+            <option value="">(none)</option>
+            <option value="Associates">Associates</option>
+            <option value="High School">High School</option>
+            <option value="BA">Bachelors Degree</option>
+            <option value="MA">Masters Degree</option>
+            <option value="PHD">Ph.D</option>
+          </select>
+        </div>
+
+        <div class="filter">
+          <label for="min_experience">Min. Experience:</label>
+          <input id="min_experience" name="min_experience" type="number" min="0" max="50" step="1" placeholder="0">
+          years
+        </div>
+
+        <!--
+        <div class="filter">
+          <label for="fiscal_year">Fiscal Year:</label>
+          <select id="fiscal_year" name="fiscal_year">
+          </select>
+        </div>
+        -->
+
+      </div><!-- /.filters  -->
+
+      <div class="graphs six columns">
+        <h5>Price Stats</h5>
+        <div class="graph">
+          <div id="price-range" class="range-graph">
+            <span class="tick min left">
+              $<b class="value"></b><br>low
+            </span>
+            <span class="tick max right">
+              $<b class="value"></b><br>high
+            </span>
+            <span class="tick average mark" style="left: 0%">
+              average<br>
+              $<b class="value"></b>
+            </span>
+          </div>
+        </div>
+
+        <!--
+        <div class="graph">
+          <div id="hourly-wages" class="bar-chart">
+          </div>
+        </div>
+        -->
+
+      </div><!-- /.graphs -->
+
+    </div><!-- /.row -->
 
   </form>
 
   <table id="results-table" class="results">
     <caption>
-      <span id="results-total">...</span> matching rows (showing <span id="results-count">...</span>)
+      <span id="results-total">...</span> matching row(s), showing <span id="results-count">...</span>
       <a id="export-data" class="button" href="/rates/?format=csv">Export Data</a>
     </caption>
     <thead>
@@ -162,6 +204,8 @@
       api = new hourglass.API(),
       wageKey = "hourly_rate_year1",
       $search = $("#labor_category"),
+      resultsTable = d3.select("#results-table")
+        .style("display", "none"),
       request;
 
   d3.select("th.wage")
@@ -242,7 +286,9 @@
         ].join("?");
       });
 
-    permalink.attr("href", "?" + hourglass.qs.format(data));
+    var href = "?" + hourglass.qs.format(data)
+    permalink.attr("href", href);
+    history.pushState(null, null, href);
   }
 
   function update(error, data) {
@@ -288,7 +334,7 @@
       .call(setPrice, data.maximum);
     graph.select(".average")
       .call(setPrice, data.average)
-      .style("top", priceScale(data.average) + "%");
+      .style("left", priceScale(data.average) + "%");
 
     function setPrice(selection, price) {
       selection.select(".value")
@@ -365,8 +411,10 @@
     });
     */
 
-    var table = d3.select("#results-table"),
-        thead = table.select("thead"),
+    resultsTable.style("display", null);
+
+    var thead = resultsTable
+          .select("thead"),
         columns = thead.selectAll("th")
           .datum(function() {
             return {
@@ -378,7 +426,7 @@
             this.classList.add("column-" + d.key);
           })
           .data(),
-        tbody = table.select("tbody");
+        tbody = resultsTable.select("tbody");
 
     var tr = tbody.selectAll("tr")
       .data(results);
