@@ -86,7 +86,7 @@
         <h5>Filters</h5>
         <div class="filter">
           <label for="price">Price:</label>
-          <input id="price" name="price" type="number" size="8" min="0" max="1000" step="10" placeholder="all prices">
+          <input id="price" name="price" type="number" size="8" min="0" max="1000" step=".01" placeholder="all prices">
         </div>
 
         <div class="filter">
@@ -183,7 +183,7 @@
         <th data-key="labor_category">Labor Category</th>
         <th data-key="education_level">Minimum Education</th>
         <th data-key="min_years_experience">Minimum Experience</th>
-        <th class="wage" data-format="$%,.02f">Price</th>
+        <th data-key="current_price" data-format="$%,.02f">Price</th>
         <th data-key="idv_piid">Contract #</th>
         <th data-key="vendor_name">Vendor</th>
       </tr>
@@ -202,14 +202,10 @@
       formatCommas = d3.format(","),
       permalink = d3.select("#permalink"),
       api = new hourglass.API(),
-      wageKey = "hourly_rate_year1",
       $search = $("#labor_category"),
       resultsTable = d3.select("#results-table")
         .style("display", "none"),
       request;
-
-  d3.select("th.wage")
-    .attr("data-key", wageKey);
 
   form.on("submit", function onsubmit() {
     // stop the form from submitting
@@ -312,7 +308,7 @@
     if (data) {
       updatePrices(data);
       // updateHourlyWages(data.hourly_wage_stats, [data.minimum, data.maximum]);
-      updateResults(data.results);
+      updateResults(data.results || []);
     } else {
       updatePrices({minimum: 0, maximum: 1, average: 0});
       // updateHourlyWages([], [0, 0]);
@@ -322,7 +318,7 @@
 
   function updatePrices(data) {
     var priceScale = d3.scale.linear()
-      .domain([data.maximum, data.minimum])
+      .domain([data.minimum, data.maximum])
       .range([0, 100]);
 
     var graph = d3.select("#price-range");
@@ -403,12 +399,6 @@
   function updateResults(results) {
     d3.select("#results-count")
       .text(formatCommas(results.length));
-
-    /*
-    results.sort(function(a, b) {
-      return d3.descending(+a[wageKey], +b[wageKey]);
-    });
-    */
 
     resultsTable.style("display", null);
 
