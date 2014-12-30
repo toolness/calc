@@ -11,6 +11,8 @@ from rest_framework.views import APIView
 from api.serializers import PaginatedContractSerializer
 from contracts.models import Contract, EDUCATION_CHOICES
 
+import csv
+
 def convert_to_tsquery(query, autocomplete=False):
     #converts multi-word phrases into AND boolean queries for postgresql
     tsquery = query
@@ -33,7 +35,7 @@ class GetRates(APIView):
         contracts_all = self.get_queryset(request, wage_field)
         page_stats = {}
 
-        if contracts_all:
+        if contracts_all and format != 'csv':
             page_stats['average'] = Decimal(contracts_all.aggregate(Avg(wage_field))[wage_field + '__avg']).quantize(Decimal(10) ** -2)
             page_stats['minimum'] = contracts_all.aggregate(Min(wage_field))[wage_field + '__min']
             page_stats['maximum'] = contracts_all.aggregate(Max(wage_field))[wage_field + '__max']
@@ -45,11 +47,21 @@ class GetRates(APIView):
 
             page_stats['hourly_wage_stats'] = sorted(hourly_wage_stats, key=lambda mye: mye['min_years_experience'])
 
-        paginator = Paginator(contracts_all, settings.PAGINATION)
-        contracts = paginator.page(page)
-        serializer = PaginatedContractSerializer(contracts, context=page_stats)
+            paginator = Paginator(contracts_all, settings.PAGINATION)
+            contracts = paginator.page(page)
+            serializer = PaginatedContractSerializer(contracts, context=page_stats)
 
-        return Response(serializer.data)
+            return Response(serializer.data)
+
+        else:
+            response = HttpResponse(content_type="text/csv")
+            response['Content-Disposition'] = 'attachment; filename="pricing_results.csv"'
+            writer = csv.writer(response) 
+            writer.writerow(("Contract #", "Business Size", "Schedule", "Site", "Begin Date", "End Date", "SIN", "Vendor Name", "Labor Category", "education Level", "Minimum Years Experience", "Current Year Labor Price"))
+
+            for c in contracts_all:
+                writer.writerow((c.idv_piid, c.business_size, c.schedule, c.contractor_site, c.contract_start, c.contract_end, c.sin, c.vendor_name, c.labor_category, c.education_level, c.min_years_experience, c.current_price ))
+            return response
 
 
     def get_queryset(self, request, wage_field):
