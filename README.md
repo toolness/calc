@@ -9,6 +9,11 @@ To install the requirements, use
 pip install -r requirements.txt
 ```
 
+If using < python 3, install the python 2 dependencies with
+```
+pip install -r requirements_python2.txt
+```
+
 Currently, Hourglass is a basic Django project. You can get started by creating a local_settings.py file (based off of local_settings.example.py) with your local database configuration, and running 
 
 ```

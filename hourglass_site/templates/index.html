@@ -176,7 +176,7 @@
   <table id="results-table" class="results">
     <caption>
       <span id="results-total">...</span> matching row(s), showing <span id="results-count">...</span>
-      <a id="export-data" class="button" href="/api/rates/?format=csv">Export Data</a>
+      <a id="export-data" class="button" href="/api/rates/csv/">Export Data</a>
     </caption>
     <thead>
       <tr>
@@ -277,12 +277,11 @@
     }, update);
 
 
-    var exportData = hourglass.extend({format: "csv"}, data);
     d3.select("#export-data")
       .attr("href", function() {
         return [
           this.href.split("?").shift(),
-          hourglass.qs.format(exportData)
+          hourglass.qs.format(data)
         ].join("?");
       });
 
