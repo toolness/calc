@@ -28,9 +28,9 @@ class Command(BaseCommand):
             try:  
                 if line[0]:
                     #create contract record, unique to vendor, labor cat
-                    idv_piid = line[0]
-                    vendor_name = line[7]
-                    labor_category = line[8].strip().replace('\n', ' ')
+                    idv_piid = line[11]
+                    vendor_name = line[10]
+                    labor_category = line[0].strip().replace('\n', ' ')
                     
                     try:
                         contract = Contract.objects.get(idv_piid=idv_piid, labor_category=labor_category, vendor_name=vendor_name)
@@ -41,28 +41,28 @@ class Command(BaseCommand):
                         contract.labor_category = labor_category
                         contract.vendor_name = vendor_name
 
-                    contract.education_level = contract.get_education_code(line[9])
-                    contract.schedule = line[2]
-                    contract.business_size = line[1]
-                    contract.sin = line[6]
+                    contract.education_level = contract.get_education_code(line[6])
+                    contract.schedule = line[12]
+                    contract.business_size = line[8]
+                    contract.sin = line[13]
 
-                    if line[4] != '':
-                        contract.contract_start = datetime.strptime(line[4], '%m/%d/%Y').date()
-                    if line[5] != '':
-                        contract.contract_end = datetime.strptime(line[5], '%m/%d/%Y').date()
+                    if line[14] != '':
+                        contract.contract_start = datetime.strptime(line[14], '%m/%d/%Y').date()
+                    if line[15] != '':
+                        contract.contract_end = datetime.strptime(line[15], '%m/%d/%Y').date()
                 
-                    if line[10].strip() != '':
-                        contract.min_years_experience = line[10]
+                    if line[7].strip() != '':
+                        contract.min_years_experience = line[7]
                     else:
                         contract.min_years_experience = 0
 
-                    if line[11] and line[11] != '': 
-                        contract.hourly_rate_year1 = contract.normalize_rate(line[11])
+                    if line[1] and line[1] != '': 
+                        contract.hourly_rate_year1 = contract.normalize_rate(line[1])
                     else:
                         #there's no pricing info
                         continue
                     
-                    for count, rate in enumerate(line[12:]):
+                    for count, rate in enumerate(line[2:6]):
                         if rate and rate.strip() != '':
                             setattr(contract, 'hourly_rate_year' + str(count+2), contract.normalize_rate(rate))
                     
@@ -73,7 +73,7 @@ class Command(BaseCommand):
                             if date(year=start_day.year + plus_year, month=start_day.month, day=start_day.day) < today:
                                 contract.current_price = getattr(contract, 'hourly_rate_year' + str(plus_year + 1))
                         
-                    contract.contractor_site = line[3]
+                    contract.contractor_site = line[9]
                     contract.save()
                     
             except Exception as e:

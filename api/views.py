@@ -11,6 +11,8 @@ from rest_framework.views import APIView
 from api.serializers import PaginatedContractSerializer
 from contracts.models import Contract, EDUCATION_CHOICES
 
+import csv
+
 def convert_to_tsquery(query, autocomplete=False):
     #converts multi-word phrases into AND boolean queries for postgresql
     tsquery = query
@@ -23,14 +25,47 @@ def convert_to_tsquery(query, autocomplete=False):
 
     return tsquery
 
+def get_contracts_queryset(request_params, wage_field):
+
+    query = request_params.get('q', None)
+    min_experience = request_params.get('min_experience', 0)
+    max_experience = request_params.get('max_experience', 100)
+    min_education = request_params.get('min_education', None)
+    schedule = request_params.get('schedule', None)
+    site = request_params.get('site', None)
+    small_business = request_params.get('small_business', None)
+    price = request_params.get('price', None)
+
+    contracts = Contract.objects.filter(min_years_experience__gte=min_experience, min_years_experience__lte=max_experience).order_by(wage_field)
+
+    if query:
+        query = convert_to_tsquery(query)
+        contracts = contracts.search(query, raw=True)
+
+    if min_education:
+        for index, pair in enumerate(EDUCATION_CHOICES):
+            if min_education == pair[0]:
+                contracts = contracts.filter(education_level__in=[ed[0] for ed in EDUCATION_CHOICES[index:] ])
+
+    if schedule:
+        contracts = contracts.filter(schedule__iexact=schedule)
+    if site:
+        contracts = contracts.filter(contractor_site__icontains=site)
+    if small_business == 'true':
+        contracts = contracts.filter(business_size__icontains='s')
+    if price:
+        contracts = contracts.filter(**{wage_field + '__exact': price})
+
+    return contracts
+
+
 class GetRates(APIView):
 
-    def get(self, request, format=None):
-       
+    def get(self, request):
+
         page = request.QUERY_PARAMS.get('page', 1)
-        wage_field = 'hourly_rate_year1'
-        
-        contracts_all = self.get_queryset(request, wage_field)
+        wage_field = 'current_price'
+        contracts_all = self.get_queryset(request.QUERY_PARAMS, wage_field)
         page_stats = {}
 
         if contracts_all:
@@ -45,46 +80,32 @@ class GetRates(APIView):
 
             page_stats['hourly_wage_stats'] = sorted(hourly_wage_stats, key=lambda mye: mye['min_years_experience'])
 
-        paginator = Paginator(contracts_all, settings.PAGINATION)
-        contracts = paginator.page(page)
-        serializer = PaginatedContractSerializer(contracts, context=page_stats)
+            paginator = Paginator(contracts_all, settings.PAGINATION)
+            contracts = paginator.page(page)
+            serializer = PaginatedContractSerializer(contracts, context=page_stats)
 
-        return Response(serializer.data)
+            return Response(serializer.data)
 
+        else:
+            return Response({})
 
     def get_queryset(self, request, wage_field):
+        return get_contracts_queryset(request, wage_field)
 
-        query = request.QUERY_PARAMS.get('q', None)
-        min_experience = request.QUERY_PARAMS.get('min_experience', 0)
-        max_experience = request.QUERY_PARAMS.get('max_experience', 100)
-        min_education = request.QUERY_PARAMS.get('min_education', None)
-        schedule = request.QUERY_PARAMS.get('schedule', None)
-        site = request.QUERY_PARAMS.get('site', None)
-        small_business = request.QUERY_PARAMS.get('small_business', None)
-        price = request.QUERY_PARAMS.get('price', None)
+def get_rates_csv(request):
+        
+        wage_field = 'current_price'
+        contracts_all = get_contracts_queryset(request.GET, wage_field)
+        
+        response = HttpResponse(content_type="text/csv")
+        response['Content-Disposition'] = 'attachment; filename="pricing_results.csv"'
+        writer = csv.writer(response) 
+        writer.writerow(("Contract #", "Business Size", "Schedule", "Site", "Begin Date", "End Date", "SIN", "Vendor Name", "Labor Category", "education Level", "Minimum Years Experience", "Current Year Labor Price"))
 
-        contracts = Contract.objects.filter(min_years_experience__gte=min_experience, min_years_experience__lte=max_experience).order_by(wage_field)
-
-        if query:
-            query = convert_to_tsquery(query)
-            contracts = contracts.search(query, raw=True)
-
-        if min_education:
-            for index, pair in enumerate(EDUCATION_CHOICES):
-                if min_education == pair[0]:
-                    contracts = contracts.filter(education_level__in=[ed[0] for ed in EDUCATION_CHOICES[index:] ])
-
-        if schedule:
-            contracts = contracts.filter(schedule__iexact=schedule)
-        if site:
-            contracts = contracts.filter(contractor_site__icontains=site)
-        if small_business == 'true':
-            contracts = contracts.filter(business_size__icontains='s')
-        if price:
-            contracts = contracts.filter(**{wage_field + '__exact': price})
-
-        return contracts
-
+        for c in contracts_all:
+            writer.writerow((c.idv_piid, c.get_readable_business_size(), c.schedule, c.contractor_site, c.contract_start, c.contract_end, c.sin, c.vendor_name, c.labor_category, c.get_education_level_display(), c.min_years_experience, c.current_price ))
+        
+        return response
 
 class GetAutocomplete(APIView):
 

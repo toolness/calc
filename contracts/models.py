@@ -48,6 +48,12 @@ class Contract(models.Model):
         auto_update_search_field = True
     )
 
+    def get_readable_business_size(self):
+        if 's' in self.business_size.lower():
+            return 'small business'
+        else:
+            return 'other than small business'
+
     def get_education_code(self, text):
         
         for pair in EDUCATION_CHOICES:
