@@ -87,25 +87,25 @@ class GetRates(APIView):
             return Response(serializer.data)
 
         else:
-            return Response({})
+            return Response({'count': 0, 'results': []})
 
     def get_queryset(self, request, wage_field):
         return get_contracts_queryset(request, wage_field)
 
 def get_rates_csv(request):
         
-        wage_field = 'current_price'
-        contracts_all = get_contracts_queryset(request.GET, wage_field)
-        
-        response = HttpResponse(content_type="text/csv")
-        response['Content-Disposition'] = 'attachment; filename="pricing_results.csv"'
-        writer = csv.writer(response) 
-        writer.writerow(("Contract #", "Business Size", "Schedule", "Site", "Begin Date", "End Date", "SIN", "Vendor Name", "Labor Category", "education Level", "Minimum Years Experience", "Current Year Labor Price"))
+    wage_field = 'current_price'
+    contracts_all = get_contracts_queryset(request.GET, wage_field)
+    
+    response = HttpResponse(content_type="text/csv")
+    response['Content-Disposition'] = 'attachment; filename="pricing_results.csv"'
+    writer = csv.writer(response) 
+    writer.writerow(("Contract #", "Business Size", "Schedule", "Site", "Begin Date", "End Date", "SIN", "Vendor Name", "Labor Category", "education Level", "Minimum Years Experience", "Current Year Labor Price"))
 
-        for c in contracts_all:
-            writer.writerow((c.idv_piid, c.get_readable_business_size(), c.schedule, c.contractor_site, c.contract_start, c.contract_end, c.sin, c.vendor_name, c.labor_category, c.get_education_level_display(), c.min_years_experience, c.current_price ))
-        
-        return response
+    for c in contracts_all:
+        writer.writerow((c.idv_piid, c.get_readable_business_size(), c.schedule, c.contractor_site, c.contract_start, c.contract_end, c.sin, c.vendor_name, c.labor_category, c.get_education_level_display(), c.min_years_experience, c.current_price ))
+    
+    return response
 
 class GetAutocomplete(APIView):
 
