@@ -11,7 +11,11 @@ from rest_framework.views import APIView
 from api.serializers import PaginatedContractSerializer
 from contracts.models import Contract, EDUCATION_CHOICES
 
-import unicodecsv as csv
+try: 
+    #python2 compat
+    import unicodecsv as csv
+except:
+    import csv
 
 def convert_to_tsquery(query, autocomplete=False):
     #converts multi-word phrases into AND boolean queries for postgresql
