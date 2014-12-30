@@ -318,7 +318,7 @@
 
   function updatePrices(data) {
     var priceScale = d3.scale.linear()
-      .domain([data.maximum, data.minimum])
+      .domain([data.minimum, data.maximum])
       .range([0, 100]);
 
     var graph = d3.select("#price-range");
