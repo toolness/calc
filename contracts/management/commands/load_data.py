@@ -23,6 +23,7 @@ class Command(BaseCommand):
 
             #replace annoying msft carraige return
             for num in range(0, len(line)):
+                #also replace version with capital D
                 line[num] = line[num].replace("_x000d_", "")
 
             try:  
