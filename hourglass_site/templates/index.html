@@ -277,12 +277,11 @@
     }, update);
 
 
-    var exportData = hourglass.extend({format: "csv"}, data);
     d3.select("#export-data")
       .attr("href", function() {
         return [
           this.href.split("?").shift(),
-          hourglass.qs.format(exportData)
+          hourglass.qs.format(data)
         ].join("?");
       });
 
