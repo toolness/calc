@@ -2,4 +2,3 @@ Django==1.7.1
 djangorestframework==3.0.2
 -e git+https://github.com/djangonauts/djorm-ext-pgfulltext.git#egg=djorm_ext_pgfulltext-master
 psycopg2==2.5.4
-unicodecsv==0.9.4
