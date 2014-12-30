@@ -37,7 +37,7 @@ You can also filter by the minimum education level, minimum years of experience,
 http://localhost:8000/api/rates/?min_education=MA&min_experience=5&max_experience=10&q=technical
 ```
 
-The valid values for min_education are AA (associates), BA (bachelors), MA (masters), and PHD (Ph.D).
+The valid values for `min_education` are `HS` (high school), `AA` (associates), `BA` (bachelors), `MA` (masters), and `PHD` (Ph.D).
 
 The default pagination is set to 200. You can paginate using the page parameter. For example:
 ```
