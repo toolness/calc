@@ -3,13 +3,18 @@ from django.conf import settings
 from contracts.models import Contract
 import csv
 import os
+import logging
 from datetime import datetime, date
 
 class Command(BaseCommand):
 
     def handle(self, *args, **options):
+        logging.basicConfig(level=logging.INFO, format='%(asctime)s ==== %(message)s ====', datefmt='%m/%d/%Y %I:%M:%S %p')
 
-        print("====== Begin load_data task ======")
+        logging.info("Begin load_data task")
+
+        logging.info("Deleting existing contract records")
+        Contract.objects.all().delete()
 
         data_file = csv.reader(open(os.path.join(settings.BASE_DIR, 'contracts/docs/hourly_prices.csv'), 'r'))
         
@@ -19,8 +24,10 @@ class Command(BaseCommand):
         #used for removing expired contracts
         today = date.today()
 
-        for line in data_file:
+        contracts = []
 
+        logging.info("Processing new datafile")
+        for line in data_file:
             #replace annoying msft carraige return
             for num in range(0, len(line)):
                 line[num] = line[num].replace("_x000d_", "")
@@ -32,14 +39,10 @@ class Command(BaseCommand):
                     vendor_name = line[10]
                     labor_category = line[0].strip().replace('\n', ' ')
                     
-                    try:
-                        contract = Contract.objects.get(idv_piid=idv_piid, labor_category=labor_category, vendor_name=vendor_name)
-                    
-                    except Contract.DoesNotExist:
-                        contract = Contract()
-                        contract.idv_piid = idv_piid
-                        contract.labor_category = labor_category
-                        contract.vendor_name = vendor_name
+                    contract = Contract()
+                    contract.idv_piid = idv_piid
+                    contract.labor_category = labor_category
+                    contract.vendor_name = vendor_name
 
                     contract.education_level = contract.get_education_code(line[6])
                     contract.schedule = line[12]
@@ -74,11 +77,12 @@ class Command(BaseCommand):
                                 contract.current_price = getattr(contract, 'hourly_rate_year' + str(plus_year + 1))
                         
                     contract.contractor_site = line[9]
-                    contract.save()
-                    
+                    contracts.append(contract)
+
             except Exception as e:
-                print(e)
-                print(line)
+                logging.exception(e)
+                logging.warning(line)
                 break
 
-        print("====== End load_data task ======")
+        Contract.objects.bulk_create(contracts)
+        logging.info("End load_data task")
