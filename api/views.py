@@ -17,15 +17,12 @@ try:
 except:
     import csv
 
-def convert_to_tsquery(query, autocomplete=False):
+def convert_to_tsquery(query):
     #converts multi-word phrases into AND boolean queries for postgresql
-    tsquery = query
-    if ' ' in query:
-        words = query.split(' ')
+    tsquery = query.strip() + ':*'
+    if ' ' in tsquery:
+        words = tsquery.split(' ')
         tsquery = ' & '.join(words)
-
-    if autocomplete:
-        tsquery = tsquery + ':*'
 
     return tsquery
 
@@ -117,7 +114,7 @@ class GetAutocomplete(APIView):
         q = request.QUERY_PARAMS.get('q', False)
 
         if q:
-            data = Contract.objects.search(convert_to_tsquery(q, autocomplete=True), raw=True).values('labor_category').annotate(count=Count('labor_category')).order_by('-count')
+            data = Contract.objects.search(convert_to_tsquery(q), raw=True).values('labor_category').annotate(count=Count('labor_category')).order_by('-count')
             return Response(data)
 
 
