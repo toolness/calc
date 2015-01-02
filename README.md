@@ -51,9 +51,9 @@ http://localhost:8000/api/rates/?q=translator&page=2
 
 Additionally, you can also now filter by the contract schedule of the transaction, whether or not the vendor is a small business, and whether or not the vendor works on the contractor or customer site.
 
-Here is an example with all three parameters (schedule, site, and small_business) included:
+Here is an example with all three parameters (schedule, site, and business_size) included:
 ```
-http://localhost:8000/api/rates/?schedule=mobis&site=customer&small_business=true
+http://localhost:8000/api/rates/?schedule=mobis&site=customer&business_size=s
 ```
 
 For schedules, there are 7 different values that will return results (case insensitive). They are:
