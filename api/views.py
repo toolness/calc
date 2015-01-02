@@ -34,7 +34,7 @@ def get_contracts_queryset(request_params, wage_field):
     min_education = request_params.get('min_education', None)
     schedule = request_params.get('schedule', None)
     site = request_params.get('site', None)
-    small_business = request_params.get('small_business', None)
+    business_size = request_params.get('business_size', None)
     price = request_params.get('price', None)
 
     contracts = Contract.objects.filter(min_years_experience__gte=min_experience, min_years_experience__lte=max_experience).order_by(wage_field)
@@ -52,8 +52,10 @@ def get_contracts_queryset(request_params, wage_field):
         contracts = contracts.filter(schedule__iexact=schedule)
     if site:
         contracts = contracts.filter(contractor_site__icontains=site)
-    if small_business == 'true':
+    if business_size == 's':
         contracts = contracts.filter(business_size__icontains='s')
+    elif business_size == 'o':
+        contracts = contracts.filter(business_size__icontains='o')
     if price:
         contracts = contracts.filter(**{wage_field + '__exact': price})
 
