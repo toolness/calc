@@ -472,6 +472,11 @@
     if (!data) return;
     inputs.each(function() {
       if (data.hasOwnProperty(this.name)) {
+        switch (this.type) {
+          case "checkbox":
+            this.checked = data[this.name] == this.value;
+            return;
+        }
         this.value = data[this.name];
       }
     });
