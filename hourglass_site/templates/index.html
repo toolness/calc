@@ -133,6 +133,13 @@
           years
         </div>
 
+        <div class="filter">
+          <label>
+            <input id="small_business" name="business_size" value="s" type="checkbox">
+            Small Business
+          </label>
+        </div>
+
         <!--
         <div class="filter">
           <label for="fiscal_year">Fiscal Year:</label>
@@ -450,6 +457,11 @@
   function getFormData() {
     var data = {};
     inputs.each(function() {
+      switch (this.type) {
+        case "checkbox":
+          if (!this.checked) return;
+          break;
+      }
       if (this.disabled || this.value === "") return;
       data[this.name] = this.value;
     });
