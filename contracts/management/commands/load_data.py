@@ -9,11 +9,11 @@ from datetime import datetime, date
 class Command(BaseCommand):
 
     def handle(self, *args, **options):
-        logging.basicConfig(level=logging.INFO, format='%(asctime)s ==== %(message)s ====', datefmt='%m/%d/%Y %I:%M:%S %p')
+        log = logging.getLogger(__name__)
 
-        logging.info("Begin load_data task")
+        log.info("Begin load_data task")
 
-        logging.info("Deleting existing contract records")
+        log.info("Deleting existing contract records")
         Contract.objects.all().delete()
 
         data_file = csv.reader(open(os.path.join(settings.BASE_DIR, 'contracts/docs/hourly_prices.csv'), 'r'))
@@ -26,7 +26,7 @@ class Command(BaseCommand):
 
         contracts = []
 
-        logging.info("Processing new datafile")
+        log.info("Processing new datafile")
         for line in data_file:
             #replace annoying msft carraige return
             for num in range(0, len(line)):
@@ -80,9 +80,9 @@ class Command(BaseCommand):
                     contracts.append(contract)
 
             except Exception as e:
-                logging.exception(e)
-                logging.warning(line)
+                log.exception(e)
+                log.warning(line)
                 break
 
         Contract.objects.bulk_create(contracts)
-        logging.info("End load_data task")
+        log.info("End load_data task")
