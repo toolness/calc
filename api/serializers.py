@@ -14,7 +14,9 @@ class PaginatedContractSerializer(pagination.PaginationSerializer):
     average = serializers.SerializerMethodField()
     minimum = serializers.SerializerMethodField()
     maximum = serializers.SerializerMethodField()
+
     hourly_wage_stats = serializers.SerializerMethodField()
+    wage_histogram = serializers.SerializerMethodField()
 
     class Meta:
         object_serializer_class = ContractSerializer
@@ -30,3 +32,6 @@ class PaginatedContractSerializer(pagination.PaginationSerializer):
 
     def get_hourly_wage_stats(self, obj):
         return self.context.get('hourly_wage_stats', [])
+
+    def get_wage_histogram(self, obj):
+        return self.context.get('wage_histogram', [])
