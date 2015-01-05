@@ -133,6 +133,15 @@
           years
         </div>
 
+        <div class="filter">
+          <label for="business_size">Business Size:</label>
+          <select id="business_size" name="business_size">
+            <option value="">(all)</option>
+            <option value="s">Small Business</option>
+            <option value="o">Other than Small</option>
+          </select>
+        </div>
+
         <!--
         <div class="filter">
           <label for="fiscal_year">Fiscal Year:</label>
@@ -450,6 +459,11 @@
   function getFormData() {
     var data = {};
     inputs.each(function() {
+      switch (this.type) {
+        case "checkbox":
+          if (!this.checked) return;
+          break;
+      }
       if (this.disabled || this.value === "") return;
       data[this.name] = this.value;
     });
@@ -460,6 +474,11 @@
     if (!data) return;
     inputs.each(function() {
       if (data.hasOwnProperty(this.name)) {
+        switch (this.type) {
+          case "checkbox":
+            this.checked = data[this.name] == this.value;
+            return;
+        }
         this.value = data[this.name];
       }
     });
