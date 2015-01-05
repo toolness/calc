@@ -1,3 +1,4 @@
+from django.core.management import call_command
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
 from contracts.models import Contract
@@ -84,5 +85,10 @@ class Command(BaseCommand):
                 log.warning(line)
                 break
 
+        log.info("Inserting records")
         Contract.objects.bulk_create(contracts)
+
+        log.info("Updating search index")
+        call_command('update_search_field', Contract._meta.app_label, Contract._meta.model_name)
+
         log.info("End load_data task")
