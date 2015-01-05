@@ -182,3 +182,14 @@ table caption {
         color: #666;
         font-size: .5em;
         margin-left: .5em; }
+
+
+.has-data {
+    -webkit-transition: opacity 0.5s linear;
+       -moz-transition: opacity 0.5s linear;
+            transition: opacity 0.5s linear;
+}
+
+.loading .has-data {
+  opacity: .2;
+}

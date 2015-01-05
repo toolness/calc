@@ -155,7 +155,7 @@
       <div class="graphs six columns">
         <h5>Price Stats</h5>
         <div class="graph">
-          <div id="price-range" class="range-graph">
+          <div id="price-range" class="range-graph has-data">
             <span class="tick min left">
               $<b class="value"></b><br>low
             </span>
@@ -180,26 +180,27 @@
 
     </div><!-- /.row -->
 
+    <table id="results-table" class="results has-data">
+      <caption>
+        <span id="results-total">...</span> matching row(s), showing <span id="results-count">...</span>
+        <a id="export-data" class="button" href="/api/rates/csv/">Export Data</a>
+      </caption>
+      <thead>
+        <tr>
+          <th data-key="labor_category">Labor Category</th>
+          <th data-key="education_level">Minimum Education</th>
+          <th data-key="min_years_experience">Minimum Experience</th>
+          <th data-key="current_price" data-format="$%,.02f">Price</th>
+          <th data-key="idv_piid">Contract #</th>
+          <th data-key="vendor_name">Vendor</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+
   </form>
 
-  <table id="results-table" class="results">
-    <caption>
-      <span id="results-total">...</span> matching row(s), showing <span id="results-count">...</span>
-      <a id="export-data" class="button" href="/api/rates/csv/">Export Data</a>
-    </caption>
-    <thead>
-      <tr>
-        <th data-key="labor_category">Labor Category</th>
-        <th data-key="education_level">Minimum Education</th>
-        <th data-key="min_years_experience">Minimum Experience</th>
-        <th data-key="current_price" data-format="$%,.02f">Price</th>
-        <th data-key="idv_piid">Contract #</th>
-        <th data-key="vendor_name">Vendor</th>
-      </tr>
-    </thead>
-    <tbody>
-    </tbody>
-  </table>
 </div>
 
 <script>
@@ -272,7 +273,9 @@
     var data = getFormData();
     console.log("submitting:", data);
 
-    form.classed("loading", true);
+    form
+      .classed("loading", true)
+      .classed("loaded", false);
 
     // cancel the outbound request if there is one
     if (request) request.abort();
@@ -300,6 +303,7 @@
     request = null;
 
     if (error) {
+      form.classed("error", true);
       // ignore aborts
       if (error.statusText === "abort") {
         return;
@@ -310,6 +314,7 @@
     }
 
     console.log("update:", data);
+    form.classed("loaded", true);
 
     d3.select("#results-total")
       .text(data ? formatCommas(data.count) : "(none)");
