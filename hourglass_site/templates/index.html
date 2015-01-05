@@ -154,6 +154,12 @@
 
       <div class="graphs six columns">
         <h5>Price Stats</h5>
+
+        <div class="loading-indicator">
+          <p class="message">Loading results...</p>
+          <div class="error"></div>
+        </div>
+
         <div class="graph">
           <div id="price-range" class="range-graph has-data">
             <span class="tick min left">
@@ -167,6 +173,7 @@
               $<b class="value"></b>
             </span>
           </div>
+
         </div>
 
         <!--
@@ -215,6 +222,7 @@
       $search = $("#labor_category"),
       resultsTable = d3.select("#results-table")
         .style("display", "none"),
+      loadingIndicator = form.select(".loading-indicator"),
       request;
 
   form.on("submit", function onsubmit() {
@@ -304,6 +312,10 @@
 
     if (error) {
       form.classed("error", true);
+
+      loadingIndicator.select(".error")
+        .text(error.responseText);
+
       // ignore aborts
       if (error.statusText === "abort") {
         return;

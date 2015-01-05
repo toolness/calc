@@ -184,6 +184,7 @@ table caption {
         margin-left: .5em; }
 
 
+.loading-indicator,
 .has-data {
     -webkit-transition: opacity 0.5s linear;
        -moz-transition: opacity 0.5s linear;
@@ -193,3 +194,13 @@ table caption {
 .loading .has-data {
   opacity: .2;
 }
+
+.loading-indicator {
+  opacity: 0;
+  visibility: hidden;
+}
+
+  .loading .loading-indicator {
+    opacity: 1;
+    visibility: visible;
+  }
