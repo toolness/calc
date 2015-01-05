@@ -134,10 +134,12 @@
         </div>
 
         <div class="filter">
-          <label>
-            <input id="small_business" name="business_size" value="s" type="checkbox">
-            Small Business
-          </label>
+          <label for="business_size">Business Size:</label>
+          <select id="business_size" name="business_size">
+            <option value="">(all)</option>
+            <option value="s">Small Business</option>
+            <option value="o">Other than Small</option>
+          </select>
         </div>
 
         <!--
