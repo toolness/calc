@@ -103,6 +103,11 @@ def get_histogram(values, bins=10):
         })
     return result
 
+def quantize(num, precision=2):
+  if num is None:
+    return None
+  return Decimal(num).quantize(Decimal(10) ** -precision)
+
 class GetRates(APIView):
 
     def get(self, request):
@@ -116,7 +121,7 @@ class GetRates(APIView):
 
         page_stats['minimum'] = contracts_all.aggregate(Min(wage_field))[wage_field + '__min']
         page_stats['maximum'] = contracts_all.aggregate(Max(wage_field))[wage_field + '__max']
-        page_stats['average'] = contracts_all.aggregate(Avg(wage_field))[wage_field + '__avg']
+        page_stats['average'] = quantize(contracts_all.aggregate(Avg(wage_field))[wage_field + '__avg'])
 
         if contracts_all:
             if bins and bins.isnumeric():
