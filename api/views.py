@@ -36,6 +36,8 @@ def get_contracts_queryset(request_params, wage_field):
     site = request_params.get('site', None)
     business_size = request_params.get('business_size', None)
     price = request_params.get('price', None)
+    price__gt = request_params.get('price__gt')
+    price__lt = request_params.get('price__lt')
 
     contracts = Contract.objects.filter(min_years_experience__gte=min_experience, min_years_experience__lte=max_experience).order_by(wage_field)
 
@@ -58,6 +60,11 @@ def get_contracts_queryset(request_params, wage_field):
         contracts = contracts.filter(business_size__icontains='o')
     if price:
         contracts = contracts.filter(**{wage_field + '__exact': price})
+    else:
+        if price__gt:
+            contracts = contracts.filter(**{wage_field + '__gt': price__gt})
+        if price__lt:
+            contracts = contracts.filter(**{wage_field + '__lt': price__lt})
 
     return contracts
 
