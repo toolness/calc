@@ -124,6 +124,21 @@ class ContractsTest(TestCase):
            'contractor_site': None,
            'business_size': None}])
 
+    def test_minimum_price_no_args(self):
+        resp = self.c.get(self.path, {})
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.data['minimum'], 16.0)
+
+    def test_maximum_price_no_args(self):
+        resp = self.c.get(self.path, {})
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.data['maximum'], 50.0)
+
+    def test_average_price_no_args(self):
+        resp = self.c.get(self.path, {})
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.data['average'], (16.0 + 18.0 + 50.0) / 3)
+
     def assertResultsEqual(self, results, expected):
         dict_results = [dict(x) for x in results]
         self.assertEqual(len(results), len(expected))
