@@ -60,10 +60,11 @@ def get_contracts_queryset(request_params, wage_field):
         contracts = contracts.filter(business_size__icontains='o')
     if price:
         contracts = contracts.filter(**{wage_field + '__exact': price})
-    elif price__gt:
-        contracts = contracts.filter(**{wage_field + '__gt': price__gt})
-    elif price__lt:
-        contracts = contracts.filter(**{wage_field + '__lt': price__lt})
+    else:
+        if price__gt:
+            contracts = contracts.filter(**{wage_field + '__gt': price__gt})
+        if price__lt:
+            contracts = contracts.filter(**{wage_field + '__lt': price__lt})
 
     return contracts
 

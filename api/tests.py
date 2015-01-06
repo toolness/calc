@@ -108,6 +108,22 @@ class ContractsTest(TestCase):
            'contractor_site': None,
            'business_size': None}])
 
+    def test_filter_by_price__gt_and_lt(self):
+        resp = self.c.get(self.path, {'price__lt': 20, 'price__gt': 16})
+        self.assertEqual(resp.status_code, 200)
+
+        self.assertResultsEqual(resp.data['results'],
+         [{'idv_piid': 'ABC123',
+           'vendor_name': 'ACME Corp.',
+           'labor_category': 'Legal Services',
+           'education_level': None,
+           'min_years_experience': 5,
+           'hourly_rate_year1': 18.0,
+           'current_price': 18.0,
+           'schedule': None,
+           'contractor_site': None,
+           'business_size': None}])
+
     def assertResultsEqual(self, results, expected):
         dict_results = [dict(x) for x in results]
         self.assertEqual(len(results), len(expected))
