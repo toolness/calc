@@ -114,6 +114,10 @@ class GetRates(APIView):
         contracts_all = self.get_queryset(request.QUERY_PARAMS, wage_field)
         page_stats = {}
 
+        page_stats['minimum'] = contracts_all.aggregate(Min(wage_field))[wage_field + '__min']
+        page_stats['maximum'] = contracts_all.aggregate(Max(wage_field))[wage_field + '__max']
+        page_stats['average'] = contracts_all.aggregate(Avg(wage_field))[wage_field + '__avg']
+
         if contracts_all:
             if bins and bins.isnumeric():
                 # numpy wants these to be floats, not Decimals
