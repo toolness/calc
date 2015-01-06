@@ -182,3 +182,68 @@ table caption {
         color: #666;
         font-size: .5em;
         margin-left: .5em; }
+
+
+.loading-indicator,
+.has-data {
+    -webkit-transition: opacity 0.5s linear;
+       -moz-transition: opacity 0.5s linear;
+            transition: opacity 0.5s linear;
+}
+
+.loading .has-data {
+  opacity: .2;
+}
+
+.loading-indicator {
+  opacity: 0;
+  visibility: hidden;
+}
+
+  .loading-indicator > * {
+    margin: 0;
+  }
+
+  .loading .loading-indicator {
+    opacity: 1;
+    visibility: visible;
+  }
+
+svg {
+  display: block;
+  margin: 0;
+  width: 100%;
+  height: auto;
+}
+
+svg * {
+  vector-effect: non-scaling-stroke;
+}
+
+.axis line,
+.axis path {
+  fill: none;
+  stroke-width: 1;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.axis text {
+  font-size: 13px;
+}
+
+.avg .value,
+.axis .tick.primary text {
+  font-weight: bold;
+}
+
+svg.histogram rect {
+  fill: #999;
+  stroke: #fff;
+  stroke-width: 1;
+}
+
+svg.histogram .avg line {
+  stroke-width: 1;
+  stroke: #000;
+}
