@@ -14,7 +14,7 @@ class ContractsTest(TestCase):
                 piid="123",
                 vendor_name="ACME Corp.",
                 labor_category="Legal Services",
-                min_years_experience=5,
+                min_years_experience=10,
                 hourly_rate_year1=18.00,
                 current_price=18.00,
         )
@@ -24,6 +24,7 @@ class ContractsTest(TestCase):
                 piid="234",
                 vendor_name="Numbers R Us",
                 labor_category="Accounting, CPA",
+                education_level='MA',
                 min_years_experience=5,
                 hourly_rate_year1=50.00,
                 current_price=50.00,
@@ -34,7 +35,8 @@ class ContractsTest(TestCase):
                 piid="345",
                 vendor_name="Word Power Co.",
                 labor_category="Writer/Editor",
-                min_years_experience=5,
+                education_level='BA',
+                min_years_experience=1,
                 hourly_rate_year1=16.00,
                 current_price=16.00,
         )
@@ -52,13 +54,34 @@ class ContractsTest(TestCase):
          [{'idv_piid': 'ABC234',
            'vendor_name': 'Numbers R Us',
            'labor_category': 'Accounting, CPA',
-           'education_level': None,
+           'education_level': 'Masters',
            'min_years_experience': 5,
            'hourly_rate_year1': 50.0,
            'current_price': 50.0,
            'schedule': None,
            'contractor_site': None,
            'business_size': None}])
+
+    def test_multi_word_search_results__hit(self):
+        resp = self.c.get(self.path, {'q': 'legal services'})
+        self.assertEqual(resp.status_code, 200)
+
+        self.assertEqual(resp.data['results'],
+         [{'idv_piid': 'ABC123',
+           'vendor_name': 'ACME Corp.',
+           'labor_category': 'Legal Services',
+           'education_level': None,
+           'min_years_experience': 10,
+           'hourly_rate_year1': 18.0,
+           'current_price': 18.0,
+           'schedule': None,
+           'contractor_site': None,
+           'business_size': None}])
+
+    def test_multi_word_search_results__miss(self):
+        resp = self.c.get(self.path, {'q': 'legal advice'})
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.data['results'], [])
 
     def test_filter_by_price__exact(self):
         resp = self.c.get(self.path, {'price': 18})
@@ -69,7 +92,7 @@ class ContractsTest(TestCase):
            'vendor_name': 'ACME Corp.',
            'labor_category': 'Legal Services',
            'education_level': None,
-           'min_years_experience': 5,
+           'min_years_experience': 10,
            'hourly_rate_year1': 18.0,
            'current_price': 18.0,
            'schedule': None,
@@ -84,7 +107,7 @@ class ContractsTest(TestCase):
          [{'idv_piid': 'ABC234',
            'vendor_name': 'Numbers R Us',
            'labor_category': 'Accounting, CPA',
-           'education_level': None,
+           'education_level': 'Masters',
            'min_years_experience': 5,
            'hourly_rate_year1': 50.0,
            'current_price': 50.0,
@@ -100,8 +123,8 @@ class ContractsTest(TestCase):
          [{'idv_piid': 'ABC345',
            'vendor_name': 'Word Power Co.',
            'labor_category': 'Writer/Editor',
-           'education_level': None,
-           'min_years_experience': 5,
+           'education_level': 'Bachelors',
+           'min_years_experience': 1,
            'hourly_rate_year1': 16.0,
            'current_price': 16.0,
            'schedule': None,
@@ -117,9 +140,57 @@ class ContractsTest(TestCase):
            'vendor_name': 'ACME Corp.',
            'labor_category': 'Legal Services',
            'education_level': None,
-           'min_years_experience': 5,
+           'min_years_experience': 10,
            'hourly_rate_year1': 18.0,
            'current_price': 18.0,
+           'schedule': None,
+           'contractor_site': None,
+           'business_size': None}])
+
+    def test_filter_by_min_education(self):
+        resp = self.c.get(self.path, {'min_education': 'MA'})
+        self.assertEqual(resp.status_code, 200)
+
+        self.assertResultsEqual(resp.data['results'],
+         [{'idv_piid': 'ABC234',
+           'vendor_name': 'Numbers R Us',
+           'labor_category': 'Accounting, CPA',
+           'education_level': 'Masters',
+           'min_years_experience': 5,
+           'hourly_rate_year1': 50.0,
+           'current_price': 50.0,
+           'schedule': None,
+           'contractor_site': None,
+           'business_size': None}])
+
+    def test_filter_by_min_experience(self):
+        resp = self.c.get(self.path, {'min_experience': '8'})
+        self.assertEqual(resp.status_code, 200)
+
+        self.assertResultsEqual(resp.data['results'],
+         [{'idv_piid': 'ABC123',
+           'vendor_name': 'ACME Corp.',
+           'labor_category': 'Legal Services',
+           'education_level': None,
+           'min_years_experience': 10,
+           'hourly_rate_year1': 18.0,
+           'current_price': 18.0,
+           'schedule': None,
+           'contractor_site': None,
+           'business_size': None}])
+
+    def test_filter_by_max_experience(self):
+        resp = self.c.get(self.path, {'max_experience': '3'})
+        self.assertEqual(resp.status_code, 200)
+
+        self.assertResultsEqual(resp.data['results'],
+         [{'idv_piid': 'ABC345',
+           'vendor_name': 'Word Power Co.',
+           'labor_category': 'Writer/Editor',
+           'education_level': 'Bachelors',
+           'min_years_experience': 1,
+           'hourly_rate_year1': 16.0,
+           'current_price': 16.0,
            'schedule': None,
            'contractor_site': None,
            'business_size': None}])

@@ -20,9 +20,7 @@ except:
 def convert_to_tsquery(query):
     #converts multi-word phrases into AND boolean queries for postgresql
     tsquery = query.strip() + ':*'
-    if ' ' in tsquery:
-        words = tsquery.split(' ')
-        tsquery = ' & '.join(words)
+    tsquery = tsquery.replace(' ', ' & ')
 
     return tsquery
 
