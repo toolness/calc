@@ -124,6 +124,40 @@ class ContractsTest(TestCase):
            'contractor_site': None,
            'business_size': None}])
 
+    def test_minimum_price_no_args(self):
+        resp = self.c.get(self.path, {})
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.data['minimum'], 16.0)
+
+    def test_maximum_price_no_args(self):
+        resp = self.c.get(self.path, {})
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.data['maximum'], 50.0)
+
+    def test_average_price_no_args(self):
+        resp = self.c.get(self.path, {})
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.data['average'], (16.0 + 18.0 + 50.0) / 3)
+
+    def test_histogram_length(self):
+        resp = self.c.get(self.path, {'histogram': 5})
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(len(resp.data['wage_histogram']), 5)
+
+    def test_histogram_not_numeric(self):
+        resp = self.c.get(self.path, {'histogram': 'x'})
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(len(resp.data['wage_histogram']), 0)
+
+    def test_histogram_bins(self):
+        resp = self.c.get(self.path, {'histogram': 2})
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(len(resp.data['wage_histogram']), 2)
+        self.assertResultsEqual(resp.data['wage_histogram'], [
+          {'count': 2, 'min': 16.0, 'max': 33.0},
+          {'count': 1, 'min': 33.0, 'max': 50.0}
+        ])
+
     def assertResultsEqual(self, results, expected):
         dict_results = [dict(x) for x in results]
         self.assertEqual(len(results), len(expected))

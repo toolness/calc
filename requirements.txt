@@ -4,3 +4,4 @@ djangorestframework==3.0.2
 psycopg2==2.5.4
 selenium
 model_mommy
+numpy==1.9.1
