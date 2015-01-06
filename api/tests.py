@@ -99,9 +99,9 @@ class ContractsTest(TestCase):
         self.assertResultsEqual(resp.data['results'],
          [{'idv_piid': 'ABC345',
            'vendor_name': 'Word Power Co.',
-           'labor_category': 'Writing/Editing',
+           'labor_category': 'Writer/Editor',
            'education_level': None,
-           'min_years_experience': 4,
+           'min_years_experience': 5,
            'hourly_rate_year1': 16.0,
            'current_price': 16.0,
            'schedule': None,
@@ -110,8 +110,6 @@ class ContractsTest(TestCase):
 
     def assertResultsEqual(self, results, expected):
         dict_results = [dict(x) for x in results]
+        self.assertEqual(len(results), len(expected))
         for i, result in enumerate(results):
-            try:
-                self.assertEqual(result, expected[i], 'Items at index {} did not match'.format(i))
-            except Exception as e:
-                print(e)
+            self.assertEqual(dict(result), expected[i])
