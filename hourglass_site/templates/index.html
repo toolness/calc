@@ -161,6 +161,11 @@
         </div>
 
         <div class="graph">
+
+          <svg id="price-histogram" class="histogram has-data">
+          </svg>
+
+          <!--
           <div id="price-range" class="range-graph has-data">
             <span class="tick min left">
               $<b class="value"></b><br>low
@@ -173,6 +178,7 @@
               $<b class="value"></b>
             </span>
           </div>
+          -->
 
         </div>
 
@@ -228,18 +234,30 @@
   form.on("submit", function onsubmit() {
     // stop the form from submitting
     d3.event.preventDefault();
-    submit();
+    submit(true);
   });
 
-  inputs.on("change", submit);
+  inputs.on("change", function onchange() {
+    submit(true);
+  });
 
   initialize();
 
-  function initialize() {
+  window.addEventListener("popstate", popstate);
+
+  function popstate() {
     // read the query string and set values accordingly
     var data = hourglass.qs.parse(location.search);
+    inputs.on("change", null);
     setFormData(data);
-    submit();
+    inputs.on("change", function onchange() {
+      submit(true);
+    });
+    submit(false);
+  }
+
+  function initialize() {
+    popstate();
 
     var autoCompReq;
     $search.autoComplete({
@@ -277,19 +295,25 @@
     });
   }
 
-  function submit() {
+  var loadingTimeout;
+  function submit(pushState) {
     var data = getFormData();
     console.log("submitting:", data);
 
-    form
-      .classed("loading", true)
-      .classed("loaded", false);
+    form.classed("loaded", false);
+    clearTimeout(loadingTimeout);
+    loadingTimeout = setTimeout(function() {
+      form.classed("loading", true);
+    }, 100);
 
     // cancel the outbound request if there is one
     if (request) request.abort();
+    var defaults = {
+      histogram: 10
+    };
     request = api.get({
       uri: "rates", 
-      data: data
+      data: hourglass.extend(defaults, data)
     }, update);
 
 
@@ -301,12 +325,15 @@
         ].join("?");
       });
 
-    var href = "?" + hourglass.qs.format(data)
-    permalink.attr("href", href);
-    history.pushState(null, null, href);
+    if (pushState) {
+      var href = "?" + hourglass.qs.format(data)
+      permalink.attr("href", href);
+      history.pushState(null, null, href);
+    }
   }
 
   function update(error, data) {
+    clearTimeout(loadingTimeout);
     form.classed("loading", false);
     request = null;
 
@@ -331,18 +358,21 @@
     d3.select("#results-total")
       .text(data ? formatCommas(data.count) : "(none)");
 
-    if (data) {
-      updatePrices(data);
+    if (data && data.results && data.results.length) {
+      updatePriceRange(data);
+      updatePriceHistogram(data);
       // updateHourlyWages(data.hourly_wage_stats, [data.minimum, data.maximum]);
       updateResults(data.results || []);
     } else {
-      updatePrices({minimum: 0, maximum: 1, average: 0});
+      data = EMPTY_DATA;
+      updatePriceRange(EMPTY_DATA);
+      updatePriceHistogram(EMPTY_DATA);
       // updateHourlyWages([], [0, 0]);
       updateResults([]);
     }
   }
 
-  function updatePrices(data) {
+  function updatePriceRange(data) {
     var priceScale = d3.scale.linear()
       .domain([data.minimum, data.maximum])
       .range([0, 100]);
@@ -361,6 +391,158 @@
       selection.select(".value")
         .text(formatPrice(+price));
     }
+  }
+
+  var histogramUpdated = false,
+      EMPTY_DATA = {
+        minimum: 0,
+        maximum: 100,
+        average: 50,
+        wage_histogram: [
+          {count: 0, min: 0, max: 50},
+          {count: 0, min: 50, max: 1}
+        ]
+      };
+  function updatePriceHistogram(data) {
+    var width = 500,
+        height = 200,
+        pad = [30, 15, 50, 45],
+        top = pad[0],
+        left = pad[3],
+        right = width - pad[1],
+        bottom = height - pad[2],
+        svg = d3.select("#price-histogram")
+          .attr("viewBox", [0, 0, width, height].join(" ")),
+        formatDecimal = d3.format(".02f"),
+        formatDollars = function(n) {
+          return "$" + formatDecimal(n);
+        };
+
+    var extent = [data.minimum, data.maximum],
+        bins = data.wage_histogram,
+        x = d3.scale.linear()
+          .domain(extent)
+          .range([left, right]),
+        height = d3.scale.linear()
+          .domain(d3.extent(bins, function(d) { return d.count; }))
+          .range([0, bottom - top]);
+
+    var xAxis = svg.select(".axis.x");
+    if (xAxis.empty()) {
+      xAxis = svg.append("g")
+        .attr("class", "axis x");
+    }
+
+    var yAxis = svg.select(".axis.y");
+    if (yAxis.empty()) {
+      yAxis = svg.append("g")
+        .attr("class", "axis y");
+    }
+
+    var gBar = svg.select("g.bars");
+    if (gBar.empty()) {
+      gBar = svg.append("g")
+        .attr("class", "bars");
+    }
+
+    var avg = svg.select("g.avg");
+    if (avg.empty()) {
+      avg = svg.append("g")
+        .attr("class", "avg");
+      avg.append("text")
+        .attr("text-anchor", "middle")
+        .attr("dy", -10)
+        .html('<tspan class="value"></tspan> average');
+      avg.append("line");
+      avg.append("circle")
+        .attr("cy", -4)
+        .attr("r", 3);
+    }
+
+    avg.select("line")
+      .attr("y1", -4)
+      .attr("y2", bottom - top + 8); // XXX tick size = 6
+    avg.select(".value")
+      .text(formatDollars(data.average));
+
+    var bars = gBar.selectAll(".bar")
+      .data(bins);
+
+    bars.exit().remove();
+
+    var enter = bars.enter().append("g")
+      .attr("class", "bar");
+    enter.append("title");
+
+    var step = (right - left) / bins.length;
+    enter.append("rect")
+      .attr("x", function(d, i) {
+        return left + i * step;
+      })
+      .attr("y", bottom)
+      .attr("width", step)
+      .attr("height", 0);
+
+    bars.select("title")
+      .text(function(d, i) {
+        var inclusive = (i === bins.length - 1),
+            sign = inclusive ? "<=" : "<";
+        return [formatCommas(d.count), ":", formatDollars(d.min), "<= x " + sign, formatDollars(d.max)].join(" ");
+      });
+
+    var t = histogramUpdated
+      ? svg.transition().duration(500)
+      : svg;
+
+    t.select(".avg")
+      .attr("transform", "translate(" + [~~x(data.average), top] + ")");
+
+    t.selectAll(".bar")
+      .each(function(d) {
+        d.x = x(d.min);
+        d.width = x(d.max) - d.x;
+        d.height = height(d.count);
+        d.y = bottom - d.height;
+      })
+      .select("rect")
+        .attr("x", function(d, i) { return d.x; })
+        .attr("y", function(d, i) { return d.y; })
+        .attr("height", function(d, i) { return d.height; })
+        .attr("width", function(d, i) { return d.width; });
+
+    var ticks = bins.map(function(d) { return d.min; })
+      .concat([data.maximum]);
+
+    var xa = d3.svg.axis()
+      .orient("bottom")
+      .scale(x)
+      .tickValues(ticks)
+      .tickFormat(function(d, i) {
+        return (i === 0 || i === bins.length)
+          ? formatDollars(d)
+          : formatDecimal(d);
+      });
+    xAxis.call(xa)
+      .attr("transform", "translate(" + [0, bottom + 2] + ")")
+      .selectAll(".tick")
+        .classed("primary", function(d, i) {
+          return i === 0 || i === bins.length;
+        })
+        .select("text")
+          .attr("text-anchor", "end")
+          .attr("transform", "translate(-20,16) rotate(-45)");
+
+    var ya = d3.svg.axis()
+      .orient("left")
+      .scale(d3.scale.linear()
+        .domain(height.domain())
+        .range([bottom, top]))
+      .tickValues(height.domain());
+    ya.tickFormat(formatCommas);
+    yAxis.call(ya)
+      .attr("transform", "translate(" + [left - 2, 0] + ")");
+
+    histogramUpdated = true;
   }
 
   function updateHourlyWages(stats, domain) {
