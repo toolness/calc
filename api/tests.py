@@ -139,6 +139,16 @@ class ContractsTest(TestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.data['average'], (16.0 + 18.0 + 50.0) / 3)
 
+    def test_histogram_length(self):
+        resp = self.c.get(self.path, {'histogram': 5})
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(len(resp.data['wage_histogram']), 5)
+
+    def test_histogram_not_numeric(self):
+        resp = self.c.get(self.path, {'histogram': 'x'})
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(len(resp.data['wage_histogram']), 0)
+
     def assertResultsEqual(self, results, expected):
         dict_results = [dict(x) for x in results]
         self.assertEqual(len(results), len(expected))
