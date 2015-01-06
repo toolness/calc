@@ -24,10 +24,6 @@
     position: relative;
   }
 
-  #permalink {
-    float: right;
-  }
-
   #price {
     width: 8em;
   }
@@ -71,11 +67,8 @@
       <div class="six columns">
         <input id="labor_category" name="q" placeholder="Type a labor category" class="search u-full-width" type="text">
       </div>
-      <div class="two columns">
-        <button class="submit button-primary u-full-width">Search</button>
-      </div>
-      <div class="four columns">
-        <a id="permalink" class="button">&infin; permalink</a>
+      <div class="six columns">
+        <button class="submit button-primary">Search</button>
       </div>
     </div>
 
@@ -223,7 +216,6 @@
       inputs = form.selectAll("*[name]"),
       formatPrice = d3.format(",.02f"),
       formatCommas = d3.format(","),
-      permalink = d3.select("#permalink"),
       api = new hourglass.API(),
       $search = $("#labor_category"),
       resultsTable = d3.select("#results-table")
@@ -327,7 +319,6 @@
 
     if (pushState) {
       var href = "?" + hourglass.qs.format(data)
-      permalink.attr("href", href);
       history.pushState(null, null, href);
     }
   }
