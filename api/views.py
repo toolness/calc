@@ -32,19 +32,28 @@ def convert_to_tsquery(query):
 def get_contracts_queryset(request_params, wage_field):
 
     query = request_params.get('q', None)
-    min_experience = request_params.get('min_experience', 0)
-    max_experience = request_params.get('max_experience', 100)
+    min_experience = request_params.get('min_experience', None)
+    max_experience = request_params.get('max_experience', None)
     min_education = request_params.get('min_education', None)
     schedule = request_params.get('schedule', None)
     site = request_params.get('site', None)
     business_size = request_params.get('business_size', None)
     price = request_params.get('price', None)
+    price__gt = request_params.get('price__gt')
+    price__lt = request_params.get('price__lt')
 
-    contracts = Contract.objects.filter(min_years_experience__gte=min_experience, min_years_experience__lte=max_experience).order_by(wage_field)
+    contracts = Contract.objects.all()
+    
 
     if query:
         query = convert_to_tsquery(query)
         contracts = contracts.search(query, raw=True)
+
+    if min_experience:
+        contracts = contracts.filter(min_years_experience__gte=min_experience)
+
+    if max_experience:
+        contracts = contracts.filter(min_years_experience__lte=max_experience)
 
     if min_education:
         for index, pair in enumerate(EDUCATION_CHOICES):
@@ -61,8 +70,13 @@ def get_contracts_queryset(request_params, wage_field):
         contracts = contracts.filter(business_size__icontains='o')
     if price:
         contracts = contracts.filter(**{wage_field + '__exact': price})
+    else:
+        if price__gt:
+            contracts = contracts.filter(**{wage_field + '__gt': price__gt})
+        if price__lt:
+            contracts = contracts.filter(**{wage_field + '__lt': price__lt})
 
-    return contracts
+    return contracts.order_by(wage_field)
 
 
 def get_histogram(values, bins=10):
@@ -79,7 +93,7 @@ def get_histogram(values, bins=10):
     >>> hist[2]
     {'count': 1, 'max': 3.0, 'min': 2.333333333333333}
     """
-    hist, edges = np.histogram(map(float, values), bins, density=False)
+    hist, edges = np.histogram(list(map(float, values)), bins, density=False)
     result = []
     for i, edge in enumerate(edges[1:]):
         result.append({
@@ -94,27 +108,13 @@ class GetRates(APIView):
     def get(self, request):
 
         page = request.QUERY_PARAMS.get('page', 1)
+        bins = request.QUERY_PARAMS.get('histogram', None)
+
         wage_field = 'current_price'
         contracts_all = self.get_queryset(request.QUERY_PARAMS, wage_field)
         page_stats = {}
 
         if contracts_all:
-            page_stats['average'] = Decimal(contracts_all.aggregate(Avg(wage_field))[wage_field + '__avg']).quantize(Decimal(10) ** -2)
-            page_stats['minimum'] = contracts_all.aggregate(Min(wage_field))[wage_field + '__min']
-            page_stats['maximum'] = contracts_all.aggregate(Max(wage_field))[wage_field + '__max']
-
-            # TODO: make this conditional on a query string parameter
-            if True:
-                hourly_wage_stats = contracts_all.values('min_years_experience').annotate(average_wage=Avg(wage_field), min_wage=Min(wage_field), max_wage=Max(wage_field), num_contracts=Count('sin')).order_by()
-
-                #Avg always returns float, so make it a fixed point string in each dict
-                for item in hourly_wage_stats:
-                    item['average_wage'] = Decimal(item['average_wage']).quantize(Decimal(10) ** -2)
-
-                page_stats['hourly_wage_stats'] = sorted(hourly_wage_stats, key=lambda mye: mye['min_years_experience'])
-
-            # look for the ?histogram= query string parameter, which should be numeric
-            bins = request.QUERY_PARAMS.get('histogram', None)
             if bins and bins.isnumeric():
                 # numpy wants these to be floats, not Decimals
                 values = contracts_all.values_list(wage_field, flat=True)
