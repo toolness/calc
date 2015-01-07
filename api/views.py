@@ -39,6 +39,7 @@ def get_contracts_queryset(request_params, wage_field):
     price = request_params.get('price', None)
     price__gt = request_params.get('price__gt')
     price__lt = request_params.get('price__lt')
+    sort = request_params.get('sort', wage_field)
 
     contracts = Contract.objects.all()
     
@@ -74,7 +75,7 @@ def get_contracts_queryset(request_params, wage_field):
         if price__lt:
             contracts = contracts.filter(**{wage_field + '__lt': price__lt})
 
-    return contracts.order_by(wage_field)
+    return contracts.order_by(*sort.split(','))
 
 
 def get_histogram(values, bins=10):
