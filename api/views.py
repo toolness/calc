@@ -11,6 +11,9 @@ from rest_framework.views import APIView
 from api.serializers import PaginatedContractSerializer
 from contracts.models import Contract, EDUCATION_CHOICES
 
+import numpy as np
+import sys
+
 try: 
     #python2 compat
     import unicodecsv as csv
@@ -27,8 +30,8 @@ def convert_to_tsquery(query):
 def get_contracts_queryset(request_params, wage_field):
 
     query = request_params.get('q', None)
-    min_experience = request_params.get('min_experience', 0)
-    max_experience = request_params.get('max_experience', 100)
+    min_experience = request_params.get('min_experience', None)
+    max_experience = request_params.get('max_experience', None)
     min_education = request_params.get('min_education', None)
     schedule = request_params.get('schedule', None)
     site = request_params.get('site', None)
@@ -37,11 +40,18 @@ def get_contracts_queryset(request_params, wage_field):
     price__gt = request_params.get('price__gt')
     price__lt = request_params.get('price__lt')
 
-    contracts = Contract.objects.filter(min_years_experience__gte=min_experience, min_years_experience__lte=max_experience).order_by(wage_field)
+    contracts = Contract.objects.all()
+    
 
     if query:
         query = convert_to_tsquery(query)
         contracts = contracts.search(query, raw=True)
+
+    if min_experience:
+        contracts = contracts.filter(min_years_experience__gte=min_experience)
+
+    if max_experience:
+        contracts = contracts.filter(min_years_experience__lte=max_experience)
 
     if min_education:
         for index, pair in enumerate(EDUCATION_CHOICES):
@@ -64,29 +74,59 @@ def get_contracts_queryset(request_params, wage_field):
         if price__lt:
             contracts = contracts.filter(**{wage_field + '__lt': price__lt})
 
-    return contracts
+    return contracts.order_by(wage_field)
 
+
+def get_histogram(values, bins=10):
+    """
+    Get a histogram of a list of numeric values.
+
+    >>> hist = get_histogram([1, 2, 3], 3)
+    >>> len(hist)
+    3
+    >>> hist[0]
+    {'count': 1, 'max': 1.6666666666666665, 'min': 1.0}
+    >>> hist[1]
+    {'count': 1, 'max': 2.333333333333333, 'min': 1.6666666666666665}
+    >>> hist[2]
+    {'count': 1, 'max': 3.0, 'min': 2.333333333333333}
+    """
+    hist, edges = np.histogram(list(map(float, values)), bins, density=False)
+    result = []
+    for i, edge in enumerate(edges[1:]):
+        result.append({
+            'count': hist[i],
+            'min': edges[i],
+            'max': edges[i + 1]
+        })
+    return result
+
+def quantize(num, precision=2):
+  if num is None:
+    return None
+  return Decimal(num).quantize(Decimal(10) ** -precision)
 
 class GetRates(APIView):
 
     def get(self, request):
 
         page = request.QUERY_PARAMS.get('page', 1)
+        bins = request.QUERY_PARAMS.get('histogram', None)
+
         wage_field = 'current_price'
         contracts_all = self.get_queryset(request.QUERY_PARAMS, wage_field)
         page_stats = {}
 
+        page_stats['minimum'] = contracts_all.aggregate(Min(wage_field))[wage_field + '__min']
+        page_stats['maximum'] = contracts_all.aggregate(Max(wage_field))[wage_field + '__max']
+        page_stats['average'] = quantize(contracts_all.aggregate(Avg(wage_field))[wage_field + '__avg'])
+
         if contracts_all:
-            page_stats['average'] = Decimal(contracts_all.aggregate(Avg(wage_field))[wage_field + '__avg']).quantize(Decimal(10) ** -2)
-            page_stats['minimum'] = contracts_all.aggregate(Min(wage_field))[wage_field + '__min']
-            page_stats['maximum'] = contracts_all.aggregate(Max(wage_field))[wage_field + '__max']
-            hourly_wage_stats = contracts_all.values('min_years_experience').annotate(average_wage=Avg(wage_field), min_wage=Min(wage_field), max_wage=Max(wage_field), num_contracts=Count('sin')).order_by()
-
-            #Avg always returns float, so make it a fixed point string in each dict
-            for item in hourly_wage_stats:
-                item['average_wage'] = Decimal(item['average_wage']).quantize(Decimal(10) ** -2)
-
-            page_stats['hourly_wage_stats'] = sorted(hourly_wage_stats, key=lambda mye: mye['min_years_experience'])
+            if bins and bins.isnumeric():
+                # numpy wants these to be floats, not Decimals
+                values = contracts_all.values_list(wage_field, flat=True)
+                # see api.serializers.PaginatedContractSerializer#get_wage_histogram()
+                page_stats['wage_histogram'] = get_histogram(values, int(bins))
 
             paginator = Paginator(contracts_all, settings.PAGINATION)
             contracts = paginator.page(page)
@@ -123,7 +163,3 @@ class GetAutocomplete(APIView):
         if q:
             data = Contract.objects.search(convert_to_tsquery(q), raw=True).values('labor_category').annotate(count=Count('labor_category')).order_by('-count')
             return Response(data)
-
-
-
-
