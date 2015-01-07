@@ -63,9 +63,9 @@ def get_contracts_queryset(request_params, wage_field):
     if site:
         contracts = contracts.filter(contractor_site__icontains=site)
     if business_size == 's':
-        contracts = contracts.filter(business_size__icontains='s')
+        contracts = contracts.filter(business_size__istartswith='s')
     elif business_size == 'o':
-        contracts = contracts.filter(business_size__icontains='o')
+        contracts = contracts.filter(business_size__istartswith='o')
     if price:
         contracts = contracts.filter(**{wage_field + '__exact': price})
     else:
