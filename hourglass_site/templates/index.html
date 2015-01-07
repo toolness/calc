@@ -68,7 +68,7 @@
         <input id="labor_category" name="q" placeholder="Type a labor category" class="search u-full-width" type="text">
       </div>
       <div class="six columns">
-        <button class="submit button-primary">Search</button>
+        <button id="submit" class="submit button-primary">Search</button>
       </div>
     </div>
 
@@ -330,18 +330,19 @@
     request = null;
 
     if (error) {
+      if (error.statusText === "abort") {
+        // ignore aborts
+        return;
+      }
+
       form.classed("error", true);
 
       loadingIndicator.select(".error")
         .text(error.responseText);
 
-      // ignore aborts
-      if (error.statusText === "abort") {
-        return;
-      } else {
-        console.warn("error:", error);
-        return showError("Whoops: " + error.responseText);
-      }
+      console.error(error.responseText);
+    } else {
+      form.classed("error", false);
     }
 
     console.log("update:", data);
