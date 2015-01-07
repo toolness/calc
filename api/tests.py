@@ -1,11 +1,14 @@
 from django.test import TestCase, Client
 from model_mommy import mommy
 from contracts.models import Contract
+from api.mommy_recipes import contract_recipe
 
 class ContractsTest(TestCase):
     """ tests for the /api/rates endpoint """
 
     def setUp(self):
+        self.maxDiff=None
+
         self.c = Client()
         self.path = '/api/rates/'
         self.contract_legal = mommy.make(
@@ -194,6 +197,35 @@ class ContractsTest(TestCase):
            'schedule': None,
            'contractor_site': None,
            'business_size': None}])
+
+    def test_filter_by_schedule(self):
+        contract_recipe.make(_quantity=3)
+
+        resp = self.c.get(self.path, {'schedule': 'MOBIS'})
+        self.assertEqual(resp.status_code, 200)
+
+        self.assertResultsEqual(resp.data['results'],
+         [{'idv_piid': 'ABC1231',
+           'vendor_name': 'CompanyName1',
+           'labor_category': 'Legal Services',
+           'education_level': None,
+           'min_years_experience': 6,
+           'hourly_rate_year1': 21.0,
+           'current_price': 21.0,
+           'schedule': 'MOBIS',
+           'contractor_site': None,
+           'business_size': None},
+         {'idv_piid': 'ABC1233',
+           'vendor_name': 'CompanyName3',
+           'labor_category': 'Legal Services',
+           'education_level': None,
+           'min_years_experience': 8,
+           'hourly_rate_year1': 23.0,
+           'current_price': 23.0,
+           'schedule': 'MOBIS',
+           'contractor_site': None,
+           'business_size': None}])
+
 
     def assertResultsEqual(self, results, expected):
         dict_results = [dict(x) for x in results]
