@@ -72,17 +72,35 @@ class FunctionalTests(LiveServerTestCase):
         labor_cell = driver.find_element_by_css_selector('tbody tr .column-labor_category')
         self.assertTrue('Engineer' in labor_cell.text, 'Labor category cell text mismatch')
 
-    def test_price_filter(self):
+    def test_price_gt(self):
         driver = self.load()
         form = self.get_form()
-        set_form_value(form, 'price__gt', 100)
+        self.search_for('Contractor')
+
+        minimum = 100
+        set_form_value(form, 'price__gt', minimum)
         self.submit_form()
-        self.assertTrue('price__gt=100' in driver.current_url, 'Missing "price__gt=100" in query string')
+        self.assertTrue(('price__gt=%d' % minimum) in driver.current_url, 'Missing "price__gt=%d" in query string' % minimum)
         wait_for(self.data_is_loaded)
 
-        price_cell = driver.find_element_by_css_selector('tbody tr .column-current_price')
-        dollars = float(price_cell.text[1:])
-        self.assertTrue(dollars > 100, 'Minimum price mismatch')
+        for cell in driver.find_elements_by_css_selector('tbody tr .column-current_price'):
+            dollars = float(cell.text[1:])
+            self.assertTrue(dollars > minimum, '%s <= %d' % (cell.text, minimum))
+
+    def test_price_lt(self):
+        driver = self.load()
+        form = self.get_form()
+        self.search_for('Contractor')
+
+        maximum = 200
+        set_form_value(form, 'price__lt', maximum)
+        self.submit_form()
+        self.assertTrue(('price__lt=%d' % maximum) in driver.current_url, 'Missing "price__lt=%d" in query string' % maximum)
+        wait_for(self.data_is_loaded)
+
+        for cell in driver.find_elements_by_css_selector('tbody tr .column-current_price'):
+            dollars = float(cell.text[1:])
+            self.assertTrue(dollars < maximum, '%s >= %d' % (cell.text, maximum))
 
     def test_sort_columns(self):
         driver = self.load()
