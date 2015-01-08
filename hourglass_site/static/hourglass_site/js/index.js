@@ -427,8 +427,13 @@
     td.enter().append("td")
       .attr("class", function(column) {
         return "column-" + column.key;
+      })
+      .classed("collapsed", function(d) {
+        return d.column.collapsed;
       });
-    td.text(function(d) { return d.string; });
+    td.text(function(d) {
+      return d.column.collapsed ? "" : d.string;
+    });
   }
 
   function getFormData() {
@@ -462,20 +467,22 @@
   function setupColumnHeader(headers) {
     headers
       .datum(function() {
-        var sortable = this.classList.contains("sortable");
         return {
           key: this.getAttribute("data-key"),
           format: getFormat(this.getAttribute("data-format")),
-          sortable: sortable
+          sortable: this.classList.contains("sortable"),
+          collapsible: this.classList.contains("collapsible")
         };
       })
       .each(function(d) {
         this.classList.add("column-" + d.key);
-      })
-      .filter(function(d) {
-        return d.sortable;
-      })
+      });
+
+    headers.filter(function(d) { return d.sortable; })
       .call(setupSortHeader);
+
+    headers.filter(function(d) { return d.collapsible; })
+      .call(setupCollabsibleHeader);
   }
 
   function setupSortHeader(headers) {
@@ -497,19 +504,45 @@
       if (d.sorted) {
         d.descending = !d.descending;
       }
-
       d.sorted = true;
-
-      console.log("sort:", d);
 
       var sort = (d.descending ? "-" : "") + d.key;
       setFormData({sort: sort});
-
       headers
         .classed("sorted", function(c) { return c.sorted; })
         .classed("descending", function(c) { return c.sorted && c.descending; });
-
       submit(true);
+    }
+  }
+
+  function setupCollabsibleHeader(headers) {
+    headers
+      .each(function(d) {
+        d.collapsed = this.classList.contains("collapsed");
+        d.label = this.innerText;
+      })
+      .on("click", function(d) {
+        d.collapsed = !d.collapsed;
+        updateCollapsed.apply(this, arguments);
+      })
+      .each(updateCollapsed);
+
+    function updateCollapsed(d) {
+      var title = [
+        (d.collapsed ? "Show" : "Hide"),
+        d.label
+      ].join(" ");
+
+      d3.select(this)
+        .classed("collapsed", d.collapsed)
+        .attr("title", title)
+        .text(d.collapsed ? "" : d.label);
+
+      resultsTable.selectAll("td.column-" + d.key)
+        .classed("collapsed", d.collapsed)
+        .text(d.collapsed
+          ? ""
+          : function(d) { return d.string; });
     }
   }
 
