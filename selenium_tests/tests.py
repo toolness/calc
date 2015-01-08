@@ -9,11 +9,6 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-from model_mommy import mommy
-from model_mommy.recipe import seq
-from contracts.models import Contract
-from api.mommy_recipes import contract_recipe
-
 import time
 
 class FunctionalTests(LiveServerTestCase): 
@@ -34,10 +29,6 @@ class FunctionalTests(LiveServerTestCase):
     def load(self, uri='/'):
         self.driver.get(self.base_url + uri)
         return self.driver
-
-    def set_form_values(self, values):
-        for key, value in values.entries():
-            set_form_value(key, value)
 
     def get_form(self):
         return self.driver.find_element_by_id('search')
@@ -60,15 +51,20 @@ class FunctionalTests(LiveServerTestCase):
         driver = self.load()
         self.assertTrue(driver.title.startswith('Hourglass'), 'Title mismatch')
 
-    def __test_form_submit_loading(self):
+    def test_form_submit_loading(self):
         driver = self.load()
+        self.search_for('Architect')
         form = self.submit_form()
-        self.assertTrue('loading' in form.get_attribute('class'), "Form class doesn't contain 'loading'")
+        self.assertTrue(has_class(form, 'loading'), "Form doesn't have 'loading' class")
+        wait_for(self.data_is_loaded)
+        self.assertTrue(has_class(form, 'loaded'), "Form doesn't have 'loaded' class")
+        self.assertFalse(has_class(form, 'loading'), "Form shouldn't have 'loading' class after loading")
 
     def test_search_input(self):
         driver = self.load()
         self.search_for('Engineer')
         self.submit_form()
+        self.assertTrue('q=Engineer' in driver.current_url, 'Missing "q=Engineer" in query string')
         wait_for(self.data_is_loaded)
 
         results_count = driver.find_element_by_id('results-count').text
@@ -81,11 +77,50 @@ class FunctionalTests(LiveServerTestCase):
         form = self.get_form()
         set_form_value(form, 'price__gt', 100)
         self.submit_form()
+        self.assertTrue('price__gt=100' in driver.current_url, 'Missing "price__gt=100" in query string')
         wait_for(self.data_is_loaded)
 
         price_cell = driver.find_element_by_css_selector('tbody tr .column-current_price')
         dollars = float(price_cell.text[1:])
         self.assertTrue(dollars > 100, 'Minimum price mismatch')
+
+    def test_sort_columns(self):
+        driver = self.load()
+        form = self.get_form()
+
+        # limit the result set so it loads more quickly
+        self.search_for('Consultant')
+        header = driver.find_element_by_css_selector('th.column-min_years_experience')
+
+        header.click()
+        self.submit_form()
+        self.assertTrue('sort=min_years_experience' in driver.current_url, 'Missing "sort=min_years_experience" in query string')
+        self.assertTrue(has_class(header, 'sorted'), "Header doesn't have 'sorted' class")
+        self.assertFalse(has_class(header, 'descending'), "Header shouldn't have 'descending' class")
+
+        wait_for(self.data_is_loaded, timeout=10)
+        # iterate through all of the min_years_experience cells,
+        # and ensure that they have a value >= the previous one
+        value = 0
+        for cell in driver.find_elements_by_css_selector('td.column-min_years_experience'):
+            cell_value = int(cell.text)
+            self.assertTrue(cell_value >= value, "%d < %d (not sorted)" % (cell_value, value))
+            value = cell_value
+
+        header.click()
+        self.submit_form()
+        self.assertTrue('sort=-min_years_experience' in driver.current_url, 'Missing "sort=-min_years_experience" in query string')
+        self.assertTrue(has_class(header, 'sorted'), "Header doesn't have 'sorted' class")
+        self.assertTrue(has_class(header, 'descending'), "Header doesn't have 'descending' class")
+
+        wait_for(self.data_is_loaded, timeout=10)
+        # iterate through all of the min_years_experience cells,
+        # and ensure that they have a value <= the previous one
+        value = 1000000
+        for cell in driver.find_elements_by_css_selector('td.column-min_years_experience'):
+            cell_value = int(cell.text)
+            self.assertTrue(cell_value <= value, "%d > %d (not sorted)" % (cell_value, value))
+            value = cell_value
 
 def wait_for(condition, timeout=3):
     start = time.time()
@@ -118,6 +153,9 @@ def set_form_value(form, key, value):
             field.send_keys(value)
     return field
 
+def set_form_values(self, values):
+    for key, value in values.entries():
+        set_form_value(key, value)
 
 if __name__ == '__main__':
     import unittest
