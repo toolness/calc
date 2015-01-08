@@ -23,9 +23,7 @@ except:
 def convert_to_tsquery(query):
     #converts multi-word phrases into AND boolean queries for postgresql
     tsquery = query.strip() + ':*'
-    if ' ' in tsquery:
-        words = tsquery.split(' ')
-        tsquery = ' & '.join(words)
+    tsquery = tsquery.replace(' ', ' & ')
 
     return tsquery
 
@@ -41,6 +39,7 @@ def get_contracts_queryset(request_params, wage_field):
     price = request_params.get('price', None)
     price__gt = request_params.get('price__gt')
     price__lt = request_params.get('price__lt')
+    sort = request_params.get('sort', wage_field)
 
     contracts = Contract.objects.all()
     
@@ -65,9 +64,9 @@ def get_contracts_queryset(request_params, wage_field):
     if site:
         contracts = contracts.filter(contractor_site__icontains=site)
     if business_size == 's':
-        contracts = contracts.filter(business_size__icontains='s')
+        contracts = contracts.filter(business_size__istartswith='s')
     elif business_size == 'o':
-        contracts = contracts.filter(business_size__icontains='o')
+        contracts = contracts.filter(business_size__istartswith='o')
     if price:
         contracts = contracts.filter(**{wage_field + '__exact': price})
     else:
@@ -76,7 +75,7 @@ def get_contracts_queryset(request_params, wage_field):
         if price__lt:
             contracts = contracts.filter(**{wage_field + '__lt': price__lt})
 
-    return contracts.order_by(wage_field)
+    return contracts.order_by(*sort.split(','))
 
 
 def get_histogram(values, bins=10):
