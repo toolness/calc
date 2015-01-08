@@ -497,18 +497,13 @@
       if (d.sorted) {
         d.descending = !d.descending;
       }
-
       d.sorted = true;
-
-      console.log("sort:", d);
 
       var sort = (d.descending ? "-" : "") + d.key;
       setFormData({sort: sort});
-
       headers
         .classed("sorted", function(c) { return c.sorted; })
         .classed("descending", function(c) { return c.sorted && c.descending; });
-
       submit(true);
     }
   }
