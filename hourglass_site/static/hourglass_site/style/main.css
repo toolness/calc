@@ -21,10 +21,15 @@ table caption {
   padding: .25em .5em;
   vertical-align: top; }
 
+th, th:first-child {
+  vertical-align: bottom;
+}
+
 tbody tr:nth-child(odd) td {
   background: #f9f9f9; }
 
 thead th {
+  color: #666;
   border-bottom: 1px solid;
 }
 
@@ -32,6 +37,34 @@ table caption {
   color: #666;
   text-align: left;
   font-weight: bold; }
+
+th.sortable {
+  text-decoration: underline;
+  cursor: pointer;
+  padding-right: 1.5em;
+}
+
+th.sorted {
+  color: #000;
+  background: #f8f8f8;
+  position: relative;
+}
+
+  th.sorted:after {
+    content: "▼";
+    display: inline-block;
+    line-height: 1em;
+    height: 1em;
+    position: absolute;
+    bottom: .4em;
+    right: 0;
+    margin-top: -.5em;
+    margin-right: .25em;
+  }
+
+  th.sorted.descending:after {
+    content: "▲";
+  }
 
 .autocomplete-suggestions {
   position: absolute;
