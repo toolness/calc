@@ -11,7 +11,6 @@
       sortHeaders = resultsTable.selectAll("thead th")
         .call(setupColumnHeader),
       loadingIndicator = form.select(".loading-indicator"),
-      loadingTimeout,
       request;
 
   form.on("submit", function onsubmit() {
@@ -94,10 +93,7 @@
     console.log("submitting:", data);
 
     form.classed("loaded", false);
-    clearTimeout(loadingTimeout);
-    loadingTimeout = setTimeout(function() {
-      form.classed("loading", true);
-    }, 100);
+    form.classed("loading", true);
 
     // cancel the outbound request if there is one
     if (request) request.abort();
@@ -125,7 +121,6 @@
   }
 
   function update(error, data) {
-    clearTimeout(loadingTimeout);
     form.classed("loading", false);
     request = null;
 
