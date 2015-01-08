@@ -2,7 +2,7 @@ from django.test import TestCase, Client
 from model_mommy import mommy
 from model_mommy.recipe import seq
 from contracts.models import Contract
-from api.mommy_recipes import contract_recipe
+from contracts.mommy_recipes import contract_recipe
 from itertools import cycle
 
 class ContractsTest(TestCase):
