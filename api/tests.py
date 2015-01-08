@@ -10,7 +10,9 @@ class ContractsTest(TestCase):
     BUSINESS_SIZES = ('small business', 'other than small business')
 
     def setUp(self):
+        # unittest config
         self.maxDiff=None
+        self.longMessage=True
 
         self.c = Client()
         self.path = '/api/rates/'
@@ -250,6 +252,80 @@ class ContractsTest(TestCase):
            'business_size': 'other than small business'}]
          )
 
+        resp = self.c.get(self.path, {'business_size': 's', 'sort': '-current_price'})
+        self.assertEqual(resp.status_code, 200)
+
+        self.assertResultsEqual(resp.data['results'],
+         [{'idv_piid': 'ABC1233',
+           'vendor_name': 'CompanyName3',
+           'labor_category': 'Business Analyst II',
+           'education_level': None,
+           'min_years_experience': 8,
+           'hourly_rate_year1': 23.0,
+           'current_price': 23.0,
+           'schedule': 'MOBIS',
+           'contractor_site': None,
+           'business_size': 'small business'},
+         {'idv_piid': 'ABC1231',
+           'vendor_name': 'CompanyName1',
+           'labor_category': 'Business Analyst II',
+           'education_level': None,
+           'min_years_experience': 6,
+           'hourly_rate_year1': 21.0,
+           'current_price': 21.0,
+           'schedule': 'MOBIS',
+           'contractor_site': None,
+           'business_size': 'small business'}])
+
+    def test_sort_on_multiple_columns(self):
+        self.make_test_set()
+        contract_recipe.make(vendor_name='Numbers R Us')
+
+        resp = self.c.get(self.path, {'sort': '-vendor_name,current_price'})
+
+        self.assertEqual(resp.status_code, 200)
+        self.assertResultsEqual(resp.data['results'],
+         [{'idv_piid': 'ABC345',
+           'vendor_name': 'Word Power Co.',
+           'labor_category': 'Writer/Editor',
+           'education_level': 'Bachelors',
+           'min_years_experience': 1,
+           'hourly_rate_year1': 16.0,
+           'current_price': 16.0,
+           'schedule': None,
+           'contractor_site': None,
+           'business_size': None},
+         {'idv_piid': 'ABC1234',
+           'vendor_name': 'Numbers R Us',
+           'labor_category': 'Business Analyst II',
+           'education_level': None,
+           'min_years_experience': 9,
+           'hourly_rate_year1': 24.0,
+           'current_price': 24.0,
+           'schedule': 'PES',
+           'contractor_site': None,
+           'business_size': None},
+         {'idv_piid': 'ABC234',
+           'vendor_name': 'Numbers R Us',
+           'labor_category': 'Accounting, CPA',
+           'education_level': 'Masters',
+           'min_years_experience': 5,
+           'hourly_rate_year1': 50.0,
+           'current_price': 50.0,
+           'schedule': None,
+           'contractor_site': None,
+           'business_size': None},
+         {'idv_piid': 'ABC123',
+           'vendor_name': 'ACME Corp.',
+           'labor_category': 'Legal Services',
+           'education_level': None,
+           'min_years_experience': 10,
+           'hourly_rate_year1': 18.0,
+           'current_price': 18.0,
+           'schedule': None,
+           'contractor_site': None,
+           'business_size': None}])
+
     def test_minimum_price_no_args(self):
         self.make_test_set()
         resp = self.c.get(self.path, {})
@@ -341,8 +417,9 @@ class ContractsTest(TestCase):
                 hourly_rate_year1=16.00,
                 current_price=16.00,
         )
+
     def assertResultsEqual(self, results, expected):
         dict_results = [dict(x) for x in results]
         self.assertEqual(len(results), len(expected))
         for i, result in enumerate(results):
-            self.assertEqual(dict(result), expected[i])
+            self.assertEqual(dict(result), expected[i], "\n===== Object at index {} failed. =====".format(i))
