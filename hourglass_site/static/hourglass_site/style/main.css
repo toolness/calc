@@ -50,8 +50,8 @@ th.sorted {
   position: relative;
 }
 
-  th.sorted:after {
-    content: "▼";
+  th.sorted:after,
+  th.collapsible:after {
     display: inline-block;
     line-height: 1em;
     height: 1em;
@@ -62,9 +62,38 @@ th.sorted {
     margin-right: .25em;
   }
 
+  th.sorted:after {
+    content: "▼";
+  }
+
   th.sorted.descending:after {
     content: "▲";
   }
+
+th.collapsible {
+  text-decoration: underline;
+  cursor: pointer;
+  position: relative;
+}
+
+  th.collapsible:after {
+    content: "▶";
+  }
+
+  th.collapsible.collapsed:after {
+    content: "◀";
+  }
+
+th.collapsed,
+td.collapsed {
+  width: 1.5em !important;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+td.collapsed {
+  border-left: 1px dotted #E1E1E1;
+}
 
 .autocomplete-suggestions {
   position: absolute;
