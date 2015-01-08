@@ -8,7 +8,10 @@
       $search = $("#labor_category"),
       resultsTable = d3.select("#results-table")
         .style("display", "none"),
+      sortHeaders = resultsTable.selectAll("thead th")
+        .call(setupColumnHeader),
       loadingIndicator = form.select(".loading-indicator"),
+      loadingTimeout,
       request;
 
   form.on("submit", function onsubmit() {
@@ -24,17 +27,6 @@
   initialize();
 
   window.addEventListener("popstate", popstate);
-
-  function popstate() {
-    // read the query string and set values accordingly
-    var data = hourglass.qs.parse(location.search);
-    inputs.on("change", null);
-    setFormData(data);
-    inputs.on("change", function onchange() {
-      submit(true);
-    });
-    submit(false);
-  }
 
   function initialize() {
     popstate();
@@ -75,7 +67,28 @@
     });
   }
 
-  var loadingTimeout;
+  function popstate() {
+    // read the query string and set values accordingly
+    var data = hourglass.extend(
+      getFormData(),
+      hourglass.qs.parse(location.search)
+    );
+    inputs.on("change", null);
+    setFormData(data);
+    inputs.on("change", function onchange() {
+      submit(true);
+    });
+    var sort = parseSortOrder(data.sort);
+    sortHeaders
+      .classed("sorted", function(d) {
+        return d.sorted = (d.key === sort.key);
+      })
+      .classed("descending", function(d) {
+        return d.descending = (d.sorted && sort.order === "-");
+      });
+    submit(false);
+  }
+
   function submit(pushState) {
     var data = getFormData();
     console.log("submitting:", data);
@@ -390,35 +403,17 @@
 
     resultsTable.style("display", null);
 
-    var thead = resultsTable
-          .select("thead"),
-        columns = thead.selectAll("th")
-          .datum(function() {
-            return {
-              key: this.getAttribute("data-key"),
-              format: getFormat(this.getAttribute("data-format"))
-            };
-          })
-          .each(function(d) {
-            this.classList.add("column-" + d.key);
-          })
-          .data(),
+    var thead = resultsTable.select("thead"),
+        columns = thead.selectAll("th").data(),
         tbody = resultsTable.select("tbody");
 
     var tr = tbody.selectAll("tr")
       .data(results);
 
     tr.exit().remove();
-    tr.enter().append("tr")
-      .selectAll("td")
-        .data(columns)
-        .enter()
-        .append("td")
-          .attr("class", function(column) {
-            return "column-" + column.key;
-          });
+    tr.enter().append("tr");
 
-    tr.selectAll("td")
+    var td = tr.selectAll("td")
       .data(function(d) {
         return columns.map(function(column) {
           var key = column.key,
@@ -431,8 +426,14 @@
             string: column.format(value)
           };
         });
-      })
-      .text(function(d) { return d.string; });
+      });
+
+    td.exit().remove();
+    td.enter().append("td")
+      .attr("class", function(column) {
+        return "column-" + column.key;
+      });
+    td.text(function(d) { return d.string; });
   }
 
   function getFormData() {
@@ -461,6 +462,74 @@
         this.value = data[this.name];
       }
     });
+  }
+
+  function setupColumnHeader(headers) {
+    headers
+      .datum(function() {
+        var sortable = this.classList.contains("sortable");
+        return {
+          key: this.getAttribute("data-key"),
+          format: getFormat(this.getAttribute("data-format")),
+          sortable: sortable
+        };
+      })
+      .each(function(d) {
+        this.classList.add("column-" + d.key);
+      })
+      .filter(function(d) {
+        return d.sortable;
+      })
+      .call(setupSortHeader);
+  }
+
+  function setupSortHeader(headers) {
+    headers
+      .each(function(d) {
+        d.sorted = false;
+        d.descending = false;
+      })
+      .on("click", setSortOrder);
+
+    function setSortOrder(d, i) {
+      headers.each(function(c, j) {
+        if (j !== i) {
+          c.sorted = false;
+          c.descending = false;
+        }
+      });
+
+      if (d.sorted) {
+        d.descending = !d.descending;
+      }
+
+      d.sorted = true;
+
+      console.log("sort:", d);
+
+      var sort = (d.descending ? "-" : "") + d.key;
+      setFormData({sort: sort});
+
+      headers
+        .classed("sorted", function(c) { return c.sorted; })
+        .classed("descending", function(c) { return c.sorted && c.descending; });
+
+      submit(true);
+    }
+  }
+
+  function parseSortOrder(order) {
+    if (!order) return {key: null, order: null};
+    var first = order.charAt(0),
+        sort = {order: ""};
+    switch (first) {
+      case "-":
+        sort.order = first;
+        order = order.substr(1);
+        break;
+    }
+    sort.key = order;
+    return sort;
   }
 
   function showError(error) {
