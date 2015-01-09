@@ -127,7 +127,7 @@ class GetRates(APIView):
         page_stats['average'] = quantize(contracts_all.aggregate(Avg(wage_field))[wage_field + '__avg'])
 
         #use paginator count method
-        if contracts_all.count() > 0:
+        if paginator.count > 0:
             if bins and bins.isnumeric():
                 # numpy wants these to be floats, not Decimals
                 values = contracts_all.values_list(wage_field, flat=True)
