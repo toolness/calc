@@ -55,6 +55,12 @@
     white-space: nowrap;
   }
 
+  td.column-min_years_experience i {
+    font-style: normal;
+    font-size: .75em;
+    color: #999;
+  }
+
   #export-data {
     position: absolute;
     right: 0;
@@ -196,8 +202,8 @@
       <thead>
         <tr>
           <th class="sortable" data-key="labor_category">Labor Category</th>
-          <th class="sortable" data-key="education_level">Minimum Education</th>
-          <th class="sortable" data-key="min_years_experience">Minimum Experience</th>
+          <th class="sortable" data-key="education_level">Min Edu.</th>
+          <th class="sortable" data-key="min_years_experience" data-format="{} &lt;i&gt;year?{s}&lt;/i&gt;">Min. Exp.</th>
           <th class="sortable" data-key="current_price" data-format="$%,.02f">Price</th>
           <th data-key="idv_piid">Contract #</th>
           <th data-key="vendor_name">Vendor</th>
