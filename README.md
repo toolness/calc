@@ -72,6 +72,7 @@ For site, there are only 3 values (also case insensitive):
  - Contractor
  - both
 
-And the small_business parameter is just a boolean (true/false) value. 
+And the small_business parameter can be either `s` for small business, or `o` for other than small business.
+
 
 More to come soon!

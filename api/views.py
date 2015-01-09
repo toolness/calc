@@ -116,21 +116,24 @@ class GetRates(APIView):
 
         wage_field = 'current_price'
         contracts_all = self.get_queryset(request.QUERY_PARAMS, wage_field)
+        
+        paginator = Paginator(contracts_all, settings.PAGINATION)
+        contracts = paginator.page(page)
+        
         page_stats = {}
 
         page_stats['minimum'] = contracts_all.aggregate(Min(wage_field))[wage_field + '__min']
         page_stats['maximum'] = contracts_all.aggregate(Max(wage_field))[wage_field + '__max']
         page_stats['average'] = quantize(contracts_all.aggregate(Avg(wage_field))[wage_field + '__avg'])
 
-        if contracts_all:
+        #use paginator count method
+        if paginator.count > 0:
             if bins and bins.isnumeric():
                 # numpy wants these to be floats, not Decimals
                 values = contracts_all.values_list(wage_field, flat=True)
                 # see api.serializers.PaginatedContractSerializer#get_wage_histogram()
                 page_stats['wage_histogram'] = get_histogram(values, int(bins))
 
-            paginator = Paginator(contracts_all, settings.PAGINATION)
-            contracts = paginator.page(page)
             serializer = PaginatedContractSerializer(contracts, context=page_stats)
 
             return Response(serializer.data)
