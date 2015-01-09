@@ -431,7 +431,7 @@
       .classed("collapsed", function(d) {
         return d.column.collapsed;
       });
-    td.text(function(d) {
+    td.html(function(d) {
       return d.column.collapsed ? "" : d.string;
     });
   }
@@ -540,7 +540,7 @@
 
       resultsTable.selectAll("td.column-" + d.key)
         .classed("collapsed", d.collapsed)
-        .text(d.collapsed
+        .html(d.collapsed
           ? ""
           : function(d) { return d.string; });
     }
@@ -566,6 +566,13 @@
 
   function getFormat(spec) {
     if (!spec) return function(d) { return d; };
+
+    if (spec.indexOf("{}") > -1) {
+      return function(d) {
+        return spec.replace(/{}/g, d)
+          .replace(/\?{(.+)}/g, d == 1 ? "" : "$1");
+      };
+    }
 
     var index = spec.indexOf("%");
     if (index === -1) {
