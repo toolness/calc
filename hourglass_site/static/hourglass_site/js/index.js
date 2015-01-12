@@ -77,6 +77,7 @@
     inputs.on("change", function onchange() {
       submit(true);
     });
+
     var sort = parseSortOrder(data.sort);
     sortHeaders
       .classed("sorted", function(d) {
@@ -85,6 +86,8 @@
       .classed("descending", function(d) {
         return d.descending = (d.sorted && sort.order === "-");
       });
+    updateSortOrder(sort.key);
+
     submit(false);
   }
 
@@ -424,14 +427,19 @@
       });
 
     td.exit().remove();
+
+    var sortKey = parseSortOrder(getFormData().sort).key;
     td.enter().append("td")
       .attr("class", function(column) {
         return "column-" + column.key;
       })
       .classed("collapsed", function(d) {
         return d.column.collapsed;
+      })
+      .classed("sorted", function(c) {
+        return c.column.key === sortKey;
       });
-    td.text(function(d) {
+    td.html(function(d) {
       return d.column.collapsed ? "" : d.string;
     });
   }
@@ -508,11 +516,22 @@
 
       var sort = (d.descending ? "-" : "") + d.key;
       setFormData({sort: sort});
-      headers
-        .classed("sorted", function(c) { return c.sorted; })
-        .classed("descending", function(c) { return c.sorted && c.descending; });
+
+      updateSortOrder(d.key);
+
       submit(true);
     }
+  }
+
+  function updateSortOrder(key) {
+    sortHeaders
+      .classed("sorted", function(c) { return c.sorted; })
+      .classed("descending", function(c) { return c.sorted && c.descending; });
+
+    resultsTable.selectAll("tbody td")
+      .classed("sorted", function(c) {
+        return c.column.key === key;
+      });
   }
 
   function setupCollabsibleHeader(headers) {
@@ -540,7 +559,7 @@
 
       resultsTable.selectAll("td.column-" + d.key)
         .classed("collapsed", d.collapsed)
-        .text(d.collapsed
+        .html(d.collapsed
           ? ""
           : function(d) { return d.string; });
     }
@@ -566,6 +585,13 @@
 
   function getFormat(spec) {
     if (!spec) return function(d) { return d; };
+
+    if (spec.indexOf("{}") > -1) {
+      return function(d) {
+        return spec.replace(/{}/g, d)
+          .replace(/\?{(.+)}/g, d == 1 ? "" : "$1");
+      };
+    }
 
     var index = spec.indexOf("%");
     if (index === -1) {
