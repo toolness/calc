@@ -40,13 +40,19 @@ def get_contracts_queryset(request_params, wage_field):
     price__gt = request_params.get('price__gt')
     price__lt = request_params.get('price__lt')
     sort = request_params.get('sort', wage_field)
+    # query_type can be: [ match_all (default) | match_phrase | match_exact ]
+    query_type = request_params.get('query_type', 'match_all')
 
     contracts = Contract.objects.all()
-    
 
     if query:
-        query = convert_to_tsquery(query)
-        contracts = contracts.search(query, raw=True)
+        if query_type == 'match_phrase':
+            contracts = contracts.filter(labor_category__icontains=query)
+        elif query_type == 'match_exact':
+            contracts = contracts.filter(labor_category__iexact=query)
+        else:
+            query = convert_to_tsquery(query)
+            contracts = contracts.search(query, raw=True)
 
     if min_experience:
         contracts = contracts.filter(min_years_experience__gte=min_experience)

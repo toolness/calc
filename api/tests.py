@@ -2,7 +2,7 @@ from django.test import TestCase, Client
 from model_mommy import mommy
 from model_mommy.recipe import seq
 from contracts.models import Contract
-from contracts.mommy_recipes import contract_recipe
+from contracts.mommy_recipes import get_contract_recipe
 from itertools import cycle
 
 class ContractsTest(TestCase):
@@ -183,7 +183,7 @@ class ContractsTest(TestCase):
            'business_size': None}])
 
     def test_filter_by_schedule(self):
-        contract_recipe.make(_quantity=3)
+        get_contract_recipe().make(_quantity=3)
         resp = self.c.get(self.path, {'schedule': 'MOBIS'})
         self.assertEqual(resp.status_code, 200)
 
@@ -210,7 +210,7 @@ class ContractsTest(TestCase):
            'business_size': None}])
 
     def test_filter_by_business_size(self):
-        contract_recipe.make(_quantity=3, business_size=cycle(self.BUSINESS_SIZES))
+        get_contract_recipe().make(_quantity=3, business_size=cycle(self.BUSINESS_SIZES))
         resp = self.c.get(self.path, {'business_size': 's'})
         self.assertEqual(resp.status_code, 200)
 
@@ -279,7 +279,8 @@ class ContractsTest(TestCase):
 
     def test_sort_on_multiple_columns(self):
         self.make_test_set()
-        contract_recipe.make(vendor_name='Numbers R Us')
+        # make one more with the same vendor name, so we can see the secondary sort on price
+        get_contract_recipe().make(_quantity=1, vendor_name='Numbers R Us')
 
         resp = self.c.get(self.path, {'sort': '-vendor_name,current_price'})
 
@@ -295,14 +296,14 @@ class ContractsTest(TestCase):
            'schedule': None,
            'contractor_site': None,
            'business_size': None},
-         {'idv_piid': 'ABC1234',
+         {'idv_piid': 'ABC1231',
            'vendor_name': 'Numbers R Us',
            'labor_category': 'Business Analyst II',
            'education_level': None,
-           'min_years_experience': 9,
-           'hourly_rate_year1': 24.0,
-           'current_price': 24.0,
-           'schedule': 'PES',
+           'min_years_experience': 6,
+           'hourly_rate_year1': 21.0,
+           'current_price': 21.0,
+           'schedule': 'MOBIS',
            'contractor_site': None,
            'business_size': None},
          {'idv_piid': 'ABC234',
@@ -316,6 +317,98 @@ class ContractsTest(TestCase):
            'contractor_site': None,
            'business_size': None},
          {'idv_piid': 'ABC123',
+           'vendor_name': 'ACME Corp.',
+           'labor_category': 'Legal Services',
+           'education_level': None,
+           'min_years_experience': 10,
+           'hourly_rate_year1': 18.0,
+           'current_price': 18.0,
+           'schedule': None,
+           'contractor_site': None,
+           'business_size': None}])
+
+        # sort the price descending, too, to make sure we're not just randomly passing the first test
+        resp = self.c.get(self.path, {'sort': '-vendor_name,-current_price'})
+
+        self.assertEqual(resp.status_code, 200)
+        self.assertResultsEqual(resp.data['results'],
+         [{'idv_piid': 'ABC345',
+           'vendor_name': 'Word Power Co.',
+           'labor_category': 'Writer/Editor',
+           'education_level': 'Bachelors',
+           'min_years_experience': 1,
+           'hourly_rate_year1': 16.0,
+           'current_price': 16.0,
+           'schedule': None,
+           'contractor_site': None,
+           'business_size': None},
+         {'idv_piid': 'ABC234',
+           'vendor_name': 'Numbers R Us',
+           'labor_category': 'Accounting, CPA',
+           'education_level': 'Masters',
+           'min_years_experience': 5,
+           'hourly_rate_year1': 50.0,
+           'current_price': 50.0,
+           'schedule': None,
+           'contractor_site': None,
+           'business_size': None},
+         {'idv_piid': 'ABC1231',
+           'vendor_name': 'Numbers R Us',
+           'labor_category': 'Business Analyst II',
+           'education_level': None,
+           'min_years_experience': 6,
+           'hourly_rate_year1': 21.0,
+           'current_price': 21.0,
+           'schedule': 'MOBIS',
+           'contractor_site': None,
+           'business_size': None},
+         {'idv_piid': 'ABC123',
+           'vendor_name': 'ACME Corp.',
+           'labor_category': 'Legal Services',
+           'education_level': None,
+           'min_years_experience': 10,
+           'hourly_rate_year1': 18.0,
+           'current_price': 18.0,
+           'schedule': None,
+           'contractor_site': None,
+           'business_size': None}])
+
+    def test_query_type__match_phrase(self):
+        self.make_test_set()
+        get_contract_recipe().make(_quantity=1, labor_category='Professional Legal Services I')
+        resp = self.c.get(self.path, {'q': 'legal services', 'query_type': 'match_phrase'})
+        self.assertEqual(resp.status_code, 200)
+
+        self.assertResultsEqual(resp.data['results'],
+         [{'idv_piid': 'ABC123',
+           'vendor_name': 'ACME Corp.',
+           'labor_category': 'Legal Services',
+           'education_level': None,
+           'min_years_experience': 10,
+           'hourly_rate_year1': 18.0,
+           'current_price': 18.0,
+           'schedule': None,
+           'contractor_site': None,
+           'business_size': None},
+          {'idv_piid': 'ABC1231',
+           'vendor_name': 'CompanyName1',
+           'labor_category': 'Professional Legal Services I',
+           'education_level': None,
+           'min_years_experience': 6,
+           'hourly_rate_year1': 21.0,
+           'current_price': 21.0,
+           'schedule': 'MOBIS',
+           'contractor_site': None,
+           'business_size': None}])
+
+    def test_query_type__match_exact(self):
+        self.make_test_set()
+        get_contract_recipe().make(_quantity=1, labor_category='Professional Legal Services I')
+        resp = self.c.get(self.path, {'q': 'legal services', 'query_type': 'match_exact'})
+        self.assertEqual(resp.status_code, 200)
+
+        self.assertResultsEqual(resp.data['results'],
+         [{'idv_piid': 'ABC123',
            'vendor_name': 'ACME Corp.',
            'labor_category': 'Legal Services',
            'education_level': None,
@@ -367,7 +460,7 @@ class ContractsTest(TestCase):
         ])
 
     def test_filter_by_site(self):
-        contract_recipe.make(_quantity=3, contractor_site=seq('Q'))
+        get_contract_recipe().make(_quantity=3, contractor_site=seq('Q'))
         resp = self.c.get(self.path, {'site': 'Q3'})
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(len(resp.data['results']), 1)
@@ -420,6 +513,6 @@ class ContractsTest(TestCase):
 
     def assertResultsEqual(self, results, expected):
         dict_results = [dict(x) for x in results]
-        self.assertEqual(len(results), len(expected))
+        self.assertEqual(len(results), len(expected), "Got a different number of results than expected.")
         for i, result in enumerate(results):
             self.assertEqual(dict(result), expected[i], "\n===== Object at index {} failed. =====".format(i))
