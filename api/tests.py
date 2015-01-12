@@ -373,6 +373,52 @@ class ContractsTest(TestCase):
            'contractor_site': None,
            'business_size': None}])
 
+    def test_query_type__match_phrase(self):
+        self.make_test_set()
+        get_contract_recipe().make(_quantity=1, labor_category='Professional Legal Services I')
+        resp = self.c.get(self.path, {'q': 'legal services', 'query_type': 'match_phrase'})
+        self.assertEqual(resp.status_code, 200)
+
+        self.assertResultsEqual(resp.data['results'],
+         [{'idv_piid': 'ABC123',
+           'vendor_name': 'ACME Corp.',
+           'labor_category': 'Legal Services',
+           'education_level': None,
+           'min_years_experience': 10,
+           'hourly_rate_year1': 18.0,
+           'current_price': 18.0,
+           'schedule': None,
+           'contractor_site': None,
+           'business_size': None},
+          {'idv_piid': 'ABC1231',
+           'vendor_name': 'CompanyName1',
+           'labor_category': 'Professional Legal Services I',
+           'education_level': None,
+           'min_years_experience': 6,
+           'hourly_rate_year1': 21.0,
+           'current_price': 21.0,
+           'schedule': 'MOBIS',
+           'contractor_site': None,
+           'business_size': None}])
+
+    def test_query_type__match_exact(self):
+        self.make_test_set()
+        get_contract_recipe().make(_quantity=1, labor_category='Professional Legal Services I')
+        resp = self.c.get(self.path, {'q': 'legal services', 'query_type': 'match_exact'})
+        self.assertEqual(resp.status_code, 200)
+
+        self.assertResultsEqual(resp.data['results'],
+         [{'idv_piid': 'ABC123',
+           'vendor_name': 'ACME Corp.',
+           'labor_category': 'Legal Services',
+           'education_level': None,
+           'min_years_experience': 10,
+           'hourly_rate_year1': 18.0,
+           'current_price': 18.0,
+           'schedule': None,
+           'contractor_site': None,
+           'business_size': None}])
+
     def test_minimum_price_no_args(self):
         self.make_test_set()
         resp = self.c.get(self.path, {})
