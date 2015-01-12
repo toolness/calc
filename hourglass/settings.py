@@ -49,6 +49,7 @@ INSTALLED_APPS = (
     'djorm_pgfulltext',
     'rest_framework',
 
+    'django_nose',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -64,6 +65,8 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'hourglass.urls'
 
 WSGI_APPLICATION = 'hourglass.wsgi.application'
+
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
 
 # Internationalization
