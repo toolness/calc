@@ -6,3 +6,4 @@ selenium
 model_mommy
 numpy==1.9.1
 nose
+django_nose
