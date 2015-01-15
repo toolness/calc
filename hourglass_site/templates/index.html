@@ -3,70 +3,10 @@
 
 {% block head %}
 <script src="{% static 'hourglass_site/js/vendor/jquery.auto-complete.min.js' %}"></script>
+<link rel="stylesheet" href="{% static 'hourglass_site/style/index.css' %}">
 {% endblock %}
 
 {% block body %}
-<style scoped>
-
-  thead th {
-    vertical-align: bottom;
-  }
-
-  * h5 {
-    margin: 0 !important;
-  }
-
-  .container {
-    margin-top: 2rem;
-  }
-
-  #search {
-    position: relative;
-  }
-
-  input.price {
-    width: 4em;
-  }
-
-  .filters {
-    background: #f9f9f9;
-    padding: 1rem;
-    border-radius: 4px;
-  }
-
-  .graphs {
-    padding: 1rem 0;
-  }
-
-  .filters .filter {
-    width: 50%;
-    float: left;
-  }
-
-  th.column-labor_category {        width: 25%; }
-  th.column-education_level {       width: 10%; }
-  th.column-min_years_experience {  width: 10%; }
-  th.column-wage {                  width:  8%; }
-  th.column-idv_piid {              width: 12%; }
-  th.column-vendor_name {           width: 25%; }
-  th.column-schedule {              width: 10%; }
-
-  td.column-idv_piid {
-    white-space: nowrap;
-  }
-
-  td.column-min_years_experience i {
-    font-style: normal;
-    font-size: .75em;
-    color: #999;
-  }
-
-  #export-data {
-    position: absolute;
-    right: 0;
-  }
-
-</style>
 <div class="container">
   <h1>Hourglass</h1>
   <form id="search" class="search" role="form">
