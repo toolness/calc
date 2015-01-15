@@ -19,6 +19,16 @@
     submit(true);
   });
 
+  form.on("reset", function onsubmit() {
+    // XXX we shouldn't have to do this...
+    // shouldn't a reset input clear them?
+    inputs.each(function() {
+      // FIXME: if this.type === "checkbox", toggle this.checked
+      this.value = "";
+    });
+    submit(true);
+  });
+
   inputs.on("change", function onchange() {
     submit(true);
   });
