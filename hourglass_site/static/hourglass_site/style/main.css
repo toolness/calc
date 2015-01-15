@@ -326,5 +326,5 @@ svg.histogram .avg line {
 }
 
 .filter_active  {
-  border: 2px solid red !important;
+  border: 2px solid #ffd855 !important;
 }
