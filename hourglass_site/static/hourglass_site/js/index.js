@@ -93,6 +93,10 @@
 
   function submit(pushState) {
     var data = getFormData();
+    inputs.classed("filter_active", function() {
+      return !!this.value;
+    });
+
     console.log("submitting:", data);
 
     form.classed("loaded", false);
