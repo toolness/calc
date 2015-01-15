@@ -78,6 +78,7 @@ class FunctionalTests(LiveServerTestCase):
         self.search_for('Engineer')
         self.submit_form()
         self.assertTrue('q=Engineer' in driver.current_url, 'Missing "q=Engineer" in query string')
+        wait_for(self.data_is_loaded)
 
         results_count = driver.find_element_by_id('results-count').text
         self.assertEqual(int(results_count), 3, 'Results count mismatch.')
