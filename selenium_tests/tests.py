@@ -159,6 +159,46 @@ class FunctionalTests(LiveServerTestCase):
         self.assertTrue(has_class(header, 'sorted'), "Header doesn't have 'sorted' class")
         self.assertTrue(has_class(header, 'descending'), "Header doesn't have 'descending' class")
 
+    def test_filter_to_only_small_businesses(self):
+        get_contract_recipe().make(_quantity=5, vendor_name=seq("Large Biz"), business_size='o')
+        get_contract_recipe().make(_quantity=5, vendor_name=seq("Small Biz"), business_size='s')
+        driver = self.load()
+        form = self.get_form()
+
+        set_form_value(form, 'business_size', 's')
+        self.submit_form()
+
+        wait_for(self.data_is_loaded)
+        self.assertResultsCount(driver, 5)
+
+        self.assertIsNone(re.search(r'Large Biz\d+', driver.page_source))
+        self.assertIsNotNone(re.search(r'Small Biz\d+', driver.page_source))
+
+    def test_filter_to_only_large_businesses(self):
+        get_contract_recipe().make(_quantity=5, vendor_name=seq("Large Biz"), business_size='o')
+        get_contract_recipe().make(_quantity=5, vendor_name=seq("Small Biz"), business_size='s')
+        driver = self.load()
+        form = self.get_form()
+
+        set_form_value(form, 'business_size', 'o')
+        self.submit_form()
+
+        wait_for(self.data_is_loaded)
+        self.assertResultsCount(driver, 5)
+
+        self.assertIsNone(re.search(r'Small Biz\d+', driver.page_source))
+        self.assertIsNotNone(re.search(r'Large Biz\d+', driver.page_source))
+
+    def test_no_filter_shows_all_sizes_of_business(self):
+        get_contract_recipe().make(_quantity=5, vendor_name=seq("Large Biz"), business_size='o')
+        get_contract_recipe().make(_quantity=5, vendor_name=seq("Small Biz"), business_size='s')
+        driver = self.load()
+
+        self.assertResultsCount(driver, 10)
+
+        self.assertIsNotNone(re.search(r'Small Biz\d+', driver.page_source))
+        self.assertIsNotNone(re.search(r'Large Biz\d+', driver.page_source))
+
     def assertResultsCount(self, driver, num):
         self.assertEqual(int(driver.find_element_by_id('results-count').text), num)
 
