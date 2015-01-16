@@ -324,3 +324,7 @@ svg.histogram .avg line {
   stroke-width: 1;
   stroke: #000;
 }
+
+.filter_active  {
+  border: 2px solid #ffd855 !important;
+}
