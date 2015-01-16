@@ -80,9 +80,9 @@ class ContractsTest(TestCase):
            'contractor_site': None,
            'business_size': None}])
 
-    def test_filter_by_price__gt(self):
+    def test_filter_by_price__gte(self):
         self.make_test_set()
-        resp = self.c.get(self.path, {'price__gt': 18})
+        resp = self.c.get(self.path, {'price__gte': 20})
         self.assertEqual(resp.status_code, 200)
 
         self.assertResultsEqual(resp.data['results'],
@@ -97,9 +97,9 @@ class ContractsTest(TestCase):
            'contractor_site': None,
            'business_size': None}])
 
-    def test_filter_by_price__lt(self):
+    def test_filter_by_price__lte(self):
         self.make_test_set()
-        resp = self.c.get(self.path, {'price__lt': 18})
+        resp = self.c.get(self.path, {'price__lte': 16})
         self.assertEqual(resp.status_code, 200)
 
         self.assertResultsEqual(resp.data['results'],
@@ -114,9 +114,9 @@ class ContractsTest(TestCase):
            'contractor_site': None,
            'business_size': None}])
 
-    def test_filter_by_price__gt_and_lt(self):
+    def test_filter_by_price__gte_and_lte(self):
         self.make_test_set()
-        resp = self.c.get(self.path, {'price__lt': 20, 'price__gt': 16})
+        resp = self.c.get(self.path, {'price__lte': 20, 'price__gte': 18})
         self.assertEqual(resp.status_code, 200)
 
         self.assertResultsEqual(resp.data['results'],

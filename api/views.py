@@ -37,8 +37,8 @@ def get_contracts_queryset(request_params, wage_field):
     site = request_params.get('site', None)
     business_size = request_params.get('business_size', None)
     price = request_params.get('price', None)
-    price__gt = request_params.get('price__gt')
-    price__lt = request_params.get('price__lt')
+    price__gte = request_params.get('price__gte')
+    price__lte = request_params.get('price__lte')
     sort = request_params.get('sort', wage_field)
     # query_type can be: [ match_all (default) | match_phrase | match_exact ]
     query_type = request_params.get('query_type', 'match_all')
@@ -76,10 +76,10 @@ def get_contracts_queryset(request_params, wage_field):
     if price:
         contracts = contracts.filter(**{wage_field + '__exact': price})
     else:
-        if price__gt:
-            contracts = contracts.filter(**{wage_field + '__gt': price__gt})
-        if price__lt:
-            contracts = contracts.filter(**{wage_field + '__lt': price__lt})
+        if price__gte:
+            contracts = contracts.filter(**{wage_field + '__gte': price__gte})
+        if price__lte:
+            contracts = contracts.filter(**{wage_field + '__lte': price__lte})
 
     return contracts.order_by(*sort.split(','))
 

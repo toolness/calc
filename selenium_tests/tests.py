@@ -49,7 +49,7 @@ class FunctionalTests(LiveServerTestCase):
 
     def test_results_count__empty_result_set(self):
         driver = self.load()
-        self.assertEqual(driver.find_element_by_id('results-count').text, '0')
+        self.assertEqual(int(driver.find_element_by_id('results-count').text), 0)
 
     def test_results_count(self):
         get_contract_recipe().make(_quantity=10, labor_category=seq("Engineer"))
@@ -78,33 +78,59 @@ class FunctionalTests(LiveServerTestCase):
         self.search_for('Engineer')
         self.submit_form()
         self.assertTrue('q=Engineer' in driver.current_url, 'Missing "q=Engineer" in query string')
+        wait_for(self.data_is_loaded)
 
         results_count = driver.find_element_by_id('results-count').text
         self.assertEqual(int(results_count), 3, 'Results count mismatch.')
         labor_cell = driver.find_element_by_css_selector('tbody tr .column-labor_category')
         self.assertTrue('Engineer' in labor_cell.text, 'Labor category cell text mismatch')
 
-    def test_price_gt(self):
-        get_contract_recipe().make(_quantity=10, labor_category=seq("Contractor"), hourly_rate_year1=seq(80, 10), current_price=seq(80, 10))
+    def test_price_gte(self):
+        # note: the hourly rates here will actually start at 80-- this seems like a bug, but whatever
+        get_contract_recipe().make(_quantity=10, labor_category=seq("Contractor"), hourly_rate_year1=seq(70, 10), current_price=seq(70, 10))
         driver = self.load()
         form = self.get_form()
         self.search_for('Contractor')
 
         minimum = 100
-        set_form_value(form, 'price__gt', minimum)
+        # add results count check
+        set_form_value(form, 'price__gte', minimum)
         self.submit_form()
-        self.assertTrue(('price__gt=%d' % minimum) in driver.current_url, 'Missing "price__gt=%d" in query string' % minimum)
+        wait_for(self.data_is_loaded)
+        self.assertEqual(int(driver.find_element_by_id('results-count').text), 8)
+        self.assertTrue(('price__gte=%d' % minimum) in driver.current_url, 'Missing "price__gte=%d" in query string' % minimum)
 
-    def test_price_lt(self):
-        get_contract_recipe().make(_quantity=10, labor_category=seq("Contractor"), hourly_rate_year1=seq(80, 10), current_price=seq(80, 10))
+    def test_price_lte(self):
+        # note: the hourly rates here will actually start at 80-- this seems like a bug, but whatever
+        get_contract_recipe().make(_quantity=10, labor_category=seq("Contractor"), hourly_rate_year1=seq(70, 10), current_price=seq(70, 10))
         driver = self.load()
         form = self.get_form()
         self.search_for('Contractor')
 
         maximum = 100
-        set_form_value(form, 'price__lt', maximum)
+        # add results count check
+        set_form_value(form, 'price__lte', maximum)
         self.submit_form()
-        self.assertTrue(('price__lt=%d' % maximum) in driver.current_url, 'Missing "price__lt=%d" in query string' % maximum)
+        wait_for(self.data_is_loaded)
+        self.assertEqual(int(driver.find_element_by_id('results-count').text), 3)
+        self.assertTrue(('price__lte=%d' % maximum) in driver.current_url, 'Missing "price__lte=%d" in query string' % maximum)
+
+    def test_price_range(self):
+        # note: the hourly rates here will actually start at 80-- this seems like a bug, but whatever
+        get_contract_recipe().make(_quantity=10, labor_category=seq("Contractor"), hourly_rate_year1=seq(70, 10), current_price=seq(70, 10))
+        driver = self.load()
+        form = self.get_form()
+        self.search_for('Contractor')
+
+        minimum = 100
+        maximum = 130
+        set_form_value(form, 'price__gte', minimum)
+        set_form_value(form, 'price__lte', maximum)
+        self.submit_form()
+        wait_for(self.data_is_loaded)
+        self.assertEqual(int(driver.find_element_by_id('results-count').text), 4)
+        self.assertTrue(('price__gte=%d' % minimum) in driver.current_url, 'Missing "price__gte=%d" in query string' % minimum)
+        self.assertTrue(('price__lte=%d' % maximum) in driver.current_url, 'Missing "price__lte=%d" in query string' % maximum)
 
     def test_sort_columns(self):
         get_contract_recipe().make(_quantity=10, labor_category=seq("Consultant"), hourly_rate_year1=seq(80, 10), current_price=seq(80, 10))
