@@ -6,10 +6,22 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from contracts.mommy_recipes import get_contract_recipe
 from model_mommy.recipe import seq
 
+import re
 import time
 
 
 class FunctionalTests(LiveServerTestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.driver = webdriver.PhantomJS()
+        cls.longMessage = True
+        cls.maxDiff = None
+        super(FunctionalTests, cls).setUpClass()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.driver.quit()
 
     def setUp(self):
         if settings.SAUCE:
@@ -20,11 +32,8 @@ class FunctionalTests(LiveServerTestCase):
                 desired_capabilities=self.desired_capabilities,
                 command_executor=sauce_url % (settings.SAUCE_USERNAME, settings.SAUCE_ACCESS_KEY)
             )
-        else:
-            self.driver = webdriver.PhantomJS()
-            self.longMessage = True
-            self.maxDiff = None
-            super(FunctionalTests, self).setUp()
+
+        super(FunctionalTests, self).setUp()
 
     def load(self, uri='/'):
         self.driver.get(self.live_server_url + uri)
@@ -49,12 +58,12 @@ class FunctionalTests(LiveServerTestCase):
 
     def test_results_count__empty_result_set(self):
         driver = self.load()
-        self.assertEqual(int(driver.find_element_by_id('results-count').text), 0)
+        self.assertResultsCount(driver, 0)
 
     def test_results_count(self):
         get_contract_recipe().make(_quantity=10, labor_category=seq("Engineer"))
         driver = self.load()
-        self.assertEqual(int(driver.find_element_by_id('results-count').text), 10)
+        self.assertResultsCount(driver, 10)
 
     def test_titles_are_correct(self):
         get_contract_recipe().make(_quantity=1, labor_category=seq("Architect"))
@@ -80,8 +89,7 @@ class FunctionalTests(LiveServerTestCase):
         self.assertTrue('q=Engineer' in driver.current_url, 'Missing "q=Engineer" in query string')
         wait_for(self.data_is_loaded)
 
-        results_count = driver.find_element_by_id('results-count').text
-        self.assertEqual(int(results_count), 3, 'Results count mismatch.')
+        self.assertResultsCount(driver, 3)
         labor_cell = driver.find_element_by_css_selector('tbody tr .column-labor_category')
         self.assertTrue('Engineer' in labor_cell.text, 'Labor category cell text mismatch')
 
@@ -97,7 +105,7 @@ class FunctionalTests(LiveServerTestCase):
         set_form_value(form, 'price__gte', minimum)
         self.submit_form()
         wait_for(self.data_is_loaded)
-        self.assertEqual(int(driver.find_element_by_id('results-count').text), 8)
+        self.assertResultsCount(driver, 8)
         self.assertTrue(('price__gte=%d' % minimum) in driver.current_url, 'Missing "price__gte=%d" in query string' % minimum)
 
     def test_price_lte(self):
@@ -112,7 +120,7 @@ class FunctionalTests(LiveServerTestCase):
         set_form_value(form, 'price__lte', maximum)
         self.submit_form()
         wait_for(self.data_is_loaded)
-        self.assertEqual(int(driver.find_element_by_id('results-count').text), 3)
+        self.assertResultsCount(driver, 3)
         self.assertTrue(('price__lte=%d' % maximum) in driver.current_url, 'Missing "price__lte=%d" in query string' % maximum)
 
     def test_price_range(self):
@@ -128,7 +136,7 @@ class FunctionalTests(LiveServerTestCase):
         set_form_value(form, 'price__lte', maximum)
         self.submit_form()
         wait_for(self.data_is_loaded)
-        self.assertEqual(int(driver.find_element_by_id('results-count').text), 4)
+        self.assertResultsCount(driver, 4)
         self.assertTrue(('price__gte=%d' % minimum) in driver.current_url, 'Missing "price__gte=%d" in query string' % minimum)
         self.assertTrue(('price__lte=%d' % maximum) in driver.current_url, 'Missing "price__lte=%d" in query string' % maximum)
 
@@ -137,7 +145,7 @@ class FunctionalTests(LiveServerTestCase):
         driver = self.load()
         self.get_form()
 
-        header = driver.find_element_by_css_selector('th.column-min_years_experience')
+        header = find_column_header(driver, 'min_years_experience')
 
         header.click()
         self.submit_form()
@@ -150,6 +158,90 @@ class FunctionalTests(LiveServerTestCase):
         self.assertTrue('sort=-min_years_experience' in driver.current_url, 'Missing "sort=-min_years_experience" in query string')
         self.assertTrue(has_class(header, 'sorted'), "Header doesn't have 'sorted' class")
         self.assertTrue(has_class(header, 'descending'), "Header doesn't have 'descending' class")
+
+    def test_there_is_no_business_size_column(self):
+        get_contract_recipe().make(_quantity=5, vendor_name=seq("Large Biz"), business_size='o')
+        driver = self.load()
+        form = self.get_form()
+
+        col_headers = get_column_headers(driver)
+
+        for head in col_headers:
+            self.assertFalse(has_matching_class(head, 'column-business[_-]size'))
+
+    def test_filter_to_only_small_businesses(self):
+        get_contract_recipe().make(_quantity=5, vendor_name=seq("Large Biz"), business_size='o')
+        get_contract_recipe().make(_quantity=5, vendor_name=seq("Small Biz"), business_size='s')
+        driver = self.load()
+        form = self.get_form()
+
+        set_form_value(form, 'business_size', 's')
+        self.submit_form()
+
+        wait_for(self.data_is_loaded)
+        self.assertResultsCount(driver, 5)
+
+        self.assertIsNone(re.search(r'Large Biz\d+', driver.page_source))
+        self.assertIsNotNone(re.search(r'Small Biz\d+', driver.page_source))
+
+    def test_filter_to_only_large_businesses(self):
+        get_contract_recipe().make(_quantity=5, vendor_name=seq("Large Biz"), business_size='o')
+        get_contract_recipe().make(_quantity=5, vendor_name=seq("Small Biz"), business_size='s')
+        driver = self.load()
+        form = self.get_form()
+
+        set_form_value(form, 'business_size', 'o')
+        self.submit_form()
+
+        wait_for(self.data_is_loaded)
+        self.assertResultsCount(driver, 5)
+
+        self.assertIsNone(re.search(r'Small Biz\d+', driver.page_source))
+        self.assertIsNotNone(re.search(r'Large Biz\d+', driver.page_source))
+
+    def test_no_filter_shows_all_sizes_of_business(self):
+        get_contract_recipe().make(_quantity=5, vendor_name=seq("Large Biz"), business_size='o')
+        get_contract_recipe().make(_quantity=5, vendor_name=seq("Small Biz"), business_size='s')
+        driver = self.load()
+
+        self.assertResultsCount(driver, 10)
+
+        self.assertIsNotNone(re.search(r'Small Biz\d+', driver.page_source))
+        self.assertIsNotNone(re.search(r'Large Biz\d+', driver.page_source))
+
+    def test_schedule_column_is_collapsed_by_default(self):
+        get_contract_recipe().make(_quantity=5)
+        driver = self.load()
+        col_header = find_column_header(driver, 'schedule')
+
+        self.assertTrue(has_class(col_header, 'collapsed'))
+
+    def test_unhide_schedule_column(self):
+        get_contract_recipe().make(_quantity=5)
+        driver = self.load()
+        col_header = find_column_header(driver, 'schedule')
+
+        # unhide column
+        col_header.click()
+
+        self.assertFalse(has_class(col_header, 'collapsed'))
+
+    def test_schedule_column_is_last(self):
+        get_contract_recipe().make(_quantity=5)
+        driver = self.load()
+        col_headers = get_column_headers(driver)
+
+        self.assertTrue(has_class(col_headers[-1], 'column-schedule'))
+
+    def test_schedule_column_is_sortable(self):
+        get_contract_recipe().make(_quantity=5)
+        driver = self.load()
+        col_header = find_column_header(driver, 'schedule')
+
+        self.assertTrue(has_class(col_header, 'sortable'))
+
+    def assertResultsCount(self, driver, num):
+        self.assertEqual(int(driver.find_element_by_id('results-count').text), num)
 
 
 def wait_for(condition, timeout=3):
@@ -165,6 +257,8 @@ def wait_for(condition, timeout=3):
 def has_class(element, klass):
     return klass in element.get_attribute('class').split(' ')
 
+def has_matching_class(element, regex):
+    return re.search(regex, element.get_attribute('class'))
 
 def set_select_value(select, value):
     select.click()
@@ -187,9 +281,17 @@ def set_form_value(form, key, value):
     return field
 
 
-def set_form_values(self, values):
+def set_form_values(values):
     for key, value in values.entries():
         set_form_value(key, value)
+
+def find_column_header(driver, col_name):
+    return driver.find_element_by_css_selector('th.column-{}'.format(col_name))
+
+def get_column_headers(driver):
+    return driver.find_elements_by_xpath('//thead/tr/th')
+
+
 
 if __name__ == '__main__':
     import unittest
