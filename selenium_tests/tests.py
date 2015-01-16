@@ -222,7 +222,7 @@ class FunctionalTests(LiveServerTestCase):
         col_header = find_column_header(driver, 'schedule')
 
         # unhide column
-        col_header.click()
+        col_header.find_element_by_css_selector('.toggle-collapse').click()
 
         self.assertFalse(has_class(col_header, 'collapsed'))
 
