@@ -104,7 +104,7 @@ th.collapsible a.toggle-collapse {
   line-height: 1.2em;
   padding: 4px;
   text-transform: uppercase;
-  color: #666;
+  color: #999;
   top: 0;
   left: 100%;
   width: 3em;
@@ -115,16 +115,6 @@ th.collapsed,
 td.collapsed {
   width: 1.5em !important;
   border-left: 1px dotted #E1E1E1;
-}
-
-th.collapsible a.toggle-collapse:before {
-  content: "▶";
-  display: inline;
-  margin-right: .5em;
-}
-
-th.collapsible.collapsed a.toggle-collapse:before {
-  content: "◀";
 }
 
 .autocomplete-suggestions {
