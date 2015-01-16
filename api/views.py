@@ -28,6 +28,29 @@ def convert_to_tsquery(query):
     return tsquery
 
 def get_contracts_queryset(request_params, wage_field):
+    """ Filters and returns contracts based on query params
+
+    Args:
+        request_params (dict): the request query parameters
+        wage_field (str): the name of the field currently being used for wage calculations and sorting
+
+    Query Params:
+        q (str): keywords to search by
+        min_experience (int): filter by minimum years of experience
+        max_experience (int): filter by maximum years of experience
+        min_education (str): filter by a minimum level of education (see EDUCATION_CHOICES)
+        schedule (str): filter by GSA schedule
+        site (str): filter by worksite
+        business_size (str): filter by 's'(mall) or 'o'(ther)
+        price (int): filter by exact price
+        price__gte (int): price must be greater than or equal to this integer
+        price__lte (int): price must be less than or equal to this integer
+        sort (str): the column to sort on, defaults to wage_field
+        query_type (str): defines how the user's keyword search should work. [ match_all (default) | match_phrase | match_exact ] 
+
+    Returns:
+        QuerySet for Contract objects
+    """
 
     query = request_params.get('q', None)
     min_experience = request_params.get('min_experience', None)
