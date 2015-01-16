@@ -11,6 +11,17 @@ import time
 
 class FunctionalTests(LiveServerTestCase):
 
+    @classmethod
+    def setUpClass(cls):
+        cls.driver = webdriver.PhantomJS()
+        cls.longMessage = True
+        cls.maxDiff = None
+        super().setUpClass()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.driver.quit()
+
     def setUp(self):
         if settings.SAUCE:
             self.live_server_url = "http://%s" % settings.DOMAIN_TO_TEST
@@ -20,11 +31,8 @@ class FunctionalTests(LiveServerTestCase):
                 desired_capabilities=self.desired_capabilities,
                 command_executor=sauce_url % (settings.SAUCE_USERNAME, settings.SAUCE_ACCESS_KEY)
             )
-        else:
-            self.driver = webdriver.PhantomJS()
-            self.longMessage = True
-            self.maxDiff = None
-            super(FunctionalTests, self).setUp()
+
+        super(FunctionalTests, self).setUp()
 
     def load(self, uri='/'):
         self.driver.get(self.live_server_url + uri)
