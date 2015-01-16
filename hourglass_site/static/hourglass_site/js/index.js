@@ -486,22 +486,23 @@
         this.classList.add("column-" + d.key);
       });
 
-    headers.filter(function(d) { return d.sortable; })
-      .call(setupSortHeader);
-
     headers.filter(function(d) { return d.collapsible; })
-      .call(setupCollabsibleHeader);
+      .call(setupCollapsibleHeaders);
+
+    headers.filter(function(d) { return d.sortable; })
+      .call(setupSortHeaders);
   }
 
-  function setupSortHeader(headers) {
+  function setupSortHeaders(headers) {
     headers
       .each(function(d) {
         d.sorted = false;
         d.descending = false;
       })
-      .on("click", setSortOrder);
+      .on("click.sort", setSortOrder);
 
     function setSortOrder(d, i) {
+      // console.log("sort:", d.key);
       headers.each(function(c, j) {
         if (j !== i) {
           c.sorted = false;
@@ -534,28 +535,32 @@
       });
   }
 
-  function setupCollabsibleHeader(headers) {
+  function setupCollapsibleHeaders(headers) {
     headers
       .each(function(d) {
         d.collapsed = this.classList.contains("collapsed");
         d.label = this.innerText;
       })
-      .on("click", function(d) {
-        d.collapsed = !d.collapsed;
-        updateCollapsed.apply(this, arguments);
-      })
-      .each(updateCollapsed);
+      .append("a")
+        .attr("class", "toggle-collapse")
+        .on("click.collapse", function(d) {
+          // console.log("collapse:", d.key);
+          d3.event.preventDefault();
+          d3.event.stopImmediatePropagation();
+          d.collapsed = !d.collapsed;
+          updateCollapsed.apply(this.parentNode, arguments);
+        });
+
+    headers.each(updateCollapsed)
 
     function updateCollapsed(d) {
-      var title = [
-        (d.collapsed ? "Show" : "Hide"),
-        d.label
-      ].join(" ");
+      var title = [d.collapsed ? "Show" : "Hide", d.label].join(" ");
 
       d3.select(this)
         .classed("collapsed", d.collapsed)
-        .attr("title", title)
-        .text(d.collapsed ? "" : d.label);
+        .select("a.toggle-collapse")
+          .attr("title", title)
+          .text(title);
 
       resultsTable.selectAll("td.column-" + d.key)
         .classed("collapsed", d.collapsed)
