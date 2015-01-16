@@ -211,7 +211,7 @@
   function updatePriceHistogram(data) {
     var width = 500,
         height = 200,
-        pad = [30, 15, 50, 45],
+        pad = [30, 15, 50, 60],
         top = pad[0],
         left = pad[3],
         right = width - pad[1],
