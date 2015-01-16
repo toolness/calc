@@ -145,7 +145,7 @@ class FunctionalTests(LiveServerTestCase):
         driver = self.load()
         self.get_form()
 
-        header = driver.find_element_by_css_selector('th.column-min_years_experience')
+        header = find_column_header(driver, 'min_years_experience')
 
         header.click()
         self.submit_form()
@@ -158,6 +158,16 @@ class FunctionalTests(LiveServerTestCase):
         self.assertTrue('sort=-min_years_experience' in driver.current_url, 'Missing "sort=-min_years_experience" in query string')
         self.assertTrue(has_class(header, 'sorted'), "Header doesn't have 'sorted' class")
         self.assertTrue(has_class(header, 'descending'), "Header doesn't have 'descending' class")
+
+    def test_there_is_no_business_size_column(self):
+        get_contract_recipe().make(_quantity=5, vendor_name=seq("Large Biz"), business_size='o')
+        driver = self.load()
+        form = self.get_form()
+
+        col_headers = get_column_headers(driver)
+
+        for head in col_headers:
+            self.assertFalse(has_matching_class(head, 'column-business[_-]size'))
 
     def test_filter_to_only_small_businesses(self):
         get_contract_recipe().make(_quantity=5, vendor_name=seq("Large Biz"), business_size='o')
@@ -199,6 +209,37 @@ class FunctionalTests(LiveServerTestCase):
         self.assertIsNotNone(re.search(r'Small Biz\d+', driver.page_source))
         self.assertIsNotNone(re.search(r'Large Biz\d+', driver.page_source))
 
+    def test_schedule_column_is_collapsed_by_default(self):
+        get_contract_recipe().make(_quantity=5)
+        driver = self.load()
+        col_header = find_column_header(driver, 'schedule')
+
+        self.assertTrue(has_class(col_header, 'collapsed'))
+
+    def test_unhide_schedule_column(self):
+        get_contract_recipe().make(_quantity=5)
+        driver = self.load()
+        col_header = find_column_header(driver, 'schedule')
+
+        # unhide column
+        col_header.click()
+
+        self.assertFalse(has_class(col_header, 'collapsed'))
+
+    def test_schedule_column_is_last(self):
+        get_contract_recipe().make(_quantity=5)
+        driver = self.load()
+        col_headers = get_column_headers(driver)
+
+        self.assertTrue(has_class(col_headers[-1], 'column-schedule'))
+
+    def test_schedule_column_is_sortable(self):
+        get_contract_recipe().make(_quantity=5)
+        driver = self.load()
+        col_header = find_column_header(driver, 'schedule')
+
+        self.assertTrue(has_class(col_header, 'sortable'))
+
     def assertResultsCount(self, driver, num):
         self.assertEqual(int(driver.find_element_by_id('results-count').text), num)
 
@@ -216,6 +257,8 @@ def wait_for(condition, timeout=3):
 def has_class(element, klass):
     return klass in element.get_attribute('class').split(' ')
 
+def has_matching_class(element, regex):
+    return re.search(regex, element.get_attribute('class'))
 
 def set_select_value(select, value):
     select.click()
@@ -238,9 +281,17 @@ def set_form_value(form, key, value):
     return field
 
 
-def set_form_values(self, values):
+def set_form_values(values):
     for key, value in values.entries():
         set_form_value(key, value)
+
+def find_column_header(driver, col_name):
+    return driver.find_element_by_css_selector('th.column-{}'.format(col_name))
+
+def get_column_headers(driver):
+    return driver.find_elements_by_xpath('//thead/tr/th')
+
+
 
 if __name__ == '__main__':
     import unittest
