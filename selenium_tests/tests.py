@@ -6,6 +6,7 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from contracts.mommy_recipes import get_contract_recipe
 from model_mommy.recipe import seq
 
+import re
 import time
 
 
@@ -57,12 +58,12 @@ class FunctionalTests(LiveServerTestCase):
 
     def test_results_count__empty_result_set(self):
         driver = self.load()
-        self.assertEqual(int(driver.find_element_by_id('results-count').text), 0)
+        self.assertResultsCount(driver, 0)
 
     def test_results_count(self):
         get_contract_recipe().make(_quantity=10, labor_category=seq("Engineer"))
         driver = self.load()
-        self.assertEqual(int(driver.find_element_by_id('results-count').text), 10)
+        self.assertResultsCount(driver, 10)
 
     def test_titles_are_correct(self):
         get_contract_recipe().make(_quantity=1, labor_category=seq("Architect"))
@@ -88,8 +89,7 @@ class FunctionalTests(LiveServerTestCase):
         self.assertTrue('q=Engineer' in driver.current_url, 'Missing "q=Engineer" in query string')
         wait_for(self.data_is_loaded)
 
-        results_count = driver.find_element_by_id('results-count').text
-        self.assertEqual(int(results_count), 3, 'Results count mismatch.')
+        self.assertResultsCount(driver, 3)
         labor_cell = driver.find_element_by_css_selector('tbody tr .column-labor_category')
         self.assertTrue('Engineer' in labor_cell.text, 'Labor category cell text mismatch')
 
@@ -105,7 +105,7 @@ class FunctionalTests(LiveServerTestCase):
         set_form_value(form, 'price__gte', minimum)
         self.submit_form()
         wait_for(self.data_is_loaded)
-        self.assertEqual(int(driver.find_element_by_id('results-count').text), 8)
+        self.assertResultsCount(driver, 8)
         self.assertTrue(('price__gte=%d' % minimum) in driver.current_url, 'Missing "price__gte=%d" in query string' % minimum)
 
     def test_price_lte(self):
@@ -120,7 +120,7 @@ class FunctionalTests(LiveServerTestCase):
         set_form_value(form, 'price__lte', maximum)
         self.submit_form()
         wait_for(self.data_is_loaded)
-        self.assertEqual(int(driver.find_element_by_id('results-count').text), 3)
+        self.assertResultsCount(driver, 3)
         self.assertTrue(('price__lte=%d' % maximum) in driver.current_url, 'Missing "price__lte=%d" in query string' % maximum)
 
     def test_price_range(self):
@@ -136,7 +136,7 @@ class FunctionalTests(LiveServerTestCase):
         set_form_value(form, 'price__lte', maximum)
         self.submit_form()
         wait_for(self.data_is_loaded)
-        self.assertEqual(int(driver.find_element_by_id('results-count').text), 4)
+        self.assertResultsCount(driver, 4)
         self.assertTrue(('price__gte=%d' % minimum) in driver.current_url, 'Missing "price__gte=%d" in query string' % minimum)
         self.assertTrue(('price__lte=%d' % maximum) in driver.current_url, 'Missing "price__lte=%d" in query string' % maximum)
 
@@ -158,6 +158,9 @@ class FunctionalTests(LiveServerTestCase):
         self.assertTrue('sort=-min_years_experience' in driver.current_url, 'Missing "sort=-min_years_experience" in query string')
         self.assertTrue(has_class(header, 'sorted'), "Header doesn't have 'sorted' class")
         self.assertTrue(has_class(header, 'descending'), "Header doesn't have 'descending' class")
+
+    def assertResultsCount(self, driver, num):
+        self.assertEqual(int(driver.find_element_by_id('results-count').text), num)
 
 
 def wait_for(condition, timeout=3):
