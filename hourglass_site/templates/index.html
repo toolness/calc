@@ -3,70 +3,10 @@
 
 {% block head %}
 <script src="{% static 'hourglass_site/js/vendor/jquery.auto-complete.min.js' %}"></script>
+<link rel="stylesheet" href="{% static 'hourglass_site/style/index.css' %}">
 {% endblock %}
 
 {% block body %}
-<style scoped>
-
-  thead th {
-    vertical-align: bottom;
-  }
-
-  * h5 {
-    margin: 0 !important;
-  }
-
-  .container {
-    margin-top: 2rem;
-  }
-
-  #search {
-    position: relative;
-  }
-
-  input.price {
-    width: 4em;
-  }
-
-  .filters {
-    background: #f9f9f9;
-    padding: 1rem;
-    border-radius: 4px;
-  }
-
-  .graphs {
-    padding: 1rem 0;
-  }
-
-  .filters .filter {
-    width: 50%;
-    float: left;
-  }
-
-  th.column-labor_category {        width: 25%; }
-  th.column-education_level {       width: 10%; }
-  th.column-min_years_experience {  width: 10%; }
-  th.column-wage {                  width:  8%; }
-  th.column-idv_piid {              width: 12%; }
-  th.column-vendor_name {           width: 25%; }
-  th.column-schedule {              width: 10%; }
-
-  td.column-idv_piid {
-    white-space: nowrap;
-  }
-
-  td.column-min_years_experience i {
-    font-style: normal;
-    font-size: .75em;
-    color: #999;
-  }
-
-  #export-data {
-    position: absolute;
-    right: 0;
-  }
-
-</style>
 <div class="container">
   <h1>Hourglass</h1>
   <form id="search" class="search" role="form">
@@ -76,6 +16,7 @@
       </div>
       <div class="six columns">
         <button id="submit" class="submit button-primary">Search</button>
+        <input id="reset" class="reset button" type="reset" value="Clear search">
       </div>
     </div>
 
@@ -83,38 +24,7 @@
 
     <div class="config row">
       <div class="filters six columns">
-        <h5>Filters</h5>
-        <div class="filter">
-          <label for="price">Show prices:</label>
-          from <input id="price__gte" name="price__gte" type="number" class="price" min="0" max="1000" step=".01" placeholder="">
-          to <input id="price__lte" name="price__lte" type="number" class="price" min="0" max="1000" step=".01" placeholder="">
-        </div>
-
-        <div class="filter">
-          <label for="site">Worksite:</label>
-          <select id="site" name="site">
-            <option value="">(all)</option>
-            <option>customer</option>
-            <option>contractor</option>
-            <option>both</option>
-          </select>
-        </div>
-
-        <!--
-        <div class="filter">
-          <label for="schedule">Schedule:</label>
-          <select id="schedule" name="schedule">
-            <option value="">(all)</option>
-            <option>Environmental</option>
-            <option>AIMS</option>
-            <option>Logistics</option>
-            <option>Language Services</option>
-            <option>PES</option>
-            <option>MOBIS</option>
-            <option>Consolidated</option>
-          </select>
-        </div>
-        -->
+        <h5>Optional Filters</h5>
 
         <div class="filter">
           <label for="min_education">Min. Education Level:</label>
@@ -135,6 +45,16 @@
         </div>
 
         <div class="filter">
+          <label for="site">Worksite:</label>
+          <select id="site" name="site">
+            <option value="">(all)</option>
+            <option>customer</option>
+            <option>contractor</option>
+            <option>both</option>
+          </select>
+        </div>
+
+        <div class="filter">
           <label for="business_size">Business Size:</label>
           <select id="business_size" name="business_size">
             <option value="">(all)</option>
@@ -142,6 +62,34 @@
             <option value="o">Other than Small</option>
           </select>
         </div>
+
+        <div class="filter">
+          <label for="price">Only search &amp; show prices:</label>
+          from <input id="price__gt" name="price__gt" type="text" class="price" min="0" max="1000" step=".01" placeholder="">
+          to <input id="price__lt" name="price__lt" type="text" class="price" min="0" max="1000" step=".01" placeholder="">
+        </div>
+
+
+
+        <!--
+        <div class="filter">
+          <label for="schedule">Schedule:</label>
+          <select id="schedule" name="schedule">
+            <option value="">(all)</option>
+            <option>Environmental</option>
+            <option>AIMS</option>
+            <option>Logistics</option>
+            <option>Language Services</option>
+            <option>PES</option>
+            <option>MOBIS</option>
+            <option>Consolidated</option>
+          </select>
+        </div>
+        -->
+
+        
+
+
 
         <!--
         <div class="filter">
@@ -197,7 +145,7 @@
     <table id="results-table" class="results has-data">
       <caption>
         <span id="results-total">...</span> matching row(s), showing <span id="results-count">...</span>
-        <a id="export-data" class="button" href="/api/rates/csv/">Export Data</a>
+        <a id="export-data" class="button button-secondary" title="Click to export your search results to an Excel file (CSV)" href="/api/rates/csv/">Export Data</a>
       </caption>
       <thead>
         <tr>

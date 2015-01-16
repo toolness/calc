@@ -63,8 +63,7 @@ th.sortable {
     position: relative;
   }
 
-  th.sortable:after,
-  th.collapsible:after {
+  th.sortable:after {
     display: inline-block;
     line-height: 1em;
     height: 1em;
@@ -91,18 +90,27 @@ th.sortable {
   }
 
 th.collapsible {
-  text-decoration: underline;
-  cursor: pointer;
   position: relative;
 }
 
-  th.collapsible:after {
-    content: "▶";
-  }
+th.collapsible.collapsed {
+  width: 0;
+  font-size: 0;
+}
 
-  th.collapsible.collapsed:after {
-    content: "◀";
-  }
+th.collapsible a.toggle-collapse {
+  position: absolute;
+  font-size: 1rem;
+  line-height: 1.2em;
+  padding: 2px 4px;
+  text-transform: uppercase;
+  text-decoration: underline;
+  color: #999;
+  top: 0;
+  left: 100%;
+  width: 3em;
+  height: 100%;
+}
 
 th.collapsed,
 td.collapsed {
@@ -323,4 +331,8 @@ svg.histogram rect {
 svg.histogram .avg line {
   stroke-width: 1;
   stroke: #000;
+}
+
+.filter_active  {
+  border: 2px solid #ffd855 !important;
 }
