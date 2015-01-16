@@ -254,6 +254,13 @@ class FunctionalTests(LiveServerTestCase):
 
         self.assertTrue(has_class(col_header, 'sortable'))
 
+    def test_histogram_is_shown(self):
+        get_contract_recipe().make(_quantity=5)
+        driver = self.load()
+        wait_for(self.data_is_loaded)
+        rect_count = len(driver.find_elements_by_css_selector('.histogram rect'))
+        self.assertTrue(rect_count > 0, "No histogram rectangles found (selector: '.histogram rect')")
+
     def assertResultsCount(self, driver, num):
         self.assertEqual(int(driver.find_element_by_id('results-count').text), num)
 
