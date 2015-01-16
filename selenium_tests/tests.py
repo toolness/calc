@@ -71,6 +71,20 @@ class FunctionalTests(LiveServerTestCase):
         wait_for(self.data_is_loaded)
         self.assertTrue(driver.title.startswith('Hourglass'), 'Title mismatch, {} does not start with Hourglass'.format(driver.title))
 
+    def test_filter_order_is_correct(self):
+        get_contract_recipe().make(_quantity=1, labor_category=seq("Architect"))
+        driver = self.load()
+        form = self.get_form()
+
+        inputs = form.find_elements_by_xpath('//input')
+
+        self.assertEqual(inputs[-3].get_attribute('name'), 'price__gte')
+        self.assertEqual(inputs[-2].get_attribute('name'), 'price__lte')
+
+        # the actual last form input should be a hidden one carrying a default sort
+        self.assertEqual(inputs[-1].get_attribute('name'), 'sort')
+        self.assertFalse(inputs[-1].is_displayed())
+
     def test_form_submit_loading(self):
         get_contract_recipe().make(_quantity=1, labor_category=seq("Architect"))
         self.load()
