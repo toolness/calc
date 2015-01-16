@@ -21,7 +21,7 @@ except:
     import csv
 
 def convert_to_tsquery(query):
-    #converts multi-word phrases into AND boolean queries for postgresql
+    """ converts multi-word phrases into AND boolean queries for postgresql """
     tsquery = query.strip() + ':*'
     tsquery = tsquery.replace(' ', ' & ')
 
@@ -49,7 +49,7 @@ def get_contracts_queryset(request_params, wage_field):
         query_type (str): defines how the user's keyword search should work. [ match_all (default) | match_phrase | match_exact ] 
 
     Returns:
-        QuerySet for Contract objects
+        QuerySet: a filtered and sorted QuerySet to retrieve Contract objects
     """
 
     query = request_params.get('q', None)
