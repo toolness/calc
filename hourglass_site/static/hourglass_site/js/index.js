@@ -250,22 +250,23 @@
         .attr("class", "bars");
     }
 
-    var avg = svg.select("g.avg");
+    var avg = svg.select("g.avg"),
+        avgOffset = -8;
     if (avg.empty()) {
       avg = svg.append("g")
         .attr("class", "avg");
       avg.append("text")
         .attr("text-anchor", "middle")
-        .attr("dy", -10)
+        .attr("dy", avgOffset - 6)
         .html('<tspan class="value"></tspan> average');
       avg.append("line");
       avg.append("circle")
-        .attr("cy", -4)
+        .attr("cy", avgOffset)
         .attr("r", 3);
     }
 
     avg.select("line")
-      .attr("y1", -4)
+      .attr("y1", avgOffset)
       .attr("y2", bottom - top + 8); // XXX tick size = 6
     avg.select(".value")
       .text(formatDollars(data.average));
