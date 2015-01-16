@@ -17,7 +17,7 @@ class FunctionalTests(LiveServerTestCase):
         cls.driver = webdriver.PhantomJS()
         cls.longMessage = True
         cls.maxDiff = None
-        super().setUpClass()
+        super(FunctionalTests, cls).setUpClass()
 
     @classmethod
     def tearDownClass(cls):
