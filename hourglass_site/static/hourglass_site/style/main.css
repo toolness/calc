@@ -102,8 +102,9 @@ th.collapsible a.toggle-collapse {
   position: absolute;
   font-size: 1rem;
   line-height: 1.2em;
-  padding: 4px;
+  padding: 2px 4px;
   text-transform: uppercase;
+  text-decoration: underline;
   color: #999;
   top: 0;
   left: 100%;
