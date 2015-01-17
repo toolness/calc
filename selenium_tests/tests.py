@@ -58,11 +58,13 @@ class FunctionalTests(LiveServerTestCase):
 
     def test_results_count__empty_result_set(self):
         driver = self.load()
+        wait_for(self.data_is_loaded)
         self.assertResultsCount(driver, 0)
 
     def test_results_count(self):
         get_contract_recipe().make(_quantity=10, labor_category=seq("Engineer"))
         driver = self.load()
+        wait_for(self.data_is_loaded)
         self.assertResultsCount(driver, 10)
 
     def test_titles_are_correct(self):
@@ -76,14 +78,14 @@ class FunctionalTests(LiveServerTestCase):
         driver = self.load()
         form = self.get_form()
 
-        inputs = form.find_elements_by_xpath('//input')
+        inputs = form.find_elements_by_css_selector("input:not([type='hidden'])")
 
-        self.assertEqual(inputs[-3].get_attribute('name'), 'price__gte')
-        self.assertEqual(inputs[-2].get_attribute('name'), 'price__lte')
+        self.assertEqual(inputs[-2].get_attribute('name'), 'price__gte')
+        self.assertEqual(inputs[-1].get_attribute('name'), 'price__lte')
 
         # the actual last form input should be a hidden one carrying a default sort
-        self.assertEqual(inputs[-1].get_attribute('name'), 'sort')
-        self.assertFalse(inputs[-1].is_displayed())
+        # self.assertEqual(inputs[-1].get_attribute('name'), 'sort')
+        # self.assertFalse(inputs[-1].is_displayed())
 
     def test_form_submit_loading(self):
         get_contract_recipe().make(_quantity=1, labor_category=seq("Architect"))
@@ -254,8 +256,28 @@ class FunctionalTests(LiveServerTestCase):
 
         self.assertTrue(has_class(col_header, 'sortable'))
 
+    def test_histogram_is_shown(self):
+        get_contract_recipe().make(_quantity=5)
+        driver = self.load()
+        wait_for(self.data_is_loaded)
+        rect_count = len(driver.find_elements_by_css_selector('.histogram rect'))
+        self.assertTrue(rect_count > 0, "No histogram rectangles found (selector: '.histogram rect')")
+
+    def test_histogram_shows_min_max(self):
+        get_contract_recipe().make(_quantity=5)
+        driver = self.load()
+        wait_for(self.data_is_loaded)
+        histogram = driver.find_element_by_css_selector('.histogram')
+        for metric in ('min', 'max', 'average'):
+            node = histogram.find_element_by_class_name(metric)
+            self.assertTrue(node.text.startswith(u'$'), "histogram '.%s' node does not start with '$': '%s'" % (metric, node.text))
+
     def assertResultsCount(self, driver, num):
-        self.assertEqual(int(driver.find_element_by_id('results-count').text), num)
+        results_count = driver.find_element_by_id('results-count').text
+        # remove commas from big numbers (e.g. "1,000" -> "1000")
+        results_count = results_count.replace(',', '')
+        self.assertNotEqual(results_count, u'', "No results count")
+        self.assertEqual(results_count, str(num), "Results count mismatch: '%s' != %d" % (results_count, num))
 
 
 def wait_for(condition, timeout=3):

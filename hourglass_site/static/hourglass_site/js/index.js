@@ -211,7 +211,7 @@
   function updatePriceHistogram(data) {
     var width = 500,
         height = 200,
-        pad = [30, 15, 50, 45],
+        pad = [30, 15, 50, 60],
         top = pad[0],
         left = pad[3],
         right = width - pad[1],
@@ -250,22 +250,26 @@
         .attr("class", "bars");
     }
 
-    var avg = svg.select("g.avg");
+    var avg = svg.select("g.avg"),
+        avgOffset = -8;
     if (avg.empty()) {
       avg = svg.append("g")
         .attr("class", "avg");
-      avg.append("text")
+      var avgText = avg.append("text")
         .attr("text-anchor", "middle")
-        .attr("dy", -10)
-        .html('<tspan class="value"></tspan> average');
+        .attr("dy", avgOffset - 6);
+      avgText.append("tspan")
+        .attr("class", "value average");
+      avgText.append("tspan")
+        .text(" average");
       avg.append("line");
       avg.append("circle")
-        .attr("cy", -4)
+        .attr("cy", avgOffset)
         .attr("r", 3);
     }
 
     avg.select("line")
-      .attr("y1", -4)
+      .attr("y1", avgOffset)
       .attr("y2", bottom - top + 8); // XXX tick size = 6
     avg.select(".value")
       .text(formatDollars(data.average));
@@ -334,6 +338,12 @@
           return i === 0 || i === bins.length;
         })
         .select("text")
+            .classed("min", function(d, i) {
+              return i === 0;
+            })
+            .classed("max", function(d, i) {
+              return i === bins.length;
+            })
           .attr("text-anchor", "end")
           .attr("transform", "translate(-20,16) rotate(-45)");
 
