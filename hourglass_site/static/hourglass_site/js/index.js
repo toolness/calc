@@ -258,7 +258,7 @@
       avg.append("text")
         .attr("text-anchor", "middle")
         .attr("dy", avgOffset - 6)
-        .html('<tspan class="value"></tspan> average');
+        .html('<tspan class="value average"></tspan> average');
       avg.append("line");
       avg.append("circle")
         .attr("cy", avgOffset)
@@ -335,6 +335,12 @@
           return i === 0 || i === bins.length;
         })
         .select("text")
+            .classed("min", function(d, i) {
+              return i === 0;
+            })
+            .classed("max", function(d, i) {
+              return i === bins.length;
+            })
           .attr("text-anchor", "end")
           .attr("transform", "translate(-20,16) rotate(-45)");
 
