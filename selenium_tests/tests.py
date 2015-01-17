@@ -268,7 +268,7 @@ class FunctionalTests(LiveServerTestCase):
         driver = self.load()
         wait_for(self.data_is_loaded)
         histogram = driver.find_element_by_css_selector('.histogram')
-        for metric in ('min', 'max', 'avg'):
+        for metric in ('min', 'max', 'average'):
             node = histogram.find_element_by_class_name(metric)
             self.assertTrue(node.text.startswith(u'$'), "histogram '.%s' node does not start with '$': '%s'" % (metric, node.text))
 
