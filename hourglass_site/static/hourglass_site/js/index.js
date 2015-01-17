@@ -255,10 +255,13 @@
     if (avg.empty()) {
       avg = svg.append("g")
         .attr("class", "avg");
-      avg.append("text")
+      var avgText = avg.append("text")
         .attr("text-anchor", "middle")
-        .attr("dy", avgOffset - 6)
-        .html('<tspan class="value average"></tspan> average');
+        .attr("dy", avgOffset - 6);
+      avgText.append("tspan")
+        .attr("class", "value average");
+      avgText.append("tspan")
+        .text(" average");
       avg.append("line");
       avg.append("circle")
         .attr("cy", avgOffset)
