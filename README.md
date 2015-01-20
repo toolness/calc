@@ -61,7 +61,7 @@ The `price__lte` and `price__gte` parameters may be used together to search for 
 http://localhost:8000/api/rates/?price__gte=95&price__lte=105
 ```
 
-Other params allow you to filter by the contract schedule of the transaction, whether or not the vendor is a small business, and whether or not the vendor works on the contractor or customer site.
+Other params allow you to filter by the contract schedule of the transaction, whether or not the vendor is a small business (valid values: 's' [small] and 'o' [other]), and whether or not the vendor works on the contractor or customer site.
 
 Here is an example with all three parameters (schedule, site, and business_size) included:
 ```
