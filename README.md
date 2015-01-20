@@ -49,7 +49,19 @@ The default pagination is set to 200. You can paginate using the page parameter.
 http://localhost:8000/api/rates/?q=translator&page=2
 ```
 
-Additionally, you can also now filter by the contract schedule of the transaction, whether or not the vendor is a small business, and whether or not the vendor works on the contractor or customer site.
+You can filter by price with any of the `price` (exact match), `price__lte` (price is less than or equal to) or `price__gte` (price is greater than or equal to) parameters.
+```
+http://localhost:8000/api/rates/?price=95
+http://localhost:8000/api/rates/?price__lte=95
+http://localhost:8000/api/rates/?price__gte=95
+```
+
+The `price__lte` and `price__gte` parameters may be used together to search for a price range.
+```
+http://localhost:8000/api/rates/?price__gte=95&price__lte=105
+```
+
+Other params allow you to filter by the contract schedule of the transaction, whether or not the vendor is a small business, and whether or not the vendor works on the contractor or customer site.
 
 Here is an example with all three parameters (schedule, site, and business_size) included:
 ```
