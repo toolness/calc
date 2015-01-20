@@ -15,6 +15,7 @@ class FunctionalTests(LiveServerTestCase):
     @classmethod
     def setUpClass(cls):
         cls.driver = webdriver.PhantomJS()
+        # cls.driver = webdriver.Firefox()
         cls.longMessage = True
         cls.maxDiff = None
         super(FunctionalTests, cls).setUpClass()
@@ -39,12 +40,22 @@ class FunctionalTests(LiveServerTestCase):
         self.driver.get(self.live_server_url + uri)
         return self.driver
 
+    def load_and_wait(self, uri='/'):
+        self.load(uri)
+        wait_for(self.data_is_loaded)
+        return self.driver
+
     def get_form(self):
         return self.driver.find_element_by_id('search')
 
     def submit_form(self):
         form = self.get_form()
         form.submit()
+        return form
+
+    def submit_form_and_wait(self):
+        form = self.submit_form
+        wait_for(self.data_is_loaded)
         return form
 
     def search_for(self, query):
@@ -57,20 +68,17 @@ class FunctionalTests(LiveServerTestCase):
         return has_class(form, 'loaded')
 
     def test_results_count__empty_result_set(self):
-        driver = self.load()
-        wait_for(self.data_is_loaded)
+        driver = self.load_and_wait()
         self.assertResultsCount(driver, 0)
 
     def test_results_count(self):
         get_contract_recipe().make(_quantity=10, labor_category=seq("Engineer"))
-        driver = self.load()
-        wait_for(self.data_is_loaded)
+        driver = self.load_and_wait()
         self.assertResultsCount(driver, 10)
 
     def test_titles_are_correct(self):
         get_contract_recipe().make(_quantity=1, labor_category=seq("Architect"))
-        driver = self.load()
-        wait_for(self.data_is_loaded)
+        driver = self.load_and_wait()
         self.assertTrue(driver.title.startswith('Hourglass'), 'Title mismatch, {} does not start with Hourglass'.format(driver.title))
 
     def test_filter_order_is_correct(self):
@@ -119,8 +127,7 @@ class FunctionalTests(LiveServerTestCase):
         minimum = 100
         # add results count check
         set_form_value(form, 'price__gte', minimum)
-        self.submit_form()
-        wait_for(self.data_is_loaded)
+        self.submit_form_and_wait()
         self.assertResultsCount(driver, 8)
         self.assertTrue(('price__gte=%d' % minimum) in driver.current_url, 'Missing "price__gte=%d" in query string' % minimum)
 
@@ -134,8 +141,7 @@ class FunctionalTests(LiveServerTestCase):
         maximum = 100
         # add results count check
         set_form_value(form, 'price__lte', maximum)
-        self.submit_form()
-        wait_for(self.data_is_loaded)
+        self.submit_form_and_wait()
         self.assertResultsCount(driver, 3)
         self.assertTrue(('price__lte=%d' % maximum) in driver.current_url, 'Missing "price__lte=%d" in query string' % maximum)
 
@@ -150,8 +156,7 @@ class FunctionalTests(LiveServerTestCase):
         maximum = 130
         set_form_value(form, 'price__gte', minimum)
         set_form_value(form, 'price__lte', maximum)
-        self.submit_form()
-        wait_for(self.data_is_loaded)
+        self.submit_form_and_wait()
         self.assertResultsCount(driver, 4)
         self.assertTrue(('price__gte=%d' % minimum) in driver.current_url, 'Missing "price__gte=%d" in query string' % minimum)
         self.assertTrue(('price__lte=%d' % maximum) in driver.current_url, 'Missing "price__lte=%d" in query string' % maximum)
@@ -188,13 +193,12 @@ class FunctionalTests(LiveServerTestCase):
     def test_filter_to_only_small_businesses(self):
         get_contract_recipe().make(_quantity=5, vendor_name=seq("Large Biz"), business_size='o')
         get_contract_recipe().make(_quantity=5, vendor_name=seq("Small Biz"), business_size='s')
-        driver = self.load()
+        driver = self.load_and_wait()
         form = self.get_form()
 
         set_form_value(form, 'business_size', 's')
-        self.submit_form()
+        self.submit_form_and_wait()
 
-        wait_for(self.data_is_loaded)
         self.assertResultsCount(driver, 5)
 
         self.assertIsNone(re.search(r'Large Biz\d+', driver.page_source))
@@ -203,13 +207,12 @@ class FunctionalTests(LiveServerTestCase):
     def test_filter_to_only_large_businesses(self):
         get_contract_recipe().make(_quantity=5, vendor_name=seq("Large Biz"), business_size='o')
         get_contract_recipe().make(_quantity=5, vendor_name=seq("Small Biz"), business_size='s')
-        driver = self.load()
+        driver = self.load_and_wait()
         form = self.get_form()
 
         set_form_value(form, 'business_size', 'o')
-        self.submit_form()
+        self.submit_form_and_wait()
 
-        wait_for(self.data_is_loaded)
         self.assertResultsCount(driver, 5)
 
         self.assertIsNone(re.search(r'Small Biz\d+', driver.page_source))
@@ -218,7 +221,7 @@ class FunctionalTests(LiveServerTestCase):
     def test_no_filter_shows_all_sizes_of_business(self):
         get_contract_recipe().make(_quantity=5, vendor_name=seq("Large Biz"), business_size='o')
         get_contract_recipe().make(_quantity=5, vendor_name=seq("Small Biz"), business_size='s')
-        driver = self.load()
+        driver = self.load_and_wait()
 
         self.assertResultsCount(driver, 10)
 
