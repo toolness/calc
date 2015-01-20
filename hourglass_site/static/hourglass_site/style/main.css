@@ -14,8 +14,8 @@ table {
   width: 100%;
 }
 
-td, td:first-child,
-th, th:first-child,
+td, td:first-child, td:last-child,
+th, th:first-child, th:last-child,
 table caption {
   position: relative;
   padding: .25em .5em;
