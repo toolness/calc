@@ -6,7 +6,6 @@ test:
 test-frontend: static
 	$(manage) test selenium_tests \
 		--liveserver=localhost:8081-8181 \
-		--failfast \
 		--nologcapture
 
 static:

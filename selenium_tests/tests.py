@@ -54,7 +54,7 @@ class FunctionalTests(LiveServerTestCase):
         return form
 
     def submit_form_and_wait(self):
-        form = self.submit_form
+        form = self.submit_form()
         wait_for(self.data_is_loaded)
         return form
 
@@ -118,7 +118,8 @@ class FunctionalTests(LiveServerTestCase):
         self.assertTrue('Engineer' in labor_cell.text, 'Labor category cell text mismatch')
 
     def test_price_gte(self):
-        # note: the hourly rates here will actually start at 80-- this seems like a bug, but whatever
+        # note: the hourly rates here will actually start at 80-- this seems
+        # like a bug, but whatever
         get_contract_recipe().make(_quantity=10, labor_category=seq("Contractor"), hourly_rate_year1=seq(70, 10), current_price=seq(70, 10))
         driver = self.load()
         form = self.get_form()
@@ -128,11 +129,12 @@ class FunctionalTests(LiveServerTestCase):
         # add results count check
         set_form_value(form, 'price__gte', minimum)
         self.submit_form_and_wait()
+        self.assertTrue(('price__gte=%d' % minimum) in driver.current_url, 'Missing "price__gte={0}" in query string: {1}'.format(minimum, driver.current_url))
         self.assertResultsCount(driver, 8)
-        self.assertTrue(('price__gte=%d' % minimum) in driver.current_url, 'Missing "price__gte=%d" in query string' % minimum)
 
     def test_price_lte(self):
-        # note: the hourly rates here will actually start at 80-- this seems like a bug, but whatever
+        # note: the hourly rates here will actually start at 80-- this seems
+        # like a bug, but whatever
         get_contract_recipe().make(_quantity=10, labor_category=seq("Contractor"), hourly_rate_year1=seq(70, 10), current_price=seq(70, 10))
         driver = self.load()
         form = self.get_form()
@@ -142,11 +144,12 @@ class FunctionalTests(LiveServerTestCase):
         # add results count check
         set_form_value(form, 'price__lte', maximum)
         self.submit_form_and_wait()
-        self.assertResultsCount(driver, 3)
         self.assertTrue(('price__lte=%d' % maximum) in driver.current_url, 'Missing "price__lte=%d" in query string' % maximum)
+        self.assertResultsCount(driver, 3)
 
     def test_price_range(self):
-        # note: the hourly rates here will actually start at 80-- this seems like a bug, but whatever
+        # note: the hourly rates here will actually start at 80-- this seems
+        # like a bug, but whatever
         get_contract_recipe().make(_quantity=10, labor_category=seq("Contractor"), hourly_rate_year1=seq(70, 10), current_price=seq(70, 10))
         driver = self.load()
         form = self.get_form()
@@ -240,40 +243,105 @@ class FunctionalTests(LiveServerTestCase):
         driver = self.load()
         col_header = find_column_header(driver, 'schedule')
 
-        # unhide column
+        # un-hide column
         col_header.find_element_by_css_selector('.toggle-collapse').click()
 
         self.assertFalse(has_class(col_header, 'collapsed'))
 
+        # re-hide column
+        col_header.find_element_by_css_selector('.toggle-collapse').click()
+
+        self.assertTrue(has_class(col_header, 'collapsed'))
+
     def test_schedule_column_is_last(self):
         get_contract_recipe().make(_quantity=5)
-        driver = self.load()
+        driver = self.load_and_wait()
         col_headers = get_column_headers(driver)
-
         self.assertTrue(has_class(col_headers[-1], 'column-schedule'))
 
     def test_schedule_column_is_sortable(self):
         get_contract_recipe().make(_quantity=5)
-        driver = self.load()
+        driver = self.load_and_wait()
         col_header = find_column_header(driver, 'schedule')
+        self.assertTrue(has_class(col_header, 'sortable'), "schedule column is not sortable")
+        # NOT sorted by default
+        self.assertFalse(has_class(col_header, 'sorted'), "schedule column is sorted by default")
+        col_header.click()
+        self.assertTrue(has_class(col_header, 'sorted'), "schedule column is not sorted after clicking")
 
-        self.assertTrue(has_class(col_header, 'sortable'))
+    def test_price_column_is_sortable(self):
+        get_contract_recipe().make(_quantity=5)
+        driver = self.load_and_wait()
+        col_header = find_column_header(driver, 'current_price')
+        # current_price should be sorted ascending by default
+        self.assertTrue(has_class(col_header, 'sortable'), "current_price column is not sortable")
+        self.assertFalse(has_class(col_header, 'descending'), "current_price column is descending by default")
+        col_header.click()
+        self.assertTrue(has_class(col_header, 'sorted'), "current_price is still sorted after clicking")
+
+    def test_labor_category_column_is_sortable(self):
+        get_contract_recipe().make(_quantity=5)
+        driver = self.load_and_wait()
+        col_header = find_column_header(driver, 'labor_category')
+        self.assertTrue(has_class(col_header, 'sortable'), "labor_category column is not sortable")
+        # NOT sorted by default
+        self.assertFalse(has_class(col_header, 'sorted'), "labor_category column is not sorted after clicking")
+        col_header.click()
+        self.assertTrue(has_class(col_header, 'sorted'), "labor_category column is not sorted after clicking")
+
+    def test_education_column_is_sortable(self):
+        get_contract_recipe().make(_quantity=5)
+        driver = self.load_and_wait()
+        col_header = find_column_header(driver, 'education_level')
+        self.assertTrue(has_class(col_header, 'sortable'), "education column is not sortable")
+        # NOT sorted by default
+        self.assertFalse(has_class(col_header, 'sorted'), "education column is not sorted after clicking")
+        col_header.click()
+        self.assertTrue(has_class(col_header, 'sorted'), "education column is not sorted after clicking")
+
+    def test_one_column_is_sortable_at_a_time(self):
+        get_contract_recipe().make(_quantity=5)
+        driver = self.load_and_wait()
+        header1 = find_column_header(driver, 'education_level')
+        header2 = find_column_header(driver, 'labor_category')
+
+        header1.click()
+        self.assertTrue(has_class(header1, 'sorted'), "column 1 is not sorted")
+        self.assertFalse(has_class(header2, 'sorted'), "column 2 is still sorted (but should not be)")
+
+        header2.click()
+        self.assertTrue(has_class(header2, 'sorted'), "column 2 is not sorted")
+        self.assertFalse(has_class(header1, 'sorted'), "column 1 is still sorted (but should not be)")
 
     def test_histogram_is_shown(self):
         get_contract_recipe().make(_quantity=5)
-        driver = self.load()
-        wait_for(self.data_is_loaded)
+        driver = self.load_and_wait()
         rect_count = len(driver.find_elements_by_css_selector('.histogram rect'))
         self.assertTrue(rect_count > 0, "No histogram rectangles found (selector: '.histogram rect')")
 
     def test_histogram_shows_min_max(self):
         get_contract_recipe().make(_quantity=5)
-        driver = self.load()
-        wait_for(self.data_is_loaded)
+        driver = self.load_and_wait()
         histogram = driver.find_element_by_css_selector('.histogram')
         for metric in ('min', 'max', 'average'):
             node = histogram.find_element_by_class_name(metric)
             self.assertTrue(node.text.startswith(u'$'), "histogram '.%s' node does not start with '$': '%s'" % (metric, node.text))
+
+    def test_histogram_shows_intevals(self):
+        get_contract_recipe().make(_quantity=5)
+        driver = self.load_and_wait()
+        ticks = driver.find_elements_by_css_selector('.histogram .x.axis .tick')
+        # XXX there should be 10 bins, but 11 labels (one for each bin edge)
+        self.assertEqual(len(ticks), 11, "Found wrong number of x-axis ticks: %d" % len(ticks))
+
+    def test_histogram_shows_tooltips(self):
+        get_contract_recipe().make(_quantity=5)
+        driver = self.load_and_wait()
+        bars = driver.find_elements_by_css_selector('.histogram .bar')
+        # TODO: check for "real" tooltips?
+        for i, bar in enumerate(bars):
+            title = bar.find_element_by_css_selector('title')
+            self.assertIsNotNone(title.text, "Histogram bar #%d has no text" % i)
 
     def assertResultsCount(self, driver, num):
         results_count = driver.find_element_by_id('results-count').text
@@ -289,7 +357,7 @@ def wait_for(condition, timeout=3):
         if condition():
             return True
         else:
-            time.sleep(0.1)
+            time.sleep(0.05)
     raise Exception('Timeout waiting for {}'.format(condition.__name__))
 
 
@@ -316,7 +384,7 @@ def set_form_value(form, key, value):
             if field.get_attribute('value') == value:
                 field.click()
         else:
-            field.send_keys(value)
+            field.send_keys(str(value))
     return field
 
 
