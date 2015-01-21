@@ -118,7 +118,8 @@ class FunctionalTests(LiveServerTestCase):
         self.assertTrue('Engineer' in labor_cell.text, 'Labor category cell text mismatch')
 
     def test_price_gte(self):
-        # note: the hourly rates here will actually start at 80-- this seems like a bug, but whatever
+        # note: the hourly rates here will actually start at 80-- this seems
+        # like a bug, but whatever
         get_contract_recipe().make(_quantity=10, labor_category=seq("Contractor"), hourly_rate_year1=seq(70, 10), current_price=seq(70, 10))
         driver = self.load()
         form = self.get_form()
@@ -132,7 +133,8 @@ class FunctionalTests(LiveServerTestCase):
         self.assertResultsCount(driver, 8)
 
     def test_price_lte(self):
-        # note: the hourly rates here will actually start at 80-- this seems like a bug, but whatever
+        # note: the hourly rates here will actually start at 80-- this seems
+        # like a bug, but whatever
         get_contract_recipe().make(_quantity=10, labor_category=seq("Contractor"), hourly_rate_year1=seq(70, 10), current_price=seq(70, 10))
         driver = self.load()
         form = self.get_form()
@@ -146,7 +148,8 @@ class FunctionalTests(LiveServerTestCase):
         self.assertResultsCount(driver, 3)
 
     def test_price_range(self):
-        # note: the hourly rates here will actually start at 80-- this seems like a bug, but whatever
+        # note: the hourly rates here will actually start at 80-- this seems
+        # like a bug, but whatever
         get_contract_recipe().make(_quantity=10, labor_category=seq("Contractor"), hourly_rate_year1=seq(70, 10), current_price=seq(70, 10))
         driver = self.load()
         form = self.get_form()
@@ -240,24 +243,75 @@ class FunctionalTests(LiveServerTestCase):
         driver = self.load()
         col_header = find_column_header(driver, 'schedule')
 
-        # unhide column
+        # un-hide column
         col_header.find_element_by_css_selector('.toggle-collapse').click()
 
         self.assertFalse(has_class(col_header, 'collapsed'))
 
+        # re-hide column
+        col_header.find_element_by_css_selector('.toggle-collapse').click()
+
+        self.assertTrue(has_class(col_header, 'collapsed'))
+
     def test_schedule_column_is_last(self):
         get_contract_recipe().make(_quantity=5)
-        driver = self.load()
+        driver = self.load_and_wait()
         col_headers = get_column_headers(driver)
-
         self.assertTrue(has_class(col_headers[-1], 'column-schedule'))
 
     def test_schedule_column_is_sortable(self):
         get_contract_recipe().make(_quantity=5)
-        driver = self.load()
+        driver = self.load_and_wait()
         col_header = find_column_header(driver, 'schedule')
+        self.assertTrue(has_class(col_header, 'sortable'), "schedule column is not sortable")
+        # NOT sorted by default
+        self.assertFalse(has_class(col_header, 'sorted'), "schedule column is sorted by default")
+        col_header.click()
+        self.assertTrue(has_class(col_header, 'sorted'), "schedule column is not sorted after clicking")
 
-        self.assertTrue(has_class(col_header, 'sortable'))
+    def test_price_column_is_sortable(self):
+        get_contract_recipe().make(_quantity=5)
+        driver = self.load_and_wait()
+        col_header = find_column_header(driver, 'current_price')
+        # current_price should be sorted ascending by default
+        self.assertTrue(has_class(col_header, 'sortable'), "current_price column is not sortable")
+        self.assertFalse(has_class(col_header, 'descending'), "current_price column is descending by default")
+        col_header.click()
+        self.assertTrue(has_class(col_header, 'sorted'), "current_price is still sorted after clicking")
+
+    def test_labor_category_column_is_sortable(self):
+        get_contract_recipe().make(_quantity=5)
+        driver = self.load_and_wait()
+        col_header = find_column_header(driver, 'labor_category')
+        self.assertTrue(has_class(col_header, 'sortable'), "labor_category column is not sortable")
+        # NOT sorted by default
+        self.assertFalse(has_class(col_header, 'sorted'), "labor_category column is not sorted after clicking")
+        col_header.click()
+        self.assertTrue(has_class(col_header, 'sorted'), "labor_category column is not sorted after clicking")
+
+    def test_education_column_is_sortable(self):
+        get_contract_recipe().make(_quantity=5)
+        driver = self.load_and_wait()
+        col_header = find_column_header(driver, 'education_level')
+        self.assertTrue(has_class(col_header, 'sortable'), "education column is not sortable")
+        # NOT sorted by default
+        self.assertFalse(has_class(col_header, 'sorted'), "education column is not sorted after clicking")
+        col_header.click()
+        self.assertTrue(has_class(col_header, 'sorted'), "education column is not sorted after clicking")
+
+    def test_one_column_is_sortable_at_a_time(self):
+        get_contract_recipe().make(_quantity=5)
+        driver = self.load_and_wait()
+        header1 = find_column_header(driver, 'education_level')
+        header2 = find_column_header(driver, 'labor_category')
+
+        header1.click()
+        self.assertTrue(has_class(header1, 'sorted'), "column 1 is not sorted")
+        self.assertFalse(has_class(header2, 'sorted'), "column 2 is still sorted (but should not be)")
+
+        header2.click()
+        self.assertTrue(has_class(header2, 'sorted'), "column 2 is not sorted")
+        self.assertFalse(has_class(header1, 'sorted'), "column 1 is still sorted (but should not be)")
 
     def test_histogram_is_shown(self):
         get_contract_recipe().make(_quantity=5)
