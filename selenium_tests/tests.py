@@ -88,12 +88,9 @@ class FunctionalTests(LiveServerTestCase):
 
         inputs = form.find_elements_by_css_selector("input:not([type='hidden'])")
 
+        # the last visible form inputs should be the price filters
         self.assertEqual(inputs[-2].get_attribute('name'), 'price__gte')
         self.assertEqual(inputs[-1].get_attribute('name'), 'price__lte')
-
-        # the actual last form input should be a hidden one carrying a default sort
-        # self.assertEqual(inputs[-1].get_attribute('name'), 'sort')
-        # self.assertFalse(inputs[-1].is_displayed())
 
     def test_form_submit_loading(self):
         get_contract_recipe().make(_quantity=1, labor_category=seq("Architect"))
