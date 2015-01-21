@@ -14,8 +14,11 @@ thead th {
   position: relative;
 }
 
-input.price {
+input.price,
+input#min_experience {
   width: 4em;
+  margin-left: .3em;
+  margin-right: .3em;
 }
 
 .filters {
