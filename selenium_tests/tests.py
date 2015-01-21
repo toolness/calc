@@ -384,7 +384,7 @@ def set_form_value(form, key, value):
             if field.get_attribute('value') == value:
                 field.click()
         else:
-            field.send_keys(value)
+            field.send_keys(str(value))
     return field
 
 
