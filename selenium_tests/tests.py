@@ -128,8 +128,8 @@ class FunctionalTests(LiveServerTestCase):
         # add results count check
         set_form_value(form, 'price__gte', minimum)
         self.submit_form_and_wait()
-        self.assertResultsCount(driver, 8)
         self.assertTrue(('price__gte=%d' % minimum) in driver.current_url, 'Missing "price__gte=%d" in query string' % minimum)
+        self.assertResultsCount(driver, 8)
 
     def test_price_lte(self):
         # note: the hourly rates here will actually start at 80-- this seems like a bug, but whatever
@@ -142,8 +142,8 @@ class FunctionalTests(LiveServerTestCase):
         # add results count check
         set_form_value(form, 'price__lte', maximum)
         self.submit_form_and_wait()
-        self.assertResultsCount(driver, 3)
         self.assertTrue(('price__lte=%d' % maximum) in driver.current_url, 'Missing "price__lte=%d" in query string' % maximum)
+        self.assertResultsCount(driver, 3)
 
     def test_price_range(self):
         # note: the hourly rates here will actually start at 80-- this seems like a bug, but whatever
@@ -261,19 +261,33 @@ class FunctionalTests(LiveServerTestCase):
 
     def test_histogram_is_shown(self):
         get_contract_recipe().make(_quantity=5)
-        driver = self.load()
-        wait_for(self.data_is_loaded)
+        driver = self.load_and_wait()
         rect_count = len(driver.find_elements_by_css_selector('.histogram rect'))
         self.assertTrue(rect_count > 0, "No histogram rectangles found (selector: '.histogram rect')")
 
     def test_histogram_shows_min_max(self):
         get_contract_recipe().make(_quantity=5)
-        driver = self.load()
-        wait_for(self.data_is_loaded)
+        driver = self.load_and_wait()
         histogram = driver.find_element_by_css_selector('.histogram')
         for metric in ('min', 'max', 'average'):
             node = histogram.find_element_by_class_name(metric)
             self.assertTrue(node.text.startswith(u'$'), "histogram '.%s' node does not start with '$': '%s'" % (metric, node.text))
+
+    def test_histogram_shows_intevals(self):
+        get_contract_recipe().make(_quantity=5)
+        driver = self.load_and_wait()
+        ticks = driver.find_elements_by_css_selector('.histogram .x.axis .tick')
+        # XXX there should be 10 bins, but 11 labels (one for each bin edge)
+        self.assertEqual(len(ticks), 11, "Found wrong number of x-axis ticks: %d" % len(ticks))
+
+    def test_histogram_shows_tooltips(self):
+        get_contract_recipe().make(_quantity=5)
+        driver = self.load_and_wait()
+        bars = driver.find_elements_by_css_selector('.histogram .bar')
+        # TODO: check for "real" tooltips?
+        for i, bar in enumerate(bars):
+            title = bar.find_element_by_css_selector('title')
+            self.assertIsNotNone(title.text, "Histogram bar #%d has no text" % i)
 
     def assertResultsCount(self, driver, num):
         results_count = driver.find_element_by_id('results-count').text
@@ -289,7 +303,7 @@ def wait_for(condition, timeout=3):
         if condition():
             return True
         else:
-            time.sleep(0.1)
+            time.sleep(0.05)
     raise Exception('Timeout waiting for {}'.format(condition.__name__))
 
 
