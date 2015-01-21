@@ -292,11 +292,17 @@
       .attr("width", step)
       .attr("height", 0);
 
+    var title = templatize("{count} results from {min} to {max}");
     bars.select("title")
       .text(function(d, i) {
         var inclusive = (i === bins.length - 1),
             sign = inclusive ? "<=" : "<";
-        return [formatCommas(d.count), ":", formatDollars(d.min), "<= x " + sign, formatDollars(d.max)].join(" ");
+        return title({
+          count: formatCommas(d.count),
+          min: formatDollars(d.min),
+          sign: sign,
+          max: formatDollars(d.max)
+        });
       });
 
     var t = histogramUpdated
@@ -631,6 +637,15 @@
     return function(str) {
       if (!str) return "";
       return prefix + format(+str);
+    };
+  }
+
+  function templatize(str, undef) {
+    undef = d3.functor(undef);
+    return function(d) {
+      return str.replace(/{(\w+)}/g, function(_, key) {
+        return d[key] || undef(d, key);
+      });
     };
   }
 
