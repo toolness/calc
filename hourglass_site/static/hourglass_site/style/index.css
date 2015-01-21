@@ -21,6 +21,10 @@ input#min_experience {
   margin-right: .3em;
 }
 
+span.dollars {
+  color: #999;
+}
+
 .filters {
   background: #f9f9f9;
   padding: 1rem;
