@@ -128,7 +128,7 @@ class FunctionalTests(LiveServerTestCase):
         # add results count check
         set_form_value(form, 'price__gte', minimum)
         self.submit_form_and_wait()
-        self.assertTrue(('price__gte=%d' % minimum) in driver.current_url, 'Missing "price__gte=%d" in query string' % minimum)
+        self.assertTrue(('price__gte=%d' % minimum) in driver.current_url, 'Missing "price__gte={0}" in query string: {1}'.format(minimum, driver.current_url))
         self.assertResultsCount(driver, 8)
 
     def test_price_lte(self):
