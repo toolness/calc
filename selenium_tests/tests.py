@@ -54,7 +54,7 @@ class FunctionalTests(LiveServerTestCase):
         return form
 
     def submit_form_and_wait(self):
-        form = self.submit_form
+        form = self.submit_form()
         wait_for(self.data_is_loaded)
         return form
 
