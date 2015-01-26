@@ -150,33 +150,30 @@ class ContractsTest(TestCase):
 
     def test_sort_by_education_level(self):
         # deliberately placing education level cycle out of order so that proper ordering cannot be
-        # a fluke (or a side-effect of ordering by idv_piid, etc.)
-        get_contract_recipe().make(_quantity=5, education_level=cycle(['MA', 'HS', 'BA', 'AA', 'PhD']))
+        # a side-effect of ordering by idv_piid or another serially-generated field
+        get_contract_recipe().make(_quantity=5, education_level=cycle(['MA', 'HS', 'BA', 'AA', 'PHD']))
 
         resp = self.c.get(self.path, {'sort': 'education_level'})
         self.assertEqual(resp.status_code, 200)
 
-        #import pprint
-        #pp = pprint.PrettyPrinter(indent=4)
-        #pp.pprint(resp.data['results'])
         self.assertResultsEqual(resp.data['results'], [
             {   'idv_piid': 'ABC1232',
                 'vendor_name': 'CompanyName2',
                 'labor_category': 'Business Analyst II',
                 'education_level': 'High School',
-                'min_years_experience': 6,
+                'min_years_experience': 7,
                 'hourly_rate_year1': 22.0,
                 'current_price': 22.00,
-                'schedule': 'MOBIS',
+                'schedule': 'PES',
                 'contractor_site': None,
                 'business_size': None},
            {   'idv_piid': 'ABC1234',
                 'vendor_name': 'CompanyName4',
                 'labor_category': 'Business Analyst II',
                 'education_level': 'Associates',
-                'min_years_experience': 7,
-                'hourly_rate_year1': 0,
-                'current_price': 0,
+                'min_years_experience': 9,
+                'hourly_rate_year1': 24.0,
+                'current_price': 24.0,
                 'schedule': 'PES',
                 'contractor_site': None,
                 'business_size': None},
@@ -185,8 +182,8 @@ class ContractsTest(TestCase):
                 'labor_category': 'Business Analyst II',
                 'education_level': 'Bachelors',
                 'min_years_experience': 8,
-                'hourly_rate_year1': 0,
-                'current_price': 0,
+                'hourly_rate_year1': 23.0,
+                'current_price': 23.0,
                 'schedule': 'MOBIS',
                 'contractor_site': None,
                 'business_size': None},
@@ -194,24 +191,84 @@ class ContractsTest(TestCase):
                 'vendor_name': 'CompanyName1',
                 'labor_category': 'Business Analyst II',
                 'education_level': 'Masters',
-                'min_years_experience': 9,
-                'hourly_rate_year1': 0,
-                'current_price': 0,
-                'schedule': 'PES',
+                'min_years_experience': 6,
+                'hourly_rate_year1': 21.0,
+                'current_price': 21.0,
+                'schedule': 'MOBIS',
                 'contractor_site': None,
                 'business_size': None},
             {   'idv_piid': 'ABC1235',
                 'vendor_name': 'CompanyName5',
                 'labor_category': 'Business Analyst II',
-                'education_level': 'PhD',
+                'education_level': 'Ph.D.',
                 'min_years_experience': 10,
-                'hourly_rate_year1': 0,
-                'current_price': 0,
+                'hourly_rate_year1': 25.0,
+                'current_price': 25.0,
                 'schedule': 'MOBIS',
                 'contractor_site': None,
                 'business_size': None},
         ])
 
+    def test_sort_by_education_level__asc(self):
+        # deliberately placing education level cycle out of order so that proper ordering cannot be
+        # a side-effect of ordering by idv_piid or another serially-generated field
+        get_contract_recipe().make(_quantity=5, education_level=cycle(['MA', 'HS', 'BA', 'AA', 'PHD']))
+
+        resp = self.c.get(self.path, {'sort': '-education_level'})
+        self.assertEqual(resp.status_code, 200)
+
+        self.assertResultsEqual(resp.data['results'], [
+            {   'idv_piid': 'ABC1235',
+                'vendor_name': 'CompanyName5',
+                'labor_category': 'Business Analyst II',
+                'education_level': 'Ph.D.',
+                'min_years_experience': 10,
+                'hourly_rate_year1': 25.0,
+                'current_price': 25.0,
+                'schedule': 'MOBIS',
+                'contractor_site': None,
+                'business_size': None},
+            {   'idv_piid': 'ABC1231',
+                'vendor_name': 'CompanyName1',
+                'labor_category': 'Business Analyst II',
+                'education_level': 'Masters',
+                'min_years_experience': 6,
+                'hourly_rate_year1': 21.0,
+                'current_price': 21.0,
+                'schedule': 'MOBIS',
+                'contractor_site': None,
+                'business_size': None},
+            {   'idv_piid': 'ABC1233',
+                'vendor_name': 'CompanyName3',
+                'labor_category': 'Business Analyst II',
+                'education_level': 'Bachelors',
+                'min_years_experience': 8,
+                'hourly_rate_year1': 23.0,
+                'current_price': 23.0,
+                'schedule': 'MOBIS',
+                'contractor_site': None,
+                'business_size': None},
+           {   'idv_piid': 'ABC1234',
+                'vendor_name': 'CompanyName4',
+                'labor_category': 'Business Analyst II',
+                'education_level': 'Associates',
+                'min_years_experience': 9,
+                'hourly_rate_year1': 24.0,
+                'current_price': 24.0,
+                'schedule': 'PES',
+                'contractor_site': None,
+                'business_size': None},
+            {   'idv_piid': 'ABC1232',
+                'vendor_name': 'CompanyName2',
+                'labor_category': 'Business Analyst II',
+                'education_level': 'High School',
+                'min_years_experience': 7,
+                'hourly_rate_year1': 22.0,
+                'current_price': 22.00,
+                'schedule': 'PES',
+                'contractor_site': None,
+                'business_size': None},
+        ])
 
     def test_filter_by_min_experience(self):
         self.make_test_set()
@@ -518,7 +575,6 @@ class ContractsTest(TestCase):
         self.make_test_set()
         resp = self.c.get(self.path, {'histogram': 2})
         self.assertEqual(resp.status_code, 200)
-        self.assertEqual(len(resp.data['wage_histogram']), 2)
         self.assertResultsEqual(resp.data['wage_histogram'], [
           {'count': 2, 'min': 16.0, 'max': 33.0},
           {'count': 1, 'min': 33.0, 'max': 50.0}
@@ -578,6 +634,20 @@ class ContractsTest(TestCase):
 
     def assertResultsEqual(self, results, expected):
         dict_results = [dict(x) for x in results]
-        self.assertEqual(len(results), len(expected), "Got a different number of results than expected.")
+
+        if 'idv_piid' in dict_results[0].keys():
+            result_ids = [x['idv_piid'] for x in dict_results]
+            expected_ids = [x['idv_piid'] for x in expected]
+
+            # test the right number of results is returned
+            self.assertEqual(len(results), len(expected), "Got a different number of results than expected.")
+
+            # test the sort order
+            # if the set of IDs returned are as expected,
+            # then if the order is different, we can assume sorting is not working right
+            # the resulting error message will actually show us how the ordering is wrong
+            if set(result_ids) == set(expected_ids):
+                self.assertEqual(result_ids, expected_ids, "The sort order is wrong!")
+
         for i, result in enumerate(results):
             self.assertEqual(dict(result), expected[i], "\n===== Object at index {} failed. =====".format(i))
