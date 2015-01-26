@@ -10,8 +10,7 @@ test-frontend: static
 		--liveserver=localhost:8081-8181 \
 		--nologcapture
 test-backend:
-	$(manage) test api contracts
-		--liveserver=localhost:8081-8181 \
+	$(manage) test api contracts \
 		--nologcapture
 
 static:
