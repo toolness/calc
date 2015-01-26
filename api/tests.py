@@ -148,6 +148,71 @@ class ContractsTest(TestCase):
            'contractor_site': None,
            'business_size': None}])
 
+    def test_sort_by_education_level(self):
+        # deliberately placing education level cycle out of order so that proper ordering cannot be
+        # a fluke (or a side-effect of ordering by idv_piid, etc.)
+        get_contract_recipe().make(_quantity=5, education_level=cycle(['MA', 'HS', 'BA', 'AA', 'PhD']))
+
+        resp = self.c.get(self.path, {'sort': 'education_level'})
+        self.assertEqual(resp.status_code, 200)
+
+        #import pprint
+        #pp = pprint.PrettyPrinter(indent=4)
+        #pp.pprint(resp.data['results'])
+        self.assertResultsEqual(resp.data['results'], [
+            {   'idv_piid': 'ABC1232',
+                'vendor_name': 'CompanyName2',
+                'labor_category': 'Business Analyst II',
+                'education_level': 'High School',
+                'min_years_experience': 6,
+                'hourly_rate_year1': 22.0,
+                'current_price': 22.00,
+                'schedule': 'MOBIS',
+                'contractor_site': None,
+                'business_size': None},
+           {   'idv_piid': 'ABC1234',
+                'vendor_name': 'CompanyName4',
+                'labor_category': 'Business Analyst II',
+                'education_level': 'Associates',
+                'min_years_experience': 7,
+                'hourly_rate_year1': 0,
+                'current_price': 0,
+                'schedule': 'PES',
+                'contractor_site': None,
+                'business_size': None},
+            {   'idv_piid': 'ABC1233',
+                'vendor_name': 'CompanyName3',
+                'labor_category': 'Business Analyst II',
+                'education_level': 'Bachelors',
+                'min_years_experience': 8,
+                'hourly_rate_year1': 0,
+                'current_price': 0,
+                'schedule': 'MOBIS',
+                'contractor_site': None,
+                'business_size': None},
+            {   'idv_piid': 'ABC1231',
+                'vendor_name': 'CompanyName1',
+                'labor_category': 'Business Analyst II',
+                'education_level': 'Masters',
+                'min_years_experience': 9,
+                'hourly_rate_year1': 0,
+                'current_price': 0,
+                'schedule': 'PES',
+                'contractor_site': None,
+                'business_size': None},
+            {   'idv_piid': 'ABC1235',
+                'vendor_name': 'CompanyName5',
+                'labor_category': 'Business Analyst II',
+                'education_level': 'PhD',
+                'min_years_experience': 10,
+                'hourly_rate_year1': 0,
+                'current_price': 0,
+                'schedule': 'MOBIS',
+                'contractor_site': None,
+                'business_size': None},
+        ])
+
+
     def test_filter_by_min_experience(self):
         self.make_test_set()
         resp = self.c.get(self.path, {'min_experience': '8'})
