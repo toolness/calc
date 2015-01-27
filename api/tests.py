@@ -270,6 +270,43 @@ class ContractsTest(TestCase):
                 'business_size': None},
         ])
 
+    def test_sort_by_education_level__retains_all_sort_params(self):
+        # placing education level and price cycles out of phase so that sort precedence matters
+        get_contract_recipe().make(_quantity=9, vendor_name='ServicesRUs', current_price=cycle([15.0, 10.0]), education_level=cycle(['BA', 'HS', 'AA']))
+
+        resp = self.c.get(self.path, {'sort': 'current_price,education_level,-idv_piid'})
+        self.assertEqual(resp.status_code, 200)
+
+        self.assertResultsEqual(resp.data['results'], [
+            {   'idv_piid': 'ABC1238',
+                'education_level': 'High School',
+                'current_price': 10.0},
+            {   'idv_piid': 'ABC1232',
+                'education_level': 'High School',
+                'current_price': 10.0},
+            {   'idv_piid': 'ABC1236',
+                'education_level': 'Associates',
+                'current_price': 10.0},
+            {   'idv_piid': 'ABC1234',
+                'education_level': 'Bachelors',
+                'current_price': 10.0},
+            {   'idv_piid': 'ABC1235',
+                'education_level': 'High School',
+                'current_price': 15.0},
+            {   'idv_piid': 'ABC1239',
+                'education_level': 'Associates',
+                'current_price': 15.0},
+            {   'idv_piid': 'ABC1233',
+                'education_level': 'Associates',
+                'current_price': 15.0},
+            {   'idv_piid': 'ABC1237',
+                'education_level': 'Bachelors',
+                'current_price': 15.0},
+            {   'idv_piid': 'ABC1231',
+                'education_level': 'Bachelors',
+                'current_price': 15.0},
+        ], just_expected_fields=True)
+
     def test_filter_by_min_experience(self):
         self.make_test_set()
         resp = self.c.get(self.path, {'min_experience': '8'})
@@ -632,15 +669,15 @@ class ContractsTest(TestCase):
                 current_price=16.00,
         )
 
-    def assertResultsEqual(self, results, expected):
+    def assertResultsEqual(self, results, expected, just_expected_fields=False):
         dict_results = [dict(x) for x in results]
+
+        # test the right number of results is returned
+        self.assertEqual(len(results), len(expected), "Got a different number of results than expected.")
 
         if 'idv_piid' in dict_results[0].keys():
             result_ids = [x['idv_piid'] for x in dict_results]
             expected_ids = [x['idv_piid'] for x in expected]
-
-            # test the right number of results is returned
-            self.assertEqual(len(results), len(expected), "Got a different number of results than expected.")
 
             # test the sort order
             # if the set of IDs returned are as expected,
@@ -649,5 +686,16 @@ class ContractsTest(TestCase):
             if set(result_ids) == set(expected_ids):
                 self.assertEqual(result_ids, expected_ids, "The sort order is wrong!")
 
-        for i, result in enumerate(results):
-            self.assertEqual(dict(result), expected[i], "\n===== Object at index {} failed. =====".format(i))
+        if just_expected_fields:
+            dict_results = [ { key: x[key] for key in expected[0].keys() } for x in dict_results ]
+
+        for i, result in enumerate(dict_results):
+            self.assertEqual(result, expected[i], "\n===== Object at index {} failed. =====".format(i))
+
+    def prettyPrint(self, thing):
+        """
+        Pretty-printing for debugging purposes.
+        """
+        import pprint; pp = pprint.PrettyPrinter(indent=4)
+        pp.pprint(thing)
+
