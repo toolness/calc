@@ -132,21 +132,21 @@ class ContractsTest(TestCase):
            'business_size': None}])
 
     def test_filter_by_min_education(self):
-        self.make_test_set()
-        resp = self.c.get(self.path, {'min_education': 'MA'})
+        get_contract_recipe().make(_quantity=5, education_level=cycle(['MA', 'HS', 'BA', 'AA', 'PHD']))
+        resp = self.c.get(self.path, {'min_education': 'AA', 'sort': 'education_level'})
         self.assertEqual(resp.status_code, 200)
 
-        self.assertResultsEqual(resp.data['results'],
-         [{'idv_piid': 'ABC234',
-           'vendor_name': 'Numbers R Us',
-           'labor_category': 'Accounting, CPA',
-           'education_level': 'Masters',
-           'min_years_experience': 5,
-           'hourly_rate_year1': 50.0,
-           'current_price': 50.0,
-           'schedule': None,
-           'contractor_site': None,
-           'business_size': None}])
+        # if this is working properly, it does not include HS in the results
+        self.assertResultsEqual(resp.data['results'], [
+            {  'idv_piid': 'ABC1234',
+               'education_level': 'Associates' },
+            {  'idv_piid': 'ABC1233',
+               'education_level': 'Bachelors' },
+            {  'idv_piid': 'ABC1231',
+               'education_level': 'Masters' },
+            {  'idv_piid': 'ABC1235',
+               'education_level': 'Ph.D.' },
+           ], True)
 
     def test_sort_by_education_level(self):
         # deliberately placing education level cycle out of order so that proper ordering cannot be
