@@ -18,7 +18,7 @@
     }
   }
 
-  aight.version = "2.0.1a";
+  aight.version = "2.0.2a";
   aight.browser = {
     name: nav,
     ie:   ie ? version : false,
@@ -851,8 +851,10 @@ if (aight.browser.ie < 9) {
       return token;
     };
     DOMTokenList = function (node) {
-      var className = node.className.replace(trim, '');
-      if (className.length) {
+      var className = (typeof node.className === "object"
+            ? node.className.baseVal
+            : node.className).replace(trim, '');
+      if (className) {
         properties.push.apply(
           this,
           className.split(spaces)
@@ -869,7 +871,11 @@ if (aight.browser.ie < 9) {
             properties.push.call(this, property);
           }
         }
-        this._.className = '' + this;
+        if (typeof this._.className === "object") {
+          this._.className.baseVal = '' + this;
+        } else {
+          this._.className = '' + this;
+        }
       },
       contains: (function(indexOf){
         return function contains(token) {
@@ -997,7 +1003,8 @@ if (aight.browser.ie < 9) {
     );
   }
 
-}(window));/* CSS Object Model patches */
+}(window));
+/* CSS Object Model patches */
 (function(CSSSDProto) {
 
   // patch CSSStyleDeclaration.prototype using IE8's methods
