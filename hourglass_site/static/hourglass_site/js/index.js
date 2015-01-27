@@ -1,5 +1,8 @@
 (function(exports) {
 
+  // for IE9: History API polyfill
+  var location = window.history.location || window.location;
+
   var form = d3.select("#search"),
       inputs = form.selectAll("*[name]"),
       formatPrice = d3.format(",.02f"),
