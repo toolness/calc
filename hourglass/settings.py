@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 import sys
+import dj_database_url
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
@@ -29,7 +30,7 @@ TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'hourglass_site/templates'),
 )
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -89,6 +90,11 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
+STATICFILES_DIRS = (
+#    os.path.join(BASE_DIR, 'static'),
+)
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+
 PAGINATION = 200
 REST_FRAMEWORK = {
     'COERCE_DECIMAL_TO_STRING': False
@@ -120,27 +126,31 @@ LOGGING = {
             'formatter': 'verbose'
         },
         'console': {
-            'level': 'WARN',
+            'level': 'INFO',
             'class': 'logging.StreamHandler',
-            'formatter': 'simple',
-            'stream': sys.stdout
+            'formatter': 'verbose'
         },
     },
     'loggers': {
         'django': {
-            'handlers':['file'],
+            'handlers':['console', 'file'],
             'propagate': True,
             'level':'INFO',
         },
         'contracts': {
-            'handlers': ['contracts_file', 'console'],
-            'level':'DEBUG',
+            'handlers': ['console', 'contracts_file'],
+            'propagate': True,
+            'level':'INFO',
         },
     },
 }
 
+DATABASES = {}
+DATABASES['default'] =  dj_database_url.config()
 
 try:
     from hourglass.local_settings import *
 except:
     pass
+
+
