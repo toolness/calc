@@ -1,0 +1,14 @@
+---
+# all applications use these settings and services
+memory: 512M
+instances: 1
+# services:
+# - db-hourglass-test
+applications:
+- name: hourglass-dev
+  path: .
+  timeout: 180
+#- name: hourglass-dev-load-data
+ # path: .
+ # no-route: true
+ # command: python manage.py load_data
