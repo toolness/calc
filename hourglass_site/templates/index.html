@@ -13,6 +13,11 @@
     <div id="primary" class="row">
       <div class="six columns">
         <input id="labor_category" name="q" placeholder="Type a labor category" class="search u-full-width" type="text">
+        <div id="query-types">
+          <label><input type="radio" name="query_type" value="words" checked> has these words</label>
+          <label><input type="radio" name="query_type" value="phrase"> contains phrase</label>
+          <label><input type="radio" name="query_type" value="exact"> exact match</label>
+        </div>
       </div>
       <div class="six columns">
         <button id="submit" class="submit button-primary">Search</button>
