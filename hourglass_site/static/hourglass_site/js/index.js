@@ -48,9 +48,13 @@
       source: function(term, done) {
         // console.log("search:", term);
         if (autoCompReq) autoCompReq.abort();
+        var data = getFormData();
         autoCompReq = api.get({
           uri: "search",
-          data: {q: term},
+          data: {
+            q: term,
+            query_type: data.query_type
+          },
         }, function(error, result) {
           autoCompReq = null;
           if (error) return done([]);
@@ -477,12 +481,13 @@
   function getFormData() {
     var data = {};
     inputs.each(function() {
+      if (this.disabled || this.value === "") return;
       switch (this.type) {
+        case "radio":
         case "checkbox":
           if (!this.checked) return;
           break;
       }
-      if (this.disabled || this.value === "") return;
       data[this.name] = this.value;
     });
     return data;
@@ -493,6 +498,7 @@
     inputs.each(function() {
       if (data.hasOwnProperty(this.name)) {
         switch (this.type) {
+          case "radio":
           case "checkbox":
             this.checked = data[this.name] == this.value;
             return;
