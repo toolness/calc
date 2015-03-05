@@ -8,7 +8,8 @@
 }
 
 thead th {
-  vertical-align: bottom; }
+  vertical-align: bottom;
+}
 
 table {
   width: 100%;
@@ -19,7 +20,8 @@ th, th:first-child, th:last-child,
 table caption {
   position: relative;
   padding: .25em .5em;
-  vertical-align: top; }
+  vertical-align: top;
+}
 
 table caption {
   padding-bottom: 1.5em;
@@ -31,7 +33,8 @@ th, th:first-child {
 }
 
 tbody tr:nth-child(odd) td {
-  background: #f9f9f9; }
+  background: #f9f9f9;
+}
 
 td.sorted {
   background: #fafafa;
@@ -49,7 +52,8 @@ thead th {
 table caption {
   color: #666;
   text-align: left;
-  font-weight: bold; }
+  font-weight: bold;
+}
 
 th.sortable {
   text-decoration: underline;
