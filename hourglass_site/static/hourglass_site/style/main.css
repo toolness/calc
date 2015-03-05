@@ -226,3 +226,21 @@ svg.histogram .avg line {
 .filter_active  {
   border: 2px solid #ffd855 !important;
 }
+
+#labor_category {
+  margin-bottom: .5rem;
+}
+
+#query-types {
+  padding: 0 1rem;
+}
+
+  #query-types label {
+    display: inline-block;
+    font-weight: normal;
+    margin: 0 1rem 0 0;
+  }
+
+  #query-types label input {
+    margin-right: .5rem;
+  }
