@@ -48,9 +48,13 @@
       source: function(term, done) {
         // console.log("search:", term);
         if (autoCompReq) autoCompReq.abort();
+        var data = getFormData();
         autoCompReq = api.get({
           uri: "search",
-          data: {q: term},
+          data: {
+            q: term,
+            query_type: data.query_type
+          },
         }, function(error, result) {
           autoCompReq = null;
           if (error) return done([]);
