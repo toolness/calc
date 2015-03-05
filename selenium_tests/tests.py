@@ -367,30 +367,25 @@ def has_class(element, klass):
 def has_matching_class(element, regex):
     return re.search(regex, element.get_attribute('class'))
 
-def set_select_value(select, value):
-    select.click()
-    for option in select.find_elements_by_tag_name('option'):
-        if option.get_attribute('value') == value:
-            option.click()
-
-
 def set_form_value(form, key, value):
-    field = form.find_element_by_name(key)
+    fields = form.find_elements_by_name(key)
+    field = fields[0]
     if field.tag_name == 'select':
-        set_select_value(field, value)
+        Select(field).select_by_value(value)
     else:
         field_type = field.get_attribute('type')
         if field_type in ('checkbox', 'radio'):
-            if field.get_attribute('value') == value:
-                field.click()
+            for _field in fields:
+                if _field.get_attribute('value') == value:
+                    _field.click()
         else:
             field.send_keys(str(value))
     return field
 
 
-def set_form_values(values):
-    for key, value in values.entries():
-        set_form_value(key, value)
+def set_form_values(form, **values):
+    for key, value in values.items():
+        set_form_value(form, key, value)
 
 def find_column_header(driver, col_name):
     return driver.find_element_by_css_selector('th.column-{}'.format(col_name))
