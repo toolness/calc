@@ -3,8 +3,10 @@ from django.test import LiveServerTestCase
 from itertools import cycle
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from selenium.webdriver.support.ui import Select
 from contracts.mommy_recipes import get_contract_recipe
 from model_mommy.recipe import seq
+from itertools import cycle
 
 import re
 import time
@@ -342,6 +344,37 @@ class FunctionalTests(LiveServerTestCase):
         for i, bar in enumerate(bars):
             title = bar.find_element_by_css_selector('title')
             self.assertIsNotNone(title.text, "Histogram bar #%d has no text" % i)
+
+    def test_query_type_matches_words(self):
+        get_contract_recipe().make(_quantity=3, labor_category=cycle(['Systems Engineer', 'Software Engineer', 'Consultant']))
+        driver = self.load()
+        form = self.get_form()
+        set_form_value(form, 'q', 'engineer')
+        self.submit_form_and_wait()
+        cells = driver.find_elements_by_css_selector('table.results tbody td.column-labor_category')
+        self.assertEqual(len(cells), 2, 'wrong cell count: %d (expected 2)' % len(cells))
+        for cell in cells:
+            self.assertTrue('Engineer' in cell.text, 'found cell without "Engineer": "%s"' % cell.text)
+
+    def test_query_type_matches_phrase(self):
+        get_contract_recipe().make(_quantity=3, labor_category=cycle(['Systems Engineer I', 'Software Engineer II', 'Consultant II']))
+        driver = self.load()
+        form = self.get_form()
+        set_form_values(form, q='software engineer', query_type='match_phrase')
+        self.submit_form_and_wait()
+        cells = driver.find_elements_by_css_selector('table.results tbody td.column-labor_category')
+        self.assertEqual(len(cells), 1, 'wrong cell count: %d (expected 1)' % len(cells))
+        self.assertEqual(cells[0].text, 'Software Engineer II', 'bad cell text: "%s"' % cells[0].text)
+
+    def test_query_type_matches_exact(self):
+        get_contract_recipe().make(_quantity=3, labor_category=cycle(['Software Engineer I', 'Software Engineer', 'Senior Software Engineer']))
+        driver = self.load()
+        form = self.get_form()
+        set_form_values(form, q='software engineer', query_type='match_exact')
+        self.submit_form_and_wait()
+        cells = driver.find_elements_by_css_selector('table.results tbody td.column-labor_category')
+        self.assertEqual(len(cells), 1, 'wrong cell count: %d (expected 1)' % len(cells))
+        self.assertEqual(cells[0].text, 'Software Engineer', 'bad cell text: "%s"' % cells[0].text)
 
     def assertResultsCount(self, driver, num):
         results_count = driver.find_element_by_id('results-count').text
