@@ -48,9 +48,13 @@
       source: function(term, done) {
         // console.log("search:", term);
         if (autoCompReq) autoCompReq.abort();
+        var data = getFormData();
         autoCompReq = api.get({
           uri: "search",
-          data: {q: term},
+          data: {
+            q: term,
+            query_type: data.query_type
+          },
         }, function(error, result) {
           autoCompReq = null;
           if (error) return done([]);
@@ -292,11 +296,17 @@
       .attr("width", step)
       .attr("height", 0);
 
+    var title = templatize("{count} results from {min} to {max}");
     bars.select("title")
       .text(function(d, i) {
         var inclusive = (i === bins.length - 1),
             sign = inclusive ? "<=" : "<";
-        return [formatCommas(d.count), ":", formatDollars(d.min), "<= x " + sign, formatDollars(d.max)].join(" ");
+        return title({
+          count: formatCommas(d.count),
+          min: formatDollars(d.min),
+          sign: sign,
+          max: formatDollars(d.max)
+        });
       });
 
     var t = histogramUpdated
@@ -471,12 +481,13 @@
   function getFormData() {
     var data = {};
     inputs.each(function() {
+      if (this.disabled || this.value === "") return;
       switch (this.type) {
+        case "radio":
         case "checkbox":
           if (!this.checked) return;
           break;
       }
-      if (this.disabled || this.value === "") return;
       data[this.name] = this.value;
     });
     return data;
@@ -487,6 +498,7 @@
     inputs.each(function() {
       if (data.hasOwnProperty(this.name)) {
         switch (this.type) {
+          case "radio":
           case "checkbox":
             this.checked = data[this.name] == this.value;
             return;
@@ -631,6 +643,15 @@
     return function(str) {
       if (!str) return "";
       return prefix + format(+str);
+    };
+  }
+
+  function templatize(str, undef) {
+    undef = d3.functor(undef);
+    return function(d) {
+      return str.replace(/{(\w+)}/g, function(_, key) {
+        return d[key] || undef(d, key);
+      });
     };
   }
 
