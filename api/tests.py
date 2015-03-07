@@ -477,9 +477,17 @@ class ContractsTest(TestCase):
            'contractor_site': 'Q3',
            'business_size': None}])
 
+    def test_exclude_by_id(self):
+        self.make_test_set()
+        resp = self.c.get(self.path, {'exclude': '1,3'})
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.data['results'][0]['id'], 2)
+        self.assertEqual(len(resp.data['results']), 1) 
+
     def make_test_set(self):
         mommy.make(
                 Contract,
+                id=1,
                 idv_piid="ABC123",
                 piid="123",
                 vendor_name="ACME Corp.",
@@ -490,6 +498,7 @@ class ContractsTest(TestCase):
         )
         mommy.make(
                 Contract,
+                id=2,
                 idv_piid="ABC234",
                 piid="234",
                 vendor_name="Numbers R Us",
@@ -501,6 +510,7 @@ class ContractsTest(TestCase):
         )
         mommy.make(
                 Contract,
+                id=3,
                 idv_piid="ABC345",
                 piid="345",
                 vendor_name="Word Power Co.",
