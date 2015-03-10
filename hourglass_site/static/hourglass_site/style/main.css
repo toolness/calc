@@ -8,18 +8,20 @@
 }
 
 thead th {
-  vertical-align: bottom; }
+  vertical-align: bottom;
+}
 
 table {
   width: 100%;
 }
 
-td, td:first-child,
-th, th:first-child,
+td, td:first-child, td:last-child,
+th, th:first-child, th:last-child,
 table caption {
   position: relative;
   padding: .25em .5em;
-  vertical-align: top; }
+  vertical-align: top;
+}
 
 table caption {
   padding-bottom: 1.5em;
@@ -31,7 +33,8 @@ th, th:first-child {
 }
 
 tbody tr:nth-child(odd) td {
-  background: #f9f9f9; }
+  background: #f9f9f9;
+}
 
 td.sorted {
   background: #fafafa;
@@ -49,7 +52,8 @@ thead th {
 table caption {
   color: #666;
   text-align: left;
-  font-weight: bold; }
+  font-weight: bold;
+}
 
 th.sortable {
   text-decoration: underline;
@@ -155,120 +159,6 @@ td.collapsed {
   position: absolute;
 }
 
-.range-graph {
-  margin: 5rem 0 2rem 0;
-  height: 1rem;
-  border-color: #999;
-  border-style: solid;
-  border-width: 1px 1px 0 1px;
-  line-height: 1.2em;
-  position: relative; }
-
-  .range-graph .tick {
-    position: absolute;
-    width: auto;
-    white-space: nowrap;
-    top: 100%;
-    width: 1.6em;
-    -webkit-transition: left 0.5s ease-in;
-    -moz-transition: left 0.5s ease-in;
-    transition: left 0.5s ease-in; }
-
-    .range-graph .tick b.value {
-      margin: .1em 0; }
-
-    .range-graph .tick.mark:before {
-      content: " ";
-      display: block;
-      position: absolute;
-      left: 50%;
-      top: 0;
-      width: 1px;
-      height: 1rem;
-      background: #000; }
-
-    .range-graph .tick.left {
-      width: 10em;
-      text-align: left;
-      padding-left: 0;
-      padding-right: .5em; }
-
-      .range-graph .tick.left.mark:before {
-        left: auto;
-        right: -3px; }
-
-    .range-graph .tick.right {
-      width: 10em;
-      text-align: right;
-      padding-right: 0;
-      padding-left: .5em; }
-
-      .range-graph .tick.right.mark:before {
-        right: auto;
-        left: -3px; }
-
-    .range-graph
-    .tick.min,
-    .range-graph .tick.max {
-      color: #666; }
-
-    .range-graph .tick.min {
-      left: 0; }
-    .range-graph .tick.max {
-      right: 0; }
-
-    .range-graph .tick.average {
-      top: auto;
-      bottom: 100%;
-      padding-bottom: .7em;
-      width: 10em;
-      margin-left: -5em;
-      text-align: center;
-    }
-
-    .range-graph .tick.mark.average:before {
-      top: auto;
-      bottom: 0;
-    }
-
-.bar-chart {
-  position: relative; }
-  .bar-chart .row {
-    position: relative;
-    line-height: 1.2em;
-    height: 1.2em;
-    margin-bottom: .5em;
-    margin-left: 2em; }
-    .bar-chart .row .row-label {
-      position: absolute;
-      right: 100%;
-      width: 2em; }
-  .bar-chart .bar {
-    position: relative;
-    height: 100%;
-    background: #dcf;
-    -webkit-transition: margin-left 0.5s linear;
-    -moz-transition: margin-left 0.5s linear;
-    transition: margin-left 0.5s linear;
-    -webkit-transition: margin-right 0.5s linear;
-    -moz-transition: margin-right 0.5s linear;
-    transition: margin-right 0.5s linear; }
-    .bar-chart .bar .average {
-      position: absolute;
-      left: 0%;
-      height: 1.6em;
-      top: -.2em;
-      border-left: 1px solid #000;
-      padding: .2em;
-      -webkit-transition: left 0.5s linear;
-      -moz-transition: left 0.5s linear;
-      transition: left 0.5s linear; }
-      .bar-chart .bar .average .count {
-        color: #666;
-        font-size: .5em;
-        margin-left: .5em; }
-
-
 .loading-indicator,
 .has-data {
     -webkit-transition: opacity 0.5s linear;
@@ -336,3 +226,21 @@ svg.histogram .avg line {
 .filter_active  {
   border: 2px solid #ffd855 !important;
 }
+
+#labor_category {
+  margin-bottom: .5rem;
+}
+
+#query-types {
+  padding: 0 1rem;
+}
+
+  #query-types label {
+    display: inline-block;
+    font-weight: normal;
+    margin: 0 1rem 0 0;
+  }
+
+  #query-types label input {
+    margin-right: .5rem;
+  }

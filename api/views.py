@@ -14,7 +14,7 @@ from contracts.models import Contract, EDUCATION_CHOICES
 import numpy as np
 import sys
 
-try: 
+try:
     #python2 compat
     import unicodecsv as csv
 except:
@@ -188,7 +188,7 @@ def get_rates_csv(request):
     
     response = HttpResponse(content_type="text/csv")
     response['Content-Disposition'] = 'attachment; filename="pricing_results.csv"'
-    writer = csv.writer(response) 
+    writer = csv.writer(response)
     writer.writerow(("Contract #", "Business Size", "Schedule", "Site", "Begin Date", "End Date", "SIN", "Vendor Name", "Labor Category", "education Level", "Minimum Years Experience", "Current Year Labor Price"))
 
     for c in contracts_all:
@@ -199,8 +199,20 @@ def get_rates_csv(request):
 class GetAutocomplete(APIView):
 
     def get(self, request, format=None):
+        """
+        Query Params:
+            q (str): the search query
+            query_type (str): defines how the search query should work. [ match_all (default) | match_phrase ]
+        """
         q = request.QUERY_PARAMS.get('q', False)
+        query_type = request.QUERY_PARAMS.get('query_type', 'match_all')
 
         if q:
-            data = Contract.objects.search(convert_to_tsquery(q), raw=True).values('labor_category').annotate(count=Count('labor_category')).order_by('-count')
+            if query_type == 'match_phrase':
+                data = Contract.objects.filter(labor_category__icontains=q)
+            else:
+                data = Contract.objects.search(convert_to_tsquery(q), raw=True)
+            data = data.values('labor_category').annotate(count=Count('labor_category')).order_by('-count')
             return Response(data)
+        else:
+            return Response([])

@@ -1,5 +1,5 @@
 from django.db import models
-from djorm_pgfulltext.models import SearchManager
+from djorm_pgfulltext.models import SearchManager, SearchQuerySet
 from djorm_pgfulltext.fields import VectorField
 
 
@@ -13,9 +13,54 @@ EDUCATION_CHOICES = (
 
 
 class CurrentContractManager(SearchManager):
-    #need to subclass the SearchManager we were using for postgres full text search instead of default
+    # need to subclass the SearchManager we were using for postgres full text search instead of default
     def get_queryset(self):
-        return super(CurrentContractManager, self).get_queryset().filter(current_price__gt=0).exclude(current_price__isnull=True)
+        return ContractsQuerySet(self.model, using=self._db)\
+                .filter(current_price__gt=0)\
+                .exclude(current_price__isnull=True)
+
+
+class ContractsQuerySet(SearchQuerySet):
+
+    def order_by(self, *args, **kwargs):
+        edu_sort_sql = """
+            case
+                when education_level = 'HS' then 1
+                when education_level = 'AA' then 2
+                when education_level = 'BA' then 3
+                when education_level = 'MA' then 4
+                when education_level = 'PHD' then 5
+                else -1
+            end
+        """
+
+        edu_index = None
+
+        if 'education_level' in args:
+            edu_index = args.index('education_level')
+        elif '-education_level' in args:
+            edu_index = args.index('-education_level')
+
+        if edu_index is not None:
+            first_ordering, last_ordering = args[:edu_index], args[edu_index+1:]
+            param = args[edu_index].replace('education_level', 'edu_sort')
+
+            queryset = super(ContractsQuerySet, self)
+
+            if first_ordering:
+                queryset = queryset.order_by(first_ordering)
+
+            queryset = queryset.extra(select={'edu_sort': edu_sort_sql}, order_by=[param])
+
+            if last_ordering:
+                queryset = queryset.order_by(last_ordering)
+
+        else:
+            queryset = super(ContractsQuerySet, self)\
+                .order_by(*args, **kwargs)
+
+        return queryset
+
 
 class Contract(models.Model):
 
@@ -55,7 +100,7 @@ class Contract(models.Model):
             return 'other than small business'
 
     def get_education_code(self, text):
-        
+
         for pair in EDUCATION_CHOICES:
             if text.strip() in pair[1]:
                 return pair[0]

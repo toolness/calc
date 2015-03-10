@@ -96,6 +96,9 @@
             }
 
             that.on('keydown.autocomplete', function(e){
+                if (e.which === 13) {
+                  return that.sc.hide();
+                }
                 // down
                 if (e.which == 40 && that.sc.html()) {
                     var next, sel = $('.autocomplete-suggestion.selected', that.sc);
@@ -135,6 +138,7 @@
             });
 
             that.on('keyup.autocomplete', function(e){
+                if (e.which === 13) return;
                 if (!~$.inArray(e.which, [27, 38, 40, 37, 39])) {
                     var val = that.val();
                     if (val.length >= o.minChars) {
