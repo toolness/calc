@@ -28,7 +28,7 @@ class ContractsTest(TestCase):
         resp = self.c.get(self.path, {'q': 'accounting'})
         self.assertEqual(resp.status_code, 200)
 
-        self.assertEqual(resp.data['results'],
+        self.assertResultsEqual(resp.data['results'],
          [{'idv_piid': 'ABC234',
            'vendor_name': 'Numbers R Us',
            'labor_category': 'Accounting, CPA',
@@ -45,7 +45,7 @@ class ContractsTest(TestCase):
         resp = self.c.get(self.path, {'q': 'legal services'})
         self.assertEqual(resp.status_code, 200)
 
-        self.assertEqual(resp.data['results'],
+        self.assertResultsEqual(resp.data['results'],
          [{'idv_piid': 'ABC123',
            'vendor_name': 'ACME Corp.',
            'labor_category': 'Legal Services',
@@ -132,21 +132,21 @@ class ContractsTest(TestCase):
            'business_size': None}])
 
     def test_filter_by_min_education(self):
-        self.make_test_set()
-        resp = self.c.get(self.path, {'min_education': 'MA'})
+        get_contract_recipe().make(_quantity=5, education_level=cycle(['MA', 'HS', 'BA', 'AA', 'PHD']))
+        resp = self.c.get(self.path, {'min_education': 'AA', 'sort': 'education_level'})
         self.assertEqual(resp.status_code, 200)
 
-        self.assertResultsEqual(resp.data['results'],
-         [{'idv_piid': 'ABC234',
-           'vendor_name': 'Numbers R Us',
-           'labor_category': 'Accounting, CPA',
-           'education_level': 'Masters',
-           'min_years_experience': 5,
-           'hourly_rate_year1': 50.0,
-           'current_price': 50.0,
-           'schedule': None,
-           'contractor_site': None,
-           'business_size': None}])
+        # if this is working properly, it does not include HS in the results
+        self.assertResultsEqual(resp.data['results'], [
+            {  'idv_piid': 'ABC1234',
+               'education_level': 'Associates' },
+            {  'idv_piid': 'ABC1233',
+               'education_level': 'Bachelors' },
+            {  'idv_piid': 'ABC1231',
+               'education_level': 'Masters' },
+            {  'idv_piid': 'ABC1235',
+               'education_level': 'Ph.D.' },
+           ], True)
 
     def test_sort_by_education_level(self):
         # deliberately placing education level cycle out of order so that proper ordering cannot be
@@ -269,6 +269,43 @@ class ContractsTest(TestCase):
                 'contractor_site': None,
                 'business_size': None},
         ])
+
+    def test_sort_by_education_level__retains_all_sort_params(self):
+        # placing education level and price cycles out of phase so that sort precedence matters
+        get_contract_recipe().make(_quantity=9, vendor_name='ServicesRUs', current_price=cycle([15.0, 10.0]), education_level=cycle(['BA', 'HS', 'AA']))
+
+        resp = self.c.get(self.path, {'sort': 'current_price,education_level,-idv_piid'})
+        self.assertEqual(resp.status_code, 200)
+
+        self.assertResultsEqual(resp.data['results'], [
+            {   'idv_piid': 'ABC1238',
+                'education_level': 'High School',
+                'current_price': 10.0},
+            {   'idv_piid': 'ABC1232',
+                'education_level': 'High School',
+                'current_price': 10.0},
+            {   'idv_piid': 'ABC1236',
+                'education_level': 'Associates',
+                'current_price': 10.0},
+            {   'idv_piid': 'ABC1234',
+                'education_level': 'Bachelors',
+                'current_price': 10.0},
+            {   'idv_piid': 'ABC1235',
+                'education_level': 'High School',
+                'current_price': 15.0},
+            {   'idv_piid': 'ABC1239',
+                'education_level': 'Associates',
+                'current_price': 15.0},
+            {   'idv_piid': 'ABC1233',
+                'education_level': 'Associates',
+                'current_price': 15.0},
+            {   'idv_piid': 'ABC1237',
+                'education_level': 'Bachelors',
+                'current_price': 15.0},
+            {   'idv_piid': 'ABC1231',
+                'education_level': 'Bachelors',
+                'current_price': 15.0},
+        ], just_expected_fields=True)
 
     def test_filter_by_min_experience(self):
         self.make_test_set()
@@ -599,11 +636,20 @@ class ContractsTest(TestCase):
            'business_size': None}])
 
     def test_exclude_by_id(self):
-        self.make_test_set()
-        resp = self.c.get(self.path, {'exclude': '1,3'})
+        get_contract_recipe().make(id=100)
+        get_contract_recipe().make(id=101)
+        get_contract_recipe().make(id=102)
+        
+        resp = self.c.get(self.path, {'exclude': '102,100'})
         self.assertEqual(resp.status_code, 200)
-        self.assertEqual(resp.data['results'][0]['id'], 2)
-        self.assertEqual(len(resp.data['results']), 1) 
+        self.assertResultsEqual(resp.data['results'],
+        [{
+           'idv_piid': 'ABC1231',
+           'vendor_name': 'CompanyName1',
+           'labor_category': 'Business Analyst II',
+           'schedule': 'MOBIS',
+           'current_price': 21.00
+        }])
 
     def make_test_set(self):
         mommy.make(
@@ -642,15 +688,15 @@ class ContractsTest(TestCase):
                 current_price=16.00,
         )
 
-    def assertResultsEqual(self, results, expected):
+    def assertResultsEqual(self, results, expected, just_expected_fields=True):
         dict_results = [dict(x) for x in results]
+
+        # test the right number of results is returned
+        self.assertEqual(len(results), len(expected), "Got a different number of results than expected.")
 
         if 'idv_piid' in dict_results[0].keys():
             result_ids = [x['idv_piid'] for x in dict_results]
             expected_ids = [x['idv_piid'] for x in expected]
-
-            # test the right number of results is returned
-            self.assertEqual(len(results), len(expected), "Got a different number of results than expected.")
 
             # test the sort order
             # if the set of IDs returned are as expected,
@@ -659,5 +705,16 @@ class ContractsTest(TestCase):
             if set(result_ids) == set(expected_ids):
                 self.assertEqual(result_ids, expected_ids, "The sort order is wrong!")
 
-        for i, result in enumerate(results):
-            self.assertEqual(dict(result), expected[i], "\n===== Object at index {} failed. =====".format(i))
+        if just_expected_fields:
+            dict_results = [ { key: x[key] for key in expected[0].keys() } for x in dict_results ]
+
+        for i, result in enumerate(dict_results):
+            self.assertEqual(result, expected[i], "\n===== Object at index {} failed. =====".format(i))
+
+    def prettyPrint(self, thing):
+        """
+        Pretty-printing for debugging purposes.
+        """
+        import pprint; pp = pprint.PrettyPrinter(indent=4)
+        pp.pprint(thing)
+

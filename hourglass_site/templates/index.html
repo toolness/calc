@@ -45,7 +45,7 @@
 
         <div class="filter">
           <label for="min_experience">Min. Experience:</label>
-          <input id="min_experience" name="min_experience" type="number" min="0" max="50" step="1" placeholder="0">
+          <input id="min_experience" name="min_experience" type="text" placeholder="0">
           years
         </div>
 
@@ -70,8 +70,8 @@
 
         <div class="filter">
           <label for="price">Only search &amp; show prices:</label>
-          from <input id="price__gte" name="price__gte" type="text" class="price" min="0" max="1000" step=".01" placeholder="">
-          to <input id="price__lte" name="price__lte" type="text" class="price" min="0" max="1000" step=".01" placeholder="">
+          from <span class="dollars">$</span><input id="price__gte" name="price__gte" type="text" class="price" placeholder="0">
+          to <span class="dollars">$</span><input id="price__lte" name="price__lte" type="text" class="price" placeholder="&infin;">
         </div>
 
 

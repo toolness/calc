@@ -47,7 +47,7 @@ def get_contracts_queryset(request_params, wage_field):
         price__lte (int): price must be less than or equal to this integer
         sort (str): the column to sort on, defaults to wage_field
         query_type (str): defines how the user's keyword search should work. [ match_all (default) | match_phrase | match_exact ] 
-        exclude (int): a list of ids to exclude from the resultset.
+        exclude: (int): comma separated list of ids to exclude from the search results
 
     Returns:
         QuerySet: a filtered and sorted QuerySet to retrieve Contract objects
@@ -66,16 +66,13 @@ def get_contracts_queryset(request_params, wage_field):
     sort = request_params.get('sort', wage_field)
     # query_type can be: [ match_all (default) | match_phrase | match_exact ]
     query_type = request_params.get('query_type', 'match_all')
-    exclude = request_params.getlist('exclude', None)
-    
+    exclude = request_params.getlist('exclude')
+
     contracts = Contract.objects.all()
 
     if exclude:
-        if len(exclude) == 1 and ',' in exclude[0]:
-            #django passed in one string with commas in it
-            #this occurs if you use the queryparam construct "&exclude=1,2,3" instead of 
-            # "exclude=1&exclude=2&exclude=3"
-            exclude = exclude[0].split(',')
+        #getlist only works for key=val&key=val2, not for key=val1,val2
+        exclude = exclude[0].split(',')
         contracts = contracts.exclude(id__in=exclude)
 
     if query:

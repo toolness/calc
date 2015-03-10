@@ -36,25 +36,17 @@ class ContractsQuerySet(SearchQuerySet):
 
         edu_index = None
 
-        if 'education_level' in args:
-            edu_index = args.index('education_level')
-        elif '-education_level' in args:
-            edu_index = args.index('-education_level')
+        sort_params = list(args)
+
+        if 'education_level' in sort_params:
+            edu_index = sort_params.index('education_level')
+        elif '-education_level' in sort_params:
+            edu_index = sort_params.index('-education_level')
 
         if edu_index is not None:
-            first_ordering, last_ordering = args[:edu_index], args[edu_index+1:]
-            param = args[edu_index].replace('education_level', 'edu_sort')
-
-            queryset = super(ContractsQuerySet, self)
-
-            if first_ordering:
-                queryset = queryset.order_by(first_ordering)
-
-            queryset = queryset.extra(select={'edu_sort': edu_sort_sql}, order_by=[param])
-
-            if last_ordering:
-                queryset = queryset.order_by(last_ordering)
-
+            sort_params[edu_index] = 'edu_sort' if not args[edu_index].startswith('-') else '-edu_sort'
+            queryset = super(ContractsQuerySet, self)\
+                .extra(select={'edu_sort': edu_sort_sql}, order_by=sort_params)
         else:
             queryset = super(ContractsQuerySet, self)\
                 .order_by(*args, **kwargs)

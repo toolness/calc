@@ -94,6 +94,14 @@ a price range:
 http://localhost:8000/api/rates/?price__gte=95&price__lte=105
 ```
 
+#### Excluding Records
+You can also exclude specific records from the results by passing in an `exclude` parameter and a comma separated list of ids:
+```
+http://localhost:8000/api/rates/?q=environmental+technician&exclude=875173,875749
+```
+
+The `id` attribute is available in api response.
+
 #### Other Filters
 Other params allow you to filter by the contract schedule of the transaction,
 whether or not the vendor is a small business (valid values: `s` [small] and
