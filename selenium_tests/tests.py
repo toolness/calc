@@ -90,12 +90,9 @@ class FunctionalTests(LiveServerTestCase):
 
         inputs = form.find_elements_by_css_selector("input:not([type='hidden'])")
 
+        # the last visible form inputs should be the price filters
         self.assertEqual(inputs[-2].get_attribute('name'), 'price__gte')
         self.assertEqual(inputs[-1].get_attribute('name'), 'price__lte')
-
-        # the actual last form input should be a hidden one carrying a default sort
-        # self.assertEqual(inputs[-1].get_attribute('name'), 'sort')
-        # self.assertFalse(inputs[-1].is_displayed())
 
     def test_form_submit_loading(self):
         get_contract_recipe().make(_quantity=1, labor_category=seq("Architect"))
@@ -165,25 +162,6 @@ class FunctionalTests(LiveServerTestCase):
         self.assertResultsCount(driver, 4)
         self.assertTrue(('price__gte=%d' % minimum) in driver.current_url, 'Missing "price__gte=%d" in query string' % minimum)
         self.assertTrue(('price__lte=%d' % maximum) in driver.current_url, 'Missing "price__lte=%d" in query string' % maximum)
-
-    def test_sort_columns(self):
-        get_contract_recipe().make(_quantity=10, labor_category=seq("Consultant"), hourly_rate_year1=seq(80, 10), current_price=seq(80, 10))
-        driver = self.load()
-        self.get_form()
-
-        header = find_column_header(driver, 'min_years_experience')
-
-        header.click()
-        self.submit_form()
-        self.assertTrue('sort=min_years_experience' in driver.current_url, 'Missing "sort=min_years_experience" in query string')
-        self.assertTrue(has_class(header, 'sorted'), "Header doesn't have 'sorted' class")
-        self.assertFalse(has_class(header, 'descending'), "Header shouldn't have 'descending' class")
-
-        header.click()
-        self.submit_form()
-        self.assertTrue('sort=-min_years_experience' in driver.current_url, 'Missing "sort=-min_years_experience" in query string')
-        self.assertTrue(has_class(header, 'sorted'), "Header doesn't have 'sorted' class")
-        self.assertTrue(has_class(header, 'descending'), "Header doesn't have 'descending' class")
 
     def test_there_is_no_business_size_column(self):
         get_contract_recipe().make(_quantity=5, vendor_name=seq("Large Biz"), business_size='o')
@@ -261,45 +239,31 @@ class FunctionalTests(LiveServerTestCase):
         col_headers = get_column_headers(driver)
         self.assertTrue(has_class(col_headers[-1], 'column-schedule'))
 
-    def test_schedule_column_is_sortable(self):
+    def test_sortable_columns__non_default(self):
         get_contract_recipe().make(_quantity=5)
         driver = self.load_and_wait()
-        col_header = find_column_header(driver, 'schedule')
-        self.assertTrue(has_class(col_header, 'sortable'), "schedule column is not sortable")
-        # NOT sorted by default
-        self.assertFalse(has_class(col_header, 'sorted'), "schedule column is sorted by default")
-        col_header.click()
-        self.assertTrue(has_class(col_header, 'sorted'), "schedule column is not sorted after clicking")
 
-    def test_price_column_is_sortable(self):
+        for col in ['schedule', 'labor_category', 'education_level', 'min_years_experience']:
+            self._test_column_is_sortable(driver, col)
+
+    def _test_column_is_sortable(self, driver, colname):
+        col_header = find_column_header(driver, colname)
+        self.assertTrue(has_class(col_header, 'sortable'), "{} column is not sortable".format(colname))
+        # NOT sorted by default
+        self.assertFalse(has_class(col_header, 'sorted'), "{} column is sorted by default".format(colname))
+        col_header.click()
+        self.assertTrue(has_class(col_header, 'sorted'), "{} column is not sorted after clicking".format(colname))
+
+    def test_price_column_is_sortable_and_is_the_default_sort(self):
         get_contract_recipe().make(_quantity=5)
         driver = self.load_and_wait()
         col_header = find_column_header(driver, 'current_price')
         # current_price should be sorted ascending by default
+        self.assertTrue(has_class(col_header, 'sorted'), "current_price is not the default sort")
         self.assertTrue(has_class(col_header, 'sortable'), "current_price column is not sortable")
         self.assertFalse(has_class(col_header, 'descending'), "current_price column is descending by default")
         col_header.click()
         self.assertTrue(has_class(col_header, 'sorted'), "current_price is still sorted after clicking")
-
-    def test_labor_category_column_is_sortable(self):
-        get_contract_recipe().make(_quantity=5)
-        driver = self.load_and_wait()
-        col_header = find_column_header(driver, 'labor_category')
-        self.assertTrue(has_class(col_header, 'sortable'), "labor_category column is not sortable")
-        # NOT sorted by default
-        self.assertFalse(has_class(col_header, 'sorted'), "labor_category column is not sorted after clicking")
-        col_header.click()
-        self.assertTrue(has_class(col_header, 'sorted'), "labor_category column is not sorted after clicking")
-
-    def test_education_column_is_sortable(self):
-        get_contract_recipe().make(_quantity=5)
-        driver = self.load_and_wait()
-        col_header = find_column_header(driver, 'education_level')
-        self.assertTrue(has_class(col_header, 'sortable'), "education column is not sortable")
-        # NOT sorted by default
-        self.assertFalse(has_class(col_header, 'sorted'), "education column is not sorted after clicking")
-        col_header.click()
-        self.assertTrue(has_class(col_header, 'sorted'), "education column is not sorted after clicking")
 
     def test_one_column_is_sortable_at_a_time(self):
         get_contract_recipe().make(_quantity=5)
