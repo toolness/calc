@@ -28,7 +28,7 @@ class ContractsTest(TestCase):
         resp = self.c.get(self.path, {'q': 'accounting'})
         self.assertEqual(resp.status_code, 200)
 
-        self.assertEqual(resp.data['results'],
+        self.assertResultsEqual(resp.data['results'],
          [{'idv_piid': 'ABC234',
            'vendor_name': 'Numbers R Us',
            'labor_category': 'Accounting, CPA',
@@ -45,7 +45,7 @@ class ContractsTest(TestCase):
         resp = self.c.get(self.path, {'q': 'legal services'})
         self.assertEqual(resp.status_code, 200)
 
-        self.assertEqual(resp.data['results'],
+        self.assertResultsEqual(resp.data['results'],
          [{'idv_piid': 'ABC123',
            'vendor_name': 'ACME Corp.',
            'labor_category': 'Legal Services',
@@ -635,6 +635,22 @@ class ContractsTest(TestCase):
            'contractor_site': 'Q3',
            'business_size': None}])
 
+    def test_exclude_by_id(self):
+        get_contract_recipe().make(id=100)
+        get_contract_recipe().make(id=101)
+        get_contract_recipe().make(id=102)
+        
+        resp = self.c.get(self.path, {'exclude': '102,100'})
+        self.assertEqual(resp.status_code, 200)
+        self.assertResultsEqual(resp.data['results'],
+        [{
+           'idv_piid': 'ABC1231',
+           'vendor_name': 'CompanyName1',
+           'labor_category': 'Business Analyst II',
+           'schedule': 'MOBIS',
+           'current_price': 21.00
+        }])
+
     def make_test_set(self):
         mommy.make(
                 Contract,
@@ -669,7 +685,7 @@ class ContractsTest(TestCase):
                 current_price=16.00,
         )
 
-    def assertResultsEqual(self, results, expected, just_expected_fields=False):
+    def assertResultsEqual(self, results, expected, just_expected_fields=True):
         dict_results = [dict(x) for x in results]
 
         # test the right number of results is returned
