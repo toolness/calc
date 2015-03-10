@@ -636,9 +636,9 @@ class ContractsTest(TestCase):
            'business_size': None}])
 
     def test_exclude_by_id(self):
-        get_contract_recipe().make(_quantity=1, id=100)
-        get_contract_recipe().make(_quantity=1, id=101)
-        get_contract_recipe().make(_quantity=1, id=102)
+        get_contract_recipe().make(id=100)
+        get_contract_recipe().make(id=101)
+        get_contract_recipe().make(id=102)
         
         resp = self.c.get(self.path, {'exclude': '102,100'})
         self.assertEqual(resp.status_code, 200)
