@@ -67,13 +67,12 @@ def get_contracts_queryset(request_params, wage_field):
     # query_type can be: [ match_all (default) | match_phrase | match_exact ]
     query_type = request_params.get('query_type', 'match_all')
     exclude = request_params.getlist('exclude')
-    if len(exclude) == 1 and ',' in exclude[0]:
-        #getlist only works for key=val&key=val2, not for key=val1,val2
-        exclude = exclude[0].split(',')
 
     contracts = Contract.objects.all()
 
     if exclude:
+        #getlist only works for key=val&key=val2, not for key=val1,val2
+        exclude = exclude[0].split(',')
         contracts = contracts.exclude(id__in=exclude)
 
     if query:
