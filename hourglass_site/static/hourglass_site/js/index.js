@@ -477,39 +477,6 @@
     });
   }
 
-  function getFormData() {
-    var data = {};
-    inputs.each(function() {
-      if (this.disabled || this.value === "") return;
-      switch (this.type) {
-        case "radio":
-        case "checkbox":
-          // bail if it's not checked *or* it was checked by default,
-          if (!this.checked || this.hasAttribute("checked")) {
-            return;
-          }
-          break;
-      }
-      data[this.name] = this.value;
-    });
-    return data;
-  }
-
-  function setFormData(data) {
-    if (!data) return;
-    inputs.each(function() {
-      if (data.hasOwnProperty(this.name)) {
-        switch (this.type) {
-          case "radio":
-          case "checkbox":
-            this.checked = data[this.name] == this.value;
-            return;
-        }
-        this.value = data[this.name];
-      }
-    });
-  }
-
   function setupColumnHeader(headers) {
     headers
       .datum(function() {
