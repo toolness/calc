@@ -3,8 +3,9 @@
   // for IE9: History API polyfill
   var location = window.history.location || window.location;
 
-  var form = d3.select("#search"),
-      inputs = form.selectAll("*[name]"),
+  var search = d3.select("#search"),
+      form = new formdb.Form(search.node()),
+      inputs = search.selectAll("*[name]"),
       formatPrice = d3.format(",.02f"),
       formatCommas = d3.format(","),
       api = new hourglass.API(),
@@ -13,27 +14,17 @@
         .style("display", "none"),
       sortHeaders = resultsTable.selectAll("thead th")
         .call(setupColumnHeader),
-      loadingIndicator = form.select(".loading-indicator"),
+      loadingIndicator = search.select(".loading-indicator"),
       request;
 
-  form.on("submit", function onsubmit() {
-    // stop the form from submitting
-    d3.event.preventDefault();
+  form.on("submit", function onsubmit(data, e) {
+    e.preventDefault();
     submit(true);
   });
 
   form.on("reset", function onreset() {
-    // XXX we shouldn't have to do this...
-    // shouldn't a reset input clear them?
-    inputs.each(function() {
-      switch (this.type) {
-        case 'checkbox':
-        case 'radio':
-          this.checked = this.hasAttribute('checked');
-          return;
-      }
-      this.value = "";
-    });
+    form.setData({});
+    $search.focus();
     submit(true);
   });
 
@@ -56,7 +47,7 @@
       source: function(term, done) {
         // console.log("search:", term);
         if (autoCompReq) autoCompReq.abort();
-        var data = getFormData();
+        var data = form.getData();
         autoCompReq = api.get({
           uri: "search",
           data: {
@@ -91,11 +82,11 @@
   function popstate() {
     // read the query string and set values accordingly
     var data = hourglass.extend(
-      getFormData(),
+      form.getData(),
       hourglass.qs.parse(location.search)
     );
     inputs.on("change", null);
-    setFormData(data);
+    form.setData(data);
     inputs.on("change", function onchange() {
       submit(true);
     });
@@ -114,15 +105,15 @@
   }
 
   function submit(pushState) {
-    var data = getFormData();
+    var data = form.getData();
     inputs.classed("filter_active", function() {
       return !!this.value;
     });
 
     console.log("submitting:", data);
 
-    form.classed("loaded", false);
-    form.classed("loading", true);
+    search.classed("loaded", false);
+    search.classed("loading", true);
 
     // cancel the outbound request if there is one
     if (request) request.abort();
@@ -150,7 +141,7 @@
   }
 
   function update(error, data) {
-    form.classed("loading", false);
+    search.classed("loading", false);
     request = null;
 
     if (error) {
@@ -159,18 +150,18 @@
         return;
       }
 
-      form.classed("error", true);
+      search.classed("error", true);
 
       loadingIndicator.select(".error")
         .text(error.responseText);
 
       console.error(error.responseText);
     } else {
-      form.classed("error", false);
+      search.classed("error", false);
     }
 
     console.log("update:", data);
-    form.classed("loaded", true);
+    search.classed("loaded", true);
 
     d3.select("#results-total")
       .text(data ? formatCommas(data.count) : "(none)");
@@ -470,7 +461,7 @@
 
     td.exit().remove();
 
-    var sortKey = parseSortOrder(getFormData().sort).key;
+    var sortKey = parseSortOrder(form.getData().sort).key;
     td.enter().append("td")
       .attr("class", function(column) {
         return "column-" + column.key;
@@ -563,7 +554,7 @@
       d.sorted = true;
 
       var sort = (d.descending ? "-" : "") + d.key;
-      setFormData({sort: sort});
+      form.set('sort', sort);
 
       updateSortOrder(d.key);
 
