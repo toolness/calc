@@ -173,6 +173,8 @@ td.collapsed {
 .loading-indicator {
   opacity: 0;
   visibility: hidden;
+  max-height: 200px;
+  overflow-y: auto;
 }
 
   .loading-indicator > * {
