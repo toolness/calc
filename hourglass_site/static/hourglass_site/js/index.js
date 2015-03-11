@@ -22,11 +22,16 @@
     submit(true);
   });
 
-  form.on("reset", function onsubmit() {
+  form.on("reset", function onreset() {
     // XXX we shouldn't have to do this...
     // shouldn't a reset input clear them?
     inputs.each(function() {
-      // FIXME: if this.type === "checkbox", toggle this.checked
+      switch (this.type) {
+        case 'checkbox':
+        case 'radio':
+          this.checked = this.hasAttribute('checked');
+          return;
+      }
       this.value = "";
     });
     submit(true);
@@ -488,7 +493,10 @@
       switch (this.type) {
         case "radio":
         case "checkbox":
-          if (!this.checked) return;
+          // bail if it's not checked *or* it was checked by default,
+          if (!this.checked || this.hasAttribute("checked")) {
+            return;
+          }
           break;
       }
       data[this.name] = this.value;
