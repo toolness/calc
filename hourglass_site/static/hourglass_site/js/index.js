@@ -1,11 +1,8 @@
 (function(exports) {
 
-<<<<<<< HEAD
   // for IE9: History API polyfill
   var location = window.history.location || window.location;
 
-=======
->>>>>>> b2a1a72... now with formdb
   var search = d3.select("#search"),
       form = new formdb.Form(search.node()),
       inputs = search.selectAll("*[name]"),
