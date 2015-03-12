@@ -1,3 +1,4 @@
+@charset 'utf-8';
 @import url(skeleton/normalize.css);
 @import url(skeleton/skeleton.css);
 
@@ -8,6 +9,7 @@
 }
 
 thead th {
+  position: relative;
   vertical-align: bottom;
 }
 
@@ -42,6 +44,10 @@ td.sorted {
 
 tbody tr:nth-child(odd) td.sorted {
   background: #f0f0f0;
+}
+
+tbody tr:hover > * {
+  background: #fefef0 !important;
 }
 
 thead th {
@@ -102,7 +108,8 @@ th.collapsible.collapsed {
   font-size: 0;
 }
 
-th.collapsible a.toggle-collapse {
+th.collapsible a.toggle-collapse,
+th.exclude a.restore {
   position: absolute;
   font-size: 1rem;
   line-height: 1.2em;
@@ -114,6 +121,13 @@ th.collapsible a.toggle-collapse {
   left: 100%;
   width: 3em;
   height: 100%;
+}
+
+th.exclude a.restore {
+  left: auto;
+  right: .5em;
+  width: 6em;
+  text-align: right;
 }
 
 th.collapsed,
@@ -245,4 +259,20 @@ svg.histogram .avg line {
 
   #query-types label input {
     margin-right: .5rem;
+  }
+
+  td.column-exclude {
+    /* padding-right: 0; */
+  }
+
+td.column-exclude a {
+  color: #999;
+  font-size: 1.2em;
+  line-height: 1rem;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+  td.column-exclude a:hover {
+    color: #000;
   }
