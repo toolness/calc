@@ -24,13 +24,25 @@
 
   form.on("reset", function onreset() {
     form.setData({});
-    $search.focus();
+    // $search.focus();
     submit(true);
   });
 
   inputs.on("change", function onchange() {
     submit(true);
   });
+
+  d3.selectAll('a.merge-params')
+    .on('click', function() {
+      d3.event.preventDefault();
+      var query = this.getAttribute('href'),
+          params = hourglass.qs.parse(query);
+      // console.log('merging:', query, params);
+      for (var key in params) {
+        form.set(key, params[key]);
+      }
+      submit(true);
+    });
 
   initialize();
 
@@ -138,6 +150,8 @@
       var href = "?" + hourglass.qs.format(data)
       history.pushState(null, null, href);
     }
+
+    updateExcluded();
   }
 
   function update(error, data) {
@@ -439,9 +453,11 @@
         tbody = resultsTable.select("tbody");
 
     var tr = tbody.selectAll("tr")
-      .data(results);
+      .data(results)
+      .classed('new', false);
 
     tr.exit().remove();
+
     tr.enter().append("tr");
 
     var td = tr.selectAll("td")
@@ -462,19 +478,87 @@
     td.exit().remove();
 
     var sortKey = parseSortOrder(form.getData().sort).key;
-    td.enter().append("td")
-      .attr("class", function(column) {
-        return "column-" + column.key;
-      })
-      .classed("collapsed", function(d) {
-        return d.column.collapsed;
-      })
-      .classed("sorted", function(c) {
-        return c.column.key === sortKey;
-      });
-    td.html(function(d) {
+
+    var enter = td.enter()
+      .append("td")
+        .attr("class", function(d) {
+          return "column-" + d.key;
+        })
+        .classed("collapsed", function(d) {
+          return d.column.collapsed;
+        })
+        .classed("sorted", function(c) {
+          return c.column.key === sortKey;
+        });
+
+    // update the HTML of all cells (except exclusion columns)
+    td.filter(function(d) {
+      return d.key !== 'exclude';
+    })
+    .html(function(d) {
       return d.column.collapsed ? "" : d.string;
     });
+
+    // add a link to incoming exclusion cells
+    enter.filter(function(d) {
+      return d.key === 'exclude';
+    })
+    .append('a')
+      .attr('class', 'exclude-row')
+      .attr('title', 'Exclude this item from your search')
+      .html('&times;');
+
+    // update the links on all exclude cells
+    td.filter(function(d) {
+      return d.key === 'exclude';
+    })
+    .select('a')
+      .attr('href', function(d) {
+        return '?exclude=' + d.row.id;
+      })
+      .on('click', function(d) {
+        d3.event.preventDefault();
+        /*
+         * XXX this is where d3.select(this).parent('tr')
+         * would be nice...
+         */
+        var tr = this.parentNode.parentNode;
+        // console.log('removing:', tr);
+        tr.parentNode.removeChild(tr);
+
+        excludeRow(d.row.id);
+      });
+  }
+
+  function excludeRow(id) {
+    id = String(id);
+    var excluded = getExcludedIds();
+    if (excluded.indexOf(id) === -1) {
+      excluded.push(id);
+    } else {
+      console.warn('attempted to exclude an already excluded row:', id);
+    }
+    form.set('exclude', excluded.join(','));
+    submit(true);
+  }
+
+  function getExcludedIds() {
+    var str = form.get('exclude');
+    return str && str.length
+      ? str.split(',')
+      : [];
+  }
+
+  function updateExcluded() {
+    var excluded = getExcludedIds(),
+        len = excluded.length,
+        rows = 'row' + (len === 1 ? '' : 's'),
+        text = len > 0
+          ? ['Restore', len, rows].join(' ')
+          : '';
+    d3.select('#restore-excluded')
+      .attr('title', rows + ': ' + excluded.join(', '))
+      .text(text);
   }
 
   function setupColumnHeader(headers) {
