@@ -8,6 +8,15 @@ applications:
 - name: hourglass-dev
   path: .
   timeout: 180
+  host: calc-dev
+
+- name: hourglass-prod
+  path: .
+  timeout: 180
+  host: calc
+
+
+
 #- name: hourglass-dev-load-data
  # path: .
  # no-route: true
