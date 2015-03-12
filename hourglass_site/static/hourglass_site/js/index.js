@@ -453,8 +453,7 @@
         tbody = resultsTable.select("tbody");
 
     var tr = tbody.selectAll("tr")
-      .data(results)
-      .classed('new', false);
+      .data(results);
 
     tr.exit().remove();
 
