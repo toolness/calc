@@ -369,65 +369,6 @@
     histogramUpdated = true;
   }
 
-  function updateHourlyWages(stats, domain) {
-    var graph = d3.select("#hourly-wages"),
-        row = graph.selectAll(".row")
-          .data(stats, function(d) {
-            return d.min_years_experience;
-          });
-
-    row.exit().remove();
-
-    var enter = row.enter().append("div")
-      .attr("class", "row");
-
-    enter.append("span")
-      .attr("class", "row-label years");
-
-    var bar = enter.append("div")
-      .attr("class", "bar")
-      .style({
-        "margin-left": "0%",
-        "margin-right": "0%"
-      });
-    bar.append("span")
-      .attr("class", "average")
-      .style("left", "0%")
-      .append("span")
-        .attr("class", "label")
-        .html('$<b class="value"></b><i class="count"></i>');
-
-    var wageScale = d3.scale.linear()
-      .domain(domain)
-      .range([0, 100]);
-
-    row.select(".years")
-      .text(function(d) {
-        return d.min_years_experience;
-      });
-
-    var bar = row.select(".bar")
-      .style("margin-left", function(d) {
-        return wageScale(d.min_wage) + "%";
-      })
-      .style("margin-right", function(d) {
-        return wageScale(d.max_wage) + "%";
-      });
-
-    var avg = bar.select(".average")
-      .style("left", function(d) {
-        return wageScale(d.average_wage) + "%";
-      });
-    avg.select(".value")
-      .text(function(d) {
-        return d.average_wage;
-      });
-    avg.select(".count")
-      .text(function(d) {
-        return d.num_contracts;
-      });
-  }
-
   function updateResults(results) {
     d3.select("#results-count")
       .text(formatCommas(results.length));
