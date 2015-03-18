@@ -149,8 +149,19 @@
 
     <table id="results-table" class="results has-data">
       <caption>
-        <span id="results-total">...</span> matching row(s), showing <span id="results-count">...</span>
-        <a id="export-data" class="button button-secondary" title="Click to export your search results to an Excel file (CSV)" href="/api/rates/csv/">Export Data</a>
+        <div class="row">
+          <div id="description" class="nine columns">
+            Showing <span data-key="count">0</span> of
+            <span class="total" data-key="total">0</span>
+            <span data-key="results">results</span>
+            <span class="filters">
+              <span class="not-empty">matching</span>
+            </span>
+          </div>
+          <div id="results-actions" class="three columns">
+            <a id="export-data" class="button button-secondary" title="Click to export your search results to an Excel file (CSV)" href="/api/rates/csv/">Export Data</a>
+          </div>
+        </div>
       </caption>
       <thead>
         <tr>
