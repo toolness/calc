@@ -25,7 +25,7 @@ span.dollars {
   color: #999;
 }
 
-.filters {
+div.filters {
   background: #f9f9f9;
   padding: 1rem;
   border-radius: 4px;
@@ -35,7 +35,7 @@ span.dollars {
   padding: 1rem 0;
 }
 
-.filters .filter {
+div.filters .filter {
   width: 50%;
   float: left;
 }
@@ -58,7 +58,27 @@ td.column-min_years_experience i {
   color: #999;
 }
 
+#results-table {
+  margin-top: 2em;
+}
+
 #export-data {
-  position: absolute;
-  right: 0;
+  margin: 0;
+}
+
+#description {
+  color: #333;
+  font-weight: normal;
+}
+
+#description .total {
+  font-weight: bold;
+}
+
+#description .empty .not-empty {
+  display: none;
+}
+
+#results-actions {
+  text-align: right;
 }
