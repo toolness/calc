@@ -19,7 +19,7 @@
     if (!(this instanceof hourglass.API)) {
       return new hourglass.API(path);
     }
-    this.path = path || "/api/";
+    this.path = path || APIHOST + "/";
   };
 
   hourglass.API.prototype = {
@@ -32,7 +32,7 @@
         ? request.uri || request.url
         : request;
       // TODO: merge request.data if provided and uri includes "?"
-      return (this.path + uri).replace(/\/\/+/g, "/");
+      return (this.path + uri);
     },
 
     /**

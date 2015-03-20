@@ -121,7 +121,7 @@
       histogram: 10
     };
     request = api.get({
-      uri: "rates", 
+      uri: "rates/", 
       data: hourglass.extend(defaults, data)
     }, update);
 

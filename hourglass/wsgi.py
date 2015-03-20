@@ -13,6 +13,8 @@ from django.core.wsgi import get_wsgi_application
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "hourglass.settings")
 #important that whitenoise import is after the line above
 from whitenoise.django import DjangoWhiteNoise
-
-application = get_wsgi_application()
+try:
+    application = get_wsgi_application()
+except Exception as e:
+    print(e)
 application = DjangoWhiteNoise(application)
