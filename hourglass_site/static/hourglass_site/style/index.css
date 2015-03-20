@@ -25,7 +25,7 @@ span.dollars {
   color: #999;
 }
 
-.filters {
+div.filters {
   background: #f9f9f9;
   padding: 1rem;
   border-radius: 4px;
@@ -35,12 +35,13 @@ span.dollars {
   padding: 1rem 0;
 }
 
-.filters .filter {
+div.filters .filter {
   width: 50%;
   float: left;
 }
 
-th.column-labor_category {        width: 25%; }
+th.column-exclude {               width:  2%; }
+th.column-labor_category {        width: 23%; }
 th.column-education_level {       width: 10%; }
 th.column-min_years_experience {  width: 10%; }
 th.column-wage {                  width:  8%; }
@@ -58,7 +59,39 @@ td.column-min_years_experience i {
   color: #999;
 }
 
+td.column-exclude {
+  /* padding-right: 0; */
+}
+
+  td.column-exclude a {
+    color: #999;
+    font-size: 1.2em;
+    line-height: 1rem;
+    font-weight: bold;
+    text-decoration: none;
+  }
+
+  td.column-exclude a:hover {
+    color: #000;
+  }
+
 #export-data {
-  position: absolute;
-  right: 0;
+  margin: 0;
+}
+
+#description {
+  color: #333;
+  font-weight: normal;
+}
+
+#description .total {
+  font-weight: bold;
+}
+
+#description .empty .not-empty {
+  display: none;
+}
+
+#results-actions {
+  text-align: right;
 }

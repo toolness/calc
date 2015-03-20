@@ -24,13 +24,25 @@
 
   form.on("reset", function onreset() {
     form.setData({});
-    $search.focus();
+    // $search.focus();
     submit(true);
   });
 
   inputs.on("change", function onchange() {
     submit(true);
   });
+
+  d3.selectAll('a.merge-params')
+    .on('click', function() {
+      d3.event.preventDefault();
+      var query = this.getAttribute('href'),
+          params = hourglass.qs.parse(query);
+      // console.log('merging:', query, params);
+      for (var key in params) {
+        form.set(key, params[key]);
+      }
+      submit(true);
+    });
 
   initialize();
 
@@ -138,9 +150,11 @@
       var href = "?" + hourglass.qs.format(data)
       history.pushState(null, null, href);
     }
+
+    updateExcluded();
   }
 
-  function update(error, data) {
+  function update(error, res) {
     search.classed("loading", false);
     request = null;
 
@@ -160,22 +174,19 @@
       search.classed("error", false);
     }
 
-    console.log("update:", data);
+    console.log("update:", res);
     search.classed("loaded", true);
 
-    d3.select("#results-total")
-      .text(data ? formatCommas(data.count) : "(none)");
+    updateDescription(res);
 
-    if (data && data.results && data.results.length) {
-      updatePriceRange(data);
-      updatePriceHistogram(data);
-      // updateHourlyWages(data.hourly_wage_stats, [data.minimum, data.maximum]);
-      updateResults(data.results || []);
+    if (res && res.results && res.results.length) {
+      updatePriceRange(res);
+      updatePriceHistogram(res);
+      updateResults(res.results || []);
     } else {
-      data = EMPTY_DATA;
+      res = EMPTY_DATA;
       updatePriceRange(EMPTY_DATA);
       updatePriceHistogram(EMPTY_DATA);
-      // updateHourlyWages([], [0, 0]);
       updateResults([]);
     }
   }
@@ -205,10 +216,9 @@
       EMPTY_DATA = {
         minimum: 0,
         maximum: 100,
-        average: 50,
+        average: 0,
         wage_histogram: [
-          {count: 0, min: 0, max: 50},
-          {count: 0, min: 50, max: 1}
+          {count: 0, min: 0, max: 0}
         ]
       };
   function updatePriceHistogram(data) {
@@ -369,65 +379,6 @@
     histogramUpdated = true;
   }
 
-  function updateHourlyWages(stats, domain) {
-    var graph = d3.select("#hourly-wages"),
-        row = graph.selectAll(".row")
-          .data(stats, function(d) {
-            return d.min_years_experience;
-          });
-
-    row.exit().remove();
-
-    var enter = row.enter().append("div")
-      .attr("class", "row");
-
-    enter.append("span")
-      .attr("class", "row-label years");
-
-    var bar = enter.append("div")
-      .attr("class", "bar")
-      .style({
-        "margin-left": "0%",
-        "margin-right": "0%"
-      });
-    bar.append("span")
-      .attr("class", "average")
-      .style("left", "0%")
-      .append("span")
-        .attr("class", "label")
-        .html('$<b class="value"></b><i class="count"></i>');
-
-    var wageScale = d3.scale.linear()
-      .domain(domain)
-      .range([0, 100]);
-
-    row.select(".years")
-      .text(function(d) {
-        return d.min_years_experience;
-      });
-
-    var bar = row.select(".bar")
-      .style("margin-left", function(d) {
-        return wageScale(d.min_wage) + "%";
-      })
-      .style("margin-right", function(d) {
-        return wageScale(d.max_wage) + "%";
-      });
-
-    var avg = bar.select(".average")
-      .style("left", function(d) {
-        return wageScale(d.average_wage) + "%";
-      });
-    avg.select(".value")
-      .text(function(d) {
-        return d.average_wage;
-      });
-    avg.select(".count")
-      .text(function(d) {
-        return d.num_contracts;
-      });
-  }
-
   function updateResults(results) {
     d3.select("#results-count")
       .text(formatCommas(results.length));
@@ -442,6 +393,7 @@
       .data(results);
 
     tr.exit().remove();
+
     tr.enter().append("tr");
 
     var td = tr.selectAll("td")
@@ -462,19 +414,87 @@
     td.exit().remove();
 
     var sortKey = parseSortOrder(form.getData().sort).key;
-    td.enter().append("td")
-      .attr("class", function(column) {
-        return "column-" + column.key;
-      })
-      .classed("collapsed", function(d) {
-        return d.column.collapsed;
-      })
-      .classed("sorted", function(c) {
-        return c.column.key === sortKey;
-      });
-    td.html(function(d) {
+
+    var enter = td.enter()
+      .append("td")
+        .attr("class", function(d) {
+          return "column-" + d.key;
+        })
+        .classed("collapsed", function(d) {
+          return d.column.collapsed;
+        })
+        .classed("sorted", function(c) {
+          return c.column.key === sortKey;
+        });
+
+    // update the HTML of all cells (except exclusion columns)
+    td.filter(function(d) {
+      return d.key !== 'exclude';
+    })
+    .html(function(d) {
       return d.column.collapsed ? "" : d.string;
     });
+
+    // add a link to incoming exclusion cells
+    enter.filter(function(d) {
+      return d.key === 'exclude';
+    })
+    .append('a')
+      .attr('class', 'exclude-row')
+      .attr('title', 'Exclude this item from your search')
+      .html('&times;');
+
+    // update the links on all exclude cells
+    td.filter(function(d) {
+      return d.key === 'exclude';
+    })
+    .select('a')
+      .attr('href', function(d) {
+        return '?exclude=' + d.row.id;
+      })
+      .on('click', function(d) {
+        d3.event.preventDefault();
+        /*
+         * XXX this is where d3.select(this).parent('tr')
+         * would be nice...
+         */
+        var tr = this.parentNode.parentNode;
+        // console.log('removing:', tr);
+        tr.parentNode.removeChild(tr);
+
+        excludeRow(d.row.id);
+      });
+  }
+
+  function excludeRow(id) {
+    id = String(id);
+    var excluded = getExcludedIds();
+    if (excluded.indexOf(id) === -1) {
+      excluded.push(id);
+    } else {
+      console.warn('attempted to exclude an already excluded row:', id);
+    }
+    form.set('exclude', excluded.join(','));
+    submit(true);
+  }
+
+  function getExcludedIds() {
+    var str = form.get('exclude');
+    return str && str.length
+      ? str.split(',')
+      : [];
+  }
+
+  function updateExcluded() {
+    var excluded = getExcludedIds(),
+        len = excluded.length,
+        rows = 'row' + (len === 1 ? '' : 's'),
+        text = len > 0
+          ? ['Restore', len, rows].join(' ')
+          : '';
+    d3.select('#restore-excluded')
+      .attr('title', rows + ': ' + excluded.join(', '))
+      .text(text);
   }
 
   function setupColumnHeader(headers) {
@@ -615,11 +635,104 @@
     };
   }
 
+  function updateDescription(res) {
+    var total = res ? formatCommas(res.count) : '0',
+        data = form.getData();
+
+    /*
+     * build a list of inputs that map to
+     * descriptive filters. The 'name' key is the
+     * 'name' attribute of the corresponding input,
+     * and the 'template' key is an HTML string
+     * suitable for use with templatize(), which
+     * replaces {key} with d[key] for the input.
+     */
+    var inputs = ([
+      {name: 'q', template: '&ldquo;<a>{value}</a>&rdquo;'},
+      {name: 'min_education', template: 'minimum education level: <a>{label}</a>'},
+      {name: 'min_experience', template: 'minimum <a>{value} years</a> of experience'},
+      {name: 'site', template: 'worksite: <a>{value}</a>'},
+      {name: 'business_size', template: 'size: <a>{label}</a>'},
+      {name: 'price__gte', template: 'price &ge; <a>${value}</a>'},
+      {name: 'price__lte', template: 'price &le; <a>${value}</a>'}
+    ])
+    .map(function(d) {
+      d.value = data[d.name];
+      d.ref = document.getElementsByName(d.name)[0];
+      d.active = !!d.value;
+      if (d.active) {
+        var ref = d.ref;
+        d.label = ref.nodeName === 'SELECT'
+          ? ref.options[ref.selectedIndex].text
+          : d.value;
+      }
+      return d;
+    });
+
+    // key/value pairs for generic descriptive
+    // elements
+    var keys = {
+      total: total,
+      count: formatCommas(res.results.length),
+      results: 'result' + (total === 1 ? '' : 's')
+    };
+
+    var desc = d3.select('#description');
+    // update all of the generic descriptive elements
+    desc.selectAll('[data-key]')
+      .datum(function() {
+        return this.getAttribute('data-key');
+      })
+      .text(function(key) {
+        return keys[key] || '';
+      });
+
+    // get only the active inputs
+    var filters = inputs.filter(function(d) {
+      return d.active;
+    });
+
+    // build the filters list
+    var f = desc.select('.filters')
+      .classed('empty', !filters.length)
+      .selectAll('.filter')
+      .data(filters);
+    f.exit().remove();
+    f.enter().append('span')
+      .attr('class', 'filter')
+      .attr('data-name', function(d) {
+        return d.name;
+      });
+
+    // update the HTML for each filter
+    var flen = filters.length,
+        multiple = flen > 1,
+        last = flen - 1;
+    f.html(function(d, i) {
+      // add a comma between filters, and the word
+      // 'and' for the last one
+      var comma = (i > 0 && flen > 2) ? ', ' : ' ',
+          and = comma + ((multiple && i === last)
+            ? 'and '
+            : ''),
+          tmpl = templatize(and + d.template);
+      // XXX we should never see "???"
+      return tmpl(d, '???');
+    })
+    .select('a')
+      .attr('href', '#')
+      .on('click', function(d) {
+        d3.event.preventDefault();
+        d.ref.focus();
+        return false;
+      });
+  }
+
   function templatize(str, undef) {
     undef = d3.functor(undef);
     return function(d) {
       return str.replace(/{(\w+)}/g, function(_, key) {
-        return d[key] || undef(d, key);
+        return d[key] || undef.call(d, key);
       });
     };
   }
