@@ -56,9 +56,9 @@ thead th {
 }
 
 table caption {
-  color: #666;
+  color: inherit;
   text-align: left;
-  font-weight: bold;
+  font-weight: normal;
 }
 
 th.sortable {
@@ -241,6 +241,11 @@ svg.histogram .avg line {
 
 .filter_active  {
   border: 2px solid #ffd855 !important;
+}
+
+input:focus,
+select:focus {
+  border: 2px solid #33C3F0 !important;
 }
 
 #labor_category {
