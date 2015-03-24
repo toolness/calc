@@ -242,8 +242,8 @@
           .domain(extent)
           .range([left, right]),
         height = d3.scale.linear()
-          .domain(d3.extent(bins, function(d) { return d.count; }))
-          .range([0, bottom - top]);
+          .domain([0].concat(d3.extent(bins, function(d) { return d.count; })))
+          .range([0, 1, bottom - top]);
 
     var xAxis = svg.select(".axis.x");
     if (xAxis.empty()) {
