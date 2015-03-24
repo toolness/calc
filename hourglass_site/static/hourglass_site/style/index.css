@@ -3,9 +3,9 @@
 
 .loading-indicator,
 .has-data {
-    -webkit-transition: opacity 0.5s linear;
-       -moz-transition: opacity 0.5s linear;
-            transition: opacity 0.5s linear;
+    -webkit-transition: opacity .5s, height .5s;
+       -moz-transition: opacity .5s, height .5s;
+            transition: opacity .5s, height .5s;
 }
 
 .autocomplete-suggestions {
@@ -44,8 +44,9 @@
 .loading-indicator {
   opacity: 0;
   visibility: hidden;
+  height: 0;
   max-height: 200px;
-  overflow-y: auto;
+  overflow-y: hidden;
 }
 
   .loading-indicator > * {
@@ -55,19 +56,17 @@
   .loading .loading-indicator {
     opacity: 1;
     visibility: visible;
+    height: auto;
   }
-
-thead th {
-  vertical-align: bottom;
-}
 
 .filter_active  {
   border: 2px solid #ffd855 !important;
 }
 
-input:focus,
+input[type="text"]:focus,
 select:focus {
   border: 2px solid #33C3F0 !important;
+  box-shadow: 0 0 5px #33C3F0;
 }
 
 main h5 {
@@ -93,7 +92,7 @@ section.filters {
   padding: 1rem 0;
 }
 
-.graphs {
+.results {
   padding: 1rem 0;
 }
 
