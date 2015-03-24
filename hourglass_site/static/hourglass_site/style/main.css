@@ -8,6 +8,92 @@
   -webkit-box-sizing: border-box;
 }
 
+body {
+}
+
+.skip-nav {
+  position: absolute;
+  left: -9999px;
+  height: 0;
+}
+
+.skip-nav:focus {
+  position: relative;
+  left: auto;
+  height: auto;
+  display: block;
+}
+
+#banner {
+  color: #ddd;
+  background: #323A45;
+}
+
+  #banner p {
+    margin: 0;
+  }
+
+  #banner #usa {
+    float: left;
+  }
+
+  #banner #site-status {
+    float: right;
+  }
+
+header {
+  padding-top: 2rem;
+  color: #fff;
+  background: #044364;
+}
+
+h1 {
+  letter-spacing: 0;
+}
+
+  h1 .site-title {
+    display: block;
+    line-height: 1em;
+  }
+
+  h1 .site-subtitle {
+    font-size: 2rem;
+    display: block;
+  }
+
+nav ul {
+  list-style: none;
+  margin: 0 0 1rem 0;
+  padding: 0;
+}
+
+  nav ul li {
+    list-style: none;
+    float: left;
+    margin: 0;
+  }
+
+  nav ul:after {
+    content: " ";
+    display: table;
+    clear: both;
+  }
+
+  nav ul li a {
+    display: inline-block;
+    color: #fff;
+    font-weight: bold;
+    padding: .2rem 1.5rem .5rem;
+  }
+
+  nav ul li + li {
+    border-left: 1px solid #fff;
+  }
+
+main {
+  margin: 2rem 0;
+}
+
 thead th {
   position: relative;
   vertical-align: bottom;
