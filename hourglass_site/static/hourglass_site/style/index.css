@@ -74,25 +74,23 @@ main h5 {
   margin: 0 !important;
 }
 
-#search {
-  position: relative;
-}
-
 input.price,
 input#min_experience {
   width: 4em;
-  margin-left: .3em;
   margin-right: .3em;
+}
+
+input.price {
+  margin-left: .3em;
 }
 
 span.dollars {
   color: #999;
 }
 
-div.filters {
-  background: #f9f9f9;
-  padding: 1rem;
-  border-radius: 4px;
+section.filters {
+  background: #eee;
+  padding: 1rem 0;
 }
 
 .graphs {
@@ -121,6 +119,10 @@ td.column-min_years_experience i {
   font-style: normal;
   font-size: .75em;
   color: #999;
+}
+
+#reset-button {
+  background: #fff;
 }
 
 #export-data {
