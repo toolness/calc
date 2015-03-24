@@ -8,8 +8,11 @@
 
 {% block body %}
 <div class="container">
-  <h1>Hourglass</h1>
   <form id="search" class="search" role="form">
+
+    <input type="hidden" name="sort" value="current_price">
+    <input type="hidden" name="exclude" value="">
+
     <div id="primary" class="row">
       <div class="six columns">
         <input id="labor_category" name="q" placeholder="Type a labor category" class="search u-full-width" type="text">
@@ -74,8 +77,6 @@
           to <span class="dollars">$</span><input id="price__lte" name="price__lte" type="text" class="price" placeholder="&infin;">
         </div>
 
-
-
         <!--
         <div class="filter">
           <label for="schedule">Schedule:</label>
@@ -91,10 +92,6 @@
           </select>
         </div>
         -->
-
-        
-
-
 
         <!--
         <div class="filter">
@@ -179,12 +176,8 @@
       </tbody>
     </table>
 
-    <input type="hidden" name="sort" value="current_price">
-    <input type="hidden" name="exclude" value="">
-
   </form>
 
-</div>
+</div><!-- /.container -->
 <script src="{% static 'hourglass_site/js/index.js' %}"></script>
-
 {% endblock %}
