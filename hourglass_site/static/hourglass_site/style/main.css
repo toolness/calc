@@ -247,37 +247,3 @@ input:focus,
 select:focus {
   border: 2px solid #33C3F0 !important;
 }
-
-#labor_category {
-  margin-bottom: .5rem;
-}
-
-#query-types {
-  padding: 0 1rem;
-}
-
-  #query-types label {
-    display: inline-block;
-    font-weight: normal;
-    margin: 0 1rem 0 0;
-  }
-
-  #query-types label input {
-    margin-right: .5rem;
-  }
-
-  td.column-exclude {
-    /* padding-right: 0; */
-  }
-
-td.column-exclude a {
-  color: #999;
-  font-size: 1.2em;
-  line-height: 1rem;
-  font-weight: bold;
-  text-decoration: none;
-}
-
-  td.column-exclude a:hover {
-    color: #000;
-  }
