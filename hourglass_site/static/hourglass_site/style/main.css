@@ -96,242 +96,31 @@ main {
   margin: 2rem 0;
 }
 
-thead th {
-  position: relative;
-  vertical-align: bottom;
-}
-
-table {
-  width: 100%;
-}
-
-td, td:first-child, td:last-child,
-th, th:first-child, th:last-child,
-table caption {
-  position: relative;
-  padding: .25em .5em;
-  vertical-align: top;
-}
-
-table caption {
-  padding-bottom: 1.5em;
-  vertical-align: bottom;
-}
-
-th, th:first-child {
-  vertical-align: bottom;
-}
-
-tbody tr:nth-child(odd) td {
-  background: #f9f9f9;
-}
-
-td.sorted {
-  background: #fafafa;
-}
-
-tbody tr:nth-child(odd) td.sorted {
-  background: #f0f0f0;
-}
-
-tbody tr:hover > * {
-  background: #fefef0 !important;
-}
-
-thead th {
-  color: #666;
-  border-bottom: 1px solid;
-}
-
-table caption {
-  color: inherit;
-  text-align: left;
-  font-weight: normal;
-}
-
-th.sortable {
-  text-decoration: underline;
-  cursor: pointer;
-  padding-right: 1.5em;
-}
-
-  th.sorted {
-    color: #000;
-    background: #f8f8f8;
-    position: relative;
-  }
-
-  th.sortable:after {
-    display: inline-block;
-    line-height: 1em;
-    height: 1em;
-    position: absolute;
-    bottom: .4em;
-    right: 0;
-    margin-top: -.5em;
-    margin-right: .25em;
-  }
-
-  th.sortable:after {
-    content: "▽";
-    font-weight: normal;
-    font-size: .9em;
-  }
-
-  th.sorted:after {
-    content: "▼";
-    font-size: 1em;
-  }
-
-  th.sorted.descending:after {
-    content: "▲";
-  }
-
-th.collapsible {
-  position: relative;
-}
-
-th.collapsible.collapsed {
-  width: 0;
-  font-size: 0;
-}
-
-th.collapsible a.toggle-collapse,
-th.exclude a.restore {
-  position: absolute;
-  font-size: 1rem;
-  line-height: 1.2em;
-  padding: 2px 4px;
-  text-transform: uppercase;
-  text-decoration: underline;
-  color: #999;
-  top: 0;
-  left: 100%;
-  width: 3em;
-  height: 100%;
-}
-
-th.exclude a.restore {
-  left: auto;
-  right: .5em;
-  width: 6em;
-  text-align: right;
-}
-
-th.collapsed,
-td.collapsed {
-  width: 1.5em !important;
-  border-left: 1px dotted #E1E1E1;
-}
-
-.autocomplete-suggestions {
-  position: absolute;
-  display: none;
-  z-index: 9999;
-  overflow: hidden;
-  background: #fff;
-
-  max-height: 29.4rem;
-  overflow: hidden;
-  overflow-y: auto;
-  border: 1px solid #ccc;
-}
-
-.autocomplete-suggestion {
-  position: relative;
-  padding: .25em .5em;
-}
-
-.autocomplete-suggestion .count {
-  position: absolute;
-  right: .5em;
-  text-align: right;
-}
-
-.autocomplete-suggestion.selected {
+footer {
   color: #fff;
-  background: #1EAEDB;
+  background: #444749;
+  padding: 2rem 0;
 }
 
-.graph {
-  position: relative;
-}
-
-.graph > .title {
-  position: absolute;
-}
-
-.loading-indicator,
-.has-data {
-    -webkit-transition: opacity 0.5s linear;
-       -moz-transition: opacity 0.5s linear;
-            transition: opacity 0.5s linear;
-}
-
-.loading .has-data {
-  opacity: .2;
-}
-
-.loading-indicator {
-  opacity: 0;
-  visibility: hidden;
-  max-height: 200px;
-  overflow-y: auto;
-}
-
-  .loading-indicator > * {
-    margin: 0;
+  footer h3 {
+    color: #ff0;
+    font-size: 2.5rem;
+    letter-spacing: 0;
   }
 
-  .loading .loading-indicator {
-    opacity: 1;
-    visibility: visible;
+  /*
+  footer .columns {
+    padding-left: 2rem;
   }
 
-svg {
-  display: block;
-  margin: 0;
-  width: 100%;
-  height: auto;
-}
+  footer .columns:first-child {
+    padding-left: 0;
+  }
+  */
 
-svg * {
-  vector-effect: non-scaling-stroke;
-}
-
-.axis line,
-.axis path {
-  fill: none;
-  stroke-width: 1;
-  stroke: #000;
-  shape-rendering: crispEdges;
-}
-
-.axis text {
-  font-size: 13px;
-}
-
-.avg .value,
-.axis .tick.primary text {
-  font-weight: bold;
-}
-
-svg.histogram rect {
-  fill: #999;
-  stroke: #fff;
-  stroke-width: 1;
-}
-
-svg.histogram .avg line {
-  stroke-width: 1;
-  stroke: #000;
-}
-
-.filter_active  {
-  border: 2px solid #ffd855 !important;
-}
-
-input:focus,
-select:focus {
-  border: 2px solid #33C3F0 !important;
-}
+  /*
+   * this doesn't work because the column heights vary
+  footer .columns + .columns {
+    border-left: 1px solid #808183;
+  }
+  */

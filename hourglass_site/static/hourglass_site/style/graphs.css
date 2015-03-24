@@ -1,0 +1,47 @@
+.graph {
+  position: relative;
+}
+
+.graph > .title {
+  position: absolute;
+}
+
+svg.graph {
+  display: block;
+  margin: 0;
+  width: 100%;
+  height: auto;
+}
+
+svg.graph * {
+  vector-effect: non-scaling-stroke;
+}
+
+.axis line,
+.axis path {
+  fill: none;
+  stroke-width: 1;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.axis text {
+  font-size: 13px;
+}
+
+.avg .value,
+.axis .tick.primary text {
+  font-weight: bold;
+}
+
+svg.histogram rect {
+  fill: #999;
+  stroke: #fff;
+  stroke-width: 1;
+}
+
+svg.histogram .avg line {
+  stroke-width: 1;
+  stroke: #000;
+}
+

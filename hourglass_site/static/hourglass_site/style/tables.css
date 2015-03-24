@@ -1,0 +1,146 @@
+/*
+ * general table styles
+ */
+table {
+  width: 100%;
+}
+
+thead th {
+  position: relative;
+  vertical-align: bottom;
+}
+
+td, td:first-child, td:last-child,
+th, th:first-child, th:last-child,
+table caption {
+  position: relative;
+  padding: .25em .5em;
+  vertical-align: top;
+}
+
+table caption {
+  padding-bottom: 1.5em;
+  vertical-align: bottom;
+}
+
+th, th:first-child {
+  vertical-align: bottom;
+}
+
+tbody tr:nth-child(odd) td {
+  background: #f9f9f9;
+}
+
+td.sorted {
+  background: #fafafa;
+}
+
+tbody tr:nth-child(odd) td.sorted {
+  background: #f0f0f0;
+}
+
+tbody tr:hover > * {
+  background: #fefef0 !important;
+}
+
+thead th {
+  color: #666;
+  border-bottom: 1px solid;
+}
+
+table caption {
+  color: inherit;
+  text-align: left;
+  font-weight: normal;
+}
+
+th.sortable {
+  text-decoration: underline;
+  cursor: pointer;
+  padding-right: 1.5em;
+}
+
+  th.sorted {
+    color: #000;
+    background: #f8f8f8;
+    position: relative;
+  }
+
+  th.sortable:after {
+    display: inline-block;
+    line-height: 1em;
+    height: 1em;
+    position: absolute;
+    bottom: .4em;
+    right: 0;
+    margin-top: -.5em;
+    margin-right: .25em;
+  }
+
+  th.sortable:after {
+    content: "▽";
+    font-weight: normal;
+    font-size: .9em;
+  }
+
+  th.sorted:after {
+    content: "▼";
+    font-size: 1em;
+  }
+
+  th.sorted.descending:after {
+    content: "▲";
+  }
+
+th.collapsible {
+  position: relative;
+}
+
+th.collapsible.collapsed {
+  width: 0;
+  font-size: 0;
+}
+
+th.collapsible a.toggle-collapse,
+th.exclude a.restore {
+  position: absolute;
+  font-size: 1rem;
+  line-height: 1.2em;
+  padding: 2px 4px;
+  text-transform: uppercase;
+  text-decoration: underline;
+  color: #999;
+  top: 0;
+  left: 100%;
+  width: 3em;
+  height: 100%;
+}
+
+th.exclude a.restore {
+  left: auto;
+  right: .5em;
+  width: 6em;
+  text-align: right;
+}
+
+th.collapsed,
+td.collapsed {
+  width: 1.5em !important;
+  border-left: 1px dotted #E1E1E1;
+}
+
+  td.column-exclude {
+    /* padding-right: 0; */
+  }
+
+td.column-exclude a {
+  color: #999;
+  font-size: 1.2em;
+  line-height: 1rem;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+  td.column-exclude a:hover {
+    color: #000;
+  }
