@@ -222,9 +222,9 @@
         ]
       };
   function updatePriceHistogram(data) {
-    var width = 500,
+    var width = 960,
         height = 200,
-        pad = [30, 15, 50, 60],
+        pad = [30, 15, 50, 30],
         top = pad[0],
         left = pad[3],
         right = width - pad[1],
