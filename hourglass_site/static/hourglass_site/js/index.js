@@ -215,7 +215,7 @@
   var histogramUpdated = false,
       EMPTY_DATA = {
         minimum: 0,
-        maximum: 100,
+        maximum: .001,
         average: 0,
         wage_histogram: [
           {count: 0, min: 0, max: 0}
