@@ -47,13 +47,20 @@
 
 #banner {
   color: #d9d9d9;
-  font-size: 90%;
+  font-size: 85%;
   background: #323A45;
   padding: .2rem 0;
 }
 
   #banner p {
     margin: 0;
+  }
+
+  #usa img {
+    vertical-align: baseline;
+    position: relative;
+    top: 1px;
+    margin-right: .3rem;
   }
 
   @media (min-width: 600px) {
@@ -112,6 +119,13 @@ nav ul {
     color: #fff;
     font-weight: bold;
     padding: .2rem 1.5rem .5rem;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  nav ul li a:hover {
+    color: #fff;
+    text-decoration: underline;
   }
 
   nav ul li:first-child {
