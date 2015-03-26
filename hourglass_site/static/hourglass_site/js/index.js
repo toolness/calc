@@ -130,7 +130,7 @@
     // cancel the outbound request if there is one
     if (request) request.abort();
     var defaults = {
-      histogram: 10
+      histogram: 12
     };
     request = api.get({
       uri: "rates", 
@@ -180,12 +180,12 @@
     updateDescription(res);
 
     if (res && res.results && res.results.length) {
-      updatePriceRange(res);
+      // updatePriceRange(res);
       updatePriceHistogram(res);
       updateResults(res.results || []);
     } else {
       res = EMPTY_DATA;
-      updatePriceRange(EMPTY_DATA);
+      // updatePriceRange(EMPTY_DATA);
       updatePriceHistogram(EMPTY_DATA);
       updateResults([]);
     }
@@ -208,7 +208,7 @@
 
     function setPrice(selection, price) {
       selection.select(".value")
-        .text(formatPrice(+price));
+        .text(formatPrice(price));
     }
   }
 
@@ -224,16 +224,15 @@
   function updatePriceHistogram(data) {
     var width = 960,
         height = 200,
-        pad = [30, 15, 50, 30],
+        pad = [30, 15, 60, 60],
         top = pad[0],
         left = pad[3],
         right = width - pad[1],
         bottom = height - pad[2],
         svg = d3.select("#price-histogram")
           .attr("viewBox", [0, 0, width, height].join(" ")),
-        formatDecimal = d3.format(".02f"),
         formatDollars = function(n) {
-          return "$" + formatDecimal(n);
+          return "$" + formatPrice(n);
         };
 
     var extent = [data.minimum, data.maximum],
@@ -348,7 +347,7 @@
       .tickFormat(function(d, i) {
         return (i === 0 || i === bins.length)
           ? formatDollars(d)
-          : formatDecimal(d);
+          : formatPrice(d);
       });
     xAxis.call(xa)
       .attr("transform", "translate(" + [0, bottom + 2] + ")")
@@ -357,14 +356,14 @@
           return i === 0 || i === bins.length;
         })
         .select("text")
-            .classed("min", function(d, i) {
-              return i === 0;
-            })
-            .classed("max", function(d, i) {
-              return i === bins.length;
-            })
-          .attr("text-anchor", "end")
-          .attr("transform", "translate(-20,16) rotate(-45)");
+          .classed("min", function(d, i) {
+            return i === 0;
+          })
+          .classed("max", function(d, i) {
+            return i === bins.length;
+          })
+          .style("text-anchor", "end")
+          .attr("transform", "rotate(-35)");
 
     var ya = d3.svg.axis()
       .orient("left")
