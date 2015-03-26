@@ -662,11 +662,16 @@
       if (d.active) {
         var ref = d.ref;
         d.label = ref.nodeName === 'SELECT'
-          ? ref.options[ref.selectedIndex].text
+          ? getRefLabel(ref)
           : d.value;
       }
       return d;
     });
+
+    function getRefLabel(select) {
+      var option = select.options[select.selectedIndex];
+      return option.getAttribute('data-label') || option.text;
+    }
 
     // key/value pairs for generic descriptive
     // elements
