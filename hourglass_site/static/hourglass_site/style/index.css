@@ -120,6 +120,11 @@ td.column-min_years_experience i {
   color: #999;
 }
 
+a.focus-input {
+  text-decoration: none;
+  border-bottom: 1px dotted;
+}
+
 #reset-button {
   background: #fff;
 }

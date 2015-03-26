@@ -725,6 +725,7 @@
     })
     .select('a')
       .attr('href', '#')
+      .classed('focus-input', true)
       .on('click', function(d) {
         d3.event.preventDefault();
         d.ref.focus();
