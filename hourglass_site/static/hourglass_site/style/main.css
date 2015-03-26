@@ -2,6 +2,11 @@
 @import url(skeleton/normalize.css);
 @import url(skeleton/skeleton.css);
 
+body {
+  /* no more Raleway */
+  font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
 * {
           box-sizing: border-box;
      -moz-box-sizing: border-box;
