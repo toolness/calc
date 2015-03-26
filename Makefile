@@ -1,19 +1,19 @@
 manage ?= ./manage.py
-tests ?=
+options ?=
 
 test:
 	$(manage) test \
 		--liveserver=localhost:8081-8181 \
-		--nologcapture $(tests)
+		--nologcapture $(options)
 
 test-frontend: static
 	$(manage) test selenium_tests \
 		--liveserver=localhost:8081-8181 \
-		--nologcapture
+		--nologcapture $(options)
 
 test-backend:
 	$(manage) test api contracts \
-		--nologcapture $(tests)
+		--nologcapture $(options)
 
 static:
 	@# using --link allows us to work on the JS and CSS
