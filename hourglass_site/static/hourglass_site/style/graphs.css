@@ -39,6 +39,7 @@ svg.histogram rect {
   fill: #999;
   stroke: #fff;
   stroke-width: 1;
+  shape-rendering: crispEdges;
 }
 
 svg.histogram .avg line {
