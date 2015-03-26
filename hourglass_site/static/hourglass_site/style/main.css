@@ -50,6 +50,15 @@ body {
   display: block;
 }
 
+/*
+.button,
+.button-primary {
+  font-size: 1.5rem !important;
+  font-weight: normal;
+  line-height: 2rem !important;
+}
+*/
+
 #banner {
   color: #d9d9d9;
   font-size: 85%;
