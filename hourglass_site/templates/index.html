@@ -108,6 +108,21 @@
 
   <section class="results">
     <div class="container">
+      <div class="row">
+        <p id="description" class="nine columns">
+          Showing <span data-key="count">0</span> of
+          <span class="total" data-key="total">0</span>
+          <span data-key="results">results</span>
+          <span class="filters">
+            <span class="not-empty">with</span>
+          </span>
+        </p>
+        <div id="results-actions" class="three columns">
+          <a id="export-data" class="button button-primary"
+            title="Click to export your search results to an Excel file (CSV)" href="/api/rates/csv/">⬇ Export Data</a>
+        </div>
+      </div>
+
       <h4>Price Stats</h4>
 
       <div class="graph">
@@ -121,21 +136,6 @@
       </div>
 
       <table id="results-table" class="results has-data">
-        <caption>
-          <div class="row">
-            <div id="description" class="nine columns">
-              Showing <span data-key="count">0</span> of
-              <span class="total" data-key="total">0</span>
-              <span data-key="results">results</span>
-              <span class="filters">
-                <span class="not-empty">matching</span>
-              </span>
-            </div>
-            <div id="results-actions" class="three columns">
-              <a id="export-data" class="button button-secondary" title="Click to export your search results to an Excel file (CSV)" href="/api/rates/csv/">Export Data</a>
-            </div>
-          </div>
-        </caption>
         <thead>
           <tr>
             <th class="exclude" data-key="exclude" data-format=""><a id="restore-excluded" class="restore merge-params" href="?exclude="></a></th>

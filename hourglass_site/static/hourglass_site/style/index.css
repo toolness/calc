@@ -96,6 +96,10 @@ section.filters {
   padding: 1rem 0;
 }
 
+  .results h4 {
+    margin-bottom: 0;
+  }
+
 div.filters .filter {
   width: 50%;
   float: left;
@@ -136,6 +140,7 @@ a.focus-input {
 #description {
   color: #333;
   font-weight: normal;
+  font-size: 2rem;
 }
 
 #description .total {
