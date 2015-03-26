@@ -715,7 +715,7 @@
     f.html(function(d, i) {
       // add a comma between filters, and the word
       // 'and' for the last one
-      var comma = (i > 0 && flen > 2) ? ', ' : ' ',
+      var comma = (i > 0 && flen > 2 && i !== last) ? ', ' : ' ',
           and = comma + ((multiple && i === last)
             ? 'and '
             : ''),
