@@ -1,39 +1,104 @@
-thead th {
-  vertical-align: bottom;
+@import url(graphs.css);
+@import url(tables.css);
+
+.loading-indicator,
+.has-data {
+    -webkit-transition: opacity .5s, height .5s;
+       -moz-transition: opacity .5s, height .5s;
+            transition: opacity .5s, height .5s;
 }
 
-* h5 {
-  margin: 0 !important;
+.autocomplete-suggestions {
+  position: absolute;
+  display: none;
+  z-index: 9999;
+  overflow: hidden;
+  background: #fff;
+
+  max-height: 29.4rem;
+  overflow: hidden;
+  overflow-y: auto;
+  border: 1px solid #ccc;
 }
 
-.container {
-  margin-top: 2rem;
-}
-
-#search {
+.autocomplete-suggestion {
   position: relative;
+  padding: .25em .5em;
+}
+
+.autocomplete-suggestion .count {
+  position: absolute;
+  right: .5em;
+  text-align: right;
+}
+
+.autocomplete-suggestion.selected {
+  color: #fff;
+  background: #1EAEDB;
+}
+
+.loading .has-data {
+  opacity: .2;
+}
+
+.loading-indicator {
+  opacity: 0;
+  visibility: hidden;
+  height: 0;
+  max-height: 200px;
+  overflow-y: hidden;
+}
+
+  .loading-indicator > * {
+    margin: 0;
+  }
+
+  .loading .loading-indicator {
+    opacity: 1;
+    visibility: visible;
+    height: auto;
+  }
+
+.filter_active  {
+  border: 2px solid #ffd855 !important;
+}
+
+input[type="text"]:focus,
+select:focus {
+  border: 2px solid #33C3F0 !important;
+  box-shadow: 0 0 5px #33C3F0;
+}
+
+main h5 {
+  margin: 0 !important;
 }
 
 input.price,
 input#min_experience {
   width: 4em;
-  margin-left: .3em;
   margin-right: .3em;
+}
+
+input.price {
+  margin-left: .3em;
 }
 
 span.dollars {
   color: #999;
 }
 
-div.filters {
-  background: #f9f9f9;
-  padding: 1rem;
-  border-radius: 4px;
-}
-
-.graphs {
+section.filters {
+  background: #eee;
   padding: 1rem 0;
 }
+
+.results {
+  padding: 1rem 0;
+}
+
+  .results h4 {
+    margin-bottom: 0;
+  }
 
 div.filters .filter {
   width: 50%;
@@ -59,21 +124,14 @@ td.column-min_years_experience i {
   color: #999;
 }
 
-td.column-exclude {
-  /* padding-right: 0; */
+a.focus-input {
+  text-decoration: none;
+  border-bottom: 1px dotted;
 }
 
-  td.column-exclude a {
-    color: #999;
-    font-size: 1.2em;
-    line-height: 1rem;
-    font-weight: bold;
-    text-decoration: none;
-  }
-
-  td.column-exclude a:hover {
-    color: #000;
-  }
+#reset-button {
+  background: #fff;
+}
 
 #export-data {
   margin: 0;
@@ -82,6 +140,7 @@ td.column-exclude {
 #description {
   color: #333;
   font-weight: normal;
+  font-size: 2rem;
 }
 
 #description .total {
@@ -95,3 +154,21 @@ td.column-exclude {
 #results-actions {
   text-align: right;
 }
+
+#labor_category {
+  margin-bottom: .5rem;
+}
+
+#query-types {
+  padding: 0 1rem;
+}
+
+  #query-types label {
+    display: inline-block;
+    font-weight: normal;
+    margin: 0 1rem 0 0;
+  }
+
+  #query-types label input {
+    margin-right: .5rem;
+  }

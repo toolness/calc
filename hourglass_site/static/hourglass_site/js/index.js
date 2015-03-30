@@ -130,7 +130,7 @@
     // cancel the outbound request if there is one
     if (request) request.abort();
     var defaults = {
-      histogram: 10
+      histogram: 12
     };
     request = api.get({
       uri: "rates", 
@@ -180,12 +180,12 @@
     updateDescription(res);
 
     if (res && res.results && res.results.length) {
-      updatePriceRange(res);
+      // updatePriceRange(res);
       updatePriceHistogram(res);
       updateResults(res.results || []);
     } else {
       res = EMPTY_DATA;
-      updatePriceRange(EMPTY_DATA);
+      // updatePriceRange(EMPTY_DATA);
       updatePriceHistogram(EMPTY_DATA);
       updateResults([]);
     }
@@ -208,32 +208,31 @@
 
     function setPrice(selection, price) {
       selection.select(".value")
-        .text(formatPrice(+price));
+        .text(formatPrice(price));
     }
   }
 
   var histogramUpdated = false,
       EMPTY_DATA = {
         minimum: 0,
-        maximum: 100,
+        maximum: .001,
         average: 0,
         wage_histogram: [
           {count: 0, min: 0, max: 0}
         ]
       };
   function updatePriceHistogram(data) {
-    var width = 500,
+    var width = 960,
         height = 200,
-        pad = [30, 15, 50, 60],
+        pad = [30, 15, 60, 60],
         top = pad[0],
         left = pad[3],
         right = width - pad[1],
         bottom = height - pad[2],
         svg = d3.select("#price-histogram")
           .attr("viewBox", [0, 0, width, height].join(" ")),
-        formatDecimal = d3.format(".02f"),
         formatDollars = function(n) {
-          return "$" + formatDecimal(n);
+          return "$" + formatPrice(n);
         };
 
     var extent = [data.minimum, data.maximum],
@@ -242,8 +241,8 @@
           .domain(extent)
           .range([left, right]),
         height = d3.scale.linear()
-          .domain(d3.extent(bins, function(d) { return d.count; }))
-          .range([0, bottom - top]);
+          .domain([0].concat(d3.extent(bins, function(d) { return d.count; })))
+          .range([0, 1, bottom - top]);
 
     var xAxis = svg.select(".axis.x");
     if (xAxis.empty()) {
@@ -348,7 +347,7 @@
       .tickFormat(function(d, i) {
         return (i === 0 || i === bins.length)
           ? formatDollars(d)
-          : formatDecimal(d);
+          : formatPrice(d);
       });
     xAxis.call(xa)
       .attr("transform", "translate(" + [0, bottom + 2] + ")")
@@ -357,14 +356,14 @@
           return i === 0 || i === bins.length;
         })
         .select("text")
-            .classed("min", function(d, i) {
-              return i === 0;
-            })
-            .classed("max", function(d, i) {
-              return i === bins.length;
-            })
-          .attr("text-anchor", "end")
-          .attr("transform", "translate(-20,16) rotate(-45)");
+          .classed("min", function(d, i) {
+            return i === 0;
+          })
+          .classed("max", function(d, i) {
+            return i === bins.length;
+          })
+          .style("text-anchor", "end")
+          .attr("transform", "rotate(-35)");
 
     var ya = d3.svg.axis()
       .orient("left")
@@ -663,11 +662,16 @@
       if (d.active) {
         var ref = d.ref;
         d.label = ref.nodeName === 'SELECT'
-          ? ref.options[ref.selectedIndex].text
+          ? getRefLabel(ref)
           : d.value;
       }
       return d;
     });
+
+    function getRefLabel(select) {
+      var option = select.options[select.selectedIndex];
+      return option.getAttribute('data-label') || option.text;
+    }
 
     // key/value pairs for generic descriptive
     // elements
@@ -711,7 +715,7 @@
     f.html(function(d, i) {
       // add a comma between filters, and the word
       // 'and' for the last one
-      var comma = (i > 0 && flen > 2) ? ', ' : ' ',
+      var comma = (i > 0 && flen > 2 && i !== last) ? ', ' : ' ',
           and = comma + ((multiple && i === last)
             ? 'and '
             : ''),
@@ -721,6 +725,7 @@
     })
     .select('a')
       .attr('href', '#')
+      .classed('focus-input', true)
       .on('click', function(d) {
         d3.event.preventDefault();
         d.ref.focus();

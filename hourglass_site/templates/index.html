@@ -7,31 +7,35 @@
 {% endblock %}
 
 {% block body %}
-<div class="container">
-  <h1>Hourglass</h1>
-  <form id="search" class="search" role="form">
-    <div id="primary" class="row">
-      <div class="six columns">
-        <input id="labor_category" name="q" placeholder="Type a labor category" class="search u-full-width" type="text">
-        <div id="query-types">
-          <label><input type="radio" name="query_type" value="match_all" checked> contains words</label>
-          <label><input type="radio" name="query_type" value="match_phrase"> contains phrase</label>
-          <label><input type="radio" name="query_type" value="match_exact"> exact match</label>
+<form id="search" class="search" role="form">
+  <input type="hidden" name="sort" value="current_price">
+  <input type="hidden" name="exclude" value="">
+
+  <section class="search">
+    <div class="container">
+      <div class="row">
+        <div class="six columns">
+          <input id="labor_category" name="q" placeholder="Type a labor category" class="search u-full-width" type="text">
+          <div id="query-types">
+            <label><input type="radio" name="query_type" value="match_all" checked> contains words</label>
+            <label><input type="radio" name="query_type" value="match_phrase"> contains phrase</label>
+            <label><input type="radio" name="query_type" value="match_exact"> exact match</label>
+          </div>
         </div>
-      </div>
-      <div class="six columns">
-        <button id="submit-button" class="submit button-primary">Search</button>
-        <input id="reset-button" class="reset button" type="reset" value="Clear search">
-      </div>
-    </div>
+        <div class="six columns">
+          <button id="submit-button" class="submit button-primary">Search</button>
+          <input id="reset-button" class="reset button" type="reset" value="Clear search">
+        </div>
+      </div><!-- /.row -->
+    </div><!-- /.container -->
+  </section><!-- /.search -->
 
-    <!-- <h2>Filters</h2> -->
+  <section class="filters">
+    <div class="container">
+      <h4>Optional Filters</h4>
 
-    <div class="config row">
-      <div class="filters six columns">
-        <h5>Optional Filters</h5>
-
-        <div class="filter">
+      <div class="row">
+        <div class="filter three columns">
           <label for="min_education">Min. Education Level:</label>
           <select id="min_education" name="min_education">
             <option value="">(none)</option>
@@ -43,13 +47,13 @@
           </select>
         </div>
 
-        <div class="filter">
+        <div class="filter three columns">
           <label for="min_experience">Min. Experience:</label>
           <input id="min_experience" name="min_experience" type="text" placeholder="0">
           years
         </div>
 
-        <div class="filter">
+        <div class="filter three columns">
           <label for="site">Worksite:</label>
           <select id="site" name="site">
             <option value="">(all)</option>
@@ -59,22 +63,20 @@
           </select>
         </div>
 
-        <div class="filter">
+        <div class="filter three columns">
           <label for="business_size">Business Size:</label>
           <select id="business_size" name="business_size">
             <option value="">(all)</option>
-            <option value="s">Small Business</option>
-            <option value="o">Other than Small</option>
+            <option value="s" data-label="small">small business</option>
+            <option value="o">other than small</option>
           </select>
         </div>
 
-        <div class="filter">
+        <div class="filter twelve columns">
           <label for="price">Only search &amp; show prices:</label>
           from <span class="dollars">$</span><input id="price__gte" name="price__gte" type="text" class="price" placeholder="0">
           to <span class="dollars">$</span><input id="price__lte" name="price__lte" type="text" class="price" placeholder="&infin;">
         </div>
-
-
 
         <!--
         <div class="filter">
@@ -92,10 +94,6 @@
         </div>
         -->
 
-        
-
-
-
         <!--
         <div class="filter">
           <label for="fiscal_year">Fiscal Year:</label>
@@ -104,87 +102,66 @@
         </div>
         -->
 
-      </div><!-- /.filters  -->
+      </div><!-- /.row -->
+    </div><!-- /.container -->
+  </section><!-- /.filters  -->
 
-      <div class="graphs six columns">
-        <h5>Price Stats</h5>
-
-        <div class="loading-indicator">
-          <p class="message">Loading results...</p>
-          <div class="error"></div>
+  <section class="results">
+    <div class="container">
+      <div class="row">
+        <p id="description" class="nine columns">
+          Showing <span data-key="count">0</span> of
+          <span class="total" data-key="total">0</span>
+          <span data-key="results">results</span>
+          <span class="filters">
+            <span class="not-empty">with</span>
+          </span>
+        </p>
+        <div id="results-actions" class="three columns">
+          <a id="export-data" class="button button-primary"
+            title="Click to export your search results to an Excel file (CSV)" href="/api/rates/csv/">⬇ Export Data</a>
         </div>
+      </div>
 
-        <div class="graph">
+      <h4>Price Stats</h4>
 
-          <svg id="price-histogram" class="histogram has-data">
-          </svg>
+      <div class="graph">
+        <svg id="price-histogram" class="graph histogram has-data">
+        </svg>
+      </div>
 
-          <!--
-          <div id="price-range" class="range-graph has-data">
-            <span class="tick min left">
-              $<b class="value"></b><br>low
-            </span>
-            <span class="tick max right">
-              $<b class="value"></b><br>high
-            </span>
-            <span class="tick average mark" style="left: 0%">
-              average<br>
-              $<b class="value"></b>
-            </span>
-          </div>
-          -->
+      <div class="loading-indicator">
+        <p class="message">Loading results...</p>
+        <div class="error"></div>
+      </div>
 
-        </div>
+      <table id="results-table" class="results has-data">
+        <thead>
+          <tr>
+            <th class="exclude" data-key="exclude" data-format=""><a id="restore-excluded" class="restore merge-params" href="?exclude="></a></th>
+            <th class="sortable" data-key="labor_category">Labor Category</th>
+            <th class="sortable" data-key="education_level">Min Edu.</th>
+            <th class="sortable" data-key="min_years_experience">Experience&nbsp;(years)</th>
+            <th class="sortable" data-key="current_price" data-format="$%,.02f">Price</th>
+            <th data-key="idv_piid">Contract #</th>
+            <th data-key="vendor_name">Vendor</th>
+            <th class="sortable collapsible collapsed" data-key="schedule">Schedule</th>
+          </tr>
+        </thead>
+        <tfoot>
+          <tr>
+            <td colspan="8">
+              <a href="#results-table">Return to the top</a>
+            </td>
+        </tfoot>
+        <tbody>
+        </tbody>
+      </table>
 
-        <!--
-        <div class="graph">
-          <div id="hourly-wages" class="bar-chart">
-          </div>
-        </div>
-        -->
+    </div><!-- /.container -->
+  </section><!-- /.graphs -->
 
-      </div><!-- /.graphs -->
+</form>
 
-    </div><!-- /.row -->
-
-    <table id="results-table" class="results has-data">
-      <caption>
-        <div class="row">
-          <div id="description" class="nine columns">
-            Showing <span data-key="count">0</span> of
-            <span id="results-count" class="total" data-key="total">0</span>
-            <span data-key="results">results</span>
-            <span class="filters">
-              <span class="not-empty">matching</span>
-            </span>
-          </div>
-          <div id="results-actions" class="three columns">
-            <a id="export-data" class="button button-secondary" title="Click to export your search results to an Excel file (CSV)" href="/api/rates/csv/">Export Data</a>
-          </div>
-        </div>
-      </caption>
-      <thead>
-        <tr>
-          <th class="exclude" data-key="exclude" data-format=""><a id="restore-excluded" class="restore merge-params" href="?exclude="></a></th>
-          <th class="sortable" data-key="labor_category">Labor Category</th>
-          <th class="sortable" data-key="education_level">Min Edu.</th>
-          <th class="sortable" data-key="min_years_experience">Experience&nbsp;(years)</th>
-          <th class="sortable" data-key="current_price" data-format="$%,.02f">Price</th>
-          <th data-key="idv_piid">Contract #</th>
-          <th data-key="vendor_name">Vendor</th>
-          <th class="sortable collapsible collapsed" data-key="schedule">Schedule</th>
-        </tr>
-      </thead>
-      <tbody>
-      </tbody>
-    </table>
-
-    <input type="hidden" name="sort" value="current_price">
-    <input type="hidden" name="exclude" value="">
-
-  </form>
-
-</div>
 <script src="{% static 'hourglass_site/js/index.js' %}"></script>
-
 {% endblock %}

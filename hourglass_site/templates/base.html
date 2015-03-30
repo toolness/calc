@@ -18,7 +18,64 @@
     {% endblock %}
   </head>
   <body>
+
+    <div id="banner">
+      <div class="container">
+        <a class="skip-nav" tabindex="0" href="#main">Skip navigation</a>
+        <p id="usa">
+          <img src="{% static 'hourglass_site/images/flag-usa.png' %}" alt="USA flag">
+          An official website of the U.S. Government</p>
+        <p id="site-status">This website is in alpha.
+          <a href="https://github.com/18F/calc/">Help us improve</a>
+        </p>
+      </div>
+    </div>
+
+    <header>
+      <div class="container">
+        <h1>
+          <acronym title="What does CALC stand for?" class="site-title">CALC</acronym>
+          <span class="site-subtitle">Prices Awarded Tool</span>
+        </h1>
+        <nav>
+          <ul>
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li><a href="{% url 'about' %}">About</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
     {% block body %}
     {% endblock %}
+    </main>
+
+    <footer>
+      <div class="container">
+        <div class="row">
+
+          <div id="code" class="three columns">
+            <p id="github"><a href="https://github.com/18F/calc/">Check out our code on GitHub</a></p>
+          </div>
+
+          <div id="help-wanted" class="six columns">
+            <h3>Want to help develop CALC?</h3>
+            <p>We are always looking for volunteers to try out prototypes.
+              Or drop us a line with your questions and comments.</p>
+            <p><strong>We&rsquo;d love your feedback!</strong>
+              email us at <a href="mailto:calc-18f@gsa.gov">calc-18f@gsa.gov</a></p>
+          </div>
+
+          <div id="logos" class="three columns">
+            <a href="http://gsa.gov"><img alt="General Services Administration logo"
+              src="{% static 'hourglass_site/images/logo-gsa.png' %}"></a>
+            <a href="https://18f.gsa.gov"><img alt="18F logo"
+              src="{% static 'hourglass_site/images/logo-18f.png' %}"></a>
+          </div>
+
+        </div>
+      </div>
+    </footer>
   </body>
 </html>

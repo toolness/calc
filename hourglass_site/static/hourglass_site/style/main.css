@@ -2,282 +2,202 @@
 @import url(skeleton/normalize.css);
 @import url(skeleton/skeleton.css);
 
+body {
+  /* no more Raleway */
+  font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
 * {
           box-sizing: border-box;
      -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
 }
 
-thead th {
-  position: relative;
-  vertical-align: bottom;
+.container {
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
-table {
-  width: 100%;
-}
-
-td, td:first-child, td:last-child,
-th, th:first-child, th:last-child,
-table caption {
-  position: relative;
-  padding: .25em .5em;
-  vertical-align: top;
-}
-
-table caption {
-  padding-bottom: 1.5em;
-  vertical-align: bottom;
-}
-
-th, th:first-child {
-  vertical-align: bottom;
-}
-
-tbody tr:nth-child(odd) td {
-  background: #f9f9f9;
-}
-
-td.sorted {
-  background: #fafafa;
-}
-
-tbody tr:nth-child(odd) td.sorted {
-  background: #f0f0f0;
-}
-
-tbody tr:hover > * {
-  background: #fefef0 !important;
-}
-
-thead th {
-  color: #666;
-  border-bottom: 1px solid;
-}
-
-table caption {
-  color: inherit;
-  text-align: left;
-  font-weight: normal;
-}
-
-th.sortable {
-  text-decoration: underline;
-  cursor: pointer;
-  padding-right: 1.5em;
-}
-
-  th.sorted {
-    color: #000;
-    background: #f8f8f8;
-    position: relative;
+@media (min-width: 400px) {
+  .container {
+    width: 100%;
   }
-
-  th.sortable:after {
-    display: inline-block;
-    line-height: 1em;
-    height: 1em;
-    position: absolute;
-    bottom: .4em;
-    right: 0;
-    margin-top: -.5em;
-    margin-right: .25em;
-  }
-
-  th.sortable:after {
-    content: "▽";
-    font-weight: normal;
-    font-size: .9em;
-  }
-
-  th.sorted:after {
-    content: "▼";
-    font-size: 1em;
-  }
-
-  th.sorted.descending:after {
-    content: "▲";
-  }
-
-th.collapsible {
-  position: relative;
 }
 
-th.collapsible.collapsed {
-  width: 0;
-  font-size: 0;
+@media (min-width: 550px) {
+  .container {
+    width: 100%;
+  }
 }
 
-th.collapsible a.toggle-collapse,
-th.exclude a.restore {
+@media (min-width: 960px) {
+  .container {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+.skip-nav {
   position: absolute;
-  font-size: 1rem;
-  line-height: 1.2em;
-  padding: 2px 4px;
-  text-transform: uppercase;
-  text-decoration: underline;
-  color: #999;
-  top: 0;
-  left: 100%;
-  width: 3em;
-  height: 100%;
+  left: -9999px;
+  height: 0;
 }
 
-th.exclude a.restore {
+.skip-nav:focus {
+  position: relative;
   left: auto;
-  right: .5em;
-  width: 6em;
-  text-align: right;
+  height: auto;
+  display: block;
 }
 
-th.collapsed,
-td.collapsed {
-  width: 1.5em !important;
-  border-left: 1px dotted #E1E1E1;
+/*
+.button,
+.button-primary {
+  font-size: 1.5rem !important;
+  font-weight: normal;
+  line-height: 2rem !important;
+}
+*/
+
+#banner {
+  color: #d9d9d9;
+  font-size: 85%;
+  background: #323A45;
+  padding: .2rem 0;
 }
 
-.autocomplete-suggestions {
-  position: absolute;
-  display: none;
-  z-index: 9999;
-  overflow: hidden;
-  background: #fff;
-
-  max-height: 29.4rem;
-  overflow: hidden;
-  overflow-y: auto;
-  border: 1px solid #ccc;
-}
-
-.autocomplete-suggestion {
-  position: relative;
-  padding: .25em .5em;
-}
-
-.autocomplete-suggestion .count {
-  position: absolute;
-  right: .5em;
-  text-align: right;
-}
-
-.autocomplete-suggestion.selected {
-  color: #fff;
-  background: #1EAEDB;
-}
-
-.graph {
-  position: relative;
-}
-
-.graph > .title {
-  position: absolute;
-}
-
-.loading-indicator,
-.has-data {
-    -webkit-transition: opacity 0.5s linear;
-       -moz-transition: opacity 0.5s linear;
-            transition: opacity 0.5s linear;
-}
-
-.loading .has-data {
-  opacity: .2;
-}
-
-.loading-indicator {
-  opacity: 0;
-  visibility: hidden;
-  max-height: 200px;
-  overflow-y: auto;
-}
-
-  .loading-indicator > * {
+  #banner p {
     margin: 0;
   }
 
-  .loading .loading-indicator {
-    opacity: 1;
-    visibility: visible;
+  #usa img {
+    vertical-align: baseline;
+    position: relative;
+    top: 1px;
+    margin-right: .3rem;
   }
 
-svg {
-  display: block;
-  margin: 0;
-  width: 100%;
-  height: auto;
+  @media (min-width: 600px) {
+    #banner #usa {
+      float: left;
+    }
+
+    #banner #site-status {
+      float: right;
+    }
+  }
+
+header {
+  padding-top: 2rem;
+  color: #fff;
+  background: #044364;
+  background-image: url(../images/background-header.png);
+  background-repeat: repeat;
+  background-size: auto 100%;
 }
 
-svg * {
-  vector-effect: non-scaling-stroke;
+h1 {
+  letter-spacing: 0;
 }
 
-.axis line,
-.axis path {
-  fill: none;
-  stroke-width: 1;
-  stroke: #000;
-  shape-rendering: crispEdges;
+  h1 .site-title {
+    display: block;
+    line-height: 1em;
+  }
+
+  h1 .site-subtitle {
+    font-size: 2rem;
+    display: block;
+  }
+
+nav ul {
+  list-style: none;
+  margin: 0 0 1rem 0;
+  padding: 0;
 }
 
-.axis text {
-  font-size: 13px;
-}
+  nav ul li {
+    list-style: none;
+    float: left;
+    margin: 0;
+  }
 
-.avg .value,
-.axis .tick.primary text {
-  font-weight: bold;
-}
+  nav ul:after {
+    content: " ";
+    display: table;
+    clear: both;
+  }
 
-svg.histogram rect {
-  fill: #999;
-  stroke: #fff;
-  stroke-width: 1;
-}
-
-svg.histogram .avg line {
-  stroke-width: 1;
-  stroke: #000;
-}
-
-.filter_active  {
-  border: 2px solid #ffd855 !important;
-}
-
-input:focus,
-select:focus {
-  border: 2px solid #33C3F0 !important;
-}
-
-#labor_category {
-  margin-bottom: .5rem;
-}
-
-#query-types {
-  padding: 0 1rem;
-}
-
-  #query-types label {
+  nav ul li a {
     display: inline-block;
-    font-weight: normal;
-    margin: 0 1rem 0 0;
+    color: #fff;
+    font-weight: bold;
+    padding: .2rem 1.5rem .5rem;
+    text-decoration: none;
+    text-transform: uppercase;
   }
 
-  #query-types label input {
-    margin-right: .5rem;
+  nav ul li a:hover {
+    color: #fff;
+    text-decoration: underline;
   }
 
-  td.column-exclude {
-    /* padding-right: 0; */
+  nav ul li:first-child {
+    margin-left: -1.5rem;
   }
 
-td.column-exclude a {
-  color: #999;
-  font-size: 1.2em;
-  line-height: 1rem;
-  font-weight: bold;
-  text-decoration: none;
+  nav ul li + li {
+    border-left: 1px solid #fff;
+  }
+
+main {
+  margin: 2rem 0;
 }
 
-  td.column-exclude a:hover {
-    color: #000;
+footer {
+  color: #fff;
+  background: #444749;
+  padding: 2rem 0;
+}
+
+  footer a,
+  footer a:hover {
+    color: #fff;
   }
+
+  footer h3 {
+    color: #ff0;
+    font-size: 2.5rem;
+    letter-spacing: 0;
+  }
+
+  /*
+  footer .columns {
+    padding-left: 2rem;
+  }
+
+  footer .columns:first-child {
+    padding-left: 0;
+  }
+  */
+
+  /*
+   * this doesn't work because the column heights vary
+  footer .columns + .columns {
+    border-left: 1px solid #808183;
+  }
+  */
+
+#logos {
+  text-align: right;
+}
+
+#logos a {
+  display: inline-block;
+  margin-left: 1rem;
+}
+
+#logos a img {
+  width: 85px;
+  height: 85px;
+}
