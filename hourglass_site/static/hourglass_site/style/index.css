@@ -88,10 +88,12 @@ span.dollars {
 }
 
 section.filters {
-  background: #eee;
+  background: #F3F3F3;
   padding: 1rem 0;
 }
-
+section.search {
+  padding: .5rem 0 1rem 0;
+}
 .results {
   padding: 1rem 0;
 }
