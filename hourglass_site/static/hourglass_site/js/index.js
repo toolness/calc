@@ -493,7 +493,7 @@
         len = excluded.length,
         rows = 'row' + (len === 1 ? '' : 's'),
         text = len > 0
-          ? ['Restore', len, rows].join(' ')
+          ? ['★ Restore', len, rows].join(' ')
           : '';
     d3.select('#restore-excluded')
       .style('display', len > 0
@@ -585,7 +585,11 @@
     headers.each(updateCollapsed)
 
     function updateCollapsed(d) {
-      var title = [d.collapsed ? "Show" : "Hide", d.label].join(" ");
+      var title = [
+        d.collapsed ? "Show" : "Hide",
+        d.label,
+        d.collapsed ? "▼" : ""
+      ].join(" ");
 
       d3.select(this)
         .classed("collapsed", d.collapsed)
