@@ -172,3 +172,7 @@ a.focus-input {
   #query-types label input {
     margin-right: .5rem;
   }
+
+#price-histogram {
+  max-height: 200px;
+}

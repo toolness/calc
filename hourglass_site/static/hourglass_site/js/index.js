@@ -17,6 +17,9 @@
       loadingIndicator = search.select(".loading-indicator"),
       request;
 
+  // JFYI
+  var HISTOGRAM_BINS = 12;
+
   form.on("submit", function onsubmit(data, e) {
     e.preventDefault();
     submit(true);
@@ -134,7 +137,7 @@
     // cancel the outbound request if there is one
     if (request) request.abort();
     var defaults = {
-      histogram: 12
+      histogram: HISTOGRAM_BINS
     };
     request = api.get({
       uri: "rates", 
@@ -226,7 +229,7 @@
         ]
       };
   function updatePriceHistogram(data) {
-    var width = 960,
+    var width = 640,
         height = 200,
         pad = [30, 15, 60, 60],
         top = pad[0],
@@ -234,7 +237,8 @@
         right = width - pad[1],
         bottom = height - pad[2],
         svg = d3.select("#price-histogram")
-          .attr("viewBox", [0, 0, width, height].join(" ")),
+          .attr("viewBox", [0, 0, width, height].join(" "))
+          .attr("preserveAspectRatio", "xMinYMid meet"),
         formatDollars = function(n) {
           return "$" + formatPrice(n);
         };
