@@ -15,6 +15,7 @@
     <script src="{% static 'hourglass_site/js/vendor/jquery.min.js' %}"></script>
     <script src="{% static 'hourglass_site/js/vendor/formdb.min.js' %}"></script>
     <script src="{% static 'hourglass_site/js/hourglass.js' %}"></script>
+    <link href='https://fonts.googleapis.com/css?family=Raleway:600|Open+Sans:300' rel='stylesheet' type='text/css'>
     {% block head %}
     {% endblock %}
   </head>
@@ -27,17 +28,14 @@
           <img src="{% static 'hourglass_site/images/flag-usa.png' %}" alt="USA flag">
           An official website of the U.S. Government</p>
         <p id="site-status">This website is in alpha.
-          <a href="https://github.com/18F/calc/">Help us improve</a>
+          <a href="#help-wanted">Help us improve</a>
         </p>
       </div>
     </div>
 
     <header>
       <div class="container">
-        <h1>
-          <acronym title="What does CALC stand for?" class="site-title">CALC</acronym>
-          <span class="site-subtitle">Prices Awarded Tool</span>
-        </h1>
+        <a href="{% url 'index' %}"><img class="logo" src="{% static 'hourglass_site/images/calc_logo_alt.png' %}" alt="CALC: Contract Awarded Labor Category Tool"></a>
         <nav>
           <ul>
             <li><a href="{% url 'index' %}">Home</a></li>
@@ -57,15 +55,21 @@
         <div class="row">
 
           <div id="code" class="three columns">
-            <p id="github"><a href="https://github.com/18F/calc/">Check out our code on GitHub</a></p>
+                <div id="footer_nav">
+                    <ul>
+                        <li><a href="https://github.com/18F/calc"><img alt="GitHub Logo" src="https://mirage-gsa-gov.s3.amazonaws.com:443/mirage_site/images/github_icon.png"> View our code on GitHub</a></li>
+                    <!--    <li><a href="/docs/">Read the API documentation</a></li>-->
+                    </ul>
+                </div><!--end footer_nav<!-->
+           
           </div>
 
           <div id="help-wanted" class="six columns">
-            <h3>Want to help develop CALC?</h3>
-            <p>We are always looking for volunteers to try out prototypes.
-              Or drop us a line with your questions and comments.</p>
-            <p><strong>We&rsquo;d love your feedback!</strong>
-              email us at <a href="mailto:calc-18f@gsa.gov">calc-18f@gsa.gov</a></p>
+            <h3>Want to help improve CALC?</h3>
+            <p>We are always looking for volunteers to try out prototypes. <br />
+              Or drop us a line with your questions and comments. <br />
+            <strong>We want your feedback!</strong></p>
+              <span class="email_us">Email us at <a href="mailto:calc-18f@gsa.gov">calc-18f@gsa.gov</a></span>
           </div>
 
           <div id="logos" class="three columns">
