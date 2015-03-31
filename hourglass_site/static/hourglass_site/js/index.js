@@ -118,9 +118,13 @@
 
   function submit(pushState) {
     var data = form.getData();
-    inputs.classed("filter_active", function() {
-      return !!this.value;
-    });
+    inputs
+      .filter(function() {
+        return this.type !== 'radio' && this.type !== 'checkbox';
+      })
+      .classed("filter_active", function() {
+        return !!this.value;
+      });
 
     console.log("submitting:", data);
 
@@ -492,6 +496,9 @@
           ? ['Restore', len, rows].join(' ')
           : '';
     d3.select('#restore-excluded')
+      .style('display', len > 0
+        ? null
+        : 'none')
       .attr('title', rows + ': ' + excluded.join(', '))
       .text(text);
   }
