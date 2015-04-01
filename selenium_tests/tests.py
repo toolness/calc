@@ -15,7 +15,16 @@ class FunctionalTests(LiveServerTestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.driver = webdriver.PhantomJS()
+        if settings.SAUCE:
+            desired_capabilities = DesiredCapabilities.CHROME
+            sauce_url = 'http://%s:%s@ondemand.saucelabs.com:80/wd/hub'
+            cls.driver = webdriver.Remote(
+                desired_capabilities=desired_capabilities,
+                command_executor=sauce_url % (settings.SAUCE_USERNAME, settings.SAUCE_ACCESS_KEY)
+            )
+        else:
+            cls.driver = webdriver.PhantomJS()
+
         # cls.driver = webdriver.Firefox()
         cls.longMessage = True
         cls.maxDiff = None
@@ -26,19 +35,15 @@ class FunctionalTests(LiveServerTestCase):
         cls.driver.quit()
 
     def setUp(self):
-        if settings.SAUCE:
-            self.live_server_url = "http://%s" % settings.DOMAIN_TO_TEST
-            self.desired_capabilities = DesiredCapabilities.CHROME
-            sauce_url = "http://%s:%s@ondemand.saucelabs.com:80/wd/hub"
-            self.driver = webdriver.Remote(
-                desired_capabilities=self.desired_capabilities,
-                command_executor=sauce_url % (settings.SAUCE_USERNAME, settings.SAUCE_ACCESS_KEY)
-            )
+        if settings.DOMAIN_TO_TEST:
+            self.base_url = "http://%s" % settings.DOMAIN_TO_TEST
+        else:
+            self.base_url = self.live_server_url
 
         super(FunctionalTests, self).setUp()
 
     def load(self, uri='/'):
-        self.driver.get(self.live_server_url + uri)
+        self.driver.get(self.base_url + uri)
         return self.driver
 
     def load_and_wait(self, uri='/'):
@@ -390,6 +395,7 @@ def find_column_header(driver, col_name):
 
 def get_column_headers(driver):
     return driver.find_elements_by_xpath('//thead/tr/th')
+
 
 # We only need this monkey patch here because the stack traces clutter up the
 # test results output. --shawn
