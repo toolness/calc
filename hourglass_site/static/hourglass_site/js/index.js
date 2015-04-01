@@ -17,6 +17,9 @@
       loadingIndicator = search.select(".loading-indicator"),
       request;
 
+  // JFYI
+  var HISTOGRAM_BINS = 12;
+
   form.on("submit", function onsubmit(data, e) {
     e.preventDefault();
     submit(true);
@@ -118,9 +121,13 @@
 
   function submit(pushState) {
     var data = form.getData();
-    inputs.classed("filter_active", function() {
-      return !!this.value;
-    });
+    inputs
+      .filter(function() {
+        return this.type !== 'radio' && this.type !== 'checkbox';
+      })
+      .classed("filter_active", function() {
+        return !!this.value;
+      });
 
     console.log("submitting:", data);
 
@@ -130,7 +137,7 @@
     // cancel the outbound request if there is one
     if (request) request.abort();
     var defaults = {
-      histogram: 12
+      histogram: HISTOGRAM_BINS
     };
     request = api.get({
       uri: "rates", 
@@ -222,7 +229,7 @@
         ]
       };
   function updatePriceHistogram(data) {
-    var width = 960,
+    var width = 640,
         height = 200,
         pad = [30, 15, 60, 60],
         top = pad[0],
@@ -230,7 +237,8 @@
         right = width - pad[1],
         bottom = height - pad[2],
         svg = d3.select("#price-histogram")
-          .attr("viewBox", [0, 0, width, height].join(" ")),
+          .attr("viewBox", [0, 0, width, height].join(" "))
+          .attr("preserveAspectRatio", "xMinYMid meet"),
         formatDollars = function(n) {
           return "$" + formatPrice(n);
         };
@@ -489,9 +497,12 @@
         len = excluded.length,
         rows = 'row' + (len === 1 ? '' : 's'),
         text = len > 0
-          ? ['Restore', len, rows].join(' ')
+          ? ['★ Restore', len, rows].join(' ')
           : '';
     d3.select('#restore-excluded')
+      .style('display', len > 0
+        ? null
+        : 'none')
       .attr('title', rows + ': ' + excluded.join(', '))
       .text(text);
   }
@@ -578,7 +589,11 @@
     headers.each(updateCollapsed)
 
     function updateCollapsed(d) {
-      var title = [d.collapsed ? "Show" : "Hide", d.label].join(" ");
+      var title = [
+        d.collapsed ? "Show" : "Hide",
+        d.label,
+        d.collapsed ? "▼" : ""
+      ].join(" ");
 
       d3.select(this)
         .classed("collapsed", d.collapsed)
