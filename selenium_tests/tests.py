@@ -11,7 +11,6 @@ from itertools import cycle
 import re
 import time
 
-
 class FunctionalTests(LiveServerTestCase):
 
     @classmethod
@@ -293,7 +292,9 @@ class FunctionalTests(LiveServerTestCase):
             node = histogram.find_element_by_class_name(metric)
             self.assertTrue(node.text.startswith(u'$'), "histogram '.%s' node does not start with '$': '%s'" % (metric, node.text))
 
-    def test_histogram_shows_intevals(self):
+    # XXX this test is deprecated because it's too brittle.
+    # We shouldn't really care about the number of x-axis ticks.
+    def xtest_histogram_shows_intevals(self):
         get_contract_recipe().make(_quantity=5)
         driver = self.load_and_wait()
         ticks = driver.find_elements_by_css_selector('.histogram .x.axis .tick')
