@@ -64,7 +64,7 @@
         if (autoCompReq) autoCompReq.abort();
         var data = form.getData();
         autoCompReq = api.get({
-          uri: "search",
+          uri: "search/",
           data: {
             q: term,
             query_type: data.query_type
@@ -140,7 +140,7 @@
       histogram: HISTOGRAM_BINS
     };
     request = api.get({
-      uri: "rates", 
+      uri: "rates/",
       data: hourglass.extend(defaults, data)
     }, update);
 
@@ -166,17 +166,17 @@
     request = null;
 
     if (error) {
-      if (error.statusText === "abort") {
+      if (error === "abort") {
         // ignore aborts
         return;
       }
 
       search.classed("error", true);
 
-      loadingIndicator.select(".error")
-        .text(error.responseText);
+      loadingIndicator.select(".error-message")
+        .text(error);
 
-      console.error(error.responseText);
+      console.error('request error:', error);
     } else {
       search.classed("error", false);
     }
