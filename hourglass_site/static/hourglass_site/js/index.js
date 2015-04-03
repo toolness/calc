@@ -189,12 +189,12 @@
     if (res && res.results && res.results.length) {
       // updatePriceRange(res);
       updatePriceHistogram(res);
-      updateResults(res.results || []);
+      updateResults(res);
     } else {
       res = EMPTY_DATA;
       // updatePriceRange(EMPTY_DATA);
-      updatePriceHistogram(EMPTY_DATA);
-      updateResults([]);
+      updatePriceHistogram(res);
+      updateResults(res);
     }
   }
 
@@ -224,6 +224,8 @@
         minimum: 0,
         maximum: .001,
         average: 0,
+        count: 0,
+        results: [],
         wage_histogram: [
           {count: 0, min: 0, max: 0}
         ]
@@ -386,9 +388,10 @@
     histogramUpdated = true;
   }
 
-  function updateResults(results) {
+  function updateResults(data) {
+    var results = data.results;
     d3.select("#results-count")
-      .text(formatCommas(results.length));
+      .text(formatCommas(data.count));
 
     resultsTable.style("display", null);
 
