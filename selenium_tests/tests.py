@@ -36,7 +36,7 @@ def _get_webdriver(name):
 class FunctionalTests(LiveServerTestCase):
     connect = None
     driver = None
-    screenshot_filename = 'selenium-screenshot.png'
+    screenshot_filename = 'selenium_tests/screenshot.png'
     window_size = (1000, 1000)
 
     @classmethod
