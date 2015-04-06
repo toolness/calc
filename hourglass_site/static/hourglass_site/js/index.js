@@ -1,4 +1,13 @@
 (function(exports) {
+  if (typeof console === 'undefined') {
+    var noop = function() {};
+    console = {
+      log: noop,
+      warn: noop,
+      debug: noop,
+      error: noop
+    };
+  }
 
   // for IE9: History API polyfill
   var location = window.history.location || window.location;
