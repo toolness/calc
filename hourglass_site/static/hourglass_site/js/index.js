@@ -1,4 +1,13 @@
 (function(exports) {
+  if (typeof console === 'undefined') {
+    var noop = function() {};
+    console = {
+      log: noop,
+      warn: noop,
+      debug: noop,
+      error: noop
+    };
+  }
 
   // for IE9: History API polyfill
   var location = window.history.location || window.location;
@@ -64,7 +73,7 @@
         if (autoCompReq) autoCompReq.abort();
         var data = form.getData();
         autoCompReq = api.get({
-          uri: "search",
+          uri: "search/",
           data: {
             q: term,
             query_type: data.query_type
@@ -140,7 +149,7 @@
       histogram: HISTOGRAM_BINS
     };
     request = api.get({
-      uri: "rates", 
+      uri: "rates/",
       data: hourglass.extend(defaults, data)
     }, update);
 
@@ -166,17 +175,17 @@
     request = null;
 
     if (error) {
-      if (error.statusText === "abort") {
+      if (error === "abort") {
         // ignore aborts
         return;
       }
 
       search.classed("error", true);
 
-      loadingIndicator.select(".error")
-        .text(error.responseText);
+      loadingIndicator.select(".error-message")
+        .text(error);
 
-      console.error(error.responseText);
+      console.error('request error:', error);
     } else {
       search.classed("error", false);
     }
@@ -189,12 +198,12 @@
     if (res && res.results && res.results.length) {
       // updatePriceRange(res);
       updatePriceHistogram(res);
-      updateResults(res.results || []);
+      updateResults(res);
     } else {
       res = EMPTY_DATA;
       // updatePriceRange(EMPTY_DATA);
-      updatePriceHistogram(EMPTY_DATA);
-      updateResults([]);
+      updatePriceHistogram(res);
+      updateResults(res);
     }
   }
 
@@ -224,6 +233,8 @@
         minimum: 0,
         maximum: .001,
         average: 0,
+        count: 0,
+        results: [],
         wage_histogram: [
           {count: 0, min: 0, max: 0}
         ]
@@ -386,9 +397,10 @@
     histogramUpdated = true;
   }
 
-  function updateResults(results) {
+  function updateResults(data) {
+    var results = data.results;
     d3.select("#results-count")
-      .text(formatCommas(results.length));
+      .text(formatCommas(data.count));
 
     resultsTable.style("display", null);
 
