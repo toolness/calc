@@ -24,9 +24,9 @@ API_HOST = os.environ.get('API_HOST', '')
 SECRET_KEY = 'i=-6!=jo-qh3sh!z=uo_2)5wf*_@ogw9eam3e0_53hp4)cp53!'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-TEMPLATE_DEBUG = True
+TEMPLATE_DEBUG = False
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'hourglass/templates'),
     os.path.join(BASE_DIR, 'hourglass_site/templates'),
