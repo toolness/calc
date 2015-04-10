@@ -3,6 +3,7 @@
  */
 table {
   width: 100%;
+  margin-top: 2rem;
 }
 
 thead th {
@@ -105,21 +106,20 @@ th.collapsible a.toggle-collapse,
 th.exclude a.restore {
   position: absolute;
   font-size: 1rem;
-  line-height: 1.2em;
-  padding: 2px 4px;
+  padding: 2px 0;
+  /* border: 1px solid red; */
   text-transform: uppercase;
   text-decoration: underline;
   color: #999;
-  top: 0;
-  left: 100%;
-  width: 3em;
-  height: 100%;
+  white-space: nowrap;
+  vertical-align: bottom;
+  bottom: 100%;
+  left: 0;
 }
 
-th.exclude a.restore {
+th.collapsible:last-child a.toggle-collapse {
   left: auto;
-  right: .5em;
-  width: 6em;
+  right: 0;
   text-align: right;
 }
 

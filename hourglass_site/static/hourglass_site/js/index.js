@@ -1,4 +1,13 @@
 (function(exports) {
+  if (typeof console === 'undefined') {
+    var noop = function() {};
+    console = {
+      log: noop,
+      warn: noop,
+      debug: noop,
+      error: noop
+    };
+  }
 
   // for IE9: History API polyfill
   var location = window.history.location || window.location;
@@ -16,6 +25,9 @@
         .call(setupColumnHeader),
       loadingIndicator = search.select(".loading-indicator"),
       request;
+
+  // JFYI
+  var HISTOGRAM_BINS = 12;
 
   form.on("submit", function onsubmit(data, e) {
     e.preventDefault();
@@ -61,7 +73,7 @@
         if (autoCompReq) autoCompReq.abort();
         var data = form.getData();
         autoCompReq = api.get({
-          uri: "search",
+          uri: "search/",
           data: {
             q: term,
             query_type: data.query_type
@@ -118,9 +130,13 @@
 
   function submit(pushState) {
     var data = form.getData();
-    inputs.classed("filter_active", function() {
-      return !!this.value;
-    });
+    inputs
+      .filter(function() {
+        return this.type !== 'radio' && this.type !== 'checkbox';
+      })
+      .classed("filter_active", function() {
+        return !!this.value;
+      });
 
     console.log("submitting:", data);
 
@@ -130,10 +146,10 @@
     // cancel the outbound request if there is one
     if (request) request.abort();
     var defaults = {
-      histogram: 12
+      histogram: HISTOGRAM_BINS
     };
     request = api.get({
-      uri: "rates/", 
+      uri: "rates/",
       data: hourglass.extend(defaults, data)
     }, update);
 
@@ -159,17 +175,17 @@
     request = null;
 
     if (error) {
-      if (error.statusText === "abort") {
+      if (error === "abort") {
         // ignore aborts
         return;
       }
 
       search.classed("error", true);
 
-      loadingIndicator.select(".error")
-        .text(error.responseText);
+      loadingIndicator.select(".error-message")
+        .text(error);
 
-      console.error(error.responseText);
+      console.error('request error:', error);
     } else {
       search.classed("error", false);
     }
@@ -182,12 +198,12 @@
     if (res && res.results && res.results.length) {
       // updatePriceRange(res);
       updatePriceHistogram(res);
-      updateResults(res.results || []);
+      updateResults(res);
     } else {
       res = EMPTY_DATA;
       // updatePriceRange(EMPTY_DATA);
-      updatePriceHistogram(EMPTY_DATA);
-      updateResults([]);
+      updatePriceHistogram(res);
+      updateResults(res);
     }
   }
 
@@ -217,12 +233,14 @@
         minimum: 0,
         maximum: .001,
         average: 0,
+        count: 0,
+        results: [],
         wage_histogram: [
           {count: 0, min: 0, max: 0}
         ]
       };
   function updatePriceHistogram(data) {
-    var width = 960,
+    var width = 640,
         height = 200,
         pad = [30, 15, 60, 60],
         top = pad[0],
@@ -230,7 +248,8 @@
         right = width - pad[1],
         bottom = height - pad[2],
         svg = d3.select("#price-histogram")
-          .attr("viewBox", [0, 0, width, height].join(" ")),
+          .attr("viewBox", [0, 0, width, height].join(" "))
+          .attr("preserveAspectRatio", "xMinYMid meet"),
         formatDollars = function(n) {
           return "$" + formatPrice(n);
         };
@@ -378,9 +397,10 @@
     histogramUpdated = true;
   }
 
-  function updateResults(results) {
+  function updateResults(data) {
+    var results = data.results;
     d3.select("#results-count")
-      .text(formatCommas(results.length));
+      .text(formatCommas(data.count));
 
     resultsTable.style("display", null);
 
@@ -489,9 +509,12 @@
         len = excluded.length,
         rows = 'row' + (len === 1 ? '' : 's'),
         text = len > 0
-          ? ['Restore', len, rows].join(' ')
+          ? ['★ Restore', len, rows].join(' ')
           : '';
     d3.select('#restore-excluded')
+      .style('display', len > 0
+        ? null
+        : 'none')
       .attr('title', rows + ': ' + excluded.join(', '))
       .text(text);
   }
@@ -578,7 +601,11 @@
     headers.each(updateCollapsed)
 
     function updateCollapsed(d) {
-      var title = [d.collapsed ? "Show" : "Hide", d.label].join(" ");
+      var title = [
+        d.collapsed ? "Show" : "Hide",
+        d.label,
+        d.collapsed ? "▼" : ""
+      ].join(" ");
 
       d3.select(this)
         .classed("collapsed", d.collapsed)

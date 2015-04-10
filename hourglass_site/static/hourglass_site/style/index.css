@@ -174,3 +174,14 @@ a.focus-input {
   #query-types label input {
     margin-right: .5rem;
   }
+
+#price-histogram {
+  max-height: 200px;
+}
+
+#search[class="search"] {
+  border: 10px solid orange;
+}
+
+#search.error { border-color: red; }
+#search.loaded { border-color: green; }

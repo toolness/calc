@@ -4,7 +4,7 @@
 
 body {
   /* no more Raleway */
-  font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
 }
 
 * {
@@ -14,23 +14,12 @@ body {
 }
 
 .container {
+  width: 100%;
   padding-left: 20px;
   padding-right: 20px;
 }
 
-@media (min-width: 400px) {
-  .container {
-    width: 100%;
-  }
-}
-
-@media (min-width: 550px) {
-  .container {
-    width: 100%;
-  }
-}
-
-@media (min-width: 960px) {
+@media (min-width: 980px) {
   .container {
     padding-left: 0;
     padding-right: 0;
@@ -64,6 +53,7 @@ body {
   font-size: 85%;
   background: #323A45;
   padding: .2rem 0;
+  text-align: center;
 }
 
   #banner p {
@@ -78,6 +68,10 @@ body {
   }
 
   @media (min-width: 600px) {
+    #banner {
+      text-align: left;
+    }
+
     #banner #usa {
       float: left;
     }

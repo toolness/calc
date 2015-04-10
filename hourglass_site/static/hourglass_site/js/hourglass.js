@@ -1,5 +1,8 @@
 (function(hourglass) {
 
+  // enable CORS support
+  $.support.cors = true;
+
   /**
    * The API class is used to access the Hourglass REST API. Usage:
    *
@@ -54,11 +57,15 @@
           data = hourglass.extend({
             format: "json"
           }, hourglass.qs.coerce(request.data));
-      return $.getJSON(url, data)
+      return $.ajax({
+          url: url,
+          dataType: 'json',
+          data: data
+        })
         .done(function(data) {
           return callback(null, data);
         })
-        .fail(function(error) {
+        .fail(function(req, status, error) {
           return callback(error);
         });
     }
