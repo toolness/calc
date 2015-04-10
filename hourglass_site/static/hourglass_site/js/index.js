@@ -451,17 +451,26 @@
       return d.key !== 'exclude';
     })
     .html(function(d) {
+      
       return d.column.collapsed ? "" : d.string;
+
     });
 
     // add a link to incoming exclusion cells
     enter.filter(function(d) {
       return d.key === 'exclude';
     })
+    
     .append('a')
       .attr('class', 'exclude-row')
-      .attr('title', 'Exclude this item from your search')
+
+      .attr('title', function(d){
+          console.log(d);
+          return 'Exclude ' + d.row.labor_category + ' from your search';
+      })
+
       .html('&times;');
+
 
     // update the links on all exclude cells
     td.filter(function(d) {
