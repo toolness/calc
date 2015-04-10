@@ -1,19 +1,20 @@
 ---
 # all applications use these settings and services
-memory: 512M
+memory: 1536M
 instances: 1
 # services:
 # - db-hourglass-test
 applications:
-- name: hourglass-dev
-  path: .
-  timeout: 180
-  host: calc-dev
+#- name: hourglass-dev
+#  path: .
+#  timeout: 180
+#  host: calc-dev
 
 - name: hourglass-prod
   path: .
   timeout: 180
-  host: calc
+  buildpack: https://github.com/cloudfoundry/python-buildpack.git
+#  command: sh initdb.sh
 
 
 
