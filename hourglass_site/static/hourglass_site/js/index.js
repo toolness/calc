@@ -25,11 +25,19 @@
     submit(true);
   });
 
-  form.on("reset", function onreset() {
-    form.setData({});
-    // $search.focus();
-    submit(true);
-  });
+  /*
+   * For some reason, the browser's native form reset isn't working.
+   * So instead of just listening for a "reset" event and submitting,
+   * we hijack the click event on the reset button and reset the form
+   * manually.
+   */
+  search.select('input[type="reset"]')
+    .on('click', function reset() {
+      form.reset();
+      console.log("reset:", form.getData());
+      submit(true);
+      d3.event.preventDefault();
+    });
 
   inputs.on("change", function onchange() {
     submit(true);
