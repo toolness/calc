@@ -463,9 +463,7 @@
     
     .append('a')
       .attr('class', 'exclude-row')
-
       .attr('title', function(d){
-          console.log(d);
           return 'Exclude ' + d.row.labor_category + ' from your search';
       })
 
