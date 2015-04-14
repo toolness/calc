@@ -11,7 +11,10 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 import sys
+import dj_database_url
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+
+API_HOST = os.environ.get('API_HOST', '')
 
 
 # Quick-start development settings - unsuitable for production
@@ -21,15 +24,15 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = 'i=-6!=jo-qh3sh!z=uo_2)5wf*_@ogw9eam3e0_53hp4)cp53!'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-TEMPLATE_DEBUG = True
+TEMPLATE_DEBUG = False
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'hourglass/templates'),
     os.path.join(BASE_DIR, 'hourglass_site/templates'),
 )
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -50,16 +53,31 @@ INSTALLED_APPS = (
     'rest_framework',
 
     'django_nose',
+    'corsheaders',
 )
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+    #'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+)
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'hourglass.context_processors.api_host',
+    "django.contrib.auth.context_processors.auth",
+    "django.core.context_processors.debug",
+    "django.core.context_processors.i18n",
+    "django.core.context_processors.media",
+    'django.core.context_processors.request',
+    "django.core.context_processors.static",
+    "django.core.context_processors.tz",
+    "django.contrib.messages.context_processors.messages"
+
 )
 
 ROOT_URLCONF = 'hourglass.urls'
@@ -82,6 +100,8 @@ USE_L10N = True
 
 USE_TZ = True
 
+#django cors headers
+CORS_ORIGIN_ALLOW_ALL = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
@@ -89,9 +109,19 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
+STATICFILES_DIRS = (
+#    os.path.join(BASE_DIR, 'static'),
+)
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+
 PAGINATION = 200
 REST_FRAMEWORK = {
-    'COERCE_DECIMAL_TO_STRING': False
+    'COERCE_DECIMAL_TO_STRING': False,
+    'WHITELIST': eval(os.environ.get('WHITELISTED_IPS', 'False')),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'api.permissions.WhiteListPermission',
+    ),
+
 }
 
 LOGGING = {
@@ -120,27 +150,31 @@ LOGGING = {
             'formatter': 'verbose'
         },
         'console': {
-            'level': 'WARN',
+            'level': 'INFO',
             'class': 'logging.StreamHandler',
-            'formatter': 'simple',
-            'stream': sys.stdout
+            'formatter': 'verbose'
         },
     },
     'loggers': {
         'django': {
-            'handlers':['file'],
+            'handlers':['console', 'file'],
             'propagate': True,
             'level':'INFO',
         },
         'contracts': {
-            'handlers': ['contracts_file', 'console'],
-            'level':'DEBUG',
+            'handlers': ['console', 'contracts_file'],
+            'propagate': True,
+            'level':'INFO',
         },
     },
 }
 
+DATABASES = {}
+DATABASES['default'] =  dj_database_url.config()
 
 try:
     from hourglass.local_settings import *
 except:
     pass
+
+

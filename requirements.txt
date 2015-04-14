@@ -1,4 +1,6 @@
-Django==1.7.1
+whitenoise==1.0.6
+dj-database-url==0.3.0
+Django==1.7.6
 djangorestframework==3.0.2
 -e git+https://github.com/djangonauts/djorm-ext-pgfulltext.git#egg=djorm_ext_pgfulltext-master
 psycopg2==2.5.4
@@ -7,3 +9,5 @@ model_mommy
 numpy==1.9.1
 nose
 django_nose
+waitress==0.8.9
+django-cors-headers

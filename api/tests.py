@@ -654,6 +654,7 @@ class ContractsTest(TestCase):
     def make_test_set(self):
         mommy.make(
                 Contract,
+                id=1,
                 idv_piid="ABC123",
                 piid="123",
                 vendor_name="ACME Corp.",
@@ -664,6 +665,7 @@ class ContractsTest(TestCase):
         )
         mommy.make(
                 Contract,
+                id=2,
                 idv_piid="ABC234",
                 piid="234",
                 vendor_name="Numbers R Us",
@@ -675,6 +677,7 @@ class ContractsTest(TestCase):
         )
         mommy.make(
                 Contract,
+                id=3,
                 idv_piid="ABC345",
                 piid="345",
                 vendor_name="Word Power Co.",
