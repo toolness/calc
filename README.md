@@ -16,7 +16,7 @@ If you're using Python 2, install the necessary dependencies with:
 pip install -r requirements_python2.txt
 ```
 
-Currently, Hourglass is a basic [Django] project. You can get started by creating
+Currently, CALC is a basic [Django] project. You can get started by creating
 a `local_settings.py` file (based off of `local_settings.example.py`) with your
 local database configuration, and running:
 

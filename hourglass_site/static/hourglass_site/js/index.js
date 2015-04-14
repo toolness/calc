@@ -34,11 +34,19 @@
     submit(true);
   });
 
-  form.on("reset", function onreset() {
-    form.setData({});
-    // $search.focus();
-    submit(true);
-  });
+  /*
+   * For some reason, the browser's native form reset isn't working.
+   * So instead of just listening for a "reset" event and submitting,
+   * we hijack the click event on the reset button and reset the form
+   * manually.
+   */
+  search.select('input[type="reset"]')
+    .on('click', function reset() {
+      form.reset();
+      console.log("reset:", form.getData());
+      submit(true);
+      d3.event.preventDefault();
+    });
 
   inputs.on("change", function onchange() {
     submit(true);
@@ -457,17 +465,24 @@
       return d.key !== 'exclude';
     })
     .html(function(d) {
+      
       return d.column.collapsed ? "" : d.string;
+
     });
 
     // add a link to incoming exclusion cells
     enter.filter(function(d) {
       return d.key === 'exclude';
     })
+    
     .append('a')
       .attr('class', 'exclude-row')
-      .attr('title', 'Exclude this item from your search')
+      .attr('title', function(d){
+          return 'Exclude ' + d.row.labor_category + ' from your search';
+      })
+
       .html('&times;');
+
 
     // update the links on all exclude cells
     td.filter(function(d) {

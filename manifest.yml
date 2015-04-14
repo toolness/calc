@@ -1,0 +1,24 @@
+---
+# all applications use these settings and services
+memory: 1536M
+instances: 1
+# services:
+# - db-hourglass-test
+applications:
+#- name: hourglass-dev
+#  path: .
+#  timeout: 180
+#  host: calc-dev
+
+- name: hourglass-prod
+  path: .
+  timeout: 180
+  buildpack: https://github.com/cloudfoundry/python-buildpack.git
+#  command: sh initdb.sh
+
+
+
+#- name: hourglass-dev-load-data
+ # path: .
+ # no-route: true
+ # command: python manage.py load_data
