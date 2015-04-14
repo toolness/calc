@@ -267,9 +267,11 @@
         x = d3.scale.linear()
           .domain(extent)
           .range([left, right]),
+        countExtent = d3.extent(bins, function(d) { return d.count; }),
         height = d3.scale.linear()
-          .domain([0].concat(d3.extent(bins, function(d) { return d.count; })))
+          .domain([0].concat(countExtent))
           .range([0, 1, bottom - top]);
+    console.log('count extent:', countExtent);
 
     var xAxis = svg.select(".axis.x");
     if (xAxis.empty()) {
@@ -392,12 +394,13 @@
           .style("text-anchor", "end")
           .attr("transform", "rotate(-35)");
 
+    var yd = d3.extent(height.domain());
     var ya = d3.svg.axis()
       .orient("left")
       .scale(d3.scale.linear()
-        .domain(height.domain())
+        .domain(yd)
         .range([bottom, top]))
-      .tickValues(height.domain());
+      .tickValues(yd);
     ya.tickFormat(formatCommas);
     yAxis.call(ya)
       .attr("transform", "translate(" + [left - 2, 0] + ")");
