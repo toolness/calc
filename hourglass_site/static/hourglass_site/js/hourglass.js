@@ -22,7 +22,10 @@
     if (!(this instanceof hourglass.API)) {
       return new hourglass.API(path);
     }
-    this.path = path || APIHOST + "/";
+    this.path = path || API_HOST;
+    if (this.path.charAt(this.path.length - 1) !== '/') {
+      this.path += '/';
+    }
   };
 
   hourglass.API.prototype = {
