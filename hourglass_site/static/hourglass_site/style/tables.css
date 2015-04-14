@@ -24,12 +24,19 @@ table caption {
   vertical-align: bottom;
 }
 
-th, th:first-child {
+thead th,
+thead th:first-child {
   vertical-align: bottom;
+  color: #666;
+  border-bottom: 1px solid;
 }
 
-tbody tr:nth-child(odd) td {
+tbody tr:nth-child(odd) > * {
   background: #f9f9f9;
+}
+
+tbody th {
+  font-weight: normal;
 }
 
 td.sorted {
@@ -42,11 +49,6 @@ tbody tr:nth-child(odd) td.sorted {
 
 tbody tr:hover > * {
   background: #fefef0 !important;
-}
-
-thead th {
-  color: #666;
-  border-bottom: 1px solid;
 }
 
 table caption {
