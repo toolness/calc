@@ -12,8 +12,14 @@ DATABASES = {
 SECRET_KEY = ''
 
 # for front-end testing with Sauce
-# if SAUCE is False, the front-end tests use PhantomJS locally
-SAUCE = False
-SAUCE_USERNAME = ''
-SAUCE_ACCESS_KEY = ''
-DOMAIN_TO_TEST = 'hourglass.18f.us'
+REMOTE_TESTING = {
+    'enabled': False,
+    'hub_url': 'http://%s:%s@ondemand.saucelabs.com:80/wd/hub',
+    'username': '',
+    'access_key': '',
+    'capabilities': {
+        # 'browser': 'internet explorer',
+        # 'version': '9.0',
+        # 'platform': 'Windows 7'
+    }
+}
