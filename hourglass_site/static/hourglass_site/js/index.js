@@ -399,23 +399,23 @@
 
   function updateResults(data) {
     var results = data.results;
-    d3.select("#results-count")
+    d3.select('#results-count')
       .text(formatCommas(data.count));
 
-    resultsTable.style("display", null);
+    resultsTable.style('display', null);
 
-    var thead = resultsTable.select("thead"),
-        columns = thead.selectAll("th").data(),
-        tbody = resultsTable.select("tbody");
+    var thead = resultsTable.select('thead'),
+        columns = thead.selectAll('th').data(),
+        tbody = resultsTable.select('tbody');
 
-    var tr = tbody.selectAll("tr")
+    var tr = tbody.selectAll('tr')
       .data(results);
 
     tr.exit().remove();
 
-    tr.enter().append("tr");
+    tr.enter().append('tr');
 
-    var td = tr.selectAll("td")
+    var td = tr.selectAll('.cell')
       .data(function(d) {
         return columns.map(function(column) {
           var key = column.key,
@@ -435,16 +435,22 @@
     var sortKey = parseSortOrder(form.getData().sort).key;
 
     var enter = td.enter()
-      .append("td")
-        .attr("class", function(d) {
-          return "column-" + d.key;
+        .append(function(d, i) {
+          var name = d.column.key === 'labor_category' ? 'th' : 'td';
+          return document.createElement(name);
         })
-        .classed("collapsed", function(d) {
+        .attr("class", function(d) {
+          return 'cell column-' + d.key;
+        })
+        .classed('collapsed', function(d) {
           return d.column.collapsed;
         })
         .classed("sorted", function(c) {
           return c.column.key === sortKey;
         });
+
+    enter.filter(function() { return this.nodeName === 'TH'; })
+      .attr('scope', 'row');
 
     // update the HTML of all cells (except exclusion columns)
     td.filter(function(d) {
