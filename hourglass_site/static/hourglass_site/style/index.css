@@ -179,9 +179,9 @@ a.focus-input {
   max-height: 200px;
 }
 
-#search[class="search"] {
+.selenium #search[class="search"] {
   border: 10px solid orange;
 }
 
-#search.error { border-color: red; }
-#search.loaded { border-color: green; }
+.selenium #search.error { border-color: red; }
+.selenium #search.loaded { border-color: green; }
