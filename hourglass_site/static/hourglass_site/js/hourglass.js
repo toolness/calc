@@ -22,7 +22,10 @@
     if (!(this instanceof hourglass.API)) {
       return new hourglass.API(path);
     }
-    this.path = path || APIHOST + "/";
+    this.path = path || window.API_HOST;
+    if (this.path.charAt(this.path.length - 1) !== '/') {
+      this.path += '/';
+    }
   };
 
   hourglass.API.prototype = {
@@ -34,6 +37,8 @@
       var uri = (typeof request === "object")
         ? request.uri || request.url
         : request;
+      // strip the preceding slash
+      if (uri.charAt(0) === '/') uri = uri.substr(1);
       // TODO: merge request.data if provided and uri includes "?"
       return (this.path + uri);
     },
