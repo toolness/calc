@@ -271,7 +271,7 @@
           .domain(extent)
           .range([left, right]),
         countExtent = d3.extent(bins, function(d) { return d.count; }),
-        height = d3.scale.linear()
+        heightScale = d3.scale.linear()
           .domain([0].concat(countExtent))
           .range([0, 1, bottom - top]);
     console.log('count extent:', countExtent);
@@ -360,7 +360,7 @@
       .each(function(d) {
         d.x = x(d.min);
         d.width = x(d.max) - d.x;
-        d.height = height(d.count);
+        d.height = heightScale(d.count);
         d.y = bottom - d.height;
       })
       .select("rect")
@@ -397,7 +397,13 @@
           .style("text-anchor", "end")
           .attr("transform", "rotate(-35)");
 
-    var yd = d3.extent(height.domain());
+    xAxis.append('text')
+      .attr('class', 'label')
+      .attr('transform', 'translate(' + [left + (right - left) / 2, 45] + ')')
+      .attr('text-anchor', 'middle')
+      .text('price')
+
+    var yd = d3.extent(heightScale.domain());
     var ya = d3.svg.axis()
       .orient("left")
       .scale(d3.scale.linear()
@@ -407,6 +413,12 @@
     ya.tickFormat(formatCommas);
     yAxis.call(ya)
       .attr("transform", "translate(" + [left - 2, 0] + ")");
+
+    yAxis.append('text')
+      .attr('class', 'label')
+      .attr('transform', 'translate(' + [-25, height / 2 - 15] + ') rotate(-90)')
+      .attr('text-anchor', 'middle')
+      .text('# of results')
 
     histogramUpdated = true;
   }
