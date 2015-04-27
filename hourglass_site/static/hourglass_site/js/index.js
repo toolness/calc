@@ -11,11 +11,14 @@
 
   // for IE9: History API polyfill
   var location = window.history.location || window.location;
+  // TODO: if location.hash, read that
+  // e.g. if an IE9 user sends a link to a Chrome user, they should see the
+  // same stuff.
 
   var search = d3.select("#search"),
       form = new formdb.Form(search.node()),
       inputs = search.selectAll("*[name]"),
-      formatPrice = d3.format(",.02f"),
+      formatPrice = d3.format(",.0f"),
       formatCommas = d3.format(","),
       api = new hourglass.API(),
       $search = $("#labor_category"),
