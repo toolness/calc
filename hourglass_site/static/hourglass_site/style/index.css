@@ -91,9 +91,11 @@ section.filters {
   background: #F3F3F3;
   padding: 1rem 0;
 }
+
 section.search {
   padding: .5rem 0 1rem 0;
 }
+
 .results {
   padding: 1rem 0;
 }
@@ -129,6 +131,11 @@ td.column-min_years_experience i {
 a.focus-input {
   text-decoration: none;
   border-bottom: 1px dotted;
+}
+
+svg .axis .label {
+  fill: #666;
+  font-style: italic;
 }
 
 #reset-button {
