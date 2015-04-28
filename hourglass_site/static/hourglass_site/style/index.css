@@ -118,6 +118,10 @@ th.column-idv_piid {              width: 12%; }
 th.column-vendor_name {           width: 25%; }
 th.column-schedule {              width: 10%; }
 
+th.column-education_level {
+  white-space: nowrap;
+}
+
 td.column-idv_piid {
   white-space: nowrap;
 }
