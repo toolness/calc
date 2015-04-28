@@ -61,13 +61,12 @@
         <div class="row">
 
           <div id="code" class="three columns">
-                <div id="footer_nav">
-                    <ul>
-                        <li><a href="https://github.com/18F/calc"><img alt="GitHub Logo" src="https://mirage-gsa-gov.s3.amazonaws.com:443/mirage_site/images/github_icon.png"> View our code on GitHub</a></li>
-                    <!--    <li><a href="/docs/">Read the API documentation</a></li>-->
-                    </ul>
-                </div><!--end footer_nav<!-->
-           
+            <div id="footer_nav">
+              <ul>
+                <li><a href="https://github.com/18F/calc"><img alt="GitHub Logo" src="https://mirage-gsa-gov.s3.amazonaws.com:443/mirage_site/images/github_icon.png"> View our code on GitHub</a></li>
+                <!-- <li><a href="/docs/">Read the API documentation</a></li> -->
+              </ul>
+            </div><!-- /.footer_nav -->
           </div>
 
           <div id="help-wanted" class="six columns">
@@ -98,6 +97,16 @@
         ga('send', 'pageview');
     </script>
     <script id="_fed_an_ua_tag" src="https://analytics.usa.gov/dap/dap.min.js"></script>
+
+    <![if gt IE 8]>
+    <script>
+      if (typeof aight === 'object') {
+        d3.select('body')
+          .classed('ie', true)
+          .classed('ie' + aight.browser.ie, true);
+      }
+    </script>
+    <![endif]>
 
   </body>
 </html>
