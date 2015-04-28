@@ -124,7 +124,7 @@ class FunctionalTests(LiveServerTestCase):
     def wait_for(self, condition, timeout=10):
         try:
             wait_for(condition, timeout=timeout)
-        except Exception, err:
+        except Exception as err:
             return self.fail(err)
         return True
 
@@ -492,7 +492,10 @@ def patch_broken_pipe_error():
     on broken pipe: <http://stackoverflow.com/a/22618740/362702>
     """
     import sys
-    from SocketServer import BaseServer
+    try:
+        from SocketServer import BaseServer
+    except:
+        from socketserver import BaseServer
     from wsgiref import handlers
 
     handle_error = BaseServer.handle_error
