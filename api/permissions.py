@@ -7,10 +7,13 @@ class WhiteListPermission(permissions.BasePermission):
     """
     def has_permission(self, request, view):
         ip_addr = None
-        try:
-            forwarded = request.META['HTTP_X_FORWARDED_FOR']
-            ip_addr = forwarded.split(',')[-2].strip()
-        except KeyError:    
+        forwarded = request.META.get('HTTP_X_FORWARDED_FOR')
+        if forwarded:
+            try:
+                ip_addr = forwarded.split(',')[-2].strip()
+            except:
+                ip_addr = forwarded
+        else:
             ip_addr = request.META['REMOTE_ADDR']
 
         if settings.REST_FRAMEWORK['WHITELIST']:
