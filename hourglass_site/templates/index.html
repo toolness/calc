@@ -2,9 +2,7 @@
 {% load staticfiles %}
 
 {% block head %}
-<![if gt IE 8]>
-<script src="{% static 'hourglass_site/js/vendor/jquery.auto-complete.min.js' %}"></script>
-<![endif]>
+
 <link rel="stylesheet" href="{% static 'hourglass_site/style/index.css' %}">
 {% endblock %}
 
@@ -177,5 +175,9 @@
 
 </form>
 
+<![if gt IE 8]>
+<script src="{% static 'hourglass_site/js/vendor/jquery.auto-complete.min.js' %}"></script>
 <script src="{% static 'hourglass_site/js/index.js' %}"></script>
+<![endif]>
+
 {% endblock %}
