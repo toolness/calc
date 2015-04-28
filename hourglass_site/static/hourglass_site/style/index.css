@@ -192,3 +192,20 @@ svg .axis .label {
 
 .selenium #search.error { border-color: red; }
 .selenium #search.loaded { border-color: green; }
+
+/**
+ * IE tweaks!
+ *
+ * In any version of IE, the <body> gets two
+ * classes:
+ *
+ * 1. "ie"
+ * 2. "ie{version}", where {version} is the
+ *    major version number, e.g. 8, 9, 10, or 11.
+ *
+ * So, to target IE8, you would prefix your
+ * selector with ".ie8", and so on.
+ */
+.ie #results-table thead th a {
+  top: -20px;
+}
