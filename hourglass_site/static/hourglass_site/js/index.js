@@ -46,6 +46,10 @@
   search.select('input[type="reset"]')
     .on('click', function reset() {
       form.reset();
+      // NB: form.reset() doesn't reset hidden inputs,
+      // so we need to do it ourselves.
+      search.selectAll('input[type="hidden"]')
+        .property('value', '');
       console.log("reset:", form.getData());
       submit(true);
       d3.event.preventDefault();
