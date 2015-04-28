@@ -11,7 +11,7 @@
     <script src="{% static 'hourglass_site/js/vendor/history.min.js' %}"></script>
     <![endif]-->
     <link rel="stylesheet" href="{% static 'hourglass_site/style/main.css' %}"/>
-    <!--[if !(IE 6)|!(IE 7)|!(IE 8)]>
+    <!--[if gt IE 8]><!-->
     <script>
       var API_HOST = "{{ API_HOST }}";
     </script>
@@ -20,7 +20,7 @@
     <script src="{% static 'hourglass_site/js/vendor/jquery.xdomainrequest.min.js' %}"></script>
     <script src="{% static 'hourglass_site/js/vendor/formdb.min.js' %}"></script>
     <script src="{% static 'hourglass_site/js/hourglass.js' %}"></script>
-    <![endif]-->
+    <!--<![endif]-->
     <link href='https://fonts.googleapis.com/css?family=Raleway:600|Open+Sans:300' rel='stylesheet' type='text/css'>
     {% block head %}
     {% endblock %}
