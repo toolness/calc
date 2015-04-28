@@ -495,7 +495,7 @@ def patch_broken_pipe_error():
     try:
         from SocketServer import BaseServer
     except:
-        from socketserver import Baseserver
+        from socketserver import BaseServer
     from wsgiref import handlers
 
     handle_error = BaseServer.handle_error
