@@ -124,7 +124,7 @@ class FunctionalTests(LiveServerTestCase):
     def wait_for(self, condition, timeout=10):
         try:
             wait_for(condition, timeout=timeout)
-        except Exception, err:
+        except Exception as err:
             return self.fail(err)
         return True
 
