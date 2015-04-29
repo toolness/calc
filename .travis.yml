@@ -15,7 +15,7 @@ matrix:
       before_script: pip install -r requirements_python2.txt
 
 install:
-- pip install -r requirements.txt
+  - pip install -r requirements.txt
 
 before_script:
   - cp hourglass/local_settings{.travis,}.py
