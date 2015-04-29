@@ -1,0 +1,6 @@
+machine:
+  python: 2.7
+
+test:
+  override:
+    - make static test
