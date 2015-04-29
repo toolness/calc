@@ -33,7 +33,9 @@ node_modules:
 static:
 	@# using --link allows us to work on the JS and CSS
 	@# without having to run collectstatic to see changes
-	echo "yes" | $(manage) collectstatic --link
+	@# piping "yes" to the command bypasses the prompt,
+	@# and piping the output to /dev/null hushes stdout
+	echo "yes" | $(manage) collectstatic --link > /dev/null
 
 clean:
 	rm -rf static
