@@ -4,7 +4,7 @@ default_options ?= --nologcapture --liveserver=localhost:$(port)
 lt_run ?= ./node_modules/.bin/lt-run
 options ?=
 
-test:
+test: static
 	$(manage) test \
 		$(default_options) \
 		$(options)
