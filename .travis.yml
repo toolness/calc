@@ -20,7 +20,7 @@ install:
 before_script:
   - cp hourglass/local_settings{.travis,}.py
   - createuser hourglass
-  - cat hourglass/setup.sql | psql
+  - cat hourglass/setup.sql | psql -U hourglass hourglass
 
 script:
   - make test
