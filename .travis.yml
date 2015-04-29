@@ -5,10 +5,13 @@ python:
 
 install:
 - "pip install -r requirements.txt"
-- "pip install -r requirements.txt"
 
-# install python 2 requirements iff we're in py2
-before_script:
-- "[ `python -c 'import sys; print sys.version_info.major'` == 2 ] && pip install -r requirements_python2.txt"
+matrix:
+  # finish on the first failure
+  fast_finish: true
+  include:
+    # install python 2 requirements iff we're in py2
+    - python: "2.7"
+      before_script: "pip install -r requirements_python2.txt"
 
 script: make test
