@@ -4,7 +4,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'hourglass',
-        'USER': 'hourglass',
+        'USER': 'postgres',
         'PASSWORD': '',
     }
 }
