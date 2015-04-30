@@ -492,10 +492,7 @@ def patch_broken_pipe_error():
     on broken pipe: <http://stackoverflow.com/a/22618740/362702>
     """
     import sys
-    try:
-        from SocketServer import BaseServer
-    except:
-        from socketserver import BaseServer
+    from socketserver import BaseServer
     from wsgiref import handlers
 
     handle_error = BaseServer.handle_error
