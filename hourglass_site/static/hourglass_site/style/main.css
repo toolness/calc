@@ -91,8 +91,17 @@ header {
 }
 .logo {
   display: inline-block;
-  width:202px;
-  height:93px;
+  width: 188px;
+  height: 76px;
+}
+#calc-description {
+  color: #225481;
+  font-family: 'Open Sans';
+  font-weight: 600;
+  font-style: italic;
+  margin-bottom: 1em;
+  margin-top: -.4em;
+  font-size: 120%;
 }
 h1 {
   letter-spacing: 0;
