@@ -20,3 +20,7 @@ install:
 script:
   - cp hourglass/local_settings{.travis,}.py
   - make test
+
+# don't spam us with emails
+notifications:
+  email: false
