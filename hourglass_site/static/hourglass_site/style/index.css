@@ -91,9 +91,11 @@ section.filters {
   background: #F3F3F3;
   padding: 1rem 0;
 }
+
 section.search {
   padding: .5rem 0 1rem 0;
 }
+
 .results {
   padding: 1rem 0;
 }
@@ -116,6 +118,10 @@ th.column-idv_piid {              width: 12%; }
 th.column-vendor_name {           width: 25%; }
 th.column-schedule {              width: 10%; }
 
+th.column-education_level {
+  white-space: nowrap;
+}
+
 td.column-idv_piid {
   white-space: nowrap;
 }
@@ -129,6 +135,11 @@ td.column-min_years_experience i {
 a.focus-input {
   text-decoration: none;
   border-bottom: 1px dotted;
+}
+
+svg .axis .label {
+  fill: #666;
+  font-style: italic;
 }
 
 #reset-button {
@@ -185,3 +196,20 @@ a.focus-input {
 
 .selenium #search.error { border-color: red; }
 .selenium #search.loaded { border-color: green; }
+
+/**
+ * IE tweaks!
+ *
+ * In any version of IE, the <body> gets two
+ * classes:
+ *
+ * 1. "ie"
+ * 2. "ie{version}", where {version} is the
+ *    major version number, e.g. 8, 9, 10, or 11.
+ *
+ * So, to target IE8, you would prefix your
+ * selector with ".ie8", and so on.
+ */
+.ie #results-table thead th a {
+  top: -20px;
+}

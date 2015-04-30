@@ -1,15 +1,17 @@
-DEBUG=True
+DEBUG = True
+
+from django.utils.crypto import get_random_string
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'hourglass',
-        'USER': '',
+        'USER': 'postgres',
         'PASSWORD': '',
     }
 }
 
-SECRET_KEY = ''
+SECRET_KEY = get_random_string(50)
 
 # for front-end testing with Sauce
 REMOTE_TESTING = {

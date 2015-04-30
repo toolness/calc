@@ -124,7 +124,7 @@ class FunctionalTests(LiveServerTestCase):
     def wait_for(self, condition, timeout=10):
         try:
             wait_for(condition, timeout=timeout)
-        except Exception, err:
+        except Exception as err:
             return self.fail(err)
         return True
 
@@ -168,7 +168,7 @@ class FunctionalTests(LiveServerTestCase):
     def test_titles_are_correct(self):
         get_contract_recipe().make(_quantity=1, labor_category=seq("Architect"))
         driver = self.load_and_wait()
-        self.assertTrue(driver.title.startswith('Hourglass'), 'Title mismatch, {} does not start with Hourglass'.format(driver.title))
+        self.assertTrue(driver.title.startswith('CALC'), 'Title mismatch, {} does not start with CALC'.format(driver.title))
 
     def test_filter_order_is_correct(self):
         get_contract_recipe().make(_quantity=1, labor_category=seq("Architect"))
@@ -398,7 +398,7 @@ class FunctionalTests(LiveServerTestCase):
         form = self.get_form()
         self.search_for('engineer')
         self.submit_form_and_wait()
-        cells = driver.find_elements_by_css_selector('table.results tbody td.column-labor_category')
+        cells = driver.find_elements_by_css_selector('table.results tbody .column-labor_category')
         self.assertEqual(len(cells), 2, 'wrong cell count: %d (expected 2)' % len(cells))
         for cell in cells:
             self.assertTrue('Engineer' in cell.text, 'found cell without "Engineer": "%s"' % cell.text)
@@ -410,7 +410,7 @@ class FunctionalTests(LiveServerTestCase):
         self.search_for('software engineer')
         self.set_form_values(form, query_type='match_phrase')
         self.submit_form_and_wait()
-        cells = driver.find_elements_by_css_selector('table.results tbody td.column-labor_category')
+        cells = driver.find_elements_by_css_selector('table.results tbody .column-labor_category')
         self.assertEqual(len(cells), 1, 'wrong cell count: %d (expected 1)' % len(cells))
         self.assertEqual(cells[0].text, 'Software Engineer II', 'bad cell text: "%s"' % cells[0].text)
 
@@ -422,7 +422,7 @@ class FunctionalTests(LiveServerTestCase):
         self.set_form_values(form, query_type='match_exact')
         # self.assertEqual(driver.execute_script('document.querySelector("input[value=\'match_exact\']").checked'), True, 'match_exact not checked!')
         self.submit_form_and_wait()
-        cells = driver.find_elements_by_css_selector('table.results tbody td.column-labor_category')
+        cells = driver.find_elements_by_css_selector('table.results tbody .column-labor_category')
         self.assertEqual(len(cells), 1, 'wrong cell count: %d (expected 1)' % len(cells))
         self.assertEqual(cells[0].text, 'Software Engineer', 'bad cell text: "%s"' % cells[0].text)
 
@@ -492,7 +492,10 @@ def patch_broken_pipe_error():
     on broken pipe: <http://stackoverflow.com/a/22618740/362702>
     """
     import sys
-    from SocketServer import BaseServer
+    try:
+        from SocketServer import BaseServer
+    except:
+        from socketserver import BaseServer
     from wsgiref import handlers
 
     handle_error = BaseServer.handle_error

@@ -8,14 +8,17 @@
     <!--[if lte IE 9]>
     <script src="{% static 'hourglass_site/js/vendor/aight.v2.min.js' %}"></script>
     <![endif]-->
-    <link rel="stylesheet" href="//code.jquery.com/qunit/qunit-1.16.0.css">
+    <link rel="stylesheet" href="{% static 'hourglass_site/tests/qunit-1.16.0.css' %}">
     <script src="{% static 'hourglass_site/js/vendor/jquery.min.js' %}"></script>
     <script src="{% static 'hourglass_site/js/hourglass.js' %}"></script>
+    <script>
+      var API_HOST = "{{ API_HOST }}";
+    </script>
   </head>
   <body>
     <div id="qunit"></div>
     <div id="qunit-fixture"></div>
-    <script src="//code.jquery.com/qunit/qunit-1.16.0.js"></script>
+    <script src="{% static 'hourglass_site/tests/qunit-1.16.0.js' %}"></script>
     <script src="{% static 'hourglass_site/js/tests.js' %}"></script>
   </body>
 </html>
