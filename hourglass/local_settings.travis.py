@@ -9,7 +9,7 @@ DATABASES = {
     }
 }
 
-SECRET_KEY = ''
+SECRET_KEY = 'travistravistravis'
 
 # for front-end testing with Sauce
 REMOTE_TESTING = {
