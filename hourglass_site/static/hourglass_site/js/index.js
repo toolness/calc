@@ -131,7 +131,9 @@
     });
 
     var sort = parseSortOrder(data.sort);
+    var sortable = function(d) { return d.sortable; };
     sortHeaders
+      .filter(sortable)
       .classed("sorted", function(d) {
         return d.sorted = (d.key === sort.key);
       })
@@ -566,14 +568,15 @@
     headers
       .datum(function() {
         return {
-          key: this.getAttribute("data-key"),
-          format: getFormat(this.getAttribute("data-format")),
-          sortable: this.classList.contains("sortable"),
-          collapsible: this.classList.contains("collapsible")
+          key: this.getAttribute('data-key'),
+          title: this.getAttribute('title') || this.textContent,
+          format: getFormat(this.getAttribute('data-format')),
+          sortable: this.classList.contains('sortable'),
+          collapsible: this.classList.contains('collapsible')
         };
       })
       .each(function(d) {
-        this.classList.add("column-" + d.key);
+        this.classList.add('column-' + d.key);
       });
 
     headers.filter(function(d) { return d.collapsible; })
@@ -589,10 +592,12 @@
         d.sorted = false;
         d.descending = false;
       })
-      .on("click.sort", setSortOrder);
+      .attr('tabindex', 0)
+      .attr('aria-role', 'button')
+      .on('click.sort', setSortOrder);
 
     function setSortOrder(d, i) {
-      // console.log("sort:", d.key);
+      // console.log('sort:', d.key);
       headers.each(function(c, j) {
         if (j !== i) {
           c.sorted = false;
@@ -605,7 +610,7 @@
       }
       d.sorted = true;
 
-      var sort = (d.descending ? "-" : "") + d.key;
+      var sort = (d.descending ? '-' : '') + d.key;
       form.set('sort', sort);
 
       updateSortOrder(d.key);
@@ -615,12 +620,32 @@
   }
 
   function updateSortOrder(key) {
-    sortHeaders
-      .classed("sorted", function(c) { return c.sorted; })
-      .classed("descending", function(c) { return c.sorted && c.descending; });
+    var title = function(d) {
+      if (d.sorted) {
+        var order = d.descending ? 'descending' : 'ascending';
+        var other = d.descending ? 'ascending' : 'descending';
+        return [d.title, ': sorted ', order, ', select to sort ', other].join('');
+      } else {
+        return d.title + ': select to sort ascending';
+      }
+    };
 
-    resultsTable.selectAll("tbody td")
-      .classed("sorted", function(c) {
+    sortHeaders
+      .filter(function(d) { return d.sortable; })
+        .classed('sorted', function(c) {
+          return c.sorted;
+        })
+        .classed('ascending', function(c) {
+          return c.sorted && !c.descending;
+        })
+        .classed('descending', function(c) {
+          return c.sorted && c.descending;
+        })
+        // .attr('aria-label', label)
+        .attr('title', label);
+
+    resultsTable.selectAll('tbody td')
+      .classed('sorted', function(c) {
         return c.column.key === key;
       });
   }
