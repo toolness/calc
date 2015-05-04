@@ -145,9 +145,6 @@ nav ul {
     margin-left: -1.5rem;
   }
 
-  nav ul li + li {
-    border-left: 1px solid #FFFFFF;
-  }
 main {
   margin: 2rem 0;
 }
