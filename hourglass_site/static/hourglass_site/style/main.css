@@ -91,17 +91,22 @@ header {
 }
 .logo {
   display: inline-block;
-  width: 188px;
-  height: 76px;
+  width:130px;
 }
-#calc-description {
-  color: #225481;
-  font-family: 'Open Sans';
-  font-weight: 600;
+.description-main {
+  color: #fff;
+  font-family: "Open Sans", sans-serif;
+  font-size: 2.2em;
   font-style: italic;
-  margin-bottom: 1em;
-  margin-top: -.4em;
-  font-size: 120%;
+  font-weight: 400;
+  margin-bottom: .3em;
+  margin-top: 1em;
+}
+.description-secondary {
+  color: rgba(255,255,255,.6);
+  font-size: 1.5em;
+  letter-spacing: normal;
+  margin-bottom: 2em;
 }
 h1 {
   letter-spacing: 0;
@@ -138,26 +143,25 @@ nav ul {
   }
 
   nav ul li a {
-    display: inline-block;
+    background: none repeat scroll 0 0 rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
     color: #fff;
+    display: inline-block;
+    font-size: 0.8em;
     font-weight: bold;
-    padding: .2rem 1.5rem .5rem;
+    padding: 0.5rem 1.5rem;
     text-decoration: none;
-    text-transform: uppercase;
   }
 
   nav ul li a:hover {
+    background: none repeat scroll 0 0 rgba(255, 255, 255, 0.25);    
     color: #fff;
-    text-decoration: underline;
   }
 
   nav ul li:first-child {
     margin-left: -1.5rem;
   }
 
-  nav ul li + li {
-    border-left: 1px solid #FFFFFF;
-  }
 main {
   margin: 2rem 0;
 }
