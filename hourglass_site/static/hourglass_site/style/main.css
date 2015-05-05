@@ -93,7 +93,7 @@ header {
   display: inline-block;
   width:140px;
 }
-#calc-description {
+.description-main {
   color: #225481;
   font-family: "Open Sans", sans-serif;
   font-size: 120%;
