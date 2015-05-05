@@ -38,4 +38,4 @@ static:
 clean:
 	rm -rf static
 
-.PHONY: test test-frontend test-backend test-browsers
+.PHONY: test test-frontend test-backend test-browsers static
