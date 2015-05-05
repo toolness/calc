@@ -300,27 +300,27 @@ class FunctionalTests(LiveServerTestCase):
         self.assertIsNotNone(re.search(r'Small Biz\d+', driver.page_source))
         self.assertIsNotNone(re.search(r'Large Biz\d+', driver.page_source))
 
-    def test_schedule_column_is_collapsed_by_default(self):
+    def test_schedule_column_is_open_by_default(self):
         get_contract_recipe().make(_quantity=5)
         driver = self.load()
         col_header = find_column_header(driver, 'schedule')
-
-        self.assertTrue(has_class(col_header, 'collapsed'))
-
-    def test_unhide_schedule_column(self):
-        get_contract_recipe().make(_quantity=5)
-        driver = self.load()
-        col_header = find_column_header(driver, 'schedule')
-
-        # un-hide column
-        col_header.find_element_by_css_selector('.toggle-collapse').click()
 
         self.assertFalse(has_class(col_header, 'collapsed'))
 
-        # re-hide column
+    def test_hide_schedule_column(self):
+        get_contract_recipe().make(_quantity=5)
+        driver = self.load()
+        col_header = find_column_header(driver, 'schedule')
+
+        # hide column
         col_header.find_element_by_css_selector('.toggle-collapse').click()
 
         self.assertTrue(has_class(col_header, 'collapsed'))
+
+        # re-show column
+        col_header.find_element_by_css_selector('.toggle-collapse').click()
+
+        self.assertFalse(has_class(col_header, 'collapsed'))
 
     def test_schedule_column_is_last(self):
         get_contract_recipe().make(_quantity=5)
