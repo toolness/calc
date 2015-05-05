@@ -93,6 +93,15 @@ header {
   display: inline-block;
   width:140px;
 }
+#calc-description {
+  color: #225481;
+  font-family: "Open Sans", sans-serif;
+  font-size: 120%;
+  font-style: italic;
+  font-weight: 600;
+  margin-bottom: 1em;
+  margin-top: -0.4em;
+}
 h1 {
   letter-spacing: 0;
 }
