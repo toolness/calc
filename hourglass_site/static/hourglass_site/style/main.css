@@ -156,6 +156,11 @@ main h4 {
   margin-bottom:0px;
 }
 
+.schedule {
+  display: block;
+  font-weight: bold;
+}
+
 footer {
   color: #fff;
   background: #444749;
