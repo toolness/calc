@@ -1,0 +1,26 @@
+language: python
+python:
+  - 3.4
+  # - 2.7
+
+addons:
+  postgresql: 9.3
+
+matrix:
+  # finish on the first failure
+  fast_finish: true
+  include:
+    # install python 2 requirements iff we're in py2
+    - python: 2.7
+      before_script: pip install -r requirements_python2.txt
+
+install:
+  - pip install -r requirements.txt
+
+script:
+  - cp hourglass/local_settings{.travis,}.py
+  - make test
+
+# don't spam us with emails
+notifications:
+  email: false

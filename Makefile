@@ -1,10 +1,10 @@
-manage ?= ./manage.py
+manage ?= python manage.py
 port ?= 8081
 default_options ?= --nologcapture --liveserver=localhost:$(port)
 lt_run ?= ./node_modules/.bin/lt-run
 options ?=
 
-test:
+test: static
 	$(manage) test \
 		$(default_options) \
 		$(options)
@@ -33,7 +33,7 @@ node_modules:
 static:
 	@# using --link allows us to work on the JS and CSS
 	@# without having to run collectstatic to see changes
-	$(manage) collectstatic --link
+	$(manage) collectstatic --noinput --link > /dev/null
 
 clean:
 	rm -rf static
