@@ -648,8 +648,8 @@
         .classed('descending', function(c) {
           return c.sorted && c.descending;
         })
-        // .attr('aria-label', label)
-        .attr('title', label);
+        // .attr('aria-label', title)
+        .attr('title', title);
 
     resultsTable.selectAll('tbody td')
       .classed('sorted', function(c) {
