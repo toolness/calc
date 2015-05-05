@@ -21,7 +21,7 @@
     <script src="{% static 'hourglass_site/js/vendor/formdb.min.js' %}"></script>
     <script src="{% static 'hourglass_site/js/hourglass.js' %}"></script>
     <![endif]>
-    <link href='https://fonts.googleapis.com/css?family=Raleway:600|Open+Sans:300,600,600italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Raleway:600|Open+Sans:300,400italic,600,600italic' rel='stylesheet' type='text/css'>
     {% block head %}
     {% endblock %}
   </head>
@@ -35,7 +35,7 @@
           An official website of the U.S. Government</p>
         <p id="site-status">This website is in beta.
           <a href="#help-wanted">Help us improve</a>
-        </p>
+        </p>  
       </div>
     </div>
 
@@ -47,6 +47,15 @@
             <li><a href="{% url 'about' %}">About</a></li>
           </ul>
         </nav>
+
+      <div class="row">
+        <div class="twelve columns">
+          <h1 class="description-main">Search awarded hourly rates for labor categories</h1>
+          <h2 class="description-secondary">This tool was built to assist contracting officers and contracting specialists with market research and price analysis for labor categories on Federal Government contracts.</h2>
+        </div>
+      </div>
+
+
       </div>
     </header>
 
