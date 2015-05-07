@@ -98,16 +98,18 @@ form {
             <option value="o">other than small</option>
           </select>
         </div>
+      </div> <!-- /row -->
 
-        <div class="filter twelve columns">
+      <div class="row">
+        <div class="filter six columns">
           <label for="price">Only search &amp; show prices:</label>
           from <span class="dollars">$</span><input id="price__gte" name="price__gte" type="text" class="price" placeholder="0">
           to <span class="dollars">$</span><input id="price__lte" name="price__lte" type="text" class="price" placeholder="&infin;">
         </div>
 
-        <!--
-        <div class="filter">
+        <div class="filter three columns">
           <label for="schedule">Schedule:</label>
+          <a href="/about#schedules" class="info">what's this?</a>
           <select id="schedule" name="schedule">
             <option value="">(all)</option>
             <option>Environmental</option>
@@ -119,7 +121,6 @@ form {
             <option>Consolidated</option>
           </select>
         </div>
-        -->
 
         <!--
         <div class="filter">
@@ -172,7 +173,7 @@ form {
             <th scope="col" class="sortable" data-key="current_price" data-format="$%,.02f">Price</th>
             <th scope="col" data-key="idv_piid">Contract #</th>
             <th scope="col" data-key="vendor_name">Vendor</th>
-            <th scope="col" class="sortable collapsible collapsed" data-key="schedule">Schedule</th>
+            <th scope="col" class="sortable collapsible" data-key="schedule">Schedule</th>
           </tr>
         </thead>
         <tbody>
