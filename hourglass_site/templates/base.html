@@ -21,7 +21,7 @@
     <script src="{% static 'hourglass_site/js/vendor/formdb.min.js' %}"></script>
     <script src="{% static 'hourglass_site/js/hourglass.js' %}"></script>
     <![endif]>
-    <link href='https://fonts.googleapis.com/css?family=Raleway:600|Open+Sans:300' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Lato:300,400,700,400italic,700italic' rel='stylesheet' type='text/css'>
     {% block head %}
     {% endblock %}
   </head>
@@ -35,19 +35,27 @@
           An official website of the U.S. Government</p>
         <p id="site-status">This website is in beta.
           <a href="#help-wanted">Help us improve</a>
-        </p>
+        </p>  
       </div>
     </div>
 
     <header>
       <div class="container">
-        <a href="{% url 'index' %}"><img class="logo" src="{% static 'hourglass_site/images/calc_logo_alt.png' %}" alt="CALC: Contract Awarded Labor Category Tool"></a>
+        <a href="{% url 'index' %}"><img class="logo" src="{% static 'hourglass_site/images/calc_logo.png' %}" alt="CALC: Contract Awarded Labor Category Tool"></a>
         <nav>
           <ul>
-            <li><a href="{% url 'index' %}">Home</a></li>
-            <li><a href="{% url 'about' %}">About</a></li>
+            <li><a href="{% url 'about' %}">Learn more about this tool</a></li>
           </ul>
         </nav>
+
+      <div class="row">
+        <div class="twelve columns">
+          <h1 class="description-main">Search awarded hourly rates for labor categories</h1>
+          <h2 class="description-secondary">This tool helps contracting officers conduct market research on professional service labor categories.  Results shown are actual awarded hourly rates captured from GSA professional service schedules.</h2>
+        </div>
+      </div>
+
+
       </div>
     </header>
 

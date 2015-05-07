@@ -3,8 +3,7 @@
 @import url(skeleton/skeleton.css);
 
 body {
-  /* no more Raleway */
-  font-family: "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
+  font-family: Lato, Helvetica, Arial, sans-serif;
 }
 
 * {
@@ -82,7 +81,7 @@ body {
   }
 
 header {
-  padding-top: 1rem;
+  padding-top: 2rem;
   color: #fff;
   background: #044364;
   background-image: url(../images/background-header.png);
@@ -91,8 +90,20 @@ header {
 }
 .logo {
   display: inline-block;
-  width:202px;
-  height:93px;
+  width:140px;
+}
+.description-main {
+  color: #fff;
+  font-size: 2.2em;
+  font-weight: 400;
+  margin-bottom: .3em;
+  margin-top: .6em;
+}
+.description-secondary {
+  color: rgba(255,255,255,.6);
+  font-size: 1.5em;
+  letter-spacing: normal;
+  margin-bottom: 2em;
 }
 h1 {
   letter-spacing: 0;
@@ -110,7 +121,7 @@ h1 {
 
 nav ul {
   list-style: none;
-  margin: -3.5rem 0 1rem 0;
+  margin: -5.5rem 0 1rem 0;
   padding: 0;
   float: right;
   display: inline-block;
@@ -129,26 +140,25 @@ nav ul {
   }
 
   nav ul li a {
-    display: inline-block;
+    background: none repeat scroll 0 0 rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
     color: #fff;
+    display: inline-block;
+    font-size: 0.9em;
     font-weight: bold;
-    padding: .2rem 1.5rem .5rem;
+    padding: 0.5rem 1.5rem;
     text-decoration: none;
-    text-transform: uppercase;
   }
 
   nav ul li a:hover {
+    background: none repeat scroll 0 0 rgba(255, 255, 255, 0.25);    
     color: #fff;
-    text-decoration: underline;
   }
 
   nav ul li:first-child {
     margin-left: -1.5rem;
   }
 
-  nav ul li + li {
-    border-left: 1px solid #FFFFFF;
-  }
 main {
   margin: 2rem 0;
 }
@@ -160,8 +170,7 @@ footer {
   color: #fff;
   background: #444749;
   padding: 2rem 0;
-  line-height: 1.3;
-  font-family: 'Open Sans';
+  line-height: 1.4;
   font-weight: 300;
   background-image: url(../images/footer_bg.png);
   background-repeat: repeat;
@@ -177,10 +186,8 @@ footer {
     color: #ff0;
     font-size: 3rem;
     letter-spacing: 0;
-    /*Raleway never dies, Shawn*/
-    font-family: 'Raleway', sans-serif;
     font-weight: 600;
-    margin-bottom:0px;
+    margin-bottom: .1em;
   }
 #footer_nav {
     padding-top: 15px;
