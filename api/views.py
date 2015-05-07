@@ -180,20 +180,46 @@ class GetRates(APIView):
     def get_queryset(self, request, wage_field):
         return get_contracts_queryset(request, wage_field)
 
-def get_rates_csv(request):
-        
-    wage_field = 'current_price'
-    contracts_all = get_contracts_queryset(request.GET, wage_field)
-    
-    response = HttpResponse(content_type="text/csv")
-    response['Content-Disposition'] = 'attachment; filename="pricing_results.csv"'
-    writer = csv.writer(response)
-    writer.writerow(("Contract #", "Business Size", "Schedule", "Site", "Begin Date", "End Date", "SIN", "Vendor Name", "Labor Category", "education Level", "Minimum Years Experience", "Current Year Labor Price"))
+class GetRatesCSV(APIView):
 
-    for c in contracts_all:
-        writer.writerow((c.idv_piid, c.get_readable_business_size(), c.schedule, c.contractor_site, c.contract_start, c.contract_end, c.sin, c.vendor_name, c.labor_category, c.get_education_level_display(), c.min_years_experience, c.current_price ))
-    
-    return response
+    def get(self, request, format=None):
+        """ Returns a CSV of matched records and selected search and filter options
+
+        Query Params:
+            q (str): keywords to search by
+            min_experience (int): filter by minimum years of experience
+            min_education (str): filter by a minimum level of education
+            site (str): filter by worksite
+            business_size (str): filter by 's'(mall) or 'o'(ther)
+        """
+
+        wage_field = 'current_price'
+        contracts_all = get_contracts_queryset(request.GET, wage_field)
+
+        q = request.QUERY_PARAMS.get('q', 'None')
+        min_education = request.QUERY_PARAMS.get('min_education', 'None Specified')
+        min_experience = request.QUERY_PARAMS.get('min_experience', 'None Specified')
+        site = request.QUERY_PARAMS.get('site', 'None Specified')
+        business_size = request.QUERY_PARAMS.get('business_size', 'None Specified')
+        business_size_map = {
+            'o': 'other than small',
+            's': 'small business'
+        }
+        business_size_set = business_size_map.get(business_size)
+        if business_size_set:
+            business_size = business_size_set
+        
+        response = HttpResponse(content_type="text/csv")
+        response['Content-Disposition'] = 'attachment; filename="pricing_results.csv"'
+        writer = csv.writer(response)
+        writer.writerow(("Search Query", "Minimum Education Level", "Minimum Years Experience", "Worksite", "Business Size", "", "", "", "", "", "", ""))
+        writer.writerow((q, min_education, min_experience, site, business_size, "", "", "", "", "", "", "")) 
+        writer.writerow(("Contract #", "Business Size", "Schedule", "Site", "Begin Date", "End Date", "SIN", "Vendor Name", "Labor Category", "education Level", "Minimum Years Experience", "Current Year Labor Price"))
+
+        for c in contracts_all:
+            writer.writerow((c.idv_piid, c.get_readable_business_size(), c.schedule, c.contractor_site, c.contract_start, c.contract_end, c.sin, c.vendor_name, c.labor_category, c.get_education_level_display(), c.min_years_experience, c.current_price ))
+        
+        return response
 
 class GetAutocomplete(APIView):
 
