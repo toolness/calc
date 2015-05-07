@@ -36,6 +36,7 @@ def get_contracts_queryset(request_params, wage_field):
 
     Query Params:
         q (str): keywords to search by
+        experience(str): filter by a range of years of experience
         min_experience (int): filter by minimum years of experience
         max_experience (int): filter by maximum years of experience
         min_education (str): filter by a minimum level of education (see EDUCATION_CHOICES)
@@ -54,6 +55,7 @@ def get_contracts_queryset(request_params, wage_field):
     """
 
     query = request_params.get('q', None)
+    experience = request_params.get('experience', None)
     min_experience = request_params.get('min_experience', None)
     max_experience = request_params.get('max_experience', None)
     min_education = request_params.get('min_education', None)
@@ -83,6 +85,12 @@ def get_contracts_queryset(request_params, wage_field):
         else:
             query = convert_to_tsquery(query)
             contracts = contracts.search(query, raw=True)
+
+    if experience:
+        years = experience.split(',')
+        min_experience = int(years[0])
+        if len(years) > 1:
+            max_experience = int(years[1])
 
     if min_experience:
         contracts = contracts.filter(min_years_experience__gte=min_experience)

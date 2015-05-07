@@ -341,6 +341,23 @@ class ContractsTest(TestCase):
            'contractor_site': None,
            'business_size': None}])
 
+    def test_filter_by_experience_range(self):
+        self.make_test_set()
+        resp = self.c.get(self.path, {'experience': '10,15'})
+        self.assertEqual(resp.status_code, 200)
+
+        self.assertResultsEqual(resp.data['results'], 
+         [{'idv_piid': 'ABC123',
+           'vendor_name': 'ACME Corp.',
+           'labor_category': 'Legal Services',
+           'education_level': None,
+           'min_years_experience': 10,
+           'hourly_rate_year1': 18.0,
+           'current_price': 18.0,
+           'schedule': None,
+           'contractor_site': None,
+           'business_size': None}])
+
     def test_filter_by_schedule(self):
         get_contract_recipe().make(_quantity=3)
         resp = self.c.get(self.path, {'schedule': 'MOBIS'})
