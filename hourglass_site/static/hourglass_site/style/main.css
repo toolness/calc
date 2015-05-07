@@ -169,6 +169,7 @@ main h4 {
 .schedule {
   display: block;
   font-weight: bold;
+  margin-bottom: 0;
 }
 
 footer {
