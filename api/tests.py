@@ -342,7 +342,7 @@ class ContractsTest(TestCase):
            'business_size': None}])
 
     def test_filter_by_experience_range(self):
-        get_contract_recipe().make(_quantity=2)
+        get_contract_recipe().make(_quantity=3)
         resp = self.c.get(self.path, {'experience': '6,8'})
         self.assertEqual(resp.status_code, 200)
 
@@ -365,6 +365,16 @@ class ContractsTest(TestCase):
            'hourly_rate_year1': 22.0,
            'current_price': 22.0,
            'schedule': 'PES',
+           'contractor_site': None,
+           'business_size': None},
+         {'idv_piid': 'ABC1233',
+           'vendor_name': 'CompanyName3',
+           'labor_category': 'Business Analyst II',
+           'education_level': None,
+           'min_years_experience': 8,
+           'hourly_rate_year1': 23.0,
+           'current_price': 23.0,
+           'schedule': 'MOBIS',
            'contractor_site': None,
            'business_size': None}])
 
