@@ -68,6 +68,14 @@ experience, and maximum years of experience. For example:
 http://localhost:8000/api/rates/?min_education=MA&min_experience=5&max_experience=10&q=technical
 ```
 
+Or, you can filter with a single, comma-separated range.
+For example, if you wanted results with more than five years and less 
+than ten years of experience:
+
+```
+http://localhost:8000/api/rates/?experience_range=5,10
+```
+
 The valid values for `min_education` are `HS` (high school), `AA` (associates),
 `BA` (bachelors), `MA` (masters), and `PHD` (Ph.D).
 

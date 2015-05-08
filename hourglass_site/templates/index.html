@@ -75,9 +75,16 @@ form {
         </div>
 
         <div class="filter three columns">
-          <label for="min_experience">Min. Experience:</label>
-          <input id="min_experience" name="min_experience" type="text" placeholder="0">
-          years
+          <label for="experience_range">Experience:</label>
+          <select id="experience_range" name="experience_range">
+            <option value="">(all)</option>
+            <option value="0,5">0-5 years</option>
+            <option value="5,10">5-10 years</option>
+            <option value="10,15">10-15 years</option>
+            <option value="15,20">15-20 years</option>
+            <option value="20,25">20-25 years</option>
+            <option value="25">25+ years</option>
+          </select>
         </div>
 
         <div class="filter three columns">
@@ -112,13 +119,13 @@ form {
           <a href="/about#schedules" class="info">what's this?</a>
           <select id="schedule" name="schedule">
             <option value="">(all)</option>
-            <option>Environmental</option>
             <option>AIMS</option>
+            <option>Consolidated</option>
+            <option>Environmental</option>
             <option>Logistics</option>
             <option>Language Services</option>
-            <option>PES</option>
             <option>MOBIS</option>
-            <option>Consolidated</option>
+            <option>PES</option>
           </select>
         </div>
 
