@@ -73,7 +73,7 @@ For example, if you wanted results with more than five years and less
 than ten years of experience:
 
 ```
-http://localhost:8000/api/rates/?experience=5,10
+http://localhost:8000/api/rates/?experience_range=5,10
 ```
 
 The valid values for `min_education` are `HS` (high school), `AA` (associates),
