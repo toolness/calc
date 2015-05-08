@@ -55,7 +55,7 @@ def get_contracts_queryset(request_params, wage_field):
     """
 
     query = request_params.get('q', None)
-    experience = request_params.get('experience', None)
+    experience_range = request_params.get('experience_range', None)
     min_experience = request_params.get('min_experience', None)
     max_experience = request_params.get('max_experience', None)
     min_education = request_params.get('min_education', None)
@@ -86,8 +86,8 @@ def get_contracts_queryset(request_params, wage_field):
             query = convert_to_tsquery(query)
             contracts = contracts.search(query, raw=True)
 
-    if experience:
-        years = experience.split(',')
+    if experience_range:
+        years = experience_range.split(',')
         min_experience = int(years[0])
         if len(years) > 1:
             max_experience = int(years[1])

@@ -343,7 +343,7 @@ class ContractsTest(TestCase):
 
     def test_filter_by_experience_range(self):
         get_contract_recipe().make(_quantity=3)
-        resp = self.c.get(self.path, {'experience': '6,8'})
+        resp = self.c.get(self.path, {'experience_range': '6,8'})
         self.assertEqual(resp.status_code, 200)
 
         self.assertResultsEqual(resp.data['results'], 
@@ -380,7 +380,7 @@ class ContractsTest(TestCase):
 
     def test_filter_by_experience_single(self):
         self.make_test_set()
-        resp = self.c.get(self.path, {'experience': '10'})
+        resp = self.c.get(self.path, {'experience_range': '10'})
         self.assertEqual(resp.status_code, 200)
 
         self.assertResultsEqual(resp.data['results'],
