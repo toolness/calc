@@ -36,7 +36,7 @@ def get_contracts_queryset(request_params, wage_field):
 
     Query Params:
         q (str): keywords to search by
-        experience(str): filter by a range of years of experience
+        experience_range(str): filter by a range of years of experience
         min_experience (int): filter by minimum years of experience
         max_experience (int): filter by maximum years of experience
         min_education (str): filter by a minimum level of education (see EDUCATION_CHOICES)
