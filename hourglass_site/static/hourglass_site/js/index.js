@@ -754,8 +754,6 @@
       {name: 'min_experience', template: 'minimum <a>{value} years</a> of experience'},
       {name: 'site', template: 'worksite: <a>{value}</a>'},
       {name: 'business_size', template: 'size: <a>{label}</a>'},
-      {name: 'price__gte', template: 'price &ge; <a>${value}</a>'},
-      {name: 'price__lte', template: 'price &le; <a>${value}</a>'},
       {name: 'schedule', template: 'schedule: <a>{value}</a>'}
     ])
     .map(function(d) {
