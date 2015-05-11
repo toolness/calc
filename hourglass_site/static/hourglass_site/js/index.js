@@ -496,9 +496,12 @@
       return d.key !== 'exclude';
     })
     .html(function(d) {
-      
-      return d.column.collapsed ? "" : d.string;
+      // don't just do "if !(d.string)" because 0 is valid
+      if (d.string === null) {
+        d.string = 'N/A';
+      }
 
+      return d.column.collapsed ? "" : d.string;
     });
 
     // add a link to incoming exclusion cells
