@@ -44,9 +44,9 @@ form {
           <input id="labor_category" name="q" placeholder="Type a labor category" class="search u-full-width" type="text">
           <label for="labor_category" style="display:none;">Type a labor category</label>
           <div id="query-types">
-            <label><input type="radio" name="query_type" value="match_all" checked> contains words</label>
-            <label><input type="radio" name="query_type" value="match_phrase"> contains phrase</label>
-            <label><input type="radio" name="query_type" value="match_exact"> exact match</label>
+            <label><input type="radio" name="query_type" value="match_all" checked> Contains words</label>
+            <label><input type="radio" name="query_type" value="match_phrase"> Contains phrase</label>
+            <label><input type="radio" name="query_type" value="match_exact"> Exact match</label>
           </div>
         </div>
         <div class="six columns">
@@ -63,7 +63,7 @@ form {
 
       <div class="row">
         <div class="filter three columns">
-          <label for="min_education">Min. Education Level:</label>
+          <label for="min_education">Min. education level:</label>
           <select id="min_education" name="min_education">
             <option value="">(none)</option>
             <option value="HS">High School</option>
@@ -98,7 +98,7 @@ form {
         </div>
 
         <div class="filter three columns">
-          <label for="business_size">Business Size:</label>
+          <label for="business_size">Business size:</label>
           <select id="business_size" name="business_size">
             <option value="">(all)</option>
             <option value="s" data-label="small">small business</option>
@@ -116,7 +116,7 @@ form {
 
         <div class="filter three columns">
           <label for="schedule">Schedule:</label>
-          <a href="/about#schedules" class="info">what's this?</a>
+          <a href="/about#schedules" class="info">What's this?</a>
           <select id="schedule" name="schedule">
             <option value="">(all)</option>
             <option>AIMS</option>
@@ -154,11 +154,11 @@ form {
         </p>
         <div id="results-actions" class="three columns">
           <a id="export-data" class="button button-primary"
-            title="Click to export your search results to an Excel file (CSV)" href="/api/rates/csv/">⬇ Export Data</a>
+            title="Click to export your search results to an Excel file (CSV)" href="/api/rates/csv/">⬇ Export Data (CSV)</a>
         </div>
       </div>
 
-      <h4>Price Stats</h4>
+      <h4>Hourly rate data</h4>
 
       <div class="graph">
         <svg id="price-histogram" class="graph histogram has-data" aria-description="A histogram showing the distribution of labor category prices.  Each bar represents a range within that distribution">
