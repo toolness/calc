@@ -114,7 +114,9 @@ span.dollars {
   }
 }
 
-.avg-price-container {
+.highlights-container {
+  margin-bottom: 2em;
+  margin-top: 1em;
   text-align: center;
 }
 
@@ -127,12 +129,13 @@ span.dollars {
   text-align: center;
 }
 
-.avg-price-title {
-}
-
 #avg-price-highlight {
   color: #29A0C5;
   font-weight: 400;
+}
+
+.rates-help-text {
+  color: #999;
 }
 
 .filter select {
