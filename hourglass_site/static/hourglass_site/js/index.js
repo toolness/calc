@@ -414,7 +414,7 @@
       .attr('class', 'label')
       .attr('transform', 'translate(' + [left + (right - left) / 2, 45] + ')')
       .attr('text-anchor', 'middle')
-      .text('price (hourly rate)')
+      .text('Price (hourly rate)')
 
     var yd = d3.extent(heightScale.domain());
     var ya = d3.svg.axis()
