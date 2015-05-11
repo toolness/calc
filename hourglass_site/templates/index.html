@@ -47,84 +47,10 @@ form {
     </div><!-- /.container -->
   </section><!-- /.search -->
 
-  <section class="filters">
-    <div class="container">
-      <h4>Optional Filters</h4>
-
-      <div class="filter">
-        <label for="min_education">Min. education level:</label>
-        <select id="min_education" name="min_education">
-          <option value="">(none)</option>
-          <option value="HS">High School</option>
-          <option value="AA">Associates</option>
-          <option value="BA">Bachelors Degree</option>
-          <option value="MA">Masters Degree</option>
-          <option value="PHD">Ph.D</option>
-        </select>
-      </div>
-
-      <div class="filter">
-        <label for="experience_range">Experience:</label>
-        <select id="experience_range" name="experience_range">
-          <option value="">(all)</option>
-          <option value="0,5">0-5 years</option>
-          <option value="5,10">5-10 years</option>
-          <option value="10,15">10-15 years</option>
-          <option value="15,20">15-20 years</option>
-          <option value="20,25">20-25 years</option>
-          <option value="25">25+ years</option>
-        </select>
-      </div>
-
-      <div class="filter">
-        <label for="site">Worksite:</label>
-        <select id="site" name="site">
-          <option value="">(all)</option>
-          <option>customer</option>
-          <option>contractor</option>
-          <option>both</option>
-        </select>
-      </div>
-
-      <div class="filter">
-        <label for="business_size">Business size:</label>
-        <select id="business_size" name="business_size">
-          <option value="">(all)</option>
-          <option value="s" data-label="small">small business</option>
-          <option value="o">other than small</option>
-        </select>
-      </div>
-
-      <div class="filter">
-        <label for="schedule">Schedule:</label>
-        <a href="/about#schedules" class="info">What's this?</a>
-        <select id="schedule" name="schedule">
-          <option value="">(all)</option>
-          <option value="AIMS">AIMS</option>
-          <option value="Consolidated">Consolidated</option>
-          <option value="Environmental">Environmental</option>
-          <option value="Logistics">Logistics</option>
-          <option value="Language Services">Language Services</option>
-          <option value="MOBIS">MOBIS</option>
-          <option value="PES">PES</option>
-        </select>
-      </div>
-
-      <!--
-      <div class="filter">
-        <label for="fiscal_year">Fiscal Year:</label>
-        <select id="fiscal_year" name="fiscal_year">
-        </select>
-      </div>
-      -->
-
-    </div><!-- /.container -->
-  </section><!-- /.filters  -->
-
-  <section class="results">
+  <section class="">
     <div class="container">
       <div class="row">
-        <p id="description" class="nine columns">
+        <p id="description" class="eight columns">
           Showing <span data-key="count">0</span> of
           <span id="results-count" class="total" data-key="total">0</span>
           <span data-key="results">results</span>
@@ -132,18 +58,97 @@ form {
             <span class="not-empty">with</span>
           </span>
         </p>
-        <div id="results-actions" class="three columns">
+        <div id="results-actions" class="four columns">
           <a id="export-data" class="button button-primary"
             title="Click to export your search results to an Excel file (CSV)" href="/api/rates/csv/">⬇ Export Data (CSV)</a>
         </div>
-      </div>
+      </div><!-- /.row -->
+    </div><!-- /.container -->
+  </section><!-- /.filters  -->
 
-      <h4>Hourly Rate Data</h4>
+  <section class="results">
+    <div class="container">
+      <div class="row">
 
-      <div class="graph">
-        <svg id="price-histogram" class="graph histogram has-data" aria-description="A histogram showing the distribution of labor category prices.  Each bar represents a range within that distribution">
-        </svg>
-      </div>
+        <div class="filter-block columns three">
+        <h5>Optional Filters</h5>
+
+          <div class="filter">
+            <label for="min_education">Min. education level:</label>
+            <select id="min_education" name="min_education">
+              <option value="">(none)</option>
+              <option value="HS">High School</option>
+              <option value="AA">Associates</option>
+              <option value="BA">Bachelors Degree</option>
+              <option value="MA">Masters Degree</option>
+              <option value="PHD">Ph.D</option>
+            </select>
+          </div>
+
+          <div class="filter">
+            <label for="experience_range">Experience:</label>
+            <select id="experience_range" name="experience_range">
+              <option value="">(all)</option>
+              <option value="0,5">0-5 years</option>
+              <option value="5,10">5-10 years</option>
+              <option value="10,15">10-15 years</option>
+              <option value="15,20">15-20 years</option>
+              <option value="20,25">20-25 years</option>
+              <option value="25">25+ years</option>
+            </select>
+          </div>
+
+          <div class="filter">
+            <label for="site">Worksite:</label>
+            <select id="site" name="site">
+              <option value="">(all)</option>
+              <option>customer</option>
+              <option>contractor</option>
+              <option>both</option>
+            </select>
+          </div>
+
+          <div class="filter">
+            <label for="business_size">Business size:</label>
+            <select id="business_size" name="business_size">
+              <option value="">(all)</option>
+              <option value="s" data-label="small">small business</option>
+              <option value="o">other than small</option>
+            </select>
+          </div>
+
+          <div class="filter">
+            <label for="schedule">Schedule:</label>
+            <a href="/about#schedules" class="info">What's this?</a>
+            <select id="schedule" name="schedule">
+              <option value="">(all)</option>
+              <option value="AIMS">AIMS</option>
+              <option value="Consolidated">Consolidated</option>
+              <option value="Environmental">Environmental</option>
+              <option value="Logistics">Logistics</option>
+              <option value="Language Services">Language Services</option>
+              <option value="MOBIS">MOBIS</option>
+              <option value="PES">PES</option>
+            </select>
+          </div>
+
+          <!--
+          <div class="filter">
+            <label for="fiscal_year">Fiscal Year:</label>
+            <select id="fiscal_year" name="fiscal_year">
+            </select>
+          </div>
+          -->
+        </div>
+
+        <div class="graph-block columns nine">
+          <h4>Hourly Rate Data</h4>
+
+          <div class="graph">
+            <svg id="price-histogram" class="graph histogram has-data" aria-description="A histogram showing the distribution of labor category prices.  Each bar represents a range within that distribution">
+            </svg>
+          </div>
+        </div><!-- /.div -->
 
       <div class="loading-indicator">
         <p class="message">Loading results...</p>

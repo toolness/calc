@@ -95,9 +95,24 @@ a.info {
   margin-left: 85px;
 }
 
-section.filters {
+.graph-block {
+  margin-left: 0;
+}
+
+.filter-block {
   background: #F3F3F3;
-  padding: 1rem 0;
+  margin-bottom: 3em;
+  padding: 1rem 2rem;
+}
+
+@media (min-width: 980px) {
+  .filter-block {
+    float: right;
+  }
+}
+
+.filter select {
+    width: 100%;
 }
 
 section.search {
