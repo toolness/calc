@@ -114,10 +114,15 @@ span.dollars {
   }
 }
 
+.avg-price-container {
+  text-align: center;
+}
+
 .avg-price-block {
   background: #f3f3f3;
   border-radius: 4px;
   display: inline-block;
+  margin: 0 auto;
   padding: .4em 2em;
   text-align: center;
 }
@@ -127,7 +132,7 @@ span.dollars {
 
 #avg-price-highlight {
   color: #29A0C5;
-  font-style: bold;
+  font-weight: 400;
 }
 
 .filter select {
