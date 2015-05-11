@@ -216,7 +216,7 @@ svg .axis .label {
   }
 
 #price-histogram {
-  max-height: 200px;
+  max-height: 220px;
 }
 
 .selenium #search[class="search"] {
