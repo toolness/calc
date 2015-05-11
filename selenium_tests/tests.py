@@ -314,6 +314,20 @@ class FunctionalTests(LiveServerTestCase):
         self.assertIsNotNone(re.search(r'Small Biz\d+', driver.page_source))
         self.assertIsNotNone(re.search(r'Large Biz\d+', driver.page_source))
 
+    def test_filter_schedules(self):
+        get_contract_recipe().make(_quantity=5, vendor_name=seq("MOBIS"), schedule='MOBIS')
+        get_contract_recipe().make(_quantity=5, vendor_name=seq("AIMS"), schedule='AIMS')
+        driver = self.load_and_wait()
+        form = self.get_form()
+
+        self.set_form_value(form, 'schedule', 'MOBIS')
+        self.submit_form_and_wait()
+
+        self.assert_results_count(driver, 5)
+
+        self.assertIsNone(re.search(r'AIMS\d+', driver.page_source))
+        self.assertIsNotNone(re.search(r'MOBIS\d+', driver.page_source))
+
     def test_schedule_column_is_open_by_default(self):
         get_contract_recipe().make(_quantity=5)
         driver = self.load()
