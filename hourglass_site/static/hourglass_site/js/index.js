@@ -505,13 +505,8 @@
     enter.filter(function(d) {
       return d.key === 'exclude';
     })
-    
     .append('a')
       .attr('class', 'exclude-row')
-      .attr('title', function(d){
-          return 'Exclude ' + d.row.labor_category + ' from your search';
-      })
-
       .html('&times;');
 
 
@@ -523,6 +518,10 @@
       .attr('href', function(d) {
         return '?exclude=' + d.row.id;
       })
+      .attr('title', function(d){
+          return 'Exclude ' + d.row.labor_category + ' from your search';
+      })
+
       .on('click', function(d) {
         d3.event.preventDefault();
         /*
