@@ -87,16 +87,18 @@ span.dollars {
   color: #6E6E6E;
 }
 
-a.info {
+.schedule-info {
+  float: right;
   font-size: 70%;
   color: #bbb;
-  position: absolute;
-  margin-top: -24px;
-  margin-left: 85px;
 }
 
 .graph-block {
   margin-left: 0;
+}
+
+.filter-title {
+  padding-bottom: .3em;
 }
 
 .filter-block {
@@ -123,13 +125,17 @@ section.search {
   padding: 1rem 0;
 }
 
-  .results h4 {
-    margin-bottom: 0;
-  }
+.results h4 {
+  margin-bottom: 0;
+}
 
 div.filters .filter {
   width: 50%;
   float: left;
+}
+
+label[for=schedule] {
+  display: inline-block;
 }
 
 th.column-exclude {               width:  2%; }
