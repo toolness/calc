@@ -28,17 +28,7 @@ form {
   <input type="hidden" name="exclude" value="">
 
   <section class="search">
-    <div class="container">
-
-<!--
-      <div class="row">
-        <div class="twelve columns">
-          <h1 class="description-main">Search awarded hourly rates for labor categories</h1>
-          <h2 class="description-secondary">This tool was built to assist contracting officers and contracting specialists with market research and price analysis for labor categories on Federal Government contracts.</h2>
-        </div>
-      </div>
--->
-      
+    <div class="container"> 
       <div class="row">
         <div class="six columns">
           <input id="labor_category" name="q" placeholder="Type a labor category" class="search u-full-width" type="text">
@@ -108,24 +98,18 @@ form {
       </div> <!-- /row -->
 
       <div class="row">
-        <div class="filter six columns">
-          <label for="price">Only search &amp; show prices:</label>
-          from <span class="dollars">$</span><input id="price__gte" name="price__gte" type="text" class="price" placeholder="0">
-          to <span class="dollars">$</span><input id="price__lte" name="price__lte" type="text" class="price" placeholder="&infin;">
-        </div>
-
         <div class="filter three columns">
           <label for="schedule">Schedule:</label>
           <a href="/about#schedules" class="info">what's this?</a>
           <select id="schedule" name="schedule">
             <option value="">(all)</option>
-            <option>AIMS</option>
-            <option>Consolidated</option>
-            <option>Environmental</option>
-            <option>Logistics</option>
-            <option>Language Services</option>
-            <option>MOBIS</option>
-            <option>PES</option>
+            <option value="AIMS">AIMS</option>
+            <option value="Consolidated">Consolidated</option>
+            <option value="Environmental">Environmental</option>
+            <option value="Logistics">Logistics</option>
+            <option value="Language Services">Language Services</option>
+            <option value="MOBIS">MOBIS</option>
+            <option value="PES">PES</option>
           </select>
         </div>
 
