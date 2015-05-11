@@ -114,6 +114,22 @@ span.dollars {
   }
 }
 
+.avg-price-block {
+  background: #f3f3f3;
+  border-radius: 4px;
+  display: inline-block;
+  padding: .4em 2em;
+  text-align: center;
+}
+
+.avg-price-title {
+}
+
+#avg-price-highlight {
+  color: #29A0C5;
+  font-style: bold;
+}
+
 .filter select {
     width: 100%;
 }

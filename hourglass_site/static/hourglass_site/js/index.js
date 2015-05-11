@@ -289,6 +289,9 @@
           .range([0, 1, bottom - top]);
     console.log('count extent:', countExtent);
 
+    d3.select("#avg-price-highlight")
+      .text(formatDollars(data.average));
+
     var xAxis = svg.select(".axis.x");
     if (xAxis.empty()) {
       xAxis = svg.append("g")
