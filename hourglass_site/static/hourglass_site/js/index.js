@@ -751,7 +751,7 @@
     var inputs = ([
       {name: 'q', template: '&ldquo;<a>{value}</a>&rdquo;'},
       {name: 'min_education', template: 'minimum education level: <a>{label}</a>'},
-      {name: 'min_experience', template: 'minimum <a>{value} years</a> of experience'},
+      {name: 'experience_range', template: '<a>{label}</a> of experience'},
       {name: 'site', template: 'worksite: <a>{value}</a>'},
       {name: 'business_size', template: 'size: <a>{label}</a>'},
       {name: 'schedule', template: 'schedule: <a>{value}</a>'}
