@@ -38,6 +38,10 @@ body {
   display: block;
 }
 
+.hidden {
+    display: none;
+}
+
 /*
 .button,
 .button-primary {
