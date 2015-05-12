@@ -55,7 +55,7 @@ form {
 
           <div class="filter-block">
 
-          <h5 class="filter-title">Optional Filters</h5>
+            <h5 class="filter-title">Optional Filters</h5>
 
             <div class="filter">
               <label for="min_education">Min. education level:</label>
@@ -123,7 +123,7 @@ form {
               </select>
             </div>
             -->
-            </div>
+          </div>
 
           <div id="results-actions">
             <a id="export-data" class="button button-primary"
@@ -134,14 +134,19 @@ form {
 
         <div class="graph-block columns nine">
 
-        <p id="description" class="">
-          Showing <span data-key="count">0</span> of
-          <span id="results-count" class="total" data-key="total">0</span>
-          <span data-key="results">results</span>
-          <span class="filters">
-            <span class="not-empty">with</span>
-          </span>
-        </p>
+          <p id="description" class="">
+            Showing <span data-key="count">0</span> of
+            <span id="results-count" class="total" data-key="total">0</span>
+            <span data-key="results">results</span>
+            <span class="filters">
+              <span class="not-empty">with</span>
+            </span>
+          </p>
+
+          <div class="loading-indicator">
+            <p class="message">Loading results...</p>
+            <div class="error-message"></div>
+          </div>
 
           <h4>Hourly Rate Data</h4>
 
@@ -160,11 +165,8 @@ form {
           <p class="rates-help-text">The rates shown here are fully burdened, applicable worldwide, and representative of the current fiscal year. This data represents rates awarded at the master contract level.</p>
 
         </div><!-- /.div -->
-
-      <div class="loading-indicator">
-        <p class="message">Loading results...</p>
-        <div class="error-message"></div>
-      </div>
+        
+      </div><!-- /.row -->
 
       <table id="results-table" class="results has-data">
         <thead>
@@ -190,7 +192,7 @@ form {
       </table>
 
     </div><!-- /.container -->
-  </section><!-- /.graphs -->
+  </section><!-- /.results -->
 
 </form>
 
