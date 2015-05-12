@@ -222,7 +222,7 @@ footer {
     list-style-type: none;
     float: left;
 }
-#footer_nav a {
+#footer_nav a, #site-status a {
     color: #FFF;
     list-style-type: none;   
 }
