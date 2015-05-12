@@ -104,13 +104,14 @@ span.dollars {
 .filter-block {
   background: #F3F3F3;
   border-radius: 4px;
-  margin-bottom: 3em;
+  margin-bottom: 2em;
   padding: 1rem 2rem;
 }
 
 @media (min-width: 550px) {
-  .filter-block {
+  .filter-container {
     float: right;
+    margin-bottom: 3em;
   }
 }
 
