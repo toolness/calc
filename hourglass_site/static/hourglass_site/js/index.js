@@ -27,21 +27,14 @@
       sortHeaders = resultsTable.selectAll("thead th")
         .call(setupColumnHeader),
       loadingIndicator = search.select(".loading-indicator"),
-      request,
-      updateExportURL = function() {
-        document.getElementById('export-data').href = API_HOST + "/rates/csv" + document.location.search;
-      };
+      request;
 
   // JFYI
   var HISTOGRAM_BINS = 12;
 
-  // update export button URL when page loads
-  updateExportURL();
-
   form.on("submit", function onsubmit(data, e) {
     e.preventDefault();
     submit(true);
-    updateExportURL();
   });
 
    /*
