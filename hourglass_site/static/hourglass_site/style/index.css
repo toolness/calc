@@ -90,7 +90,6 @@ span.dollars {
 .schedule-info {
   float: right;
   font-size: 70%;
-  color: #666;
 }
 
 .graph-block {
@@ -131,7 +130,7 @@ span.dollars {
 }
 
 #avg-price-highlight {
-  color: #29A0C5;
+  color: #17779f;
   font-weight: 400;
 }
 
