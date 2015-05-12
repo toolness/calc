@@ -44,7 +44,7 @@
     updateExportURL();
   });
 
-  /*
+   /*
    * For some reason, the browser's native form reset isn't working.
    * So instead of just listening for a "reset" event and submitting,
    * we hijack the click event on the reset button and reset the form
@@ -455,7 +455,15 @@
 
     tr.exit().remove();
 
-    tr.enter().append('tr');
+    tr.enter().append('tr')
+    .on('mouseover', function(d) {
+      var label = this.querySelector('.years');
+      label.className = label.className.replace('hidden', '');
+    })
+    .on('mouseout', function(d) {
+      var label = this.querySelector('.years');
+      label.className = label.className + ' hidden';
+    });
 
     var td = tr.selectAll('.cell')
       .data(function(d) {
@@ -502,6 +510,14 @@
       
       return d.column.collapsed ? "" : d.string;
 
+    });
+
+    // add "years" the experience number, shown on row hover
+    td.filter(function(d) {
+      return d.key === 'min_years_experience';
+    })
+    .html(function(d) {
+        return d.string + ' <span class="years hidden">years</span>';
     });
 
     // add a link to incoming exclusion cells
