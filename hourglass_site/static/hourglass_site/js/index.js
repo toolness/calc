@@ -29,7 +29,7 @@
       loadingIndicator = search.select(".loading-indicator"),
       request,
       updateExportURL = function() {
-        document.getElementById('export-data').href = "/api/rates/csv" + document.location.search;
+        document.getElementById('export-data').href = API_HOST + "/rates/csv" + document.location.search;
       };
 
   // JFYI
