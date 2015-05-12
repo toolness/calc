@@ -513,7 +513,8 @@
       return d.key === 'min_years_experience';
     })
     .html(function(d) {
-        return d.string + ' <span class="years hidden">years</span>';
+      var label = d.string === 1 ? 'year' : 'years';
+      return d.string + ' <span class="years hidden">' + label + '</span>';
     });
 
     // add a link to incoming exclusion cells
