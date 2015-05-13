@@ -163,6 +163,11 @@ label[for=schedule] {
   display: inline-block;
 }
 
+.table-container {
+  width: 100%;
+  overflow: scroll;
+}
+
 th.column-exclude {               width:  2%; }
 th.column-labor_category {        width: 23%; }
 th.column-education_level {       width: 10%; }
