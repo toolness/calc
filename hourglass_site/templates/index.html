@@ -55,7 +55,7 @@ form {
 
           <div class="filter-block">
 
-          <h5 class="filter-title">Optional Filters</h5>
+            <h5 class="filter-title">Optional Filters</h5>
 
             <div class="filter">
               <label for="min_education">Min. education level:</label>
@@ -123,7 +123,7 @@ form {
               </select>
             </div>
             -->
-            </div>
+          </div>
 
           <div id="results-actions">
             <a id="export-data" class="button button-primary"
@@ -134,17 +134,22 @@ form {
 
         <div class="graph-block columns nine">
 
-        <p id="description" class="">
-          Showing <span data-key="count">0</span> of
-          <span id="results-count" class="total" data-key="total">0</span>
-          <span data-key="results">results</span>
-          <span class="filters">
-            <span class="not-empty">with</span>
-          </span>
-        </p>
+          <p id="description" class="">
+            Showing <span data-key="count">0</span> of
+            <span id="results-count" class="total" data-key="total">0</span>
+            <span data-key="results">results</span>
+            <span class="filters">
+              <span class="not-empty">with</span>
+            </span>
+          </p>
 
           <h4>Hourly Rate Data</h4>
 
+          <div class="loading-indicator">
+            <p class="message">Loading results...</p>
+            <div class="error-message"></div>
+          </div>
+          
           <div class="graph">
             <svg id="price-histogram" class="graph histogram has-data" aria-description="A histogram showing the distribution of labor category prices.  Each bar represents a range within that distribution">
             </svg>
@@ -161,10 +166,7 @@ form {
 
         </div><!-- /.div -->
 
-      <div class="loading-indicator">
-        <p class="message">Loading results...</p>
-        <div class="error-message"></div>
-      </div>
+      </div><!-- /.row -->
 
       <table id="results-table" class="results has-data">
         <thead>
@@ -190,7 +192,7 @@ form {
       </table>
 
     </div><!-- /.container -->
-  </section><!-- /.graphs -->
+  </section><!-- /.results -->
 
 </form>
 
