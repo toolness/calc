@@ -266,6 +266,15 @@ class FunctionalTests(LiveServerTestCase):
         self.assertIsNone(re.search(r'4 years of experience\d+', driver.page_source))
         self.assertIsNotNone(re.search(r'5 years of experience\d+', driver.page_source))
 
+    def test_contract_link(self):
+        get_contract_recipe().make(_quantity=1, idv_piid='GS-23F-0062P')
+        driver = self.load_and_wait()
+        form = self.get_form()
+
+        contract_link = driver.find_element_by_xpath('//*[@id="results-table"]/tbody/tr[1]/td[5]/a')
+        redirect_url = 'https://www.gsaadvantage.gov/ref_text/GS23F0062P/GS23F0062P_online.htm'
+        self.assertEqual(contract_link.get_attribute('href'), redirect_url)
+
     def test_there_is_no_business_size_column(self):
         get_contract_recipe().make(_quantity=5, vendor_name=seq("Large Biz"), business_size='o')
         driver = self.load()
