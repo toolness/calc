@@ -55,7 +55,7 @@ form {
 
           <div class="filter-block">
 
-          <h5 class="filter-title">Optional Filters</h5>
+            <h5 class="filter-title">Optional Filters</h5>
 
             <div class="filter">
               <label for="min_education">Min. education level:</label>
@@ -123,7 +123,7 @@ form {
               </select>
             </div>
             -->
-            </div>
+          </div>
 
           <div id="results-actions">
             <a id="export-data" class="button button-primary"
@@ -134,17 +134,22 @@ form {
 
         <div class="graph-block columns nine">
 
-        <p id="description" class="">
-          Showing <span data-key="count">0</span> of
-          <span id="results-count" class="total" data-key="total">0</span>
-          <span data-key="results">results</span>
-          <span class="filters">
-            <span class="not-empty">with</span>
-          </span>
-        </p>
+          <p id="description" class="">
+            Showing <span data-key="count">0</span> of
+            <span id="results-count" class="total" data-key="total">0</span>
+            <span data-key="results">results</span>
+            <span class="filters">
+              <span class="not-empty">with</span>
+            </span>
+          </p>
 
           <h4>Hourly Rate Data</h4>
 
+          <div class="loading-indicator">
+            <p class="message">Loading results...</p>
+            <div class="error-message"></div>
+          </div>
+          
           <div class="graph">
             <svg id="price-histogram" class="graph histogram has-data" aria-description="A histogram showing the distribution of labor category prices.  Each bar represents a range within that distribution">
             </svg>
@@ -161,36 +166,35 @@ form {
 
         </div><!-- /.div -->
 
-      <div class="loading-indicator">
-        <p class="message">Loading results...</p>
-        <div class="error-message"></div>
+      </div><!-- /.row -->
+
+      <div class="table-container">
+        <table id="results-table" class="results has-data">
+          <thead>
+            <tr>
+              <th scope="col" class="exclude" data-key="exclude" data-format=""><a id="restore-excluded" class="restore merge-params" href="?exclude="></a></th>
+              <th scope="col" class="sortable" data-key="labor_category">Labor Category</th>
+              <th scope="col" class="sortable" data-key="education_level" title="Minimum years of education">Min&nbsp;Edu.</th>
+              <th scope="col" class="sortable" data-key="min_years_experience" title="Minimum years of experience">Experience</th>
+              <th scope="col" class="sortable" data-key="current_price" data-format="$%,.02f">Price</th>
+              <th scope="col" data-key="idv_piid">Contract #</th>
+              <th scope="col" class="sortable" data-key="vendor_name">Vendor</th>
+              <th scope="col" class="sortable collapsible" data-key="schedule">Schedule</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="8">
+                <a href="#results-table">Return to the top</a>
+              </td>
+          </tfoot>
+        </table>
       </div>
 
-      <table id="results-table" class="results has-data">
-        <thead>
-          <tr>
-            <th scope="col" class="exclude" data-key="exclude" data-format=""><a id="restore-excluded" class="restore merge-params" href="?exclude="></a></th>
-            <th scope="col" class="sortable" data-key="labor_category">Labor Category</th>
-            <th scope="col" class="sortable" data-key="education_level" title="Minimum years of education">Min&nbsp;Edu.</th>
-            <th scope="col" class="sortable" data-key="min_years_experience" title="Minimum years of experience">Experience</th>
-            <th scope="col" class="sortable" data-key="current_price" data-format="$%,.02f">Price</th>
-            <th scope="col" data-key="idv_piid">Contract #</th>
-            <th scope="col" class="sortable" data-key="vendor_name">Vendor</th>
-            <th scope="col" class="sortable collapsible" data-key="schedule">Schedule</th>
-          </tr>
-        </thead>
-        <tbody>
-        </tbody>
-        <tfoot>
-          <tr>
-            <td colspan="8">
-              <a href="#results-table">Return to the top</a>
-            </td>
-        </tfoot>
-      </table>
-
     </div><!-- /.container -->
-  </section><!-- /.graphs -->
+  </section><!-- /.results -->
 
 </form>
 
