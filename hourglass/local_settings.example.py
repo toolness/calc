@@ -23,3 +23,6 @@ REMOTE_TESTING = {
         # 'platform': 'Windows 7'
     }
 }
+
+
+SECURE_SSL_REDIRECT = False
