@@ -517,6 +517,17 @@
       return d.string + ' <span class="years hidden">' + label + '</span>';
     });
 
+    // add links to contracts
+    td.filter(function(d) {
+      return d.key === 'idv_piid';
+    })
+    .html(function(d) {
+      var id = d.string.split('-').join('');
+      return '<a target="_blank" href="https://www.gsaadvantage.gov/ref_text/' 
+             + id + '/' + id + '_online.htm">' + d.string
+             + '<img class="document-icon" src="static/hourglass_site/images/document.svg" alt="document icon"></a>';
+    });
+
     // add a link to incoming exclusion cells
     enter.filter(function(d) {
       return d.key === 'exclude';
