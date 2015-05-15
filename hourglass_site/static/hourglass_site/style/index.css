@@ -261,6 +261,49 @@ svg .axis .label {
 .selenium #search.error { border-color: red; }
 .selenium #search.loaded { border-color: green; }
 
+/* tooltips */
+
+.tooltip {
+  display: inline;
+  position: relative;
+}
+
+.tooltip::after {
+  background: none repeat scroll 0 0 rgba(0, 0, 0, 0.8);
+  border-radius: 5px;
+  bottom: 26px;
+  color: #fff;
+  content: attr(title);
+  left: 20%;
+  opacity: 0;
+  padding: 5px 15px;
+  position: absolute;
+  transition: opacity 0.25s ease-in-out 0s;
+  width: 220px;
+  z-index: 98;
+}
+
+.tooltip:hover::after {
+  opacity: 1;
+}
+
+.tooltip:hover::before {
+  -moz-border-bottom-colors: none;
+  -moz-border-left-colors: none;
+  -moz-border-right-colors: none;
+  -moz-border-top-colors: none;
+  border-color: #333 transparent;
+  border-image: none;
+  border-style: solid;
+  border-width: 6px 6px 0;
+  bottom: 20px;
+  content: "";
+  left: 50%;
+  position: absolute;
+  z-index: 99;
+}
+
+
 /**
  * IE tweaks!
  *
