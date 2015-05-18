@@ -290,20 +290,73 @@ svg .axis .label {
   z-index: 99;
 }
 
-.tooltip:hover:after {
-  background: #333;
-  background: rgba(0,0,0,.8);
+.tooltip:hover::after {
+  background: none repeat scroll 0 0 rgba(0, 0, 0, 0.8);
   border-radius: 5px;
   bottom: 26px;
   color: #fff;
   content: attr(aria-label);
-  left: 20%;
-  padding: 5px 15px;
+  left: 0;
+  padding: 3px 15px;
   position: absolute;
+  text-align: center;
+  width: auto;
   z-index: 98;
-  width: 220px;
 }
 
+/* tooltips test 2 */
+
+.tooltips {
+  position: relative;
+  display: inline;
+}
+.tooltips span {
+  position: absolute;
+  width:140px;
+  color: #FFFFFF;
+  background: #000000;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  visibility: hidden;
+  border-radius: 6px;
+}
+.tooltips span:after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -8px;
+  width: 0; height: 0;
+  border-top: 8px solid #000000;
+  border-right: 8px solid transparent;
+  border-left: 8px solid transparent;
+}
+th:hover.tooltips span {
+  visibility: visible;
+  opacity: 0.8;
+  bottom: 30px;
+  left: 50%;
+  margin-left: -76px;
+  z-index: 999;
+}
+
+/* tooltips test 3 */
+
+.drag-hint {
+  position:relative;
+}
+.drag-hint > span{
+  display:none;
+}
+.drag-hint:hover > span {
+  display: inline;
+  position:absolute;
+  top: -25px;
+  left: 0;
+  right: 0;
+  text-align: center;
+}
 
 /**
  * IE tweaks!
