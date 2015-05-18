@@ -2,27 +2,15 @@
 {% load staticfiles %}
 
 {% block head %}
-
 <link rel="stylesheet" href="{% static 'hourglass_site/style/index.css' %}">
+<script src="{% static 'hourglass_site/js/vendor/rgbcolor.js' %}"></script>
+<script src="{% static 'hourglass_site/js/vendor/StackBlur.js' %}"></script>
+<script src="{% static 'hourglass_site/js/vendor/canvg.js' %}"></script>
+<script src="{% static 'hourglass_site/js/vendor/canvas-toBlob.js' %}"></script>
+<script src="{% static 'hourglass_site/js/vendor/FileSaver.js' %}"></script>
 {% endblock %}
 
 {% block body %}
-
-<!--[if lt IE 9]>
-<section class="alert-ie8">
-  <div class="container">
-    <h2>This website does not support Internet Explorer version 8 or lower.</h2>
-    <p>We recomend upgrading to the latest <a href="http://windows.microsoft.com/en-us/internet-explorer/download-ie">Internet Explorer</a>, <a href="https://www.google.com/chrome/browser/">Google Chrome</a>, or <a href="https://www.mozilla.org/firefox/">Firefox</a>.</p>
-    <p>If you are using Internet Explorer 9 or later, make sure you turn off "Compatibility View"</p>    
-  </div>
-</section>
-<style>
-form {
-  display: none;
-}
-</style>
-<![endif]-->
-
 <form id="search" class="search" role="form">
   <input type="hidden" name="sort" value="current_price">
   <input type="hidden" name="exclude" value="">
@@ -133,7 +121,7 @@ form {
         </div>
 
         <div class="graph-block columns nine">
-
+          <canvas id="graph" class="hidden" width="710" height="280"></canvas> <!-- for converting the histogram into an img -->
           <p id="description" class="">
             Showing <span data-key="count">0</span> of
             <span id="results-count" class="total" data-key="total">0</span>
@@ -144,14 +132,54 @@ form {
           </p>
 
           <h4>Hourly Rate Data</h4>
+          <a id="download-histogram" class="hidden" href="#">Download histogram</a>
 
           <div class="loading-indicator">
             <p class="message">Loading results...</p>
             <div class="error-message"></div>
           </div>
-          
+
           <div class="graph">
             <svg id="price-histogram" class="graph histogram has-data" aria-description="A histogram showing the distribution of labor category prices.  Each bar represents a range within that distribution">
+              <style>
+                * {
+                  vector-effect: non-scaling-stroke;
+                }
+
+                .axis .label {
+                  fill: #666;
+                  font-style: italic;
+                }
+
+                .axis line,
+                .axis path {
+                  fill: none;
+                  stroke-width: 1;
+                  stroke: #000;
+                  shape-rendering: crispEdges;
+                }
+
+                .axis text {
+                  font-size: 13px;
+                }
+
+                .avg .value,
+                .axis .tick.primary text {
+                  font-weight: bold;
+                }
+
+                rect {
+                  fill: #999;
+                  stroke: #fff;
+                  stroke-width: 1;
+                  shape-rendering: crispEdges;
+                }
+
+                .avg line {
+                  stroke-width: 1;
+                  stroke: #000;
+                }
+              </style>
             </svg>
           </div>
 

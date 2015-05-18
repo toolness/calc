@@ -27,6 +27,7 @@
       sortHeaders = resultsTable.selectAll("thead th")
         .call(setupColumnHeader),
       loadingIndicator = search.select(".loading-indicator"),
+      histogramDownloadLink = document.getElementById('download-histogram'),
       request;
 
   // JFYI
@@ -58,6 +59,9 @@
   inputs.on("change", function onchange() {
     submit(true);
   });
+
+  histogramDownloadLink.className = "";
+  histogramDownloadLink.addEventListener('click', histogram_to_img, false);
 
   d3.selectAll('a.merge-params')
     .on('click', function() {
@@ -313,8 +317,6 @@
         .attr("dy", avgOffset - 6);
       avgText.append("tspan")
         .attr("class", "value average");
-      avgText.append("tspan")
-        .text(" average");
       avg.append("line");
       avg.append("circle")
         .attr("cy", avgOffset)
@@ -325,7 +327,7 @@
       .attr("y1", avgOffset)
       .attr("y2", bottom - top + 8); // XXX tick size = 6
     avg.select(".value")
-      .text(formatDollars(data.average));
+      .text(formatDollars(data.average) + ' average');
 
     var bars = gBar.selectAll(".bar")
       .data(bins);
@@ -867,6 +869,19 @@
         return d[key] || undef.call(d, key);
       });
     };
+  }
+
+  function histogram_to_img(e) {
+    e.preventDefault();
+    var svg = document.getElementById('price-histogram').outerHTML.toString(),
+        canvas = document.getElementById('graph');
+
+    // convert svg into canvas
+    canvg(canvas, svg, {ignoreMouse: true, scaleWidth: 640, scaleHeight: 200});
+
+    canvas.toBlob(function(blob) {
+      saveAs(blob, 'histogram.png');
+    });
   }
 
 })(this);

@@ -1,4 +1,3 @@
-@import url(graphs.css);
 @import url(tables.css);
 
 .loading-indicator,
@@ -206,11 +205,6 @@ a.focus-input {
   border-bottom: 1px dotted;
 }
 
-svg .axis .label {
-  fill: #666;
-  font-style: italic;
-}
-
 #reset-button {
   background: #fff;
 }
@@ -257,6 +251,23 @@ svg .axis .label {
 
 #price-histogram {
   max-height: 220px;
+}
+
+/* graph container */
+.graph {
+  position: relative;
+  margin: 1rem 0;
+}
+
+svg.graph {
+  display: block;
+  margin: 0;
+  width: 100%;
+  height: auto;
+}
+
+.graph > .title {
+  position: absolute;
 }
 
 .selenium #search[class="search"] {
