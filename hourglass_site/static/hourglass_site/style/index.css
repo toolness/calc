@@ -196,8 +196,14 @@ td.column-min_years_experience .years {
 }
 
 .document-icon {
+  fill: #17779f;
   height: 12px;
   margin-left: 3px;
+  width: 12px;
+}
+
+.column-idv_piid:hover .document-icon {
+  fill: #0c4c6f;
 }
 
 a.focus-input {
