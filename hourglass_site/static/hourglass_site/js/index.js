@@ -60,7 +60,7 @@
     submit(true);
   });
 
-  histogramDownloadLink.className = "";
+  histogramDownloadLink.className = "button button-primary";
   histogramDownloadLink.addEventListener('click', histogram_to_img, false);
 
   d3.selectAll('a.merge-params')
