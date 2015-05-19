@@ -876,7 +876,8 @@
     var svg = document.getElementById('price-histogram'),
         canvas = document.getElementById('graph'),
         serializer = new XMLSerializer(),
-        img;
+        img,
+        modalImg;
 
     svg = serializer.serializeToString(svg);
 
@@ -894,7 +895,7 @@
       modalImg.src = img;
 
       vex.open({
-        content: 'Please right click and select "save as" to download graph.',
+        content: 'Please right click the image and select "save as" to download the graph.',
         afterOpen: function(content) {
           return content.append(modalImg);
         },
