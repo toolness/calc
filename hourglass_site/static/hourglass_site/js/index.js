@@ -873,8 +873,11 @@
 
   function histogram_to_img(e) {
     e.preventDefault();
-    var svg = document.getElementById('price-histogram').outerHTML.toString(),
-        canvas = document.getElementById('graph');
+    var svg = document.getElementById('price-histogram'),
+        canvas = document.getElementById('graph'),
+        serializer = new XMLSerializer();
+
+    svg = serializer.serializeToString(svg);
 
     // convert svg into canvas
     canvg(canvas, svg, {ignoreMouse: true, scaleWidth: 640, scaleHeight: 200});
