@@ -875,16 +875,35 @@
     e.preventDefault();
     var svg = document.getElementById('price-histogram'),
         canvas = document.getElementById('graph'),
-        serializer = new XMLSerializer();
+        serializer = new XMLSerializer(),
+        img;
 
     svg = serializer.serializeToString(svg);
 
     // convert svg into canvas
     canvg(canvas, svg, {ignoreMouse: true, scaleWidth: 640, scaleHeight: 200});
 
-    canvas.toBlob(function(blob) {
-      saveAs(blob, 'histogram.png');
-    });
+    if (typeof Blob !== 'undefined') {
+      canvas.toBlob(function(blob) {
+        saveAs(blob, 'histogram.png');
+      });
+    }
+    else {
+      img = canvas.toDataURL('image/png');
+      modalImg = new Image();
+      modalImg.src = img;
+
+      vex.open({
+        content: 'Please right click and select "save as" to download graph.',
+        afterOpen: function(content) {
+          return content.append(modalImg);
+        },
+        showCloseButton: true,
+        contentCSS: {
+          'width': '800px'
+        }
+      });
+    }
   }
 
 })(this);
