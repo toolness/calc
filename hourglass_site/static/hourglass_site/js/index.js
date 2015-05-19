@@ -870,3 +870,8 @@
   }
 
 })(this);
+
+// initialize tooltipster.js
+$(document).ready(function() {
+    $('.tooltip').tooltipster();
+});
