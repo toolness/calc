@@ -873,5 +873,9 @@
 
 // initialize tooltipster.js
 $(document).ready(function() {
-    $('.tooltip').tooltipster();
+    $('.tooltip').tooltipster({
+        functionInit: function(origin, content) {
+            return $(this).attr('aria-label');
+        }
+    });
 });
