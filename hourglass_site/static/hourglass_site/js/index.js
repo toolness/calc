@@ -29,6 +29,18 @@
       loadingIndicator = search.select(".loading-indicator"),
       request;
 
+  // set default options for all future tooltip instantiations
+  $.fn.tooltipster('setDefaults', {
+    speed: 200
+  });
+
+  // initialize tooltipster.js
+  $('.tooltip').tooltipster({
+      functionInit: function(origin, content) {
+          return $(this).attr('aria-label');
+      }
+  });
+
   // JFYI
   var HISTOGRAM_BINS = 12;
 
@@ -534,7 +546,12 @@
     })
     .append('a')
       .attr('class', 'exclude-row')
-      .html('&times;');
+      .html('&times;')
+      .each(function(){
+        $(this).tooltipster({
+          position: 'bottom'
+        })
+      });
 
 
     // update the links on all exclude cells
@@ -545,8 +562,11 @@
       .attr('href', function(d) {
         return '?exclude=' + d.row.id;
       })
-      .attr('title', function(d){
+      .attr('aria-label', function(d){
           return 'Exclude ' + d.row.labor_category + ' from your search';
+      })
+      .each(function(){
+        $(this).tooltipster('content', this.getAttribute('aria-label'))
       })
 
       .on('click', function(d) {
@@ -612,8 +632,9 @@
         this.classList.add('column-' + d.key);
       });
 
-    headers.filter(function(d) { return d.collapsible; })
-      .call(setupCollapsibleHeaders);
+    // removed temporarily to prevent collision with tooltips [TS]
+    // headers.filter(function(d) { return d.collapsible; })
+    //   .call(setupCollapsibleHeaders);
 
     headers.filter(function(d) { return d.sortable; })
       .call(setupSortHeaders);
@@ -674,8 +695,10 @@
         .classed('descending', function(c) {
           return c.sorted && c.descending;
         })
-        // .attr('aria-label', title)
-        .attr('title', title);
+        .attr('aria-label', title)
+        .each(function (){
+          $(this).tooltipster('content', this.getAttribute ('aria-label'));
+        })
 
     resultsTable.selectAll('tbody td')
       .classed('sorted', function(c) {
@@ -683,6 +706,7 @@
       });
   }
 
+  // temporarily not in use to prevent tooltip collision [TS]
   function setupCollapsibleHeaders(headers) {
     headers
       .each(function(d) {
