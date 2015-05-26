@@ -632,8 +632,9 @@
         this.classList.add('column-' + d.key);
       });
 
-    headers.filter(function(d) { return d.collapsible; })
-      .call(setupCollapsibleHeaders);
+    // removed temporarily to prevent collision with tooltips [TS]
+    // headers.filter(function(d) { return d.collapsible; })
+    //   .call(setupCollapsibleHeaders);
 
     headers.filter(function(d) { return d.sortable; })
       .call(setupSortHeaders);
@@ -705,6 +706,7 @@
       });
   }
 
+  // temporarily not in use to prevent tooltip collision [TS]
   function setupCollapsibleHeaders(headers) {
     headers
       .each(function(d) {
