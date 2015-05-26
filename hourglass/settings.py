@@ -54,9 +54,12 @@ INSTALLED_APPS = (
 
     'django_nose',
     'corsheaders',
+    'djangosecure',
 )
 
+
 MIDDLEWARE_CLASSES = (
+    'djangosecure.middleware.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -171,6 +174,10 @@ LOGGING = {
 
 DATABASES = {}
 DATABASES['default'] =  dj_database_url.config()
+
+SECURE_SSL_REDIRECT = True
+# Amazon ELBs pass on X-Forwarded-Proto.
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 try:
     from hourglass.local_settings import *

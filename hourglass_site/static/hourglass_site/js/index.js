@@ -29,6 +29,18 @@
       loadingIndicator = search.select(".loading-indicator"),
       request;
 
+  // set default options for all future tooltip instantiations
+  $.fn.tooltipster('setDefaults', {
+    speed: 200
+  });
+
+  // initialize tooltipster.js
+  $('.tooltip').tooltipster({
+      functionInit: function(origin, content) {
+          return $(this).attr('aria-label');
+      }
+  });
+
   // JFYI
   var HISTOGRAM_BINS = 12;
 
@@ -513,7 +525,19 @@
       return d.key === 'min_years_experience';
     })
     .html(function(d) {
-        return d.string + ' <span class="years hidden">years</span>';
+      var label = d.string === 1 ? 'year' : 'years';
+      return d.string + ' <span class="years hidden">' + label + '</span>';
+    });
+
+    // add links to contracts
+    td.filter(function(d) {
+      return d.key === 'idv_piid';
+    })
+    .html(function(d) {
+      var id = d.string.split('-').join('');
+      return '<a target="_blank" href="https://www.gsaadvantage.gov/ref_text/' 
+             + id + '/' + id + '_online.htm">' + d.string
+             + '<svg class="document-icon" width="8" height="8" viewBox="0 0 8 8"><path d="M0 0v8h7v-4h-4v-4h-3zm4 0v3h3l-3-3zm-3 2h1v1h-1v-1zm0 2h1v1h-1v-1zm0 2h4v1h-4v-1z" /></svg>';
     });
 
     // add a link to incoming exclusion cells
@@ -522,7 +546,12 @@
     })
     .append('a')
       .attr('class', 'exclude-row')
-      .html('&times;');
+      .html('&times;')
+      .each(function(){
+        $(this).tooltipster({
+          position: 'bottom'
+        })
+      });
 
 
     // update the links on all exclude cells
@@ -533,8 +562,11 @@
       .attr('href', function(d) {
         return '?exclude=' + d.row.id;
       })
-      .attr('title', function(d){
+      .attr('aria-label', function(d){
           return 'Exclude ' + d.row.labor_category + ' from your search';
+      })
+      .each(function(){
+        $(this).tooltipster('content', this.getAttribute('aria-label'))
       })
 
       .on('click', function(d) {
@@ -600,8 +632,9 @@
         this.classList.add('column-' + d.key);
       });
 
-    headers.filter(function(d) { return d.collapsible; })
-      .call(setupCollapsibleHeaders);
+    // removed temporarily to prevent collision with tooltips [TS]
+    // headers.filter(function(d) { return d.collapsible; })
+    //   .call(setupCollapsibleHeaders);
 
     headers.filter(function(d) { return d.sortable; })
       .call(setupSortHeaders);
@@ -662,8 +695,10 @@
         .classed('descending', function(c) {
           return c.sorted && c.descending;
         })
-        // .attr('aria-label', title)
-        .attr('title', title);
+        .attr('aria-label', title)
+        .each(function (){
+          $(this).tooltipster('content', this.getAttribute ('aria-label'));
+        })
 
     resultsTable.selectAll('tbody td')
       .classed('sorted', function(c) {
@@ -671,6 +706,7 @@
       });
   }
 
+  // temporarily not in use to prevent tooltip collision [TS]
   function setupCollapsibleHeaders(headers) {
     headers
       .each(function(d) {

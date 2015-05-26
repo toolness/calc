@@ -1,19 +1,51 @@
 ---
 # all applications use these settings and services
-memory: 1536M
+#memory: 512M
 instances: 1
+domain: 18f.gov
 # services:
 # - db-hourglass-test
 applications:
-#- name: hourglass-dev
-#  path: .
-#  timeout: 180
-#  host: calc-dev
+- name: calc-dev
+  stack: lucid64
+  path: .
+  timeout: 180
+  host: calc-dev
+  buildpack: https://github.com/cloudfoundry/python-buildpack.git
+  memory: 256M
 
-- name: hourglass-prod
+- name: calc-prod
+# commenting these out so an accidental straight deploy to calc.gsa.gov doesn't happen
+# should use blue-green deploy process in conjunction with calc-depoy app below
+#  no-hostname: true
+#  domain: calc.gsa.gov
+  host: calc-prod
+  stack: lucid64
   path: .
   timeout: 180
   buildpack: https://github.com/cloudfoundry/python-buildpack.git
+  memory: 1G
+  instances: 4
+  env:
+    NEW_RELIC_ENV: production
+    NEW_RELIC_CONFIG_FILE: newrelic.ini
+    NEW_RELIC_APP_NAME: CALC (production)
+    NEW_RELIC_LOG: stdout
+
+- name: calc-deploy
+  stack: lucid64
+  path: .
+  timeout: 180
+  buildpack: https://github.com/cloudfoundry/python-buildpack.git
+  memory: 1G
+  instances: 4
+  env:
+    NEW_RELIC_ENV: production
+    NEW_RELIC_CONFIG_FILE: newrelic.ini
+    NEW_RELIC_APP_NAME: CALC (production)
+    NEW_RELIC_LOG: stdout
+
+
 #  command: sh initdb.sh
 
 
