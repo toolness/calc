@@ -344,7 +344,8 @@ class FunctionalTests(LiveServerTestCase):
 
         self.assertFalse(has_class(col_header, 'collapsed'))
 
-    def test_hide_schedule_column(self):
+    # functionality temporarily deactivated
+    def xtest_hide_schedule_column(self):
         get_contract_recipe().make(_quantity=5)
         driver = self.load()
         col_header = find_column_header(driver, 'schedule')
