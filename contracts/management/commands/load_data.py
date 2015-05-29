@@ -72,12 +72,7 @@ class Command(BaseCommand):
                         if rate and rate.strip() != '':
                             setattr(contract, 'hourly_rate_year' + str(count+2), contract.normalize_rate(rate))
                     
-                    if contract.contract_end > today and contract.contract_start < today:
-                        #it's a current contract, need to find which year we're in
-                        start_day = contract.contract_start
-                        for plus_year in range(0,5):
-                            if date(year=start_day.year + plus_year, month=start_day.month, day=start_day.day) < today:
-                                contract.current_price = getattr(contract, 'hourly_rate_year' + str(plus_year + 1))
+                    contract.current_price = getattr(contract, 'hourly_rate_year' + str(line[14]))
                         
                     contract.contractor_site = line[9]
                     contracts.append(contract)
