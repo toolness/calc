@@ -49,12 +49,13 @@ class Command(BaseCommand):
                     contract.education_level = contract.get_education_code(line[6])
                     contract.schedule = line[12]
                     contract.business_size = line[8]
+                    contract.contract_year = line[14]
                     contract.sin = line[13]
 
-                    if line[14] != '':
-                        contract.contract_start = datetime.strptime(line[14], '%m/%d/%Y').date()
                     if line[15] != '':
-                        contract.contract_end = datetime.strptime(line[15], '%m/%d/%Y').date()
+                        contract.contract_start = datetime.strptime(line[15], '%m/%d/%Y').date()
+                    if line[16] != '':
+                        contract.contract_end = datetime.strptime(line[16], '%m/%d/%Y').date()
                 
                     if line[7].strip() != '':
                         contract.min_years_experience = line[7]

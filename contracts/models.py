@@ -60,6 +60,7 @@ class Contract(models.Model):
     piid = models.CharField(max_length=128) #index this field
     contract_start = models.DateField(null=True, blank=True)
     contract_end = models.DateField(null=True, blank=True)
+    contract_year = models.DecimalField(max_digits=1, decimal_places=0, null=True, blank=True)
     vendor_name = models.CharField(max_length=128)
     labor_category = models.TextField() #index this field
     education_level = models.CharField(choices=EDUCATION_CHOICES, max_length=5, null=True, blank=True)
@@ -77,7 +78,7 @@ class Contract(models.Model):
 
     search_index = VectorField()
 
-    #use a manager that filters by current contracts with a valud current_price
+    #use a manager that filters by current contracts with a valid current_price
     objects = CurrentContractManager(
         fields=('labor_category',),
         config = 'pg_catalog.english',
