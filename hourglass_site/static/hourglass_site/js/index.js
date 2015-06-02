@@ -286,6 +286,37 @@
           return "$" + formatPrice(n);
         };
 
+    var rates = data.results.map(function(record) {
+      return record.hourly_rate_year1;
+    });
+    console.log(rates);
+
+    console.log(standardDeviation(data.average, rates));
+
+    // from http://derickbailey.com/2014/09/21/calculating-standard-deviation-with-array-map-and-array-reduce-in-javascript/
+    function standardDeviation(avg, values){
+
+      function average(data){
+        var sum = data.reduce(function(sum, value){
+          return sum + value;
+        }, 0);
+
+        var avg = sum / data.length;
+        return avg;
+      }
+
+      var squareDiffs = values.map(function(value){
+        var diff = value - avg;
+        var sqrDiff = diff * diff;
+        return sqrDiff;
+      });
+      
+      var avgSquareDiff = average(squareDiffs);
+     
+      var stdDev = Math.sqrt(avgSquareDiff);
+      return stdDev;
+    }
+
     var extent = [data.minimum, data.maximum],
         bins = data.wage_histogram,
         x = d3.scale.linear()
@@ -328,17 +359,42 @@
         .attr("dy", avgOffset - 6);
       avgText.append("tspan")
         .attr("class", "value average");
-      avg.append("line");
+      avg.append("line")
+        .attr("class", "avg-line");
       avg.append("circle")
         .attr("cy", avgOffset)
         .attr("r", 3);
     }
 
-    avg.select("line")
+    avg.select("line.avg-line")
       .attr("y1", avgOffset)
       .attr("y2", bottom - top + 8); // XXX tick size = 6
     avg.select(".value")
       .text(formatDollars(data.average) + ' average');
+
+    var sd = svg.select("g.sd-low");
+    if (sd.empty()) {
+      sd = svg.append("g")
+        .attr('class', 'sd-low')
+      sd.append("line")
+        .attr('class', 'sd-line-low');
+    }
+
+    sd.select("line.sd-line-low")
+      .attr("y1", avgOffset)
+      .attr("y2", bottom - top + 8);
+
+    var sd = svg.select("g.sd-high");
+    if (sd.empty()) {
+      sd = svg.append("g")
+        .attr('class', 'sd-high')
+      sd.append("line")
+        .attr('class', 'sd-line-high');
+    }
+
+    sd.select("line.sd-line-high")
+      .attr("y1", avgOffset)
+      .attr("y2", bottom - top + 8);
 
     var bars = gBar.selectAll(".bar")
       .data(bins);
@@ -377,6 +433,12 @@
 
     t.select(".avg")
       .attr("transform", "translate(" + [~~x(data.average), top] + ")");
+
+    t.select(".sd-low")
+      .attr("transform", "translate(" + [~~x(data.average - standardDeviation(data.average, rates)), top] + ")");
+
+    t.select(".sd-high")
+      .attr("transform", "translate(" + [~~x(data.average + standardDeviation(data.average, rates)), top] + ")");
 
     t.selectAll(".bar")
       .each(function(d) {
