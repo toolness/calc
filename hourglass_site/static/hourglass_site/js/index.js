@@ -27,6 +27,7 @@
       sortHeaders = resultsTable.selectAll("thead th")
         .call(setupColumnHeader),
       loadingIndicator = search.select(".loading-indicator"),
+      histogramDownloadLink = document.getElementById('download-histogram'),
       request;
 
   // set default options for all future tooltip instantiations
@@ -70,6 +71,8 @@
   inputs.on("change", function onchange() {
     submit(true);
   });
+
+  histogramDownloadLink.addEventListener('click', histogram_to_img, false);
 
   d3.selectAll('a.merge-params')
     .on('click', function() {
@@ -325,8 +328,6 @@
         .attr("dy", avgOffset - 6);
       avgText.append("tspan")
         .attr("class", "value average");
-      avgText.append("tspan")
-        .text(" average");
       avg.append("line");
       avg.append("circle")
         .attr("cy", avgOffset)
@@ -337,7 +338,7 @@
       .attr("y1", avgOffset)
       .attr("y2", bottom - top + 8); // XXX tick size = 6
     avg.select(".value")
-      .text(formatDollars(data.average));
+      .text(formatDollars(data.average) + ' average');
 
     var bars = gBar.selectAll(".bar")
       .data(bins);
@@ -891,6 +892,42 @@
         return d[key] || undef.call(d, key);
       });
     };
+  }
+
+  function histogram_to_img(e) {
+    e.preventDefault();
+    var svg = document.getElementById('price-histogram'),
+        canvas = document.getElementById('graph'),
+        serializer = new XMLSerializer(),
+        img,
+        modalImg;
+
+    svg = serializer.serializeToString(svg);
+
+    // convert svg into canvas
+    canvg(canvas, svg, {ignoreMouse: true, scaleWidth: 640, scaleHeight: 200});
+
+    if (typeof Blob !== 'undefined') {
+      canvas.toBlob(function(blob) {
+        saveAs(blob, 'histogram.png');
+      });
+    }
+    else {
+      img = canvas.toDataURL('image/png');
+      modalImg = new Image();
+      modalImg.src = img;
+
+      vex.open({
+        content: 'Please right click the image and select "save as" to download the graph.',
+        afterOpen: function(content) {
+          return content.append(modalImg);
+        },
+        showCloseButton: true,
+        contentCSS: {
+          'width': '800px'
+        }
+      });
+    }
   }
 
 })(this);
