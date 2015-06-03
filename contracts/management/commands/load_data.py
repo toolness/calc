@@ -72,9 +72,13 @@ class Command(BaseCommand):
                         if rate and rate.strip() != '':
                             setattr(contract, 'hourly_rate_year' + str(count+2), contract.normalize_rate(rate))
                     
-                    contract.current_price = getattr(contract, 'hourly_rate_year' + str(line[14]))
+                    # don't list current price for records under the federal minimum contract rate
+                    current_price = getattr(contract, 'hourly_rate_year' + str(line[14]))
+                    if current_price and current_price >= 10.10:
+                        contract.current_price = current_price
                         
                     contract.contractor_site = line[9]
+                    
                     contracts.append(contract)
 
             except Exception as e:
