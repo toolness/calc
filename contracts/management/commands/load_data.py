@@ -7,6 +7,8 @@ import os
 import logging
 from datetime import datetime, date
 
+FEDERAL_MIN_CONTRACT_RATE = 10.10
+
 class Command(BaseCommand):
 
     def handle(self, *args, **options):
@@ -75,7 +77,7 @@ class Command(BaseCommand):
                     # don't create current price for records where the rate
                     # is under the federal minimum contract rate
                     current_price = getattr(contract, 'hourly_rate_year' + str(line[14]))
-                    if current_price and current_price >= 10.10:
+                    if current_price and current_price >= FEDERAL_MIN_CONTRACT_RATE:
                         contract.current_price = current_price
                         
                     contract.contractor_site = line[9]
