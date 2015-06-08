@@ -7,6 +7,8 @@ import os
 import logging
 from datetime import datetime, date
 
+FEDERAL_MIN_CONTRACT_RATE = 10.10
+
 class Command(BaseCommand):
 
     def handle(self, *args, **options):
@@ -49,12 +51,13 @@ class Command(BaseCommand):
                     contract.education_level = contract.get_education_code(line[6])
                     contract.schedule = line[12]
                     contract.business_size = line[8]
+                    contract.contract_year = line[14]
                     contract.sin = line[13]
 
-                    if line[14] != '':
-                        contract.contract_start = datetime.strptime(line[14], '%m/%d/%Y').date()
                     if line[15] != '':
-                        contract.contract_end = datetime.strptime(line[15], '%m/%d/%Y').date()
+                        contract.contract_start = datetime.strptime(line[15], '%m/%d/%Y').date()
+                    if line[16] != '':
+                        contract.contract_end = datetime.strptime(line[16], '%m/%d/%Y').date()
                 
                     if line[7].strip() != '':
                         contract.min_years_experience = line[7]
@@ -71,14 +74,14 @@ class Command(BaseCommand):
                         if rate and rate.strip() != '':
                             setattr(contract, 'hourly_rate_year' + str(count+2), contract.normalize_rate(rate))
                     
-                    if contract.contract_end > today and contract.contract_start < today:
-                        #it's a current contract, need to find which year we're in
-                        start_day = contract.contract_start
-                        for plus_year in range(0,5):
-                            if date(year=start_day.year + plus_year, month=start_day.month, day=start_day.day) < today:
-                                contract.current_price = getattr(contract, 'hourly_rate_year' + str(plus_year + 1))
+                    # don't create current price for records where the rate
+                    # is under the federal minimum contract rate
+                    current_price = getattr(contract, 'hourly_rate_year' + str(line[14]))
+                    if current_price and current_price >= FEDERAL_MIN_CONTRACT_RATE:
+                        contract.current_price = current_price
                         
                     contract.contractor_site = line[9]
+                    
                     contracts.append(contract)
 
             except Exception as e:
