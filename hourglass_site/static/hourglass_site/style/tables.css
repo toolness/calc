@@ -87,12 +87,12 @@ th.sortable {
   }
 
   th.sorted:after {
-    content: "▼";
+    content: "▲";
     font-size: 1em;
   }
 
   th.sorted.descending:after {
-    content: "▲";
+    content: "▼";
   }
 
 th.collapsible {

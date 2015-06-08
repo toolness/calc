@@ -1,21 +1,6 @@
-.graph {
-  position: relative;
-  margin: 1rem 0;
-}
-
-.graph > .title {
-  position: absolute;
-}
-
-svg.graph {
-  display: block;
-  margin: 0;
-  width: 100%;
-  height: auto;
-}
-
-svg.graph * {
-  vector-effect: non-scaling-stroke;
+.axis .label {
+  fill: #666;
+  font-style: italic;
 }
 
 .axis line,
@@ -35,14 +20,14 @@ svg.graph * {
   font-weight: bold;
 }
 
-svg.histogram rect {
+rect {
   fill: #999;
   stroke: #fff;
   stroke-width: 1;
   shape-rendering: crispEdges;
 }
 
-svg.histogram .avg line {
+.avg line {
   stroke-width: 1;
   stroke: #000;
 }
