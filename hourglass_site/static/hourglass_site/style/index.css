@@ -118,16 +118,20 @@ span.dollars {
 .dropdown {
   margin-bottom: 1.5rem;
 }
+
 .dropdown dd, .dropdown dt {
   margin:0px;
   padding:0px;
 }
+
 .dropdown ul {
   margin: -1px 0 0 0;
 }
+
 .dropdown dd {
   position:relative;
 }
+
 .dropdown a, 
 .dropdown a:visited {
   color:#000;
@@ -135,6 +139,7 @@ span.dollars {
   outline:none;
   font-size: 14px;
 }
+
 .dropdown dt a {
   background-color: #fff;
   border: 1px solid #d1d1d1;
@@ -146,16 +151,36 @@ span.dollars {
   line-height: 24px;
   overflow: hidden;
   padding: 6px 10px;
-}  
+} 
+
+.dropdown dt a:focus {
+  border: 2px solid #33c3f0 !important;
+  box-shadow: 0 0 5px #33c3f0;
+} 
+
+.mutliSelect label:hover {
+  cursor: pointer;
+}
 
 .multiSel, .mutliSelect fieldset {
 margin-bottom: 0;
 }
+
+.mutliSelect label {
+  font-weight: 400;
+  display: inline;
+}
+
+input[type="checkbox"]:checked ~ label {
+  font-weight: 600;
+}
+
 .dropdown dt a span, .multiSel span {
   cursor:pointer;
   display:inline-block;
   padding: 0 3px 2px 0;
 }
+
 .dropdown dd ul {
   background-color: #fff;
   border:0;
@@ -166,24 +191,29 @@ margin-bottom: 0;
   position:absolute;
   top:2px;
   list-style:none;
-  height: 100px;
+  height: auto;
   overflow: auto;
   width: 100%;
 }
+
 .dropdown span.value {
   display:none;
 }
+
 .dropdown dd ul li a {
   padding:5px;
   display:block;
   margin-bottom: 0;
 }
+
 .dropdown dd ul li a:hover {
   background-color:#fff;
 }
+
 .dropdown li {
   margin-bottom: 0;
 }
+
 .dropdown input {
   margin-bottom: 0;
   margin-right: 6px;
