@@ -60,6 +60,9 @@ input.button-primary[type="button"]:focus {
   left: -9999px;
   height: 0;
 }
+.skip-nav:focus {
+  outline: 0;
+}
 
 .skip-nav:focus {
   position: relative;
