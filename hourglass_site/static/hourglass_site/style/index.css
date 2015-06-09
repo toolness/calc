@@ -147,7 +147,7 @@ span.dollars {
   box-shadow: none;
   box-sizing: border-box;
   display: block;
-  height: 38px;
+  min-height: 38px;
   line-height: 24px;
   overflow: hidden;
   padding: 6px 10px;
