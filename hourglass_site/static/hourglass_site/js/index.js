@@ -938,12 +938,16 @@
   license: http://www.opensource.org/licenses/mit-license.php
 */ 
 
-$(".dropdown dt a").on('click', function () {
+      $(".dropdown dt a").on('click', function (e) {
           $(".dropdown dd ul").slideToggle('fast');
+
+          e.preventDefault();
       });
 
-      $(".dropdown dd ul li a").on('click', function () {
+      $(".dropdown dd ul li a").on('click', function (e) {
           $(".dropdown dd ul").hide();
+
+          e.preventDefault();
       });
 
       function getSelectedValue(id) {
