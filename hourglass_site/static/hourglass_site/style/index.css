@@ -165,10 +165,10 @@ margin-bottom: 0;
   padding: 2px 15px 2px 5px;
   position:absolute;
   top:2px;
-  width:280px;
   list-style:none;
   height: 100px;
   overflow: auto;
+  width: 100%;
 }
 .dropdown span.value {
   display:none;
@@ -176,11 +176,18 @@ margin-bottom: 0;
 .dropdown dd ul li a {
   padding:5px;
   display:block;
+  margin-bottom: 0;
 }
 .dropdown dd ul li a:hover {
   background-color:#fff;
 }
-
+.dropdown li {
+  margin-bottom: 0;
+}
+.dropdown input {
+  margin-bottom: 0;
+  margin-right: 6px;
+}
 
 .highlights-container {
   margin-bottom: 2em;
