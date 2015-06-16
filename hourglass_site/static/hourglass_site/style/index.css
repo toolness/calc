@@ -138,8 +138,14 @@ span.dollars {
   margin: 5px 0 5px 0;
 }
 .years {
-  margin: 0 0 15px 0;
+  /*margin: 0 0 15px 0;*/
 }
+.filter .years select {
+  width: auto;
+  height: auto;
+  margin: 15px 0;
+}
+
 
 .rates-help-text {
   color: #999;

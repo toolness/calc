@@ -171,7 +171,7 @@
       });
 
     // grab slider data
-    data['experience_range'] = $('span.lower').html() + "," + $('span.upper').html();
+    data['experience_range'] = $('.lower').val() + "," + $('.upper').val();
 
 
     console.log("submitting:", data);
@@ -935,7 +935,8 @@
   }
 
   $('.slider').noUiSlider({
-    start: [ $('span.lower').html(), $('span.upper').html() ],
+    // start: [ $('span.lower').html(), $('span.upper').html() ],
+    start: [0, 5],
     step: 1,
     connect: true,
     range: {
@@ -944,22 +945,22 @@
     }
   });
 
-  $('.slider').Link('lower').to($('span.lower'), "text", wNumb({
+  $('.slider').Link('lower').to($('.lower'), null, wNumb({
     decimals: 0
   }));
-  $('.slider').Link('upper').to($('span.upper'), "text", wNumb({
+  $('.slider').Link('upper').to($('.upper'), null, wNumb({
     decimals: 0
   }));
 
   $('.slider').on({
     set: function () {
 
-      if($('span.lower').html() === $('span.upper').html()) {
-        $('span.separator, span.upper').hide();
-      }
-      else {
-        $('span.separator, span.upper').show();
-      }
+      // if($('span.lower').html() === $('span.upper').html()) {
+      //   $('span.separator, span.upper').hide();
+      // }
+      // else {
+      //   $('span.separator, span.upper').show();
+      // }
 
       submit(true);
     }
