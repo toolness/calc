@@ -119,7 +119,8 @@ span.dollars {
   text-align: center;
 }
 
-.avg-price-block {
+.avg-price-block,
+.standard-deviation-block {
   background: #f3f3f3;
   border-radius: 4px;
   display: inline-block;
@@ -128,7 +129,8 @@ span.dollars {
   text-align: center;
 }
 
-#avg-price-highlight {
+#avg-price-highlight,
+.sd-highlight {
   color: #17779f;
   font-weight: 400;
 }

@@ -299,9 +299,12 @@
 
     d3.select("#avg-price-highlight")
       .text(formatDollars(data.average));
-console.log(data.first_standard_deviation);
-    d3.select("#standard-deviation-highlight")
-      .text(formatDollars(data.first_standard_deviation));
+
+    d3.select("#standard-deviation-minus-highlight")
+      .text(formatDollars(data.average - data.first_standard_deviation));
+
+    d3.select("#standard-deviation-plus-highlight")
+      .text(formatDollars(data.average + data.first_standard_deviation));
 
     var xAxis = svg.select(".axis.x");
     if (xAxis.empty()) {
