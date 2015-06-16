@@ -170,9 +170,7 @@
         return !!this.value;
       });
 
-    // grab slider data
     data['experience_range'] = $('.lower').val() + "," + $('.upper').val();
-
 
     console.log("submitting:", data);
 
@@ -935,13 +933,12 @@
   }
 
   $('.slider').noUiSlider({
-    // start: [ $('span.lower').html(), $('span.upper').html() ],
     start: [0, 5],
     step: 1,
     connect: true,
     range: {
       'min': 0,
-      'max': 25
+      'max': 45
     }
   });
 
@@ -954,14 +951,6 @@
 
   $('.slider').on({
     set: function () {
-
-      // if($('span.lower').html() === $('span.upper').html()) {
-      //   $('span.separator, span.upper').hide();
-      // }
-      // else {
-      //   $('span.separator, span.upper').show();
-      // }
-
       submit(true);
     }
   });
