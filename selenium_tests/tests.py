@@ -180,7 +180,7 @@ class FunctionalTests(LiveServerTestCase):
         # the last visible form inputs should be the price filters
         self.assertEqual(inputs[-2].get_attribute('name'), 'price__gte')
         self.assertEqual(inputs[-1].get_attribute('name'), 'price__lte')
-    
+
     # TODO bring this back!
     def xtest_form_submit_loading(self):
         get_contract_recipe().make(_quantity=1, labor_category=seq("Architect"))
@@ -258,7 +258,11 @@ class FunctionalTests(LiveServerTestCase):
         driver = self.load_and_wait()
         form = self.get_form()
 
-        self.set_form_value(form, 'experience_range', '5,10')
+        # self.set_form_value(form, 'experience_range', '5,10')
+
+        self.set_form_value(form, 'min_experience', 5)
+        self.set_form_value(form, 'max_experience', 10)
+
         self.submit_form_and_wait()
 
         self.assert_results_count(driver, 5)
