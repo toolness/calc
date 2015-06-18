@@ -119,14 +119,30 @@ span.dollars {
   text-align: center;
 }
 
+.price-block {
+  background: #f9f9f9;
+  border: 1px solid #e1e1e1;
+  border-radius: 4px;
+}
+
+.standard-deviation-title {
+  font-size: 14px;
+  padding-bottom: 4px;
+  padding-top: 11px;
+}
+
+.avg-price-block {
+  border-left: 1px solid #e1e1e1;
+  border-right: 1px solid #e1e1e1;
+}
+
 .avg-price-block,
 .standard-deviation-block {
-  background: #f3f3f3;
-  border-radius: 4px;
   display: inline-block;
   margin: 0 auto;
-  padding: .4em 2em;
+  padding: .4em 0;
   text-align: center;
+  width: 32%;
 }
 
 #avg-price-highlight,
