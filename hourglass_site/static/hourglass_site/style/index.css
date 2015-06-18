@@ -132,7 +132,6 @@ span.dollars {
 .avg-price-block,
 .standard-deviation-block {
   display: inline-block;
-  margin: 0 auto;
   padding: .4em 0;
   text-align: center;
 }

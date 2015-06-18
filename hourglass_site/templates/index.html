@@ -122,11 +122,6 @@
             -->
           </div>
 
-          <div id="results-actions">
-            <a id="export-data" class="button button-primary"
-              title="Click to export your search results to an Excel file (CSV)" href="{{ API_HOST }}rates/csv/">⬇ Export Data (CSV)</a>
-          </div>
-
         </div>
 
         <div class="graph-block columns nine">
@@ -193,7 +188,7 @@
 
           <div class="highlights-container row">
 
-            <div class="price-block nine columns">
+            <div class="price-block eight columns">
 
               <div class="row">
 
@@ -213,10 +208,19 @@
               </div>
             </div>
 
-            <div class="three columns">
+          </div> 
+
+          <div class="row">         
+            <div class="four columns">
               <a id="download-histogram" class="button button-primary" href="#">⬇ Download graph</a>
             </div>
-          </div> 
+
+          <div id="results-actions four columns">
+            <a id="export-data" class="button button-primary"
+              title="Click to export your search results to an Excel file (CSV)" href="{{ API_HOST }}rates/csv/">⬇ Export Data (CSV)</a>
+          </div>
+
+          </div>
 
           <p class="rates-help-text">The rates shown here are fully burdened, applicable worldwide, and representative of the current fiscal year. This data represents rates awarded at the master contract level.</p>
 
