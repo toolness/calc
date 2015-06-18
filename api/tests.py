@@ -341,6 +341,60 @@ class ContractsTest(TestCase):
            'contractor_site': None,
            'business_size': None}])
 
+    def test_filter_by_experience_range(self):
+        get_contract_recipe().make(_quantity=3)
+        resp = self.c.get(self.path, {'experience_range': '6,8'})
+        self.assertEqual(resp.status_code, 200)
+
+        self.assertResultsEqual(resp.data['results'], 
+         [{'idv_piid': 'ABC1231',
+           'vendor_name': 'CompanyName1',
+           'labor_category': 'Business Analyst II',
+           'education_level': None,
+           'min_years_experience': 6,
+           'hourly_rate_year1': 21.0,
+           'current_price': 21.0,
+           'schedule': 'MOBIS',
+           'contractor_site': None,
+           'business_size': None},
+         {'idv_piid': 'ABC1232',
+           'vendor_name': 'CompanyName2',
+           'labor_category': 'Business Analyst II',
+           'education_level': None,
+           'min_years_experience': 7,
+           'hourly_rate_year1': 22.0,
+           'current_price': 22.0,
+           'schedule': 'PES',
+           'contractor_site': None,
+           'business_size': None},
+         {'idv_piid': 'ABC1233',
+           'vendor_name': 'CompanyName3',
+           'labor_category': 'Business Analyst II',
+           'education_level': None,
+           'min_years_experience': 8,
+           'hourly_rate_year1': 23.0,
+           'current_price': 23.0,
+           'schedule': 'MOBIS',
+           'contractor_site': None,
+           'business_size': None}])
+
+    def test_filter_by_experience_single(self):
+        self.make_test_set()
+        resp = self.c.get(self.path, {'experience_range': '10'})
+        self.assertEqual(resp.status_code, 200)
+
+        self.assertResultsEqual(resp.data['results'],
+         [{'idv_piid': 'ABC123',
+           'vendor_name': 'ACME Corp.',
+           'labor_category': 'Legal Services',
+           'education_level': None,
+           'min_years_experience': 10,
+           'hourly_rate_year1': 18.0,
+           'current_price': 18.0,
+           'schedule': None,
+           'contractor_site': None,
+           'business_size': None}])
+
     def test_filter_by_schedule(self):
         get_contract_recipe().make(_quantity=3)
         resp = self.c.get(self.path, {'schedule': 'MOBIS'})

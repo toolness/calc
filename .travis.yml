@@ -14,6 +14,7 @@ install:
 
 script:
   - cp hourglass/local_settings{.travis,}.py
+  - phantomjs --version
   - make test
 
 # don't spam us with emails

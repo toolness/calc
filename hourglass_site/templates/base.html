@@ -11,6 +11,7 @@
     <script src="{% static 'hourglass_site/js/vendor/history.min.js' %}"></script>
     <![endif]-->
     <link rel="stylesheet" href="{% static 'hourglass_site/style/main.css' %}"/>
+
     <![if gt IE 8]>
     <script>
       var API_HOST = "{{ API_HOST }}";
@@ -20,34 +21,42 @@
     <script src="{% static 'hourglass_site/js/vendor/jquery.xdomainrequest.min.js' %}"></script>
     <script src="{% static 'hourglass_site/js/vendor/formdb.min.js' %}"></script>
     <script src="{% static 'hourglass_site/js/hourglass.js' %}"></script>
+    <script src="{% static 'hourglass_site/js/vendor/jquery.tooltipster.js' %}"></script>
     <![endif]>
-    <link href='https://fonts.googleapis.com/css?family=Raleway:600|Open+Sans:300' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Lato:300,400,700,400italic,700italic' rel='stylesheet' type='text/css'>
     {% block head %}
     {% endblock %}
   </head>
   <body>
-
     <div id="banner">
       <div class="container">
-        <a class="skip-nav" tabindex="0" href="#main">Skip navigation</a>
+        <a class="skip-nav" tabindex="-1" href="#main">Skip navigation</a>
         <p id="usa">
           <img src="{% static 'hourglass_site/images/flag-usa.png' %}" alt="USA flag">
           An official website of the U.S. Government</p>
         <p id="site-status">This website is in beta.
           <a href="#help-wanted">Help us improve</a>
-        </p>
+        </p>  
       </div>
     </div>
 
     <header>
       <div class="container">
-        <a href="{% url 'index' %}"><img class="logo" src="{% static 'hourglass_site/images/calc_logo_alt.png' %}" alt="CALC: Contract Awarded Labor Category Tool"></a>
+        <a href="{% url 'index' %}"><img class="logo" src="{% static 'hourglass_site/images/calc_logo.png' %}" alt="CALC: Contract Awarded Labor Category Tool"></a>
         <nav>
           <ul>
-            <li><a href="{% url 'index' %}">Home</a></li>
-            <li><a href="{% url 'about' %}">About</a></li>
+            <li><a href="{% url 'about' %}">FAQ</a></li>
           </ul>
         </nav>
+
+      <div class="row">
+        <div class="twelve columns">
+          <h1 class="description-main">Search awarded ceiling rates for labor categories</h1>
+          <h2 class="description-secondary">CALC lets you conduct market research on professional service labor categories more quickly and easily. It also takes the guesswork out of cost estimations — all results shown are <i>actual</i> awarded hourly rates from GSA service schedules — helping you make more informed decisions. </h2>
+        </div>
+      </div>
+
+
       </div>
     </header>
 
@@ -71,9 +80,9 @@
 
           <div id="help-wanted" class="six columns">
             <h3>Want to help improve CALC?</h3>
-            <p>We are always looking for volunteers to try out prototypes. <br />
-              Or drop us a line with your questions and comments. <br />
-            <strong>We want your feedback!</strong></p>
+            <p>We're always looking for volunteers to try out prototypes.
+              Drop us a line to share your feedback or to learn more about prototype testing.
+           </p>
               <span class="email_us">Email us at <a href="mailto:calc-18f@gsa.gov">calc-18f@gsa.gov</a></span>
           </div>
 

@@ -13,3 +13,10 @@ ghostdriver.log
 *.log
 node_modules
 selenium_tests/screenshot.png
+
+.Python
+/bin
+/include
+/lib
+pip-selfcheck.json
+/src

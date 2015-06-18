@@ -27,7 +27,20 @@
       sortHeaders = resultsTable.selectAll("thead th")
         .call(setupColumnHeader),
       loadingIndicator = search.select(".loading-indicator"),
+      histogramDownloadLink = document.getElementById('download-histogram'),
       request;
+
+  // set default options for all future tooltip instantiations
+  $.fn.tooltipster('setDefaults', {
+    speed: 200
+  });
+
+  // initialize tooltipster.js
+  $('.tooltip').tooltipster({
+      functionInit: function(origin, content) {
+          return $(this).attr('aria-label');
+      }
+  });
 
   // JFYI
   var HISTOGRAM_BINS = 12;
@@ -37,7 +50,7 @@
     submit(true);
   });
 
-  /*
+   /*
    * For some reason, the browser's native form reset isn't working.
    * So instead of just listening for a "reset" event and submitting,
    * we hijack the click event on the reset button and reset the form
@@ -58,6 +71,8 @@
   inputs.on("change", function onchange() {
     submit(true);
   });
+
+  histogramDownloadLink.addEventListener('click', histogram_to_img, false);
 
   d3.selectAll('a.merge-params')
     .on('click', function() {
@@ -282,6 +297,9 @@
           .range([0, 1, bottom - top]);
     console.log('count extent:', countExtent);
 
+    d3.select("#avg-price-highlight")
+      .text(formatDollars(data.average));
+
     var xAxis = svg.select(".axis.x");
     if (xAxis.empty()) {
       xAxis = svg.append("g")
@@ -310,8 +328,6 @@
         .attr("dy", avgOffset - 6);
       avgText.append("tspan")
         .attr("class", "value average");
-      avgText.append("tspan")
-        .text(" average");
       avg.append("line");
       avg.append("circle")
         .attr("cy", avgOffset)
@@ -322,7 +338,7 @@
       .attr("y1", avgOffset)
       .attr("y2", bottom - top + 8); // XXX tick size = 6
     avg.select(".value")
-      .text(formatDollars(data.average));
+      .text(formatDollars(data.average) + ' average');
 
     var bars = gBar.selectAll(".bar")
       .data(bins);
@@ -407,7 +423,7 @@
       .attr('class', 'label')
       .attr('transform', 'translate(' + [left + (right - left) / 2, 45] + ')')
       .attr('text-anchor', 'middle')
-      .text('price')
+      .text('Ceiling price (hourly rate)')
 
     var yd = d3.extent(heightScale.domain());
     var ya = d3.svg.axis()
@@ -445,7 +461,15 @@
 
     tr.exit().remove();
 
-    tr.enter().append('tr');
+    tr.enter().append('tr')
+    .on('mouseover', function(d) {
+      var label = this.querySelector('.years');
+      label.className = label.className.replace('hidden', '');
+    })
+    .on('mouseout', function(d) {
+      var label = this.querySelector('.years');
+      label.className = label.className + ' hidden';
+    });
 
     var td = tr.selectAll('.cell')
       .data(function(d) {
@@ -489,23 +513,46 @@
       return d.key !== 'exclude';
     })
     .html(function(d) {
-      
-      return d.column.collapsed ? "" : d.string;
+      // don't just do "if !(d.string)" because 0 is valid
+      if (d.string === null) {
+        d.string = 'N/A';
+      }
 
+      return d.column.collapsed ? "" : d.string;
+    });
+
+    // add "years" the experience number, shown on row hover
+    td.filter(function(d) {
+      return d.key === 'min_years_experience';
+    })
+    .html(function(d) {
+      var label = d.string === 1 ? 'year' : 'years';
+      return d.string + ' <span class="years hidden">' + label + '</span>';
+    });
+
+    // add links to contracts
+    td.filter(function(d) {
+      return d.key === 'idv_piid';
+    })
+    .html(function(d) {
+      var id = d.string.split('-').join('');
+      return '<a target="_blank" href="https://www.gsaadvantage.gov/ref_text/' 
+             + id + '/' + id + '_online.htm">' + d.string
+             + '<svg class="document-icon" width="8" height="8" viewBox="0 0 8 8"><path d="M0 0v8h7v-4h-4v-4h-3zm4 0v3h3l-3-3zm-3 2h1v1h-1v-1zm0 2h1v1h-1v-1zm0 2h4v1h-4v-1z" /></svg>';
     });
 
     // add a link to incoming exclusion cells
     enter.filter(function(d) {
       return d.key === 'exclude';
     })
-    
     .append('a')
       .attr('class', 'exclude-row')
-      .attr('title', function(d){
-          return 'Exclude ' + d.row.labor_category + ' from your search';
-      })
-
-      .html('&times;');
+      .html('&times;')
+      .each(function(){
+        $(this).tooltipster({
+          position: 'bottom'
+        })
+      });
 
 
     // update the links on all exclude cells
@@ -516,6 +563,13 @@
       .attr('href', function(d) {
         return '?exclude=' + d.row.id;
       })
+      .attr('aria-label', function(d){
+          return 'Exclude ' + d.row.labor_category + ' from your search';
+      })
+      .each(function(){
+        $(this).tooltipster('content', this.getAttribute('aria-label'))
+      })
+
       .on('click', function(d) {
         d3.event.preventDefault();
         /*
@@ -579,8 +633,9 @@
         this.classList.add('column-' + d.key);
       });
 
-    headers.filter(function(d) { return d.collapsible; })
-      .call(setupCollapsibleHeaders);
+    // removed temporarily to prevent collision with tooltips [TS]
+    // headers.filter(function(d) { return d.collapsible; })
+    //   .call(setupCollapsibleHeaders);
 
     headers.filter(function(d) { return d.sortable; })
       .call(setupSortHeaders);
@@ -641,8 +696,10 @@
         .classed('descending', function(c) {
           return c.sorted && c.descending;
         })
-        // .attr('aria-label', label)
-        .attr('title', label);
+        .attr('aria-label', title)
+        .each(function (){
+          $(this).tooltipster('content', this.getAttribute ('aria-label'));
+        })
 
     resultsTable.selectAll('tbody td')
       .classed('sorted', function(c) {
@@ -650,6 +707,7 @@
       });
   }
 
+  // temporarily not in use to prevent tooltip collision [TS]
   function setupCollapsibleHeaders(headers) {
     headers
       .each(function(d) {
@@ -744,11 +802,10 @@
     var inputs = ([
       {name: 'q', template: '&ldquo;<a>{value}</a>&rdquo;'},
       {name: 'min_education', template: 'minimum education level: <a>{label}</a>'},
-      {name: 'min_experience', template: 'minimum <a>{value} years</a> of experience'},
+      {name: 'experience_range', template: '<a>{label}</a> of experience'},
       {name: 'site', template: 'worksite: <a>{value}</a>'},
       {name: 'business_size', template: 'size: <a>{label}</a>'},
-      {name: 'price__gte', template: 'price &ge; <a>${value}</a>'},
-      {name: 'price__lte', template: 'price &le; <a>${value}</a>'}
+      {name: 'schedule', template: 'schedule: <a>{value}</a>'}
     ])
     .map(function(d) {
       d.value = data[d.name];
@@ -835,6 +892,42 @@
         return d[key] || undef.call(d, key);
       });
     };
+  }
+
+  function histogram_to_img(e) {
+    e.preventDefault();
+    var svg = document.getElementById('price-histogram'),
+        canvas = document.getElementById('graph'),
+        serializer = new XMLSerializer(),
+        img,
+        modalImg;
+
+    svg = serializer.serializeToString(svg);
+
+    // convert svg into canvas
+    canvg(canvas, svg, {ignoreMouse: true, scaleWidth: 640, scaleHeight: 200});
+
+    if (typeof Blob !== 'undefined') {
+      canvas.toBlob(function(blob) {
+        saveAs(blob, 'histogram.png');
+      });
+    }
+    else {
+      img = canvas.toDataURL('image/png');
+      modalImg = new Image();
+      modalImg.src = img;
+
+      vex.open({
+        content: 'Please right click the image and select "save as" to download the graph.',
+        afterOpen: function(content) {
+          return content.append(modalImg);
+        },
+        showCloseButton: true,
+        contentCSS: {
+          'width': '800px'
+        }
+      });
+    }
   }
 
 })(this);

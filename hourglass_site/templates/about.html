@@ -6,21 +6,28 @@
 
 {% block body %}
 <div class="container">
-  
-<h4>Why was CALC built?</h4>
-<p>The CALC (Contract Awarded Labor Category) tool was built to assist contracting officers and contracting specialists with market research and price analysis for labor categories on Federal Government contracts.  By creating a database with an easy to use interface, we can enable a search to be completed in a couple of seconds and return up to hundreds of comparables, versus spending hours searching paper files or GSA Advantage to come up with only a handful of comparables.  </p>
+<p><a href="/">< Back to CALC Home</a></p>
+
+<h4>What does CALC do?</h4>
+<p>The CALC (Contract Awarded Labor Category) tool searches awarded hourly rate prices on the eight GSA professional services schedules and returns comparable labor categories and prices based on search criteria and filters used. Learn more about the schedules <a href="#schedules">below</a>, or on the <a href="http://www.gsa.gov/portal/category/100611">GSA website.</a></p>
+
+<h4>How can CALC help me?</h4>
+<p>The CALC  tool was built to assist contracting officers and contracting specialists with market research and price analysis for labor categories on Federal Government contracts.  By capturing award prices in a database with an easy to use interface, we can enable a search to be completed in a couple of seconds and return up to hundreds of comparables, versus spending hours searching paper files or GSA Advantage to come up with only a handful of comparables.  </p>
 
 <p>Additionally, the tool creates the opportunity to conduct calculations that will allow the contracting officer to gain understanding about the total population of data, such as ranges (highest and lowest prices), average prices. This data is helpful for negotiations for prices on contracts.</p>
 
-<h4>What does CALC do?</h4>
-<p>CALC searches awarded prices on the eight professional services schedules and return comparable labor categories and prices based on search criteria and filters used. The eight professional services schedules are MOBIS, Environmental, LOGWORLD, Professional Engineering Schedule, Language, Advertising and Integrated Marketing Schedules (AIMS), Finance and Business Solutions (FABS), and the Consolidated Schedule. The AIMS and FABS Schedules are newly added so there is limited data currently.</p>
 
+<h4>Where do the prices in this tool come from?</h4>
+<p>This tool shows actual ceiling prices awarded to various vendors at the master contract level, on the eight GSA professional services schedules listed <a href="#schedules">below.</a>  These are not prices paid at the task order level, which may be slightly different (e.g. to reflect a discount).
+<br /> <br />
+<b>Rates you see in CALC are:</b>
+<ul id="about">
+<li>Fully burdened hourly rates </li>
+<li>Ceiling prices (awarded at the master contract level)</li>
+<li>For the current fiscal year</li>
+<li>Worldwide awarded rates</li>
+</ul>
 
-<h4>What price information is NOT included in CALC?</h4>
-<p>The tool does not return future or historical prices and does not currently include prices paid. </p>
-
-<h4>What are "Prices Awarded"?</h4>
-<p>Awarded prices are prices that are awarded at the master contract level (such as a schedule contract). Prices paid are prices that are paid at the task order level.
  </p>
 
 <h4>Where does the data come from?</h4>
@@ -32,7 +39,35 @@
 <h4>Where does the data reside?</h4>
 <p>The source data is housed in a database on GSA Region 10 servers, and within Amazon Web Services account for GSA 18F.</p>
 
+<h4 id="schedules">What are these schedules?</h4>
+<p>Visit <a href="http://www.gsa.gov/portal/category/100611">GSA's website</a> to learn more about the Multiple Award Schedules (MAS).</p>
 
+<p class="schedule">Mission Oriented Business Integrated Services (MOBIS)</p>
+<p>MOBIS provides management and consulting services, including facilitation, surveys, competetive sourcing and project management</p>
+
+<p class="schedule">Environmental</p>
+<p>Provides services in environmental management, electronics stewardship, pollution prevention cleanup and restoration, HAZMAT, and training.</p>
+
+<p class="schedule">Logistics Worldwide (LOGWORLD)</p>
+<p>Provides services (including deployment of supplies, equipment, materials and personnel) in the areas of planning acquisition and management of logistics system, expert advice, assistance, guidance, management, and operational support services.  Various types of training are also available.</p>
+
+<p class="schedule">Professional Engineering Schedule</p>
+<p>Covers engineering disciplines, including mechanical, electrical, chemical, civil, software, aerospace, nuclear, bio, fire protection, and marine.</p>
+
+<p class="schedule">Language</p>
+<p>Provides a range of services, from basic transcribing to advance analytical consulting. Sign language and training are also offered.</p>
+
+<p class="schedule">Advertising and Integrated Marketing Schedules (AIMS)</p>
+<p>AIMS provides advertising, marketing and related communications fields, including web & graphic design, direct mail campaigns, etc.<br />
+<i>Note: AIMS is newly added so available results in CALC is currently limited.</i></p>
+
+
+<p class="schedule">Finance and Business Solutions (FABS)</p>
+<p>Includes services for asset management, financial management, auditing, business information, program management and grant management.<br />
+<i>Note: FABS is newly added so available results in CALC is currently limited.</i></p>
+
+<p class="schedule">The Consolidated Schedule</p>
+<p>Covers contracts awarded to a single company for services that cover multiple schedules.</p>
 
 </div>
 {% endblock %}
