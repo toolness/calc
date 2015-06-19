@@ -170,9 +170,7 @@
         return !!this.value;
       });
 
-    // grab slider data
-    data['experience_range'] = $('.lower').val() + "," + $('.upper').val();
-
+    data['experience_range'] = $('#min_experience').val() + "," + $('#max_experience').val();
 
     console.log("submitting:", data);
 
@@ -935,33 +933,24 @@
   }
 
   $('.slider').noUiSlider({
-    // start: [ $('span.lower').html(), $('span.upper').html() ],
-    start: [0, 5],
+    start: [0, 45],
     step: 1,
     connect: true,
     range: {
       'min': 0,
-      'max': 25
+      'max': 45
     }
   });
 
-  $('.slider').Link('lower').to($('.lower'), null, wNumb({
+  $('.slider').Link('lower').to($('#min_experience'), null, wNumb({
     decimals: 0
   }));
-  $('.slider').Link('upper').to($('.upper'), null, wNumb({
+  $('.slider').Link('upper').to($('#max_experience'), null, wNumb({
     decimals: 0
   }));
 
   $('.slider').on({
     set: function () {
-
-      // if($('span.lower').html() === $('span.upper').html()) {
-      //   $('span.separator, span.upper').hide();
-      // }
-      // else {
-      //   $('span.separator, span.upper').show();
-      // }
-
       submit(true);
     }
   });
