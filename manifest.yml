@@ -13,6 +13,7 @@ applications:
   host: calc-dev
   buildpack: https://github.com/cloudfoundry/python-buildpack.git
   memory: 256M
+  command: bash cf.sh
 
 - name: calc-prod
 # commenting these out so an accidental straight deploy to calc.gsa.gov doesn't happen
