@@ -122,11 +122,6 @@
             -->
           </div>
 
-          <div id="results-actions">
-            <a id="export-data" class="button button-primary"
-              title="Click to export your search results to an Excel file (CSV)" href="{{ API_HOST }}rates/csv/">⬇ Export Data (CSV)</a>
-          </div>
-
         </div>
 
         <div class="graph-block columns nine">
@@ -192,17 +187,40 @@
           </div>
 
           <div class="highlights-container row">
-            <div class="four columns">
-              <p>&nbsp</p>
-            </div>            
-            <div class="avg-price-block four columns">
-              <h5 class="avg-price-title">Average Price</h5>
-              <h5 id="avg-price-highlight"></h5>
-            </div> 
+
+            <div class="price-block eight columns">
+
+              <div class="row">
+
+                <div class="standard-deviation-block">
+                  <h5 class="standard-deviation-title">Std Deviation -1</h5>
+                  <h5 id="standard-deviation-minus-highlight" class="sd-highlight"></h5>
+
+                </div>            
+                <div class="avg-price-block">
+                  <h5 class="avg-price-title">Average</h5>
+                  <h5 id="avg-price-highlight"></h5>
+                </div> 
+                <div class="standard-deviation-block">
+                  <h5 class="standard-deviation-title">Std Deviation +1</h5>
+                  <h5 id="standard-deviation-plus-highlight" class="sd-highlight"></h5>
+                </div> 
+              </div>
+            </div>
+
+          </div> 
+
+          <div class="download-buttons row">         
             <div class="four columns">
               <a id="download-histogram" class="button button-primary" href="#">⬇ Download graph</a>
             </div>
-          </div> 
+
+          <div id="results-actions four columns">
+            <a id="export-data" class="button button-primary"
+              title="Click to export your search results to an Excel file (CSV)" href="{{ API_HOST }}rates/csv/">⬇ Export Data (CSV)</a>
+          </div>
+
+          </div>
 
           <p class="rates-help-text">The rates shown here are fully burdened, applicable worldwide, and representative of the current fiscal year. This data represents rates awarded at the master contract level.</p>
 
