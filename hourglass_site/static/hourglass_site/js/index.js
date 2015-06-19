@@ -951,8 +951,14 @@
 
   $('.proposed-price button').click(function () {
 
-    $('.proposed-price-highlight').html('$' + $('.proposed-price input').val());
-    $('.proposed-price-block').fadeIn();
+    if($('.proposed-price input').val()) {
+      $('.proposed-price-highlight').html('$' + $('.proposed-price input').val());
+      $('.proposed-price-block').fadeIn();
+    }
+    else {
+      $('.proposed-price-block').fadeOut();
+    }
+
 
   });
 
