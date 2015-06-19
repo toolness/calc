@@ -952,8 +952,14 @@
   $('.slider').on({
     set: function () {
       submit(true);
+
+      if($('#min_experience').val() == 0 && $('#max_experience').val() == 45) {
+        $('#min_experience, #max_experience').removeClass('filter_active');
+      }
     }
   });
 
+  // on load remove active class on experience slider
+  $('#min_experience, #max_experience').removeClass('filter_active');
 
 })(this);
