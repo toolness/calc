@@ -67,7 +67,7 @@
 }
 
 input[type="text"]:focus,
-select:focus {
+select:focus, .filter_focus {
   border: 2px solid #33C3F0 !important;
   box-shadow: 0 0 5px #33C3F0;
 }
@@ -753,6 +753,8 @@ th:hover.tooltips span {
   height: 16px;
   left: -4px;
   top: -4px;
+
+
 }
 
 /* Styling;
@@ -786,6 +788,7 @@ th:hover.tooltips span {
 .noUi-dragable {
   cursor: w-resize;
 }
+
 .noUi-vertical .noUi-dragable {
   cursor: n-resize;
 }

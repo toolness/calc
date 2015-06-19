@@ -950,7 +950,12 @@
   }));
 
   $('.slider').on({
+    slide : function () {
+      $('.noUi-horizontal .noUi-handle').addClass('filter_focus');
+    },
     set: function () {
+      $('.noUi-horizontal .noUi-handle').removeClass('filter_focus');
+
       submit(true);
 
       if($('#min_experience').val() == 0 && $('#max_experience').val() == 45) {
