@@ -25,7 +25,7 @@
   <input type="hidden" name="exclude" value="">
 
   <section class="search">
-    <div class="container"> 
+    <div class="container">
       <div class="row">
         <div class="six columns">
           <input id="labor_category" name="q" placeholder="Type a labor category" class="search u-full-width" type="text">
@@ -137,6 +137,11 @@
 
           <h4>Hourly Rate Data</h4>
 
+          <div class="proposed-price">
+            <input type="number" name="proposed-price" placeholder="Proposed price" />
+            <button class="button-primary go" />Go</button>
+          </div>
+
           <div class="loading-indicator">
             <p class="message">Loading results...</p>
             <div class="error-message"></div>
@@ -195,22 +200,31 @@
                 <div class="standard-deviation-block">
                   <h5 class="standard-deviation-title">Std Deviation -1</h5>
                   <h5 id="standard-deviation-minus-highlight" class="sd-highlight"></h5>
+                </div>
 
-                </div>            
                 <div class="avg-price-block">
                   <h5 class="avg-price-title">Average</h5>
                   <h5 id="avg-price-highlight"></h5>
-                </div> 
+                </div>
+
                 <div class="standard-deviation-block">
                   <h5 class="standard-deviation-title">Std Deviation +1</h5>
                   <h5 id="standard-deviation-plus-highlight" class="sd-highlight"></h5>
-                </div> 
+                </div>
+
               </div>
+
             </div>
 
-          </div> 
+            <div class="proposed-price-block">
+              <h5 class="proposed-price-title">Proposed Price</h5>
+              <h5 class="proposed-price-highlight"></h5>
+            </div>
 
-          <div class="download-buttons row">         
+
+          </div>
+
+          <div class="download-buttons row">
             <div class="four columns">
               <a id="download-histogram" class="button button-primary" href="#">⬇ Download graph</a>
             </div>
