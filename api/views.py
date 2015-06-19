@@ -14,11 +14,7 @@ from contracts.models import Contract, EDUCATION_CHOICES
 import numpy as np
 import sys
 
-try:
-    #python2 compat
-    import unicodecsv as csv
-except:
-    import csv
+import csv
 
 def convert_to_tsquery(query):
     """ converts multi-word phrases into AND boolean queries for postgresql """
