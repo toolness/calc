@@ -170,6 +170,14 @@
         return !!this.value;
       });
 
+    // turns any array input data into a comma separated string
+    // in use for the education filter
+    for (filter in data) {
+      if (Array.isArray(data[filter])) {
+        data[filter] = data[filter].join(',');
+      }
+    }
+
     console.log("submitting:", data);
 
     search.classed("loaded", false);
