@@ -25,7 +25,7 @@
   <input type="hidden" name="exclude" value="">
 
   <section class="search">
-    <div class="container"> 
+    <div class="container">
       <div class="row">
         <div class="six columns">
           <input id="labor_category" name="q" placeholder="Type a labor category" class="search u-full-width" type="text">
@@ -56,12 +56,12 @@
 
             <label>Education level:</label>
 
-            <dl class="dropdown"> 
-              
+            <dl class="dropdown">
+
               <dt>
                 <a href="">
-                  <span class="hida">Select <span class='sr-only'>to reveal Education Level options</span></span>    
-                  <p class="multiSel"></p>  
+                  <span class="hide">Select <span class='sr-only'>to reveal Education Level options</span></span>
+                  <div class="multiSel"></div>
                 </a>
               </dt>
 
@@ -71,23 +71,23 @@
                     <legend class="sr-only">Education level:</legend>
                     <ul>
                       <li>
-                        <input id="high-school" type="checkbox" value="High School" />
+                        <input id="high-school" type="checkbox" value="HS" name="min_education_level" />
                         <label for="high-school">High School</label>
                       </li>
                       <li>
-                          <input id="associates" type="checkbox" value="Associates" />
+                          <input id="associates" type="checkbox" value="AA" name="min_education" />
                           <label for="associates">Associates</label>
                       </li>
                       <li>
-                          <input id="bachelors-degree" type="checkbox" value="Bachelors Degree" />
+                          <input id="bachelors-degree" type="checkbox" value="BA" name="min_education" />
                           <label for="bachelors-degree">Bachelors Degree</label>
                       </li>
                       <li>
-                          <input id="masters-degree" type="checkbox" value="Masters Degree" />
+                          <input id="masters-degree" type="checkbox" value="MA" name="min_education" />
                           <label for="masters-degree">Masters Degree</label>
                       </li>
                       <li>
-                          <input id="phd" type="checkbox" value="Ph.D" />
+                          <input id="phd" type="checkbox" value="PHD" name="min_education" />
                           <label for="phd">Ph.D</label>
                       </li>
                     </ul>
@@ -96,7 +96,7 @@
               </dd>
             </dl>
 
-            <div class="filter">
+<!--             <div class="filter">
               <label for="min_education">Min. education level:</label>
               <select id="min_education" name="min_education">
                 <option value="">(none)</option>
@@ -107,7 +107,7 @@
                 <option value="PHD">Ph.D</option>
               </select>
             </div>
-
+ -->
             <div class="filter">
               <label for="experience_range">Experience:</label>
               <select id="experience_range" name="experience_range">
@@ -236,15 +236,15 @@
           <div class="highlights-container row">
             <div class="four columns">
               <p>&nbsp</p>
-            </div>            
+            </div>
             <div class="avg-price-block four columns">
               <h5 class="avg-price-title">Average Price</h5>
               <h5 id="avg-price-highlight"></h5>
-            </div> 
+            </div>
             <div class="four columns">
               <a id="download-histogram" class="button button-primary" href="#">⬇ Download graph</a>
             </div>
-          </div> 
+          </div>
 
           <p class="rates-help-text">The rates shown here are fully burdened, applicable worldwide, and representative of the current fiscal year. This data represents rates awarded at the master contract level.</p>
 

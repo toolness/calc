@@ -132,7 +132,7 @@ span.dollars {
   position:relative;
 }
 
-.dropdown a, 
+.dropdown a,
 .dropdown a:visited {
   color:#000;
   text-decoration:none;
@@ -151,12 +151,12 @@ span.dollars {
   line-height: 24px;
   overflow: hidden;
   padding: 6px 10px;
-} 
+}
 
 .dropdown dt a:focus {
   border: 2px solid #33c3f0 !important;
   box-shadow: 0 0 5px #33c3f0;
-} 
+}
 
 .mutliSelect label:hover {
   cursor: pointer;
@@ -179,6 +179,12 @@ input[type="checkbox"]:checked ~ label {
   cursor:pointer;
   display:inline-block;
   padding: 0 3px 2px 0;
+}
+.multiSel span:after {
+  content: ",";
+}
+.multiSel span:last-child:after {
+  content: "";
 }
 
 .dropdown dd ul {
@@ -494,7 +500,7 @@ th:hover.tooltips span {
 
 /* This is the default Tooltipster theme (feel free to modify or duplicate and create multiple themes!): */
 .tooltipster-default {
-  border-radius: 5px; 
+  border-radius: 5px;
   border: 2px solid #000;
   background: #4c4c4c;
   color: #fff;
@@ -558,7 +564,7 @@ th:hover.tooltips span {
 }
 .tooltipster-arrow span, .tooltipster-arrow-border {
   display: block;
-  width: 0; 
+  width: 0;
   height: 0;
   position: absolute;
 }
@@ -606,7 +612,7 @@ th:hover.tooltips span {
 }
 .tooltipster-arrow-left span, .tooltipster-arrow-left .tooltipster-arrow-border {
   border-top: 8px solid transparent !important;
-  border-bottom: 8px solid transparent !important; 
+  border-bottom: 8px solid transparent !important;
   border-left: 8px solid;
   top: 50%;
   margin-top: -7px;
@@ -614,13 +620,13 @@ th:hover.tooltips span {
 }
 .tooltipster-arrow-left .tooltipster-arrow-border {
   border-top: 9px solid transparent !important;
-  border-bottom: 9px solid transparent !important; 
+  border-bottom: 9px solid transparent !important;
   border-left: 9px solid;
   margin-top: -8px;
 }
 .tooltipster-arrow-right span, .tooltipster-arrow-right .tooltipster-arrow-border {
   border-top: 8px solid transparent !important;
-  border-bottom: 8px solid transparent !important; 
+  border-bottom: 8px solid transparent !important;
   border-right: 8px solid;
   top: 50%;
   margin-top: -7px;
@@ -628,7 +634,7 @@ th:hover.tooltips span {
 }
 .tooltipster-arrow-right .tooltipster-arrow-border {
   border-top: 9px solid transparent !important;
-  border-bottom: 9px solid transparent !important; 
+  border-bottom: 9px solid transparent !important;
   border-right: 9px solid;
   margin-top: -8px;
 }
@@ -668,10 +674,10 @@ th:hover.tooltips span {
   -ms-transform: scale(1,1);
   transform: scale(1,1);
   -webkit-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1);
-  -webkit-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15); 
-  -moz-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15); 
-  -ms-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15); 
-  -o-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15); 
+  -webkit-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15);
+  -moz-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15);
+  -ms-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15);
+  -o-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15);
   transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15);
 }
 
@@ -696,10 +702,10 @@ th:hover.tooltips span {
   -ms-transform: rotateZ(0deg);
   transform: rotateZ(0deg);
   -webkit-transition-timing-function: cubic-bezier(0.230, 0.635, 0.495, 1);
-  -webkit-transition-timing-function: cubic-bezier(0.230, 0.635, 0.495, 2.4); 
-  -moz-transition-timing-function: cubic-bezier(0.230, 0.635, 0.495, 2.4); 
-  -ms-transition-timing-function: cubic-bezier(0.230, 0.635, 0.495, 2.4); 
-  -o-transition-timing-function: cubic-bezier(0.230, 0.635, 0.495, 2.4); 
+  -webkit-transition-timing-function: cubic-bezier(0.230, 0.635, 0.495, 2.4);
+  -moz-transition-timing-function: cubic-bezier(0.230, 0.635, 0.495, 2.4);
+  -ms-transition-timing-function: cubic-bezier(0.230, 0.635, 0.495, 2.4);
+  -o-transition-timing-function: cubic-bezier(0.230, 0.635, 0.495, 2.4);
   transition-timing-function: cubic-bezier(0.230, 0.635, 0.495, 2.4);
 }
 
@@ -711,11 +717,11 @@ th:hover.tooltips span {
   -ms-transition-property: top;
   transition-property: top;
   -webkit-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1);
-  -webkit-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15); 
-  -moz-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15); 
-  -ms-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15); 
-  -o-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15); 
-  transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15); 
+  -webkit-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15);
+  -moz-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15);
+  -ms-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15);
+  -o-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15);
+  transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15);
 }
 .tooltipster-fall-show {
 }
@@ -737,10 +743,10 @@ th:hover.tooltips span {
   -ms-transition-property: left;
   transition-property: left;
   -webkit-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1);
-  -webkit-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15); 
-  -moz-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15); 
-  -ms-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15); 
-  -o-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15); 
+  -webkit-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15);
+  -moz-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15);
+  -ms-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15);
+  -o-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15);
   transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15);
 }
 .tooltipster-slide.tooltipster-slide-show {
