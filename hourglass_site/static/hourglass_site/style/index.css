@@ -153,9 +153,7 @@ span.dollars {
   border-radius: 4px;
   padding: 1.1em 2em .5em 2em;
   margin: 0 20px 0 0;
-  top: 0;
-  right: 0;
-  position: absolute;
+  float: right;
   display: none;
 }
 .proposed-price-title {
@@ -167,6 +165,15 @@ span.dollars {
   color: #17779f;
   font-weight: 400;
 }
+
+@media (max-width: 800px) {
+  .proposed-price-block {
+    clear: both;
+    float: left;
+    margin: 10px 0 0 0;
+  }
+}
+
 
 .rates-help-text {
   color: #999;
