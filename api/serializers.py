@@ -15,6 +15,7 @@ class PaginatedContractSerializer(pagination.PaginationSerializer):
     minimum = serializers.SerializerMethodField()
     maximum = serializers.SerializerMethodField()
     wage_histogram = serializers.SerializerMethodField()
+    first_standard_deviation = serializers.SerializerMethodField()
 
     class Meta:
         object_serializer_class = ContractSerializer
@@ -30,3 +31,6 @@ class PaginatedContractSerializer(pagination.PaginationSerializer):
 
     def get_wage_histogram(self, obj):
         return self.context.get('wage_histogram', [])
+
+    def get_first_standard_deviation(self, obj):
+        return self.context.get('first_standard_deviation', 0)
