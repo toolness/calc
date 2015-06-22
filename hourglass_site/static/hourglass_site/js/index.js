@@ -959,7 +959,12 @@
       $('.proposed-price-block').fadeOut();
     }
 
+  });
 
+  $(document).keypress(function (e) {
+    if(e.which == 13) {
+      $('.proposed-price button').trigger('click');
+    }
   });
 
 
