@@ -158,7 +158,7 @@ span.dollars {
   box-shadow: 0 0 5px #33c3f0;
 }
 
-.mutliSelect label:hover {
+.multiSelect label:hover {
   cursor: pointer;
 }
 
@@ -166,7 +166,7 @@ span.dollars {
 margin-bottom: 0;
 }
 
-.mutliSelect label {
+.multiSelect label {
   font-weight: 400;
   display: inline;
 }
