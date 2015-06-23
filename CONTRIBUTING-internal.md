@@ -12,7 +12,7 @@ See CONTRIBUTING.md as well for information on automated testing.
 The CALC team uses a loose Scrum framework. We have daily phone standups during 
 our two week sprints, for which we do a sprint planning and review and retrospective.
 
-We use Trello to house our product and release backlogs, as well as to keep track
+We use a [Trello board](https://trello.com/b/LjXJaVbZ/hourglass) to house our product and release backlogs, as well as to keep track
 of progress in the current sprint. Each sprint has its own list of cards. When 
 a card is in progress, it should be moved to the "Working" list. After the work
 is complete (including documentation and automated tests as appropriate), the card
@@ -42,7 +42,7 @@ a clean list of branches.
 
 Travis CI runs automated builds that run the full test suite with each commit on a pull request. At the time
 of writing, there are some periodic false failures. Tests should never be ignored if they fail. Tests must be passing 
-before merging into master. Rerun tests if necessary.`
+before merging into master. Rerun tests if necessary.
 
 ### Deployment
 See deploy.md for technical details.
