@@ -1,8 +1,15 @@
+# Working with CALC
+
 ## Testing
 To run the tests, just run:
 
 ```sh
 make test
+```
+
+If you want to run Python unit tests only:
+```sh
+make test-backend
 ```
 
 ### Front End Testing
