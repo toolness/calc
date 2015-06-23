@@ -836,7 +836,7 @@
      */
     var inputs = ([
       {name: 'q', template: '&ldquo;<a>{value}</a>&rdquo;'},
-      {name: 'education', template: 'minimum education level: <a>{label}</a>'},
+      {name: 'education', template: 'education level: <a>{label}</a>'},
       {name: 'experience_range', template: '<a>{label}</a> of experience'},
       {name: 'site', template: 'worksite: <a>{value}</a>'},
       {name: 'business_size', template: 'size: <a>{label}</a>'},
