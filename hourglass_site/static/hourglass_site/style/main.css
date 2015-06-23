@@ -142,6 +142,11 @@ header {
   letter-spacing: normal;
   margin-bottom: 2em;
 }
+
+.price-callout img {
+  max-width: 30px;
+}
+
 h1 {
   letter-spacing: 0;
 }
