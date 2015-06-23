@@ -14,11 +14,7 @@ from contracts.models import Contract, EDUCATION_CHOICES
 import numpy as np
 import sys
 
-try:
-    #python2 compat
-    import unicodecsv as csv
-except:
-    import csv
+import csv
 
 def convert_to_tsquery(query):
     """ converts multi-word phrases into AND boolean queries for postgresql """
@@ -165,10 +161,15 @@ class GetRates(APIView):
         contracts = paginator.page(page)
         
         page_stats = {}
+        current_rates = []
 
         page_stats['minimum'] = contracts_all.aggregate(Min(wage_field))[wage_field + '__min']
         page_stats['maximum'] = contracts_all.aggregate(Max(wage_field))[wage_field + '__max']
         page_stats['average'] = quantize(contracts_all.aggregate(Avg(wage_field))[wage_field + '__avg'])
+
+        for rate in contracts_all.values(wage_field):
+            current_rates.append(rate[wage_field])
+        page_stats['first_standard_deviation'] = np.std(current_rates)
 
         #use paginator count method
         if paginator.count > 0:

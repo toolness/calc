@@ -300,6 +300,12 @@
     d3.select("#avg-price-highlight")
       .text(formatDollars(data.average));
 
+    d3.select("#standard-deviation-minus-highlight")
+      .text(formatDollars(data.average - data.first_standard_deviation));
+
+    d3.select("#standard-deviation-plus-highlight")
+      .text(formatDollars(data.average + data.first_standard_deviation));
+
     var xAxis = svg.select(".axis.x");
     if (xAxis.empty()) {
       xAxis = svg.append("g")
@@ -423,7 +429,7 @@
       .attr('class', 'label')
       .attr('transform', 'translate(' + [left + (right - left) / 2, 45] + ')')
       .attr('text-anchor', 'middle')
-      .text('Price (hourly rate)')
+      .text('Ceiling price (hourly rate)')
 
     var yd = d3.extent(heightScale.domain());
     var ya = d3.svg.axis()
@@ -536,7 +542,7 @@
     })
     .html(function(d) {
       var id = d.string.split('-').join('');
-      return '<a target="_blank" href="https://www.gsaadvantage.gov/ref_text/' 
+      return '<a target="_blank" href="https://www.gsaadvantage.gov/ref_text/'
              + id + '/' + id + '_online.htm">' + d.string
              + '<svg class="document-icon" width="8" height="8" viewBox="0 0 8 8"><path d="M0 0v8h7v-4h-4v-4h-3zm4 0v3h3l-3-3zm-3 2h1v1h-1v-1zm0 2h1v1h-1v-1zm0 2h4v1h-4v-1z" /></svg>';
     });
@@ -929,5 +935,37 @@
       });
     }
   }
+
+  function isNumberKey(evt){
+      var charCode = (evt.which) ? evt.which : event.keyCode
+      if (charCode > 31 && (charCode < 48 || charCode > 57))
+          return false;
+      return true;
+  }
+  // restrict proposed price input to be numeric only
+  $('.proposed-price input').keypress(function (e) {
+    if(!isNumberKey(e)) {
+      e.preventDefault();
+    }
+  })
+
+  $('.proposed-price button').click(function () {
+
+    if($('.proposed-price input').val()) {
+      $('.proposed-price-highlight').html('$' + $('.proposed-price input').val());
+      $('.proposed-price-block').fadeIn();
+    }
+    else {
+      $('.proposed-price-block').fadeOut();
+    }
+
+  });
+
+  $(document).keypress(function (e) {
+    if(e.which == 13) {
+      $('.proposed-price button').trigger('click');
+    }
+  });
+
 
 })(this);
