@@ -192,6 +192,8 @@
         return !!this.value;
       });
 
+    data['experience_range'] = $('#min_experience').val() + "," + $('#max_experience').val();
+
     console.log("submitting:", data);
 
     search.classed("loaded", false);
@@ -1029,10 +1031,46 @@
     }
   }
 
+  $('.slider').noUiSlider({
+    start: [0, 45],
+    step: 1,
+    connect: true,
+    range: {
+      'min': 0,
+      'max': 45
+    }
+  });
+
+  $('.slider').Link('lower').to($('#min_experience'), null, wNumb({
+    decimals: 0
+  }));
+  $('.slider').Link('upper').to($('#max_experience'), null, wNumb({
+    decimals: 0
+  }));
+
+  $('.slider').on({
+    slide : function () {
+      $('.noUi-horizontal .noUi-handle').addClass('filter_focus');
+    },
+    set: function () {
+      $('.noUi-horizontal .noUi-handle').removeClass('filter_focus');
+
+      submit(true);
+
+      if($('#min_experience').val() == 0 && $('#max_experience').val() == 45) {
+        $('#min_experience, #max_experience').removeClass('filter_active');
+      }
+    }
+  });
+
+  // on load remove active class on experience slider
+  $('#min_experience, #max_experience').removeClass('filter_active');
+
   function isNumberKey(evt){
-      var charCode = (evt.which) ? evt.which : event.keyCode
+      var charCode = (evt.which) ? evt.which : event.keyCode;
+
       if (charCode > 31 && (charCode < 48 || charCode > 57))
-          return false;
+        return false;
       return true;
   }
   // restrict proposed price input to be numeric only
@@ -1059,7 +1097,6 @@
       $('.proposed-price button').trigger('click');
     }
   });
-
 
 })(this);
 
