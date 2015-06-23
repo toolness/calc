@@ -171,6 +171,7 @@ span.dollars {
 
 .rates-help-text {
   color: #999;
+  clear: both;
 }
 
 .filter select {
