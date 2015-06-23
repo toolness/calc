@@ -322,6 +322,12 @@
     d3.select("#avg-price-highlight")
       .text(formatDollars(data.average));
 
+    d3.select("#standard-deviation-minus-highlight")
+      .text(formatDollars(data.average - data.first_standard_deviation));
+
+    d3.select("#standard-deviation-plus-highlight")
+      .text(formatDollars(data.average + data.first_standard_deviation));
+
     var xAxis = svg.select(".axis.x");
     if (xAxis.empty()) {
       xAxis = svg.append("g")
@@ -440,6 +446,9 @@
           })
           .style("text-anchor", "end")
           .attr("transform", "rotate(-35)");
+
+    // remove existing labels
+    svg.selectAll("text.label").remove();
 
     xAxis.append('text')
       .attr('class', 'label')
@@ -954,7 +963,6 @@
     }
   }
 
-
   /*
     Dropdown with Multiple checkbox select with jQuery - May 27, 2013
     (c) 2013 @ElmahdiMahmoud
@@ -1020,6 +1028,37 @@
 
     }
   }
+
+  function isNumberKey(evt){
+      var charCode = (evt.which) ? evt.which : event.keyCode
+      if (charCode > 31 && (charCode < 48 || charCode > 57))
+          return false;
+      return true;
+  }
+  // restrict proposed price input to be numeric only
+  $('.proposed-price input').keypress(function (e) {
+    if(!isNumberKey(e)) {
+      e.preventDefault();
+    }
+  })
+
+  $('.proposed-price button').click(function () {
+
+    if($('.proposed-price input').val()) {
+      $('.proposed-price-highlight').html('$' + $('.proposed-price input').val());
+      $('.proposed-price-block').fadeIn();
+    }
+    else {
+      $('.proposed-price-block').fadeOut();
+    }
+
+  });
+
+  $(document).keypress(function (e) {
+    if(e.which == 13) {
+      $('.proposed-price button').trigger('click');
+    }
+  });
 
 
 })(this);

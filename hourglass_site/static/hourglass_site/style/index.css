@@ -5,6 +5,7 @@
     -webkit-transition: opacity .5s, height .5s;
        -moz-transition: opacity .5s, height .5s;
             transition: opacity .5s, height .5s;
+    clear: both;
 }
 
 .autocomplete-suggestions {
@@ -229,21 +230,62 @@ input[type="checkbox"]:checked ~ label {
   margin-bottom: 2em;
   margin-top: 1em;
   text-align: center;
+  position: relative;
+}
+
+.price-block {
+  background: #f9f9f9;
+  border: 1px solid #e1e1e1;
+  border-radius: 4px;
+}
+
+.standard-deviation-title {
+  font-size: 14px;
+  padding-bottom: 4px;
+  padding-top: 11px;
 }
 
 .avg-price-block {
-  background: #f3f3f3;
-  border-radius: 4px;
-  display: inline-block;
-  margin: 0 auto;
-  padding: .4em 2em;
-  text-align: center;
+  border-left: 1px solid #e1e1e1;
+  border-right: 1px solid #e1e1e1;
 }
 
-#avg-price-highlight {
+.avg-price-block,
+.standard-deviation-block {
+  display: inline-block;
+  margin: 0 auto;
+  padding: .4em 0;
+  text-align: center;
+  width: 32%;
+}
+
+.proposed-price-block {
+  background: #f9f9f9;
+  border: 1px solid #e1e1e1;
+  border-radius: 4px;
+  padding: 1.1em 2em .5em 2em;
+  margin: 0 20px 0 0;
+  float: right;
+  display: none;
+}
+.proposed-price-title {
+  font-size: 16px;
+}
+
+#avg-price-highlight,
+.sd-highlight, .proposed-price-highlight {
   color: #17779f;
   font-weight: 400;
 }
+
+@media (max-width: 800px) {
+  .proposed-price-block {
+    clear: both;
+    float: left;
+    margin: 10px 0 0 0;
+  }
+}
+
 
 .rates-help-text {
   color: #999;
@@ -263,6 +305,18 @@ section.search {
 
 .results h4 {
   margin-bottom: 0;
+  float: left;
+}
+
+.proposed-price {
+  float: right;
+}
+.proposed-price input {
+  width: 135px;
+}
+.proposed-price .go {
+  padding: 0 10px;
+  cursor: pointer;
 }
 
 div.filters .filter {

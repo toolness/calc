@@ -674,6 +674,12 @@ class ContractsTest(TestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.data['average'], (16.0 + 18.0 + 50.0) / 3)
 
+    def test_first_std_deviation_no_args(self):
+        self.make_test_set()
+        resp = self.c.get(self.path, {})
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(int(resp.data['first_standard_deviation']), 15)
+
     def test_histogram_length(self):
         self.make_test_set()
         resp = self.c.get(self.path, {'histogram': 5})
