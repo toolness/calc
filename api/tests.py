@@ -148,6 +148,30 @@ class ContractsTest(TestCase):
                'education_level': 'Ph.D.' },
            ], True)
 
+    def test_filter_by_education_single(self):
+        get_contract_recipe().make(_quantity=5, education_level=cycle(['MA', 'HS', 'BA', 'AA', 'PHD']))
+        resp = self.c.get(self.path, {'education': 'AA', 'sort': 'education_level'})
+        self.assertEqual(resp.status_code, 200)
+
+        self.assertResultsEqual(resp.data['results'], [
+            { 'idv_piid': 'ABC1234',
+              'education_level': 'Associates' }
+            ], True)
+
+    def test_filter_by_education_multiple(self):
+        get_contract_recipe().make(_quantity=5, education_level=cycle(['MA', 'HS', 'BA', 'AA', 'PHD']))
+        resp = self.c.get(self.path, {'education': 'AA,MA,PHD', 'sort': 'education_level'})
+        self.assertEqual(resp.status_code, 200)
+
+        self.assertResultsEqual(resp.data['results'], [
+            { 'idv_piid': 'ABC1234',
+              'education_level': 'Associates' },
+            {  'idv_piid': 'ABC1231',
+               'education_level': 'Masters' },
+            {  'idv_piid': 'ABC1235',
+               'education_level': 'Ph.D.' },
+            ], True)
+
     def test_sort_by_education_level(self):
         # deliberately placing education level cycle out of order so that proper ordering cannot be
         # a side-effect of ordering by idv_piid or another serially-generated field

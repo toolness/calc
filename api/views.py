@@ -55,6 +55,7 @@ def get_contracts_queryset(request_params, wage_field):
     min_experience = request_params.get('min_experience', None)
     max_experience = request_params.get('max_experience', None)
     min_education = request_params.get('min_education', None)
+    education = request_params.get('education', None)
     schedule = request_params.get('schedule', None)
     site = request_params.get('site', None)
     business_size = request_params.get('business_size', None)
@@ -98,6 +99,14 @@ def get_contracts_queryset(request_params, wage_field):
         for index, pair in enumerate(EDUCATION_CHOICES):
             if min_education == pair[0]:
                 contracts = contracts.filter(education_level__in=[ed[0] for ed in EDUCATION_CHOICES[index:] ])
+
+    if education:
+        degrees = education.split(',')
+        selected_degrees = []
+        for index, pair in enumerate(EDUCATION_CHOICES):
+            if pair[0] in degrees:
+                selected_degrees.append(pair[0])
+        contracts = contracts.filter(education_level__in=selected_degrees)
 
     if schedule:
         contracts = contracts.filter(schedule__iexact=schedule)

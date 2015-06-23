@@ -61,11 +61,12 @@ You can change the way that labor categories are searched by using the
 All of the query types are case-insenstive.
 
 #### Education and Experience Filters
-You can also filter by the minimum education level, minimum years of
-experience, and maximum years of experience. For example:
+###### Experience
+You can also filter by the minimum years of
+experience and maximum years of experience. For example:
 
 ```
-http://localhost:8000/api/rates/?min_education=MA&min_experience=5&max_experience=10&q=technical
+http://localhost:8000/api/rates/?&min_experience=5&max_experience=10&q=technical
 ```
 
 Or, you can filter with a single, comma-separated range.
@@ -76,8 +77,26 @@ than ten years of experience:
 http://localhost:8000/api/rates/?experience_range=5,10
 ```
 
-The valid values for `min_education` are `HS` (high school), `AA` (associates),
+###### Education
+The valid values for the education endpoints are `HS` (high school), `AA` (associates),
 `BA` (bachelors), `MA` (masters), and `PHD` (Ph.D).
+
+There are two ways to filter based on education, `min_education` and `education`.
+
+To filter by specific education levels, use `education`. It accepts one or more
+education values as defined above:
+
+```
+http://localhost:8000/api/rates/?education=AA,BA
+```
+
+You can also get all results that match and exceed the selected education level
+by using `min_education`. The following example will return results that have
+an education level of MA or PHD:
+
+```
+http://localhost:8000/api/rates/?min_education=MA
+```
 
 The default pagination is set to 200. You can paginate using the `page`
 parameter:
