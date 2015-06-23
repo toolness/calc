@@ -42,6 +42,13 @@
       }
   });
 
+  function getUrlParameterByName(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+      results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+  }
+
   // JFYI
   var HISTOGRAM_BINS = 12;
 
@@ -160,16 +167,7 @@
     submit(false);
   }
 
-  function submit(pushState) {
-    var data = form.getData();
-    inputs
-      .filter(function() {
-        return this.type !== 'radio' && this.type !== 'checkbox';
-      })
-      .classed("filter_active", function() {
-        return !!this.value;
-      });
-
+  function arrayToCSV(data) {
     // turns any array input data into a comma separated string
     // in use for the education filter
     for (filter in data) {
@@ -177,6 +175,22 @@
         data[filter] = data[filter].join(',');
       }
     }
+
+    return data;
+  }
+
+  function submit(pushState) {
+    var data = form.getData();
+
+    data = arrayToCSV(data);
+
+    inputs
+      .filter(function() {
+        return this.type !== 'radio' && this.type !== 'checkbox';
+      })
+      .classed("filter_active", function() {
+        return !!this.value;
+      });
 
     console.log("submitting:", data);
 
@@ -799,6 +813,8 @@
     var total = res ? formatCommas(res.count) : '0',
         data = form.getData();
 
+    data = arrayToCSV(data);
+
     /*
      * build a list of inputs that map to
      * descriptive filters. The 'name' key is the
@@ -809,7 +825,7 @@
      */
     var inputs = ([
       {name: 'q', template: '&ldquo;<a>{value}</a>&rdquo;'},
-      {name: 'min_education', template: 'minimum education level: <a>{label}</a>'},
+      {name: 'education', template: 'minimum education level: <a>{label}</a>'},
       {name: 'experience_range', template: '<a>{label}</a> of experience'},
       {name: 'site', template: 'worksite: <a>{value}</a>'},
       {name: 'business_size', template: 'size: <a>{label}</a>'},
@@ -967,7 +983,7 @@
   });
 
 
-  $('.mutliSelect input[type="checkbox"]').on('click', function () {
+  $('.multiSelect input[type="checkbox"]').on('click', function () {
 
       var title = $(this).next().html();
 
@@ -982,7 +998,29 @@
         var ret = $(".hide");
         $('.dropdown dt a').append(ret);
       }
+
+      if(!$('.multiSelect input:checked').length) {
+        $('.hide').show();
+      }
+
   });
+
+  if(getUrlParameterByName('education').length) {
+
+    var parameters = getUrlParameterByName('education').split(',');
+
+    $('.hide').hide();
+
+    for(key in parameters) {
+
+      var title = $('.multiSelect input[type=checkbox][value=' + parameters[key] + ']').attr('checked', true).next().html();
+
+      $('.multiSel').append('<span title="' + title + '">' + title + '</span>');
+
+
+    }
+  }
+
 
 })(this);
 
