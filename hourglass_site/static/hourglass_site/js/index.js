@@ -973,4 +973,35 @@
   // on load remove active class on experience slider
   $('#min_experience, #max_experience').removeClass('filter_active');
 
+  function isNumberKey(evt){
+      var charCode = (evt.which) ? evt.which : event.keyCode
+      if (charCode > 31 && (charCode < 48 || charCode > 57))
+          return false;
+      return true;
+  }
+  // restrict proposed price input to be numeric only
+  $('.proposed-price input').keypress(function (e) {
+    if(!isNumberKey(e)) {
+      e.preventDefault();
+    }
+  })
+
+  $('.proposed-price button').click(function () {
+
+    if($('.proposed-price input').val()) {
+      $('.proposed-price-highlight').html('$' + $('.proposed-price input').val());
+      $('.proposed-price-block').fadeIn();
+    }
+    else {
+      $('.proposed-price-block').fadeOut();
+    }
+
+  });
+
+  $(document).keypress(function (e) {
+    if(e.which == 13) {
+      $('.proposed-price button').trigger('click');
+    }
+  });
+
 })(this);
