@@ -172,8 +172,6 @@ class ContractsTest(TestCase):
                'education_level': 'Ph.D.' },
             ], True)
 
-
-
     def test_sort_by_education_level(self):
         # deliberately placing education level cycle out of order so that proper ordering cannot be
         # a side-effect of ordering by idv_piid or another serially-generated field
