@@ -144,7 +144,10 @@ header {
 }
 
 .price-callout img {
+  float: left;
+  margin-right: 10px;
   max-width: 30px;
+  opacity: 0.6;
 }
 
 h1 {
