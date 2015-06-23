@@ -1003,7 +1003,7 @@
         html = '<span title="' + title + '">' + title + '</span>';
 
         $('.multiSel').append(html);
-        $(".hide").hide();
+        $(".eduSelect").hide();
       }
       else {
         $('span[title="' + title + '"]').remove();
@@ -1011,7 +1011,10 @@
       }
 
       if(!$('.multiSelect input:checked').length) {
-        $('.hide').show();
+        $('.eduSelect').show();
+      }
+      else {
+        $('.eduSelect').hide();
       }
 
   });
