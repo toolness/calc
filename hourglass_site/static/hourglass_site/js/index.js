@@ -959,6 +959,7 @@
     Dropdown with Multiple checkbox select with jQuery - May 27, 2013
     (c) 2013 @ElmahdiMahmoud
     license: http://www.opensource.org/licenses/mit-license.php
+    // many edits by xtine
   */
 
   $(".dropdown dt a").on('click', function (e) {
@@ -985,18 +986,18 @@
 
   $('.multiSelect input[type="checkbox"]').on('click', function () {
 
-      var title = $(this).next().html();
+      var title = $(this).next().html(),
+          html;
 
       if ($(this).is(':checked')) {
-        var html = '<span title="' + title + '">' + title + '</span>';
+        html = '<span title="' + title + '">' + title + '</span>';
 
         $('.multiSel').append(html);
         $(".hide").hide();
       }
       else {
         $('span[title="' + title + '"]').remove();
-        var ret = $(".hide");
-        $('.dropdown dt a').append(ret);
+        $('.dropdown dt a').addClass('hide');
       }
 
       if(!$('.multiSelect input:checked').length) {
@@ -1007,16 +1008,15 @@
 
   if(getUrlParameterByName('education').length) {
 
-    var parameters = getUrlParameterByName('education').split(',');
+    var parameters = getUrlParameterByName('education').split(','),
+        title;
 
     $('.hide').hide();
 
     for(key in parameters) {
-
-      var title = $('.multiSelect input[type=checkbox][value=' + parameters[key] + ']').attr('checked', true).next().html();
+      title = $('.multiSelect input[type=checkbox][value=' + parameters[key] + ']').attr('checked', true).next().html();
 
       $('.multiSel').append('<span title="' + title + '">' + title + '</span>');
-
 
     }
   }
