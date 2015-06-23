@@ -13,9 +13,10 @@ The CALC team uses a loose Scrum framework. We have daily phone standups during
 our two week sprints, for which we do a sprint planning and review and retrospective.
 
 We use a [Trello board](https://trello.com/b/LjXJaVbZ/hourglass) to house our product and release backlogs, as well as to keep track
-of progress in the current sprint. Each sprint has its own list of cards. When 
-a card is in progress, it should be moved to the "Working" list. After the work
-is complete (including documentation and automated tests as appropriate), the card
+of progress in the current sprint. Each story is represented by a card. Stories are generated at the beginning of the project from broad hypotheses created during the planning process, and new "story candidates" can be added anytime as we build and learn.
+
+Each sprint has its own list of cards. When a card is in progress, it should be moved
+to the "Working" list. After the work is complete (including documentation and automated tests as appropriate), the card
 should be put into the "Acceptance Testing" list until our product owner approves it.
 
 Each card in Trello, before being worked on, should have two lists: Tasks and Acceptance 
@@ -26,7 +27,8 @@ task to assign it.
 Acceptance Criteria should outline what the user will see and experience in order for the 
 feature to be considered complete.
 
-If a card is started in a sprint but not finished, it is placed back into the Release Backlog 
+If the team decides it has the bandwidth to commit to take the story on, we move the card to the current Sprint backlog, then repeat the process until the team feels it can't take on anything else.
+In the event that a card is started in a sprint but not finished, it is placed back into the Release Backlog 
 for reprioritization in a following sprint.
 
 Before each sprint planning, our product owner sorts the cards in the Release Backlog based on 
