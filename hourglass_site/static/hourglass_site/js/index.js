@@ -427,6 +427,9 @@
           .style("text-anchor", "end")
           .attr("transform", "rotate(-35)");
 
+    // remove existing labels
+    svg.selectAll("text.label").remove();
+
     xAxis.append('text')
       .attr('class', 'label')
       .attr('transform', 'translate(' + [left + (right - left) / 2, 45] + ')')
