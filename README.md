@@ -62,11 +62,11 @@ All of the query types are case-insenstive.
 
 #### Education and Experience Filters
 ###### Experience
-You can also filter by the minimum education level, minimum years of
-experience, and maximum years of experience. For example:
+You can also filter by the minimum years of
+experience and maximum years of experience. For example:
 
 ```
-http://localhost:8000/api/rates/?min_education=MA&min_experience=5&max_experience=10&q=technical
+http://localhost:8000/api/rates/?&min_experience=5&max_experience=10&q=technical
 ```
 
 Or, you can filter with a single, comma-separated range.
