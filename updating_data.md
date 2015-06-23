@@ -22,3 +22,6 @@ The files that we get are in .xlsx format. They need to be converted to CSV. The
 Save a copy of the CSV as the next version of the data in https://github.com/18F/calc/tree/master/contracts/docs. Overwrite `hourly_prices.csv` with the new file.
 
 Run `./manage.py load_data`
+
+## Updating data on Cloud Foundry
+Before pushing to an app, edit the `manifest.yml` and under the environment you want to push to, add `command: bash cf.sh`.
