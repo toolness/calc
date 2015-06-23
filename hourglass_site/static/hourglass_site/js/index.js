@@ -1073,6 +1073,13 @@
         return false;
       return true;
   }
+
+  // load experience range if query string exists
+  if(getUrlParameterByName('max_experience').length) {
+    $('.slider').val([getUrlParameterByName('min_experience'), getUrlParameterByName('max_experience')])
+  }
+
+
   // restrict proposed price input to be numeric only
   $('.proposed-price input').keypress(function (e) {
     if(!isNumberKey(e)) {
