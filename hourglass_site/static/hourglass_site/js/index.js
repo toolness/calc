@@ -84,6 +84,9 @@
 
       $('.multiSel').empty();
       $('.eduSelect').show();
+      if($('.multiSelect input:checked').length) {
+        $('.multiSelect input:checked').attr('checked', false);
+      }
       $('.slider').val([0, 45]);
 
     });
@@ -1043,7 +1046,6 @@
       title = $('.multiSelect input[type=checkbox][value=' + parameters[key] + ']').attr('checked', true).next().html();
 
       $('.multiSel').append('<span title="' + title + '">' + title + '</span>');
-
     }
   }
 
