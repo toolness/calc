@@ -1037,7 +1037,7 @@
     var parameters = getUrlParameterByName('education').split(','),
         title;
 
-    $('.hide').hide();
+    $('.eduSelect').hide();
 
     for(key in parameters) {
       title = $('.multiSelect input[type=checkbox][value=' + parameters[key] + ']').attr('checked', true).next().html();
