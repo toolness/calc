@@ -22,16 +22,16 @@ The files that we get are in .xlsx format. They need to be converted to CSV. The
 - Contract begin date
 - Contract end date
 
-#### Labor Category
+##### Labor Category
 Ex: "Mechanical Engineer". Cannot be empty.
 
-#### Current Contract Year
+##### Current Contract Year
 Must be an integer from 1-5. Cannot be empty.
 
-#### Contract Year Rates 1-5
+##### Contract Year Rates 1-5
 Ex: 253.88. The first year cannot be empty.
 
-#### Education Level
+##### Education Level
 Must be one of the following or empty:
 - "High School"
 - "Associates"
@@ -39,27 +39,27 @@ Must be one of the following or empty:
 - "Masters"
 - "Ph.D"
 
-#### Minimum Years of Experience
+##### Minimum Years of Experience
 Must be an integer or empty.
 
-#### Business Size
+##### Business Size
 Must be one of the following or empty:
 - "s" for small business
 - "o" for other than small
 
-#### Worksite Location
+##### Worksite Location
 Must be one of the following or empty:
 - "customer"
 - "contractor"
 - "both"
 
-#### Company Name
+##### Company Name
 Ex: "Great Products Inc." Must not be empty.
 
-#### Contract ID
+##### Contract ID
 Ex: "GS-10F-0616P" Must not be empty.
 
-#### Schedule Name
+##### Schedule Name
 Must be one of the following or empty:
 - AIMS
 - Consolidated
@@ -69,10 +69,10 @@ Must be one of the following or empty:
 - MOBIS
 - PES
 
-#### SIN Number
+##### SIN Number
 Ex: "235-34" or "235-34, 689-12".
 
-#### Contract Start Date and Contract End Date
+##### Contract Start Date and Contract End Date
 Month/Day/Year Ex: "12/3/14"
 
 ## Updating the contract data
