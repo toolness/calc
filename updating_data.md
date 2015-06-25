@@ -1,4 +1,7 @@
-## The data
+# CALC Data Imports
+
+## About the data
+https://github.com/18F/calc/tree/master/contracts/docs has all versions of the data that has been imported to date. https://github.com/18F/calc/blob/master/contracts/docs/hourly_prices.csv is the most recent data set.
 
 The files that we get are in .xlsx format. They need to be converted to CSV. The columns should be arranged as such:
 - Labor Category
@@ -77,6 +80,10 @@ Month/Day/Year Ex: "12/3/14"
 Save a copy of the CSV as the next version of the data in https://github.com/18F/calc/tree/master/contracts/docs. Overwrite `hourly_prices.csv` with the new file.
 
 Run `./manage.py load_data`
+
+This will replace all existing records with the ones in the CSV.
+
+Should the format of the file we import ever change, run `./manage.py makemigrations` and alert the team that they will need to run migrations on their local environments. 
 
 ## Updating data on Cloud Foundry
 Before pushing to an app, edit the `manifest.yml` and under the environment you want to push to, add `command: bash cf.sh`.
