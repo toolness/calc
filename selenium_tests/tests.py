@@ -447,6 +447,7 @@ class FunctionalTests(LiveServerTestCase):
     def test_query_type_matches_words(self):
         get_contract_recipe().make(_quantity=3, labor_category=cycle(['Systems Engineer', 'Software Engineer', 'Consultant']))
         driver = self.load()
+        self.wait_for(self.data_is_loaded)
         form = self.get_form()
         self.search_for('engineer')
         self.submit_form_and_wait()
@@ -458,6 +459,7 @@ class FunctionalTests(LiveServerTestCase):
     def test_query_type_matches_phrase(self):
         get_contract_recipe().make(_quantity=3, labor_category=cycle(['Systems Engineer I', 'Software Engineer II', 'Consultant II']))
         driver = self.load()
+        self.wait_for(self.data_is_loaded)
         form = self.get_form()
         self.search_for('software engineer')
         self.set_form_values(form, query_type='match_phrase')
@@ -469,6 +471,7 @@ class FunctionalTests(LiveServerTestCase):
     def test_query_type_matches_exact(self):
         get_contract_recipe().make(_quantity=3, labor_category=cycle(['Software Engineer I', 'Software Engineer', 'Senior Software Engineer']))
         driver = self.load()
+        self.wait_for(self.data_is_loaded)
         form = self.get_form()
         self.search_for('software engineer')
         self.set_form_values(form, query_type='match_exact')
