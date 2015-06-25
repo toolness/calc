@@ -18,15 +18,12 @@ The files that we get are in .xlsx format. They need to be converted to CSV. The
 - Contract number
 - Schedule
 - SIN number
-- Year that the contract is in
+- Current contract year
 - Contract begin date
 - Contract end date
 
 ##### Labor Category
 Ex: "Mechanical Engineer". Cannot be empty.
-
-##### Current Contract Year
-Must be an integer from 1-5. Cannot be empty.
 
 ##### Contract Year Rates 1-5
 Ex: 253.88. The first year cannot be empty.
@@ -71,6 +68,9 @@ Must be one of the following or empty:
 
 ##### SIN Number
 Ex: "235-34" or "235-34, 689-12".
+
+##### Current Contract Year
+Must be an integer from 1-5. Cannot be empty.
 
 ##### Contract Start Date and Contract End Date
 Month/Day/Year Ex: "12/3/14"
