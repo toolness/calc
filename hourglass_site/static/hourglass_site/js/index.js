@@ -324,7 +324,8 @@
           .attr("preserveAspectRatio", "xMinYMid meet"),
         formatDollars = function(n) {
           return "$" + formatPrice(n);
-        };
+        },
+        stdMinus, stdPlus;
 
     var extent = [data.minimum, data.maximum],
         bins = data.wage_histogram,
@@ -337,14 +338,32 @@
           .range([0, 1, bottom - top]);
     console.log('count extent:', countExtent);
 
+
     d3.select("#avg-price-highlight")
       .text(formatDollars(data.average));
 
+    stdMinus = data.average - data.first_standard_deviation;
+    stdPlus = data.average + data.first_standard_deviation;
+
+    if(isNaN(stdMinus)) {
+      stdMinus = "$0";
+    }
+    else {
+      stdMinus = formatDollars(stdMinus);
+    }
+    if(isNaN(stdPlus)) {
+      stdPlus = "$0";
+    }
+    else {
+      stdPlus = formatDollars(stdPlus);
+    }
+
+
     d3.select("#standard-deviation-minus-highlight")
-      .text(formatDollars(data.average - data.first_standard_deviation));
+      .text(stdMinus);
 
     d3.select("#standard-deviation-plus-highlight")
-      .text(formatDollars(data.average + data.first_standard_deviation));
+      .text(stdPlus);
 
     var xAxis = svg.select(".axis.x");
     if (xAxis.empty()) {
