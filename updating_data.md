@@ -1,4 +1,4 @@
-## Updating the contract data
+## The data
 
 The files that we get are in .xlsx format. They need to be converted to CSV. The columns should be arranged as such:
 - Labor Category
@@ -18,6 +18,61 @@ The files that we get are in .xlsx format. They need to be converted to CSV. The
 - Year that the contract is in
 - Contract begin date
 - Contract end date
+
+#### Labor Category
+Ex: "Mechanical Engineer". Cannot be empty.
+
+#### Current Contract Year
+Must be an integer from 1-5. Cannot be empty.
+
+#### Contract Year Rates 1-5
+Ex: 253.88. The first year cannot be empty.
+
+#### Education Level
+Must be one of the following or empty:
+- "High School"
+- "Associates"
+- "Bachelors"
+- "Masters"
+- "Ph.D"
+
+#### Minimum Years of Experience
+Must be an integer or empty.
+
+#### Business Size
+Must be one of the following or empty:
+- "s" for small business
+- "o" for other than small
+
+#### Worksite Location
+Must be one of the following or empty:
+- "customer"
+- "contractor"
+- "both"
+
+#### Company Name
+Ex: "Great Products Inc." Must not be empty.
+
+#### Contract ID
+Ex: "GS-10F-0616P" Must not be empty.
+
+#### Schedule Name
+Must be one of the following or empty:
+- AIMS
+- Consolidated
+- Environmental
+- Logistics
+- Language Services
+- MOBIS
+- PES
+
+#### SIN Number
+Ex: "235-34" or "235-34, 689-12".
+
+#### Contract Start Date and Contract End Date
+Month/Day/Year Ex: "12/3/14"
+
+## Updating the contract data
 
 Save a copy of the CSV as the next version of the data in https://github.com/18F/calc/tree/master/contracts/docs. Overwrite `hourly_prices.csv` with the new file.
 
