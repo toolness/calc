@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.core.paginator import Paginator
 from django.conf import settings
-from django.db.models import Avg, Max, Min, Count
+from django.db.models import Avg, Max, Min, Count, Q
 from decimal import Decimal
 
 from rest_framework.response import Response
@@ -75,13 +75,21 @@ def get_contracts_queryset(request_params, wage_field):
         contracts = contracts.exclude(id__in=exclude)
 
     if query:
+        qs = query.split(',')
+        q_objs = Q()
+        queries = []
         if query_type == 'match_phrase':
-            contracts = contracts.filter(labor_category__icontains=query)
+            for q in qs:
+                q_objs.add(Q(labor_category__icontains=q), Q.OR)
+            contracts = contracts.filter(q_objs)
         elif query_type == 'match_exact':
-            contracts = contracts.filter(labor_category__iexact=query)
+            for q in qs:
+                q_objs.add(Q(labor_category__iexact=q.strip()), Q.OR)
+            contracts = contracts.filter(q_objs)
         else:
-            query = convert_to_tsquery(query)
-            contracts = contracts.search(query, raw=True)
+            for q in qs:
+                queries.append(convert_to_tsquery(q))
+            contracts = contracts.search(" | ".join(queries), raw=True)
 
     if experience_range:
         years = experience_range.split(',')
