@@ -63,6 +63,13 @@ class ContractsTest(TestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.data['results'], [])
 
+    def test_search_results_with_nonalphanumeric(self):
+        # the search should be able to handle queries with non-alphanumeric chars without erroring
+        self.make_test_set()
+        resp = self.c.get(self.path, {'q': 'category (ABC)"^$#@!&*'})
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.data['results'], [])
+
     def test_filter_by_price__exact(self):
         self.make_test_set()
         resp = self.c.get(self.path, {'price': 18})
