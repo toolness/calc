@@ -53,6 +53,12 @@ You can change the way that labor categories are searched by using the
 * `match_phrase`, which matches the query as a phrase; or
 * `match_exact`, which matches labor categories exactly
 
+You can search for multiple labor categories separated by a comma.
+
+```
+http://localhost:8000/api/rates/?q=trainer,instructor
+```
+
 All of the query types are case-insenstive.
 
 #### Education and Experience Filters
