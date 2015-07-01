@@ -63,6 +63,34 @@ class ContractsTest(TestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.data['results'], [])
 
+    def test_multi_category_search_results(self):
+        self.make_test_set()
+        resp = self.c.get(self.path, {'q': 'legal services, accounting'})
+        self.assertEqual(resp.status_code, 200)
+        self.assertResultsEqual(resp.data['results'],
+           [{'id': 1,
+            'idv_piid': 'ABC123',
+            'vendor_name': 'ACME Corp.',
+            'labor_category': 'Legal Services',
+            'education_level': None,
+            'min_years_experience': 10,
+            'hourly_rate_year1': 18.0,
+            'current_price': 18.0,
+            'schedule': None,
+            'contractor_site': None,
+            'business_size': None},
+            {'id': 2,
+            'idv_piid': 'ABC234',
+            'vendor_name': 'Numbers R Us',
+            'labor_category': 'Accounting, CPA',
+            'education_level': 'Masters',
+            'min_years_experience': 5,
+            'hourly_rate_year1': 50.0,
+            'current_price': 50.0,
+            'schedule': None,
+            'contractor_site': None,
+            'business_size': None}])
+
     def test_filter_by_price__exact(self):
         self.make_test_set()
         resp = self.c.get(self.path, {'price': 18})
