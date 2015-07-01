@@ -75,21 +75,19 @@ def get_contracts_queryset(request_params, wage_field):
         contracts = contracts.exclude(id__in=exclude)
 
     if query:
-        qs = query.split(',')
-        q_objs = Q()
-        queries = []
-        if query_type == 'match_phrase':
-            for q in qs:
-                q_objs.add(Q(labor_category__icontains=q), Q.OR)
-            contracts = contracts.filter(q_objs)
-        elif query_type == 'match_exact':
-            for q in qs:
-                q_objs.add(Q(labor_category__iexact=q.strip()), Q.OR)
-            contracts = contracts.filter(q_objs)
-        else:
-            for q in qs:
-                queries.append(convert_to_tsquery(q))
+        qs = query.split()
+
+        if query_type not in ('match_phrase', 'match_exact'):
+            queries = [convert_to_tsquery(q) for q in qs]
             contracts = contracts.search(" | ".join(queries), raw=True)
+        else:
+            q_objs = Q()
+            for q in qs:
+                if query_type == 'match_phrase':
+                    q_objs.add(Q(labor_category__icontains=q), Q.OR)
+                elif query_type == 'match_exact':
+                    q_objs.add(Q(labor_category__iexact=q.strip()), Q.OR)
+            contracts = contracts.filter(q_objs)
 
     if experience_range:
         years = experience_range.split(',')
