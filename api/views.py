@@ -75,7 +75,7 @@ def get_contracts_queryset(request_params, wage_field):
         contracts = contracts.exclude(id__in=exclude)
 
     if query:
-        qs = query.split()
+        qs = query.split(',')
 
         if query_type not in ('match_phrase', 'match_exact'):
             queries = [convert_to_tsquery(q) for q in qs]
