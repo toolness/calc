@@ -75,6 +75,7 @@ class ContractsTest(TestCase):
         self.make_test_set()
         resp = self.c.get(self.path, {'q': 'category (ABC)"^$#@!&*'})
         self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.data['results'], [])
 
     def test_search_results_with_extra_spaces(self):
         # the search should insert the correct number of ampersands in the right locations
