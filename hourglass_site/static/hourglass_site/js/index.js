@@ -936,15 +936,19 @@
     }
   }
 
-  function isNumberKey(evt){
-      var charCode = (evt.which) ? evt.which : event.keyCode
-      if (charCode > 31 && (charCode < 48 || charCode > 57))
-          return false;
+  function isNumberOrPeriodKey(evt){
+      var charCode = (evt.which) ? evt.which : event.keyCode;
+      if (charCode === 46) { 
+        return true;
+      }
+      if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+        return false;
+      }
       return true;
   }
   // restrict proposed price input to be numeric only
   $('.proposed-price input').keypress(function (e) {
-    if(!isNumberKey(e)) {
+    if(!isNumberOrPeriodKey(e)) {
       e.preventDefault();
     }
   })
