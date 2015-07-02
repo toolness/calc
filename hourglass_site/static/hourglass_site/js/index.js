@@ -297,8 +297,8 @@
       };
   function updatePriceHistogram(data) {
     var width = 720,
-        height = 240,
-        pad = [60, 15, 60, 60],
+        height = 280,
+        pad = [90, 15, 60, 60],
         top = pad[0],
         left = pad[3],
         right = width - pad[1],
@@ -339,9 +339,9 @@
       stdDev = svg.append("g")
         .attr("transform", "translate(0,0)")
         .attr("class", "stddev");
-      stdDev.append("rect")  
+      stdDev.append("rect")
         .attr("class", "range-fill");
-      stdDev.append("line")  
+      stdDev.append("line")
         .attr("class", "range-rule");
       var stdDevLabels = stdDev.append("g")
         .attr("class", "range-labels")
@@ -352,7 +352,7 @@
         ])
         .enter()
         .append("g")
-          .attr("transform", "translate(0,0)")        
+          .attr("transform", "translate(0,0)")
           .attr("class", function(d) {
             return "label " + d.type;
           });
@@ -372,6 +372,8 @@
 
       stdDevLabelsText.append("tspan")
         .attr("class", "stddev-text");
+      stdDevLabelsText.append("tspan")
+        .attr("class", "stddev-text-label");
     }
 
     var xAxis = svg.select(".axis.x");
@@ -393,7 +395,7 @@
     }
 
     var avg = svg.select("g.avg"),
-        avgOffset = -8;
+        avgOffset = -45;
     if (avg.empty()) {
       avg = svg.append("g")
         .attr("class", "avg");
@@ -450,23 +452,33 @@
       : svg;
 
     var stdDevWidth = x(stdDevMax) - x(stdDevMin),
-        stdDevTop = 20;
+        stdDevTop = 60;
     stdDev = t.select(".stddev");
     stdDev
       .attr("transform", "translate(" + [x(stdDevMin), stdDevTop] + ")")
 
     stdDev.select("rect.range-fill")
       .attr("width", stdDevWidth)
-      .attr("height", bottom - stdDevTop)
+      .attr("height", bottom - stdDevTop);
 
     stdDev.select("line.range-rule")
-      .attr("x2", stdDevWidth)
+      .attr("x2", stdDevWidth);
 
     stdDev.select(".label.min .stddev-text")
-      .text(formatDollars(stdDevMin));
+      .text(formatDollars(stdDevMin))
+      .attr({x : 0, dy : 0});
+
+    stdDev.select(".label.min .stddev-text-label")
+      .text("-1 std dev")
+      .attr({x : -8, dy : '15px'});
 
     stdDev.select(".label.max")
       .attr("transform", "translate(" + [stdDevWidth, 0] + ")")
+
+    stdDev.select(".label.max .stddev-text-label")
+      .text("+1 std dev")
+      .attr({x : 8, dy : '15px'});
+
 
     stdDev.select(".label.max .stddev-text")
       .text(formatDollars(stdDevMax));
@@ -537,7 +549,7 @@
 
     yAxis.append('text')
       .attr('class', 'label')
-      .attr('transform', 'translate(' + [-25, height / 2 - 15] + ') rotate(-90)')
+      .attr('transform', 'translate(' + [-25, height / 2 + 12] + ') rotate(-90)')
       .attr('text-anchor', 'middle')
       .text('# of results')
 

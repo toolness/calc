@@ -295,10 +295,12 @@
           </div>
 
           <div class="graph">
-          
+
 
             <svg id="price-histogram" class="graph histogram has-data" aria-description="A histogram showing the distribution of labor category prices. Each bar represents a range within that distribution">
               <style>
+                /* styles here for download graph compatibility */
+
                 * {
                   vector-effect: non-scaling-stroke;
                 }
@@ -318,8 +320,8 @@
                 .range-rule {
                   stroke: #949494;
                   fill: none;
-                  stroke-dasharray: 5,5; 
-                  stroke-width: 1;                  
+                  stroke-dasharray: 5,5;
+                  stroke-width: 1;
                 }
 
                 .label-rule {
@@ -340,6 +342,11 @@
 
                 .axis text {
                   font-size: 13px;
+                }
+
+                .stddev-text-label {
+                  font-size: 12px;
+                  fill: #666;
                 }
 
                 .avg .value,
