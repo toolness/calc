@@ -337,6 +337,7 @@
     var stdDev = svg.select(".stddev");
     if (stdDev.empty()) {
       stdDev = svg.append("g")
+        .attr("transform", "translate(0,0)")
         .attr("class", "stddev");
       stdDev.append("rect")  
         .attr("class", "range-fill");
@@ -351,6 +352,7 @@
         ])
         .enter()
         .append("g")
+          .attr("transform", "translate(0,0)")        
           .attr("class", function(d) {
             return "label " + d.type;
           });
@@ -371,28 +373,6 @@
       stdDevLabelsText.append("tspan")
         .attr("class", "stddev-text");
     }
-
-
-    var stdDevWidth = x(stdDevMax) - x(stdDevMin),
-        stdDevTop = 20;
-    stdDev
-      .attr("transform", "translate(" + [x(stdDevMin), stdDevTop] + ")")
-
-    stdDev.select("rect.range-fill")
-      .attr("width", stdDevWidth)
-      .attr("height", bottom - stdDevTop)
-
-    stdDev.select("line.range-rule")
-      .attr("x2", stdDevWidth)
-
-    stdDev.select(".label.min .stddev-text")
-      .text(formatDollars(stdDevMin));
-
-    stdDev.select(".label.max")
-      .attr("transform", "translate(" + [stdDevWidth, 0] + ")")
-
-    stdDev.select(".label.max .stddev-text")
-      .text(formatDollars(stdDevMax));
 
     var xAxis = svg.select(".axis.x");
     if (xAxis.empty()) {
@@ -468,6 +448,28 @@
     var t = histogramUpdated
       ? svg.transition().duration(500)
       : svg;
+
+    var stdDevWidth = x(stdDevMax) - x(stdDevMin),
+        stdDevTop = 20;
+    stdDev = t.select(".stddev");
+    stdDev
+      .attr("transform", "translate(" + [x(stdDevMin), stdDevTop] + ")")
+
+    stdDev.select("rect.range-fill")
+      .attr("width", stdDevWidth)
+      .attr("height", bottom - stdDevTop)
+
+    stdDev.select("line.range-rule")
+      .attr("x2", stdDevWidth)
+
+    stdDev.select(".label.min .stddev-text")
+      .text(formatDollars(stdDevMin));
+
+    stdDev.select(".label.max")
+      .attr("transform", "translate(" + [stdDevWidth, 0] + ")")
+
+    stdDev.select(".label.max .stddev-text")
+      .text(formatDollars(stdDevMax));
 
     t.select(".avg")
       .attr("transform", "translate(" + [~~x(data.average), top] + ")");
