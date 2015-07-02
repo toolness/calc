@@ -256,15 +256,6 @@ class GetAutocomplete(APIView):
             q (str): the search query
             query_type (str): defines how the search query should work. [ match_all (default) | match_phrase ]
         """
-        q = request.QUERY_PARAMS.get('q', False)
-        query_type = request.QUERY_PARAMS.get('query_type', 'match_all')
-
-        if q:
-            if query_type == 'match_phrase':
-                data = Contract.objects.filter(labor_category__icontains=q)
-            else:
-                data = Contract.objects.search(convert_to_tsquery(q), raw=True)
-            data = data.values('labor_category').annotate(count=Count('labor_category')).order_by('-count')
-            return Response(data)
-        else:
-            return Response([])
+        contracts = Contract.objects.all().order_by('labor_category')
+        labor_categories = contracts.values('labor_category').annotate(Count('labor_category'))
+        return Response(labor_categories)
