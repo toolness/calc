@@ -60,7 +60,7 @@
 
               <dt>
                 <a href="">
-                  <span class="hide">Select <span class='sr-only'>to reveal Education Level options</span></span>
+                  <span class="eduSelect">Select <span class='sr-only'>to reveal Education Level options</span></span>
                   <div class="multiSel"></div>
                 </a>
               </dt>
@@ -295,12 +295,36 @@
           </div>
 
           <div class="graph">
+          
+
             <svg id="price-histogram" class="graph histogram has-data" aria-description="A histogram showing the distribution of labor category prices. Each bar represents a range within that distribution">
               <style>
                 * {
                   vector-effect: non-scaling-stroke;
                 }
 
+                .stddev-rect {
+                  position: absolute;;
+                }
+
+                .bars .bar rect {
+                  fill: #17779f;
+                }
+
+                .range-fill {
+                  fill: #eeeeee;
+                }
+
+                .range-rule {
+                  stroke: #949494;
+                  fill: none;
+                  stroke-dasharray: 5,5; 
+                  stroke-width: 1;                  
+                }
+
+                .label-rule {
+                  stroke: #949494;
+                }
                 .axis .label {
                   fill: #666;
                   font-style: italic;
@@ -335,6 +359,28 @@
                   stroke: #000;
                 }
               </style>
+<!---
+              <g class="stddev">
+                <rect width="100" height="200" class="range-fill"></rect>
+                <line x1="0" x2="100" class="range-rule"></line>
+                <g class="range-labels">
+                  <g class="label min" transform="translate(0,0)">
+                    <line class="label-rule" y1="-5" y2="5"></line>
+                    <text text-anchor="end" dx="-5">
+                      <tspan class="value">$40</tspan>
+                      <tspan class="label">-1 stddev</tspan>
+                    </text>
+                  </g>
+                  <g class="label max" transform="translate(100,0)">
+                    <line class="label-rule" y1="-5" y2="5"></line>
+                    <text text-anchor="start" dx="5">
+                      <tspan class="value">$40</tspan>
+                      <tspan class="label">+1 stddev</tspan>
+                    </text>
+                  </g>
+                </g>
+              </g>
+-->
             </svg>
           </div>
 

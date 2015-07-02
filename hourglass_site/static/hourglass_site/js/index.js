@@ -296,9 +296,9 @@
         ]
       };
   function updatePriceHistogram(data) {
-    var width = 640,
-        height = 200,
-        pad = [30, 15, 60, 60],
+    var width = 720,
+        height = 240,
+        pad = [60, 15, 60, 60],
         top = pad[0],
         left = pad[3],
         right = width - pad[1],
@@ -324,11 +324,75 @@
     d3.select("#avg-price-highlight")
       .text(formatDollars(data.average));
 
+
+    var stdDevMin = data.average - data.first_standard_deviation,
+        stdDevMax = data.average + data.first_standard_deviation;
+
     d3.select("#standard-deviation-minus-highlight")
-      .text(formatDollars(data.average - data.first_standard_deviation));
+      .text(formatDollars(stdDevMin));
 
     d3.select("#standard-deviation-plus-highlight")
-      .text(formatDollars(data.average + data.first_standard_deviation));
+      .text(formatDollars(stdDevMax));
+
+    var stdDev = svg.select(".stddev");
+    if (stdDev.empty()) {
+      stdDev = svg.append("g")
+        .attr("class", "stddev");
+      stdDev.append("rect")  
+        .attr("class", "range-fill");
+      stdDev.append("line")  
+        .attr("class", "range-rule");
+      var stdDevLabels = stdDev.append("g")
+        .attr("class", "range-labels")
+        .selectAll("g.label")
+        .data([
+          {type: "min",anchor:"end",label:"-1 stddev"},
+          {type: "max",anchor:"start",label:"+1 stddev"}
+        ])
+        .enter()
+        .append("g")
+          .attr("class", function(d) {
+            return "label " + d.type;
+          });
+      stdDevLabels.append("line")
+        .attr("class", "label-rule")
+        .attr({
+          y1: -5,
+          y2: 5
+        });
+      var stdDevLabelsText = stdDevLabels.append("text")
+        .attr("text-anchor", function(d) {
+          return d.anchor;
+        })
+        .attr("dx", function(d, i) {
+          return 8 * (i ? 1 : -1);
+        })
+
+      stdDevLabelsText.append("tspan")
+        .attr("class", "stddev-text");
+    }
+
+
+    var stdDevWidth = x(stdDevMax) - x(stdDevMin),
+        stdDevTop = 20;
+    stdDev
+      .attr("transform", "translate(" + [x(stdDevMin), stdDevTop] + ")")
+
+    stdDev.select("rect.range-fill")
+      .attr("width", stdDevWidth)
+      .attr("height", bottom - stdDevTop)
+
+    stdDev.select("line.range-rule")
+      .attr("x2", stdDevWidth)
+
+    stdDev.select(".label.min .stddev-text")
+      .text(formatDollars(stdDevMin));
+
+    stdDev.select(".label.max")
+      .attr("transform", "translate(" + [stdDevWidth, 0] + ")")
+
+    stdDev.select(".label.max .stddev-text")
+      .text(formatDollars(stdDevMax));
 
     var xAxis = svg.select(".axis.x");
     if (xAxis.empty()) {
@@ -1003,7 +1067,7 @@
         html = '<span title="' + title + '">' + title + '</span>';
 
         $('.multiSel').append(html);
-        $(".hide").hide();
+        $(".eduSelect").hide();
       }
       else {
         $('span[title="' + title + '"]').remove();
@@ -1011,7 +1075,10 @@
       }
 
       if(!$('.multiSelect input:checked').length) {
-        $('.hide').show();
+        $('.eduSelect').show();
+      }
+      else {
+        $('.eduSelect').hide();
       }
 
   });
