@@ -27,7 +27,7 @@ table caption {
 thead th,
 thead th:first-child {
   vertical-align: bottom;
-  color: #666;
+  color: #595959;
   border-bottom: 1px solid;
 }
 
@@ -136,7 +136,7 @@ td.collapsed {
   }
 
 td.column-exclude a {
-  color: #767676;
+  color: #595959;
   font-size: 1.2em;
   line-height: 1rem;
   font-weight: bold;
