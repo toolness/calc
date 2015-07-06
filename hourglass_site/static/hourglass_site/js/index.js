@@ -306,8 +306,8 @@
 
   function updatePriceHistogram(data) {
     var width = 720,
-        height = 280,
-        pad = [110, 15, 60, 60],
+        height = 300,
+        pad = [120, 15, 60, 60],
         top = pad[0],
         left = pad[3],
         right = width - pad[1],
@@ -403,33 +403,10 @@
         .attr("class", "bars");
     }
 
-    // draw average line
-    var avg = svg.select("g.avg"),
-        avgOffset = -55;
-    if (avg.empty()) {
-      avg = svg.append("g")
-        .attr("class", "avg");
-      var avgText = avg.append("text")
-        .attr("text-anchor", "middle")
-        .attr("dy", avgOffset - 6);
-      avgText.append("tspan")
-        .attr("class", "value average");
-      avg.append("line");
-      avg.append("circle")
-        .attr("cy", avgOffset)
-        .attr("r", 3);
-    }
-
-    avg.select("line")
-      .attr("y1", avgOffset)
-      .attr("y2", bottom - top + 8);
-    avg.select(".value")
-      .text(formatDollars(data.average) + ' average');
-
 
     // draw proposed price line
     var pp = svg.select("g.pp"),
-        ppOffset = -85;
+        ppOffset = -95;
     if (pp.empty()) {
       pp = svg.append("g")
         .attr("class", "pp");
@@ -456,6 +433,39 @@
     else {
       pp.style("opacity", 1)
     }
+
+    // draw average line
+    var avg = svg.select("g.avg"),
+        avgOffset = -55;
+    if (avg.empty()) {
+      avg = svg.append("g")
+        .attr("class", "avg");
+
+      avg.append("rect")
+        .attr("y", avgOffset - 30)
+        .attr("x", -55)
+        .attr("class", "avg-label-box")
+        .attr("width", 110)
+        .attr("height", 30)
+        .attr("rx", 7)
+        .attr("ry", 7)
+
+      var avgText = avg.append("text")
+        .attr("text-anchor", "middle")
+        .attr("dy", avgOffset - 10);
+      avgText.append("tspan")
+        .attr("class", "value average");
+      avg.append("line");
+      // avg.append("circle")
+        // .attr("cy", avgOffset)
+        // .attr("r", 3);
+    }
+
+    avg.select("line")
+      .attr("y1", avgOffset)
+      .attr("y2", bottom - top + 8);
+    avg.select(".value")
+      .text(formatDollars(data.average) + ' average');
 
 
     var bars = gBar.selectAll(".bar")
@@ -494,7 +504,7 @@
       : svg;
 
     var stdDevWidth = x(stdDevMax) - x(stdDevMin),
-        stdDevTop = 70;
+        stdDevTop = 85;
     stdDev = t.select(".stddev");
     stdDev
       .attr("transform", "translate(" + [x(stdDevMin), stdDevTop] + ")")
@@ -594,7 +604,7 @@
 
     yAxis.append('text')
       .attr('class', 'label')
-      .attr('transform', 'translate(' + [-25, height / 2 + 12] + ') rotate(-90)')
+      .attr('transform', 'translate(' + [-25, height / 2 + 25] + ') rotate(-90)')
       .attr('text-anchor', 'middle')
       .text('# of results')
 
