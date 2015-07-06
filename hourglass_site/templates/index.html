@@ -331,7 +331,7 @@
                 .stddev-text {
                   fill: #595959;
                 }
-                
+
                 .axis .label {
                   fill: #595959;
                   font-style: italic;
@@ -354,7 +354,7 @@
                   fill: #595959;
                 }
 
-                .avg .value,
+                .avg .value, .pp .value,
                 .axis .tick.primary text {
                   font-weight: bold;
                 }
@@ -366,33 +366,12 @@
                   shape-rendering: crispEdges;
                 }
 
-                .avg line {
+                .avg line, .pp line {
                   stroke-width: 1;
                   stroke: #000;
                 }
               </style>
-<!---
-              <g class="stddev">
-                <rect width="100" height="200" class="range-fill"></rect>
-                <line x1="0" x2="100" class="range-rule"></line>
-                <g class="range-labels">
-                  <g class="label min" transform="translate(0,0)">
-                    <line class="label-rule" y1="-5" y2="5"></line>
-                    <text text-anchor="end" dx="-5">
-                      <tspan class="value">$40</tspan>
-                      <tspan class="label">-1 stddev</tspan>
-                    </text>
-                  </g>
-                  <g class="label max" transform="translate(100,0)">
-                    <line class="label-rule" y1="-5" y2="5"></line>
-                    <text text-anchor="start" dx="5">
-                      <tspan class="value">$40</tspan>
-                      <tspan class="label">+1 stddev</tspan>
-                    </text>
-                  </g>
-                </g>
-              </g>
--->
+
             </svg>
           </div>
 

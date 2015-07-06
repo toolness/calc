@@ -251,6 +251,13 @@
 
     updateDescription(res);
 
+    if($('.proposed-price input').val()) {
+      res.proposedPrice = $('.proposed-price input').val();
+    }
+    else {
+      res.proposedPrice = 0;
+    }
+
     if (res && res.results && res.results.length) {
       // updatePriceRange(res);
       updatePriceHistogram(res);
@@ -295,10 +302,12 @@
           {count: 0, min: 0, max: 0}
         ]
       };
+
+
   function updatePriceHistogram(data) {
     var width = 720,
         height = 280,
-        pad = [90, 15, 60, 60],
+        pad = [110, 15, 60, 60],
         top = pad[0],
         left = pad[3],
         right = width - pad[1],
@@ -394,8 +403,9 @@
         .attr("class", "bars");
     }
 
+    // draw average line
     var avg = svg.select("g.avg"),
-        avgOffset = -45;
+        avgOffset = -55;
     if (avg.empty()) {
       avg = svg.append("g")
         .attr("class", "avg");
@@ -412,9 +422,41 @@
 
     avg.select("line")
       .attr("y1", avgOffset)
-      .attr("y2", bottom - top + 8); // XXX tick size = 6
+      .attr("y2", bottom - top + 8);
     avg.select(".value")
       .text(formatDollars(data.average) + ' average');
+
+
+    // draw proposed price line
+    var pp = svg.select("g.pp"),
+        ppOffset = -85;
+    if (pp.empty()) {
+      pp = svg.append("g")
+        .attr("class", "pp");
+      var ppText = pp.append("text")
+        .attr("text-anchor", "middle")
+        .attr("dy", ppOffset - 6);
+      ppText.append("tspan")
+        .attr("class", "value");
+      pp.append("line");
+      pp.append("circle")
+        .attr("cy", ppOffset)
+        .attr("r", 3);
+    }
+
+    pp.select("line")
+      .attr("y1", ppOffset)
+      .attr("y2", bottom - top + 8);
+    pp.select(".value")
+      .text(formatDollars(data.proposedPrice) + ' proposed');
+
+    if(data.proposedPrice == 0) {
+      pp.style("opacity", 0);
+    }
+    else {
+      pp.style("opacity", 1)
+    }
+
 
     var bars = gBar.selectAll(".bar")
       .data(bins);
@@ -452,7 +494,7 @@
       : svg;
 
     var stdDevWidth = x(stdDevMax) - x(stdDevMin),
-        stdDevTop = 60;
+        stdDevTop = 70;
     stdDev = t.select(".stddev");
     stdDev
       .attr("transform", "translate(" + [x(stdDevMin), stdDevTop] + ")")
@@ -485,6 +527,9 @@
 
     t.select(".avg")
       .attr("transform", "translate(" + [~~x(data.average), top] + ")");
+
+    t.select(".pp")
+      .attr("transform", "translate(" + [~~x(data.proposedPrice), top] + ")");
 
     t.selectAll(".bar")
       .each(function(d) {
@@ -555,6 +600,7 @@
 
     histogramUpdated = true;
   }
+
 
   function updateResults(data) {
     var results = data.results;
@@ -1169,9 +1215,9 @@
   })
 
   $('.proposed-price button').click(function () {
-
     if($('.proposed-price input').val()) {
       $('.proposed-price-highlight').html('$' + $('.proposed-price input').val());
+
       $('.proposed-price-block').fadeIn();
     }
     else {
