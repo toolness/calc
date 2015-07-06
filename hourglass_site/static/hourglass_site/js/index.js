@@ -1223,8 +1223,12 @@
     else {
       $('.proposed-price-block').fadeOut();
     }
-
   });
+
+if(getUrlParameterByName('proposed-price').length) {
+  $('.proposed-price-highlight').html('$' + getUrlParameterByName('proposed-price'));
+  $('.proposed-price-block').show();
+}
 
   $(document).keypress(function (e) {
     if(e.which == 13) {
