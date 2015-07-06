@@ -410,15 +410,22 @@
     if (pp.empty()) {
       pp = svg.append("g")
         .attr("class", "pp");
+
+      pp.append("rect")
+        .attr("y", ppOffset - 25)
+        .attr("x", -55)
+        .attr("class", "pp-label-box")
+        .attr("width", 110)
+        .attr("height", 26)
+        .attr("rx", 4)
+        .attr("ry", 4)
+
       var ppText = pp.append("text")
         .attr("text-anchor", "middle")
         .attr("dy", ppOffset - 6);
       ppText.append("tspan")
-        .attr("class", "value");
+        .attr("class", "value proposed");
       pp.append("line");
-      pp.append("circle")
-        .attr("cy", ppOffset)
-        .attr("r", 3);
     }
 
     pp.select("line")
@@ -442,23 +449,20 @@
         .attr("class", "avg");
 
       avg.append("rect")
-        .attr("y", avgOffset - 30)
+        .attr("y", avgOffset - 25)
         .attr("x", -55)
         .attr("class", "avg-label-box")
         .attr("width", 110)
-        .attr("height", 30)
-        .attr("rx", 7)
-        .attr("ry", 7)
+        .attr("height", 26)
+        .attr("rx", 4)
+        .attr("ry", 4)
 
       var avgText = avg.append("text")
         .attr("text-anchor", "middle")
-        .attr("dy", avgOffset - 10);
+        .attr("dy", avgOffset - 7);
       avgText.append("tspan")
         .attr("class", "value average");
       avg.append("line");
-      // avg.append("circle")
-        // .attr("cy", avgOffset)
-        // .attr("r", 3);
     }
 
     avg.select("line")
