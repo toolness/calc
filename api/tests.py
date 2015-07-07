@@ -3,6 +3,8 @@ from model_mommy import mommy
 from model_mommy.recipe import seq
 from contracts.models import Contract
 from contracts.mommy_recipes import get_contract_recipe
+from api.views import convert_to_tsquery
+
 from itertools import cycle
 
 class ContractsTest(TestCase):
@@ -16,6 +18,11 @@ class ContractsTest(TestCase):
 
         self.c = Client()
         self.path = '/api/rates/'
+
+    def test_convert_to_tsquery(self):
+        self.assertEqual(convert_to_tsquery('staff  consultant'), 'staff:* & consultant:*')
+        self.assertEqual(convert_to_tsquery('senior typist (st)'), 'senior:* & typist:* & st:*')
+        self.assertEqual(convert_to_tsquery('@$(#)%&**#'), '')
 
     def test_empty_results(self):
         self.make_test_set()
@@ -62,6 +69,19 @@ class ContractsTest(TestCase):
         resp = self.c.get(self.path, {'q': 'legal advice'})
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.data['results'], [])
+
+    def test_search_results_with_nonalphanumeric(self):
+        # the search should be able to handle queries with non-alphanumeric chars without erroring
+        self.make_test_set()
+        resp = self.c.get(self.path, {'q': 'category (ABC)"^$#@!&*'})
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.data['results'], [])
+
+    def test_search_results_with_extra_spaces(self):
+        # the search should insert the correct number of ampersands in the right locations
+        self.make_test_set()
+        resp = self.c.get(self.path, {'q': 'legal  advice '})
+        self.assertEqual(resp.status_code, 200)
 
     def test_filter_by_price__exact(self):
         self.make_test_set()
@@ -147,6 +167,30 @@ class ContractsTest(TestCase):
             {  'idv_piid': 'ABC1235',
                'education_level': 'Ph.D.' },
            ], True)
+
+    def test_filter_by_education_single(self):
+        get_contract_recipe().make(_quantity=5, education_level=cycle(['MA', 'HS', 'BA', 'AA', 'PHD']))
+        resp = self.c.get(self.path, {'education': 'AA', 'sort': 'education_level'})
+        self.assertEqual(resp.status_code, 200)
+
+        self.assertResultsEqual(resp.data['results'], [
+            { 'idv_piid': 'ABC1234',
+              'education_level': 'Associates' }
+            ], True)
+
+    def test_filter_by_education_multiple(self):
+        get_contract_recipe().make(_quantity=5, education_level=cycle(['MA', 'HS', 'BA', 'AA', 'PHD']))
+        resp = self.c.get(self.path, {'education': 'AA,MA,PHD', 'sort': 'education_level'})
+        self.assertEqual(resp.status_code, 200)
+
+        self.assertResultsEqual(resp.data['results'], [
+            { 'idv_piid': 'ABC1234',
+              'education_level': 'Associates' },
+            {  'idv_piid': 'ABC1231',
+               'education_level': 'Masters' },
+            {  'idv_piid': 'ABC1235',
+               'education_level': 'Ph.D.' },
+            ], True)
 
     def test_sort_by_education_level(self):
         # deliberately placing education level cycle out of order so that proper ordering cannot be

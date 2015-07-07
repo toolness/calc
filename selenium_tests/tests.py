@@ -180,7 +180,7 @@ class FunctionalTests(LiveServerTestCase):
         # the last visible form inputs should be the price filters
         self.assertEqual(inputs[-2].get_attribute('name'), 'price__gte')
         self.assertEqual(inputs[-1].get_attribute('name'), 'price__lte')
-    
+
     # TODO bring this back!
     def xtest_form_submit_loading(self):
         get_contract_recipe().make(_quantity=1, labor_category=seq("Architect"))
@@ -253,12 +253,16 @@ class FunctionalTests(LiveServerTestCase):
         self.assertTrue(('price__lte=%d' % maximum) in driver.current_url, 'Missing "price__lte=%d" in query string' % maximum)
 
     def test_filter_experience_range(self):
-        get_contract_recipe().make(_quantity=5, vendor_name=seq("4 years of experience"), min_years_experience=4)
-        get_contract_recipe().make(_quantity=5, vendor_name=seq("5 years of experience"), min_years_experience=5)
+        get_contract_recipe().make(_quantity=5, vendor_name=seq("4 years of experience"), min_years_experience='4')
+        get_contract_recipe().make(_quantity=5, vendor_name=seq("5 years of experience"), min_years_experience='5')
         driver = self.load_and_wait()
         form = self.get_form()
 
-        self.set_form_value(form, 'experience_range', '5,10')
+        # self.set_form_value(form, 'experience_range', '5,10')
+
+        self.set_form_value(form, 'min_experience', "5")
+        self.set_form_value(form, 'max_experience', "10")
+
         self.submit_form_and_wait()
 
         self.assert_results_count(driver, 5)
@@ -443,6 +447,7 @@ class FunctionalTests(LiveServerTestCase):
     def test_query_type_matches_words(self):
         get_contract_recipe().make(_quantity=3, labor_category=cycle(['Systems Engineer', 'Software Engineer', 'Consultant']))
         driver = self.load()
+        self.wait_for(self.data_is_loaded)
         form = self.get_form()
         self.search_for('engineer')
         self.submit_form_and_wait()
@@ -454,6 +459,7 @@ class FunctionalTests(LiveServerTestCase):
     def test_query_type_matches_phrase(self):
         get_contract_recipe().make(_quantity=3, labor_category=cycle(['Systems Engineer I', 'Software Engineer II', 'Consultant II']))
         driver = self.load()
+        self.wait_for(self.data_is_loaded)
         form = self.get_form()
         self.search_for('software engineer')
         self.set_form_values(form, query_type='match_phrase')
@@ -465,6 +471,7 @@ class FunctionalTests(LiveServerTestCase):
     def test_query_type_matches_exact(self):
         get_contract_recipe().make(_quantity=3, labor_category=cycle(['Software Engineer I', 'Software Engineer', 'Senior Software Engineer']))
         driver = self.load()
+        self.wait_for(self.data_is_loaded)
         form = self.get_form()
         self.search_for('software engineer')
         self.set_form_values(form, query_type='match_exact')

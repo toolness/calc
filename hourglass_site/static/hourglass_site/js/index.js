@@ -42,6 +42,21 @@
       }
   });
 
+  function getUrlParameterByName(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+      results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+  }
+
+  function isNumberKey(evt){
+      var charCode = (evt.which) ? evt.which : event.keyCode;
+
+      if (charCode > 31 && (charCode < 48 || charCode > 57))
+        return false;
+      return true;
+  }
+
   // JFYI
   var HISTOGRAM_BINS = 12;
 
@@ -66,6 +81,14 @@
       console.log("reset:", form.getData());
       submit(true);
       d3.event.preventDefault();
+
+      $('.multiSel').empty();
+      $('.eduSelect').show();
+      if($('.multiSelect input:checked').length) {
+        $('.multiSelect input:checked').attr('checked', false);
+      }
+      $('.slider').val([0, 45]);
+
     });
 
   inputs.on("change", function onchange() {
@@ -160,8 +183,23 @@
     submit(false);
   }
 
+  function arrayToCSV(data) {
+    // turns any array input data into a comma separated string
+    // in use for the education filter
+    for (filter in data) {
+      if (Array.isArray(data[filter])) {
+        data[filter] = data[filter].join(',');
+      }
+    }
+
+    return data;
+  }
+
   function submit(pushState) {
     var data = form.getData();
+
+    data = arrayToCSV(data);
+
     inputs
       .filter(function() {
         return this.type !== 'radio' && this.type !== 'checkbox';
@@ -169,6 +207,8 @@
       .classed("filter_active", function() {
         return !!this.value;
       });
+
+    data['experience_range'] = $('#min_experience').val() + "," + $('#max_experience').val();
 
     console.log("submitting:", data);
 
@@ -424,6 +464,9 @@
           })
           .style("text-anchor", "end")
           .attr("transform", "rotate(-35)");
+
+    // remove existing labels
+    svg.selectAll("text.label").remove();
 
     xAxis.append('text')
       .attr('class', 'label')
@@ -797,6 +840,8 @@
     var total = res ? formatCommas(res.count) : '0',
         data = form.getData();
 
+    data = arrayToCSV(data);
+
     /*
      * build a list of inputs that map to
      * descriptive filters. The 'name' key is the
@@ -807,7 +852,7 @@
      */
     var inputs = ([
       {name: 'q', template: '&ldquo;<a>{value}</a>&rdquo;'},
-      {name: 'min_education', template: 'minimum education level: <a>{label}</a>'},
+      {name: 'education', template: 'education level: <a>{label}</a>'},
       {name: 'experience_range', template: '<a>{label}</a> of experience'},
       {name: 'site', template: 'worksite: <a>{value}</a>'},
       {name: 'business_size', template: 'size: <a>{label}</a>'},
@@ -936,16 +981,126 @@
     }
   }
 
+
   function isNumberOrPeriodKey(evt){
       var charCode = (evt.which) ? evt.which : event.keyCode;
-      if (charCode === 46) { 
+      if (charCode === 46) {
         return true;
       }
       if (charCode > 31 && (charCode < 48 || charCode > 57)) {
         return false;
       }
       return true;
+    }
+
+  /*
+    Dropdown with Multiple checkbox select with jQuery - May 27, 2013
+    (c) 2013 @ElmahdiMahmoud
+    license: http://www.opensource.org/licenses/mit-license.php
+    // many edits by xtine
+  */
+
+  $(".dropdown dt a").on('click', function (e) {
+      $(".dropdown dd ul").slideToggle('fast');
+
+      e.preventDefault();
+  });
+
+  $(".dropdown dd ul li a").on('click', function (e) {
+      $(".dropdown dd ul").hide();
+
+      e.preventDefault();
+  });
+
+  function getSelectedValue(id) {
+    return $("#" + id).find("dt a span.value").html();
   }
+
+  $(document).bind('click', function (e) {
+    var $clicked = $(e.target);
+    if (!$clicked.parents().hasClass("dropdown")) $(".dropdown dd ul").hide();
+  });
+
+
+  $('.multiSelect input[type="checkbox"]').on('click', function () {
+
+      var title = $(this).next().html(),
+          html;
+
+      if ($(this).is(':checked')) {
+        html = '<span title="' + title + '">' + title + '</span>';
+
+        $('.multiSel').append(html);
+        $(".eduSelect").hide();
+      }
+      else {
+        $('span[title="' + title + '"]').remove();
+        $('.dropdown dt a').addClass('hide');
+      }
+
+      if(!$('.multiSelect input:checked').length) {
+        $('.eduSelect').show();
+      }
+      else {
+        $('.eduSelect').hide();
+      }
+
+  });
+
+  if(getUrlParameterByName('education').length) {
+
+    var parameters = getUrlParameterByName('education').split(','),
+        title;
+
+    $('.eduSelect').hide();
+
+    for(key in parameters) {
+      title = $('.multiSelect input[type=checkbox][value=' + parameters[key] + ']').attr('checked', true).next().html();
+
+      $('.multiSel').append('<span title="' + title + '">' + title + '</span>');
+    }
+  }
+
+  $('.slider').noUiSlider({
+    start: [0, 45],
+    step: 1,
+    connect: true,
+    range: {
+      'min': 0,
+      'max': 45
+    }
+  });
+
+  $('.slider').Link('lower').to($('#min_experience'), null, wNumb({
+    decimals: 0
+  }));
+  $('.slider').Link('upper').to($('#max_experience'), null, wNumb({
+    decimals: 0
+  }));
+
+  $('.slider').on({
+    slide : function () {
+      $('.noUi-horizontal .noUi-handle').addClass('filter_focus');
+    },
+    set: function () {
+      $('.noUi-horizontal .noUi-handle').removeClass('filter_focus');
+
+      submit(true);
+
+      if($('#min_experience').val() == 0 && $('#max_experience').val() == 45) {
+        $('#min_experience, #max_experience').removeClass('filter_active');
+      }
+    }
+  });
+
+  // on load remove active class on experience slider
+  $('#min_experience, #max_experience').removeClass('filter_active');
+
+  // load experience range if query string exists
+  if(getUrlParameterByName('max_experience').length) {
+    $('.slider').val([getUrlParameterByName('min_experience'), getUrlParameterByName('max_experience')])
+  }
+
   // restrict proposed price input to be numeric only
   $('.proposed-price input').keypress(function (e) {
     if(!isNumberOrPeriodKey(e)) {
@@ -953,6 +1108,7 @@
     }
   })
 
+  // trigger proposed button input
   $('.proposed-price button').click(function () {
 
     if($('.proposed-price input').val()) {
@@ -963,8 +1119,14 @@
       $('.proposed-price-block').fadeOut();
     }
 
-
+  });
+  // trigger proposed price button with enter click
+  $(document).keypress(function (e) {
+    if(e.which == 13) {
+      $('.proposed-price button').trigger('click');
+    }
   });
 
-
 })(this);
+
+

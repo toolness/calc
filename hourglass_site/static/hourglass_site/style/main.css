@@ -75,6 +75,14 @@ input.button-primary[type="button"]:focus {
     display: none;
 }
 
+.sr-only {
+  position: absolute !important;
+  height: 1px; width: 1px; 
+  overflow: hidden;
+  clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+  clip: rect(1px, 1px, 1px, 1px);
+}
+
 /*
 .button,
 .button-primary {
@@ -142,6 +150,31 @@ header {
   letter-spacing: normal;
   margin-bottom: 2em;
 }
+
+.price-callout img {
+  float: left;
+  margin-right: 10px;
+  max-width: 28px;
+  opacity: 0.6;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.price-callout .ceiling-icon {
+  max-width: 40px;
+}
+
+.price-callout .fully-burdened-icon {
+  max-width: 33px;  
+}
+
+.price-callout p {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
 h1 {
   letter-spacing: 0;
 }
@@ -200,7 +233,7 @@ main {
   margin: 2rem 0;
 }
 main h4 {
-  margin-bottom:0px;
+  margin-bottom:.5rem;
 }
 
 .schedule {
