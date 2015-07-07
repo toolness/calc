@@ -210,7 +210,7 @@
 
     data['experience_range'] = $('#min_experience').val() + "," + $('#max_experience').val();
 
-    console.log("submitting:", data);
+    // console.log("submitting:", data);
 
     search.classed("loaded", false);
     search.classed("loading", true);
@@ -262,7 +262,7 @@
       search.classed("error", false);
     }
 
-    console.log("update:", res);
+    // console.log("update:", res);
     search.classed("loaded", true);
 
     updateDescription(res);
@@ -335,7 +335,7 @@
         heightScale = d3.scale.linear()
           .domain([0].concat(countExtent))
           .range([0, 1, bottom - top]);
-    console.log('count extent:', countExtent);
+    // console.log('count extent:', countExtent);
 
     d3.select("#avg-price-highlight")
       .text(formatDollars(data.average));
@@ -838,102 +838,140 @@
 
   function updateDescription(res) {
     var total = res ? formatCommas(res.count) : '0',
-        data = form.getData();
+        data = form.getData(),
+        description = $('.filters');
 
-    data = arrayToCSV(data);
+    $.each(data, function(key, value) {
 
-    /*
-     * build a list of inputs that map to
-     * descriptive filters. The 'name' key is the
-     * 'name' attribute of the corresponding input,
-     * and the 'template' key is an HTML string
-     * suitable for use with templatize(), which
-     * replaces {key} with d[key] for the input.
-     */
-    var inputs = ([
-      {name: 'q', template: '&ldquo;<a>{value}</a>&rdquo;'},
-      {name: 'education', template: 'education level: <a>{label}</a>'},
-      {name: 'experience_range', template: '<a>{label}</a> of experience'},
-      {name: 'site', template: 'worksite: <a>{value}</a>'},
-      {name: 'business_size', template: 'size: <a>{label}</a>'},
-      {name: 'schedule', template: 'schedule: <a>{value}</a>'}
-    ])
-    .map(function(d) {
-      d.value = data[d.name];
-      d.ref = document.getElementsByName(d.name)[0];
-      d.active = !!d.value;
-      if (d.active) {
-        var ref = d.ref;
-        d.label = ref.nodeName === 'SELECT'
-          ? getRefLabel(ref)
-          : d.value;
+      if(key !== 'sort' && key !== 'query_type') {
+
+        // description.append('span')
+          // .attr('class', 'filter')
+          // .attr('data-name', key);
+
+        var el = document.createElement('span');
+
+        description.append(el);
+
+        if(key == 'education') {
+          // description.select(this).text('education level: ' + value);
+        }
+        else if (key == 'min_experience') {
+          // description.selectAll('span')
+            // .text('experience: ' + data.min_experience + ' - ' + data.max_experience + ' years');
+        }
+
+
+
+        console.log(key + ': ' + value);
       }
-      return d;
+
     });
 
-    function getRefLabel(select) {
-      var option = select.options[select.selectedIndex];
-      return option.getAttribute('data-label') || option.text;
-    }
+    console.log('');
 
-    // key/value pairs for generic descriptive
-    // elements
-    var keys = {
-      total: total,
-      count: formatCommas(res.results.length),
-      results: 'result' + (total === 1 ? '' : 's')
-    };
 
-    var desc = d3.select('#description');
-    // update all of the generic descriptive elements
-    desc.selectAll('[data-key]')
-      .datum(function() {
-        return this.getAttribute('data-key');
-      })
-      .text(function(key) {
-        return keys[key] || '';
-      });
+    // /*
+    //  * build a list of inputs that map to
+    //  * descriptive filters. The 'name' key is the
+    //  * 'name' attribute of the corresponding input,
+    //  * and the 'template' key is an HTML string
+    //  * suitable for use with templatize(), which
+    //  * replaces {key} with d[key] for the input.
+    //  */
+    // var inputs = ([
+    //   {name: 'q', template: '&ldquo;<a>{value}</a>&rdquo;'},
+    //   // {name: 'education', template: 'education level: <a>{value}</a>'},
+    //   {name: 'experience_range', template: '<a>{label}</a> of experience'},
+    //   {name: 'site', template: 'worksite: <a>{value}</a>'},
+    //   {name: 'business_size', template: 'size: <a>{label}</a>'},
+    //   {name: 'schedule', template: 'schedule: <a>{value}</a>'}
+    // ])
+    // .map(function(d) {
+    //   d.value = data[d.name];
+    //   d.ref = document.getElementsByName(d.name)[0];
+    //   d.active = !!d.value;
+    //   if (d.active) {
+    //     var ref = d.ref;
+    //     d.label = ref.nodeName === 'SELECT'
+    //       ? getRefLabel(ref)
+    //       : d.value;
+    //   }
 
-    // get only the active inputs
-    var filters = inputs.filter(function(d) {
-      return d.active;
-    });
+    //   console.log(d.value);
 
-    // build the filters list
-    var f = desc.select('.filters')
-      .classed('empty', !filters.length)
-      .selectAll('.filter')
-      .data(filters);
-    f.exit().remove();
-    f.enter().append('span')
-      .attr('class', 'filter')
-      .attr('data-name', function(d) {
-        return d.name;
-      });
+    //   return d;
+    // });
 
-    // update the HTML for each filter
-    var flen = filters.length,
-        multiple = flen > 1,
-        last = flen - 1;
-    f.html(function(d, i) {
-      // add a comma between filters, and the word
-      // 'and' for the last one
-      var comma = (i > 0 && flen > 2 && i !== last) ? ', ' : ' ',
-          and = comma + ((multiple && i === last)
-            ? 'and '
-            : ''),
-          tmpl = templatize(and + d.template);
-      // XXX we should never see "???"
-      return tmpl(d, '???');
-    })
-    .select('a')
-      .attr('href', '#')
-      .classed('focus-input', true)
-      .on('click', function(d) {
-        d3.event.preventDefault();
-        d.ref.focus();
-        return false;
-      });
+    // // console.table(inputs);
+
+    // function getRefLabel(select) {
+    //   var option = select.options[select.selectedIndex];
+    //   return option.getAttribute('data-label') || option.text;
+    // }
+
+    // // key/value pairs for generic descriptive
+    // // elements
+    // var keys = {
+    //   total: total,
+    //   count: formatCommas(res.results.length),
+    //   results: 'result' + (total === 1 ? '' : 's')
+    // };
+
+    // var desc = d3.select('#description');
+    // // update all of the generic descriptive elements
+    // desc.selectAll('[data-key]')
+    //   .datum(function() {
+    //     return this.getAttribute('data-key');
+    //   })
+    //   .text(function(key) {
+    //     return keys[key] || '';
+    //   });
+
+    // // get only the active inputs
+    // var filters = inputs.filter(function(d) {
+    //   return d.active;
+    // });
+
+    // // build the filters list
+    // var f = desc.select('.filters')
+    //   .classed('empty', !filters.length)
+    //   .selectAll('.filter')
+    //   .data(filters);
+    // f.exit().remove();
+    // f.enter().append('span')
+    //   .attr('class', 'filter')
+    //   .attr('data-name', function(d) {
+    //     return d.name;
+    //   });
+
+    // // update the HTML for each filter
+    // var flen = filters.length,
+    //     multiple = flen > 1,
+    //     last = flen - 1;
+    // f.html(function(d, i) {
+    //   // add a comma between filters, and the word
+    //   // 'and' for the last one
+    //   var comma = (i > 0 && flen > 2 && i !== last) ? ', ' : ' ',
+    //       and = comma + ((multiple && i === last)
+    //         ? 'and '
+    //         : ''),
+    //       tmpl = templatize(and + d.template);
+    //   // XXX we should never see "???"
+    //   return tmpl(d, '???');
+    // })
+    // .select('a')
+    //   .attr('href', '#')
+    //   .classed('focus-input', true)
+    //   .on('click', function(d) {
+    //     d3.event.preventDefault();
+    //     d.ref.focus();
+    //     return false;
+    //   });
+
+
+
+
   }
 
   function templatize(str, undef) {
