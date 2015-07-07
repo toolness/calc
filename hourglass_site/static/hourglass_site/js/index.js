@@ -267,6 +267,16 @@
 
     updateDescription(res);
 
+    if($('.proposed-price input').val()) {
+      res.proposedPrice = $('.proposed-price input').val();
+      $('.proposed-price-highlight').html('$' + $('.proposed-price input').val());
+      $('.proposed-price-block').fadeIn();
+    }
+    else {
+      res.proposedPrice = 0;
+      $('.proposed-price-block').fadeOut();
+    }
+
     if (res && res.results && res.results.length) {
       // updatePriceRange(res);
       updatePriceHistogram(res);
@@ -311,10 +321,12 @@
           {count: 0, min: 0, max: 0}
         ]
       };
+
+
   function updatePriceHistogram(data) {
-    var width = 640,
-        height = 200,
-        pad = [30, 15, 60, 60],
+    var width = 720,
+        height = 300,
+        pad = [120, 15, 60, 60],
         top = pad[0],
         left = pad[3],
         right = width - pad[1],
@@ -342,6 +354,57 @@
     d3.select("#avg-price-highlight")
       .text(formatDollars(data.average));
 
+    var stdDevMin = data.average - data.first_standard_deviation,
+        stdDevMax = data.average + data.first_standard_deviation;
+
+    d3.select("#standard-deviation-minus-highlight")
+      .text(formatDollars(stdDevMin));
+
+    d3.select("#standard-deviation-plus-highlight")
+      .text(formatDollars(stdDevMax));
+
+    var stdDev = svg.select(".stddev");
+    if (stdDev.empty()) {
+      stdDev = svg.append("g")
+        .attr("transform", "translate(0,0)")
+        .attr("class", "stddev");
+      stdDev.append("rect")
+        .attr("class", "range-fill");
+      stdDev.append("line")
+        .attr("class", "range-rule");
+      var stdDevLabels = stdDev.append("g")
+        .attr("class", "range-labels")
+        .selectAll("g.label")
+        .data([
+          {type: "min",anchor:"end",label:"-1 stddev"},
+          {type: "max",anchor:"start",label:"+1 stddev"}
+        ])
+        .enter()
+        .append("g")
+          .attr("transform", "translate(0,0)")
+          .attr("class", function(d) {
+            return "label " + d.type;
+          });
+      stdDevLabels.append("line")
+        .attr("class", "label-rule")
+        .attr({
+          y1: -5,
+          y2: 5
+        });
+      var stdDevLabelsText = stdDevLabels.append("text")
+        .attr("text-anchor", function(d) {
+          return d.anchor;
+        })
+        .attr("dx", function(d, i) {
+          return 8 * (i ? 1 : -1);
+        })
+
+      stdDevLabelsText.append("tspan")
+        .attr("class", "stddev-text");
+      stdDevLabelsText.append("tspan")
+        .attr("class", "stddev-text-label");
+    }
+
     stdMinus = data.average - data.first_standard_deviation;
     stdPlus = data.average + data.first_standard_deviation;
 
@@ -365,6 +428,7 @@
     d3.select("#standard-deviation-plus-highlight")
       .text(stdPlus);
 
+
     var xAxis = svg.select(".axis.x");
     if (xAxis.empty()) {
       xAxis = svg.append("g")
@@ -383,27 +447,74 @@
         .attr("class", "bars");
     }
 
+
+    // draw proposed price line
+    var pp = svg.select("g.pp"),
+        ppOffset = -95;
+    if (pp.empty()) {
+      pp = svg.append("g")
+        .attr("class", "pp");
+
+      pp.append("rect")
+        .attr("y", ppOffset - 25)
+        .attr("x", -55)
+        .attr("class", "pp-label-box")
+        .attr("width", 110)
+        .attr("height", 26)
+        .attr("rx", 4)
+        .attr("ry", 4)
+
+      var ppText = pp.append("text")
+        .attr("text-anchor", "middle")
+        .attr("dy", ppOffset - 6);
+      ppText.append("tspan")
+        .attr("class", "value proposed");
+      pp.append("line");
+    }
+
+    pp.select("line")
+      .attr("y1", ppOffset)
+      .attr("y2", bottom - top + 8);
+    pp.select(".value")
+      .text(formatDollars(data.proposedPrice) + ' proposed');
+
+    if(data.proposedPrice == 0) {
+      pp.style("opacity", 0);
+    }
+    else {
+      pp.style("opacity", 1)
+    }
+
+    // draw average line
     var avg = svg.select("g.avg"),
-        avgOffset = -8;
+        avgOffset = -55;
     if (avg.empty()) {
       avg = svg.append("g")
         .attr("class", "avg");
+
+      avg.append("rect")
+        .attr("y", avgOffset - 25)
+        .attr("x", -55)
+        .attr("class", "avg-label-box")
+        .attr("width", 110)
+        .attr("height", 26)
+        .attr("rx", 4)
+        .attr("ry", 4)
+
       var avgText = avg.append("text")
         .attr("text-anchor", "middle")
-        .attr("dy", avgOffset - 6);
+        .attr("dy", avgOffset - 7);
       avgText.append("tspan")
         .attr("class", "value average");
       avg.append("line");
-      avg.append("circle")
-        .attr("cy", avgOffset)
-        .attr("r", 3);
     }
 
     avg.select("line")
       .attr("y1", avgOffset)
-      .attr("y2", bottom - top + 8); // XXX tick size = 6
+      .attr("y2", bottom - top + 8);
     avg.select(".value")
       .text(formatDollars(data.average) + ' average');
+
 
     var bars = gBar.selectAll(".bar")
       .data(bins);
@@ -440,8 +551,43 @@
       ? svg.transition().duration(500)
       : svg;
 
+    var stdDevWidth = x(stdDevMax) - x(stdDevMin),
+        stdDevTop = 85;
+    stdDev = t.select(".stddev");
+    stdDev
+      .attr("transform", "translate(" + [x(stdDevMin), stdDevTop] + ")")
+
+    stdDev.select("rect.range-fill")
+      .attr("width", stdDevWidth)
+      .attr("height", bottom - stdDevTop);
+
+    stdDev.select("line.range-rule")
+      .attr("x2", stdDevWidth);
+
+    stdDev.select(".label.min .stddev-text")
+      .text(formatDollars(stdDevMin))
+      .attr({x : 0, dy : 0});
+
+    stdDev.select(".label.min .stddev-text-label")
+      .text("-1 std dev")
+      .attr({x : -8, dy : '15px'});
+
+    stdDev.select(".label.max")
+      .attr("transform", "translate(" + [stdDevWidth, 0] + ")")
+
+    stdDev.select(".label.max .stddev-text-label")
+      .text("+1 std dev")
+      .attr({x : 8, dy : '15px'});
+
+
+    stdDev.select(".label.max .stddev-text")
+      .text(formatDollars(stdDevMax));
+
     t.select(".avg")
       .attr("transform", "translate(" + [~~x(data.average), top] + ")");
+
+    t.select(".pp")
+      .attr("transform", "translate(" + [~~x(data.proposedPrice), top] + ")");
 
     t.selectAll(".bar")
       .each(function(d) {
@@ -506,12 +652,13 @@
 
     yAxis.append('text')
       .attr('class', 'label')
-      .attr('transform', 'translate(' + [-25, height / 2 - 15] + ') rotate(-90)')
+      .attr('transform', 'translate(' + [-25, height / 2 + 25] + ') rotate(-90)')
       .attr('text-anchor', 'middle')
       .text('# of results')
 
     histogramUpdated = true;
   }
+
 
   function updateResults(data) {
     var results = data.results;
@@ -1129,17 +1276,22 @@
 
   // trigger proposed button input
   $('.proposed-price button').click(function () {
-
     if($('.proposed-price input').val()) {
       $('.proposed-price-highlight').html('$' + $('.proposed-price input').val());
+
       $('.proposed-price-block').fadeIn();
     }
     else {
       $('.proposed-price-block').fadeOut();
     }
-
   });
-  // trigger proposed price button with enter click
+
+
+if(getUrlParameterByName('proposed-price').length) {
+  $('.proposed-price-highlight').html('$' + getUrlParameterByName('proposed-price'));
+  $('.proposed-price-block').show();
+}
+
   $(document).keypress(function (e) {
     if(e.which == 13) {
       $('.proposed-price button').trigger('click');
