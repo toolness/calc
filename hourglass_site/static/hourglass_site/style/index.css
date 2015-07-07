@@ -350,6 +350,7 @@ label[for=schedule] {
 .table-container {
   width: 100%;
   overflow: scroll;
+  clear: both;
 }
 
 th.column-exclude {               width:  2%; }

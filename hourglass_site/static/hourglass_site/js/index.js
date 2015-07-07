@@ -49,6 +49,14 @@
     return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
   }
 
+  function isNumberKey(evt){
+      var charCode = (evt.which) ? evt.which : event.keyCode;
+
+      if (charCode > 31 && (charCode < 48 || charCode > 57))
+        return false;
+      return true;
+  }
+
   // JFYI
   var HISTOGRAM_BINS = 12;
 
@@ -73,6 +81,14 @@
       console.log("reset:", form.getData());
       submit(true);
       d3.event.preventDefault();
+
+      $('.multiSel').empty();
+      $('.eduSelect').show();
+      if($('.multiSelect input:checked').length) {
+        $('.multiSelect input:checked').attr('checked', false);
+      }
+      $('.slider').val([0, 45]);
+
     });
 
   inputs.on("change", function onchange() {
@@ -1162,13 +1178,12 @@
     var parameters = getUrlParameterByName('education').split(','),
         title;
 
-    $('.hide').hide();
+    $('.eduSelect').hide();
 
     for(key in parameters) {
       title = $('.multiSelect input[type=checkbox][value=' + parameters[key] + ']').attr('checked', true).next().html();
 
       $('.multiSel').append('<span title="' + title + '">' + title + '</span>');
-
     }
   }
 
@@ -1207,19 +1222,10 @@
   // on load remove active class on experience slider
   $('#min_experience, #max_experience').removeClass('filter_active');
 
-  function isNumberKey(evt){
-      var charCode = (evt.which) ? evt.which : event.keyCode;
-
-      if (charCode > 31 && (charCode < 48 || charCode > 57))
-        return false;
-      return true;
-  }
-
   // load experience range if query string exists
   if(getUrlParameterByName('max_experience').length) {
     $('.slider').val([getUrlParameterByName('min_experience'), getUrlParameterByName('max_experience')])
   }
-
 
   // restrict proposed price input to be numeric only
   $('.proposed-price input').keypress(function (e) {
@@ -1228,6 +1234,7 @@
     }
   })
 
+  // trigger proposed button input
   $('.proposed-price button').click(function () {
     if($('.proposed-price input').val()) {
       $('.proposed-price-highlight').html('$' + $('.proposed-price input').val());
@@ -1238,6 +1245,7 @@
       $('.proposed-price-block').fadeOut();
     }
   });
+
 
 if(getUrlParameterByName('proposed-price').length) {
   $('.proposed-price-highlight').html('$' + getUrlParameterByName('proposed-price'));

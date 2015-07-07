@@ -7,7 +7,7 @@ domain: 18f.gov
 # - db-hourglass-test
 applications:
 - name: calc-dev
-  stack: lucid64
+  stack: cflinuxfs2
   path: .
   timeout: 180
   host: calc-dev
@@ -21,7 +21,7 @@ applications:
 #  no-hostname: true
 #  domain: calc.gsa.gov
   host: calc-prod
-  stack: lucid64
+  stack: cflinuxfs2
   path: .
   timeout: 180
   buildpack: https://github.com/cloudfoundry/python-buildpack.git
@@ -34,7 +34,7 @@ applications:
     NEW_RELIC_LOG: stdout
 
 - name: calc-deploy
-  stack: lucid64
+  stack: cflinuxfs2
   path: .
   timeout: 180
   buildpack: https://github.com/cloudfoundry/python-buildpack.git

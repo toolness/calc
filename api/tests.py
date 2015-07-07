@@ -3,6 +3,8 @@ from model_mommy import mommy
 from model_mommy.recipe import seq
 from contracts.models import Contract
 from contracts.mommy_recipes import get_contract_recipe
+from api.views import convert_to_tsquery
+
 from itertools import cycle
 
 class ContractsTest(TestCase):
@@ -16,6 +18,11 @@ class ContractsTest(TestCase):
 
         self.c = Client()
         self.path = '/api/rates/'
+
+    def test_convert_to_tsquery(self):
+        self.assertEqual(convert_to_tsquery('staff  consultant'), 'staff:* & consultant:*')
+        self.assertEqual(convert_to_tsquery('senior typist (st)'), 'senior:* & typist:* & st:*')
+        self.assertEqual(convert_to_tsquery('@$(#)%&**#'), '')
 
     def test_empty_results(self):
         self.make_test_set()
@@ -62,6 +69,19 @@ class ContractsTest(TestCase):
         resp = self.c.get(self.path, {'q': 'legal advice'})
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.data['results'], [])
+
+    def test_search_results_with_nonalphanumeric(self):
+        # the search should be able to handle queries with non-alphanumeric chars without erroring
+        self.make_test_set()
+        resp = self.c.get(self.path, {'q': 'category (ABC)"^$#@!&*'})
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.data['results'], [])
+
+    def test_search_results_with_extra_spaces(self):
+        # the search should insert the correct number of ampersands in the right locations
+        self.make_test_set()
+        resp = self.c.get(self.path, {'q': 'legal  advice '})
+        self.assertEqual(resp.status_code, 200)
 
     def test_filter_by_price__exact(self):
         self.make_test_set()
