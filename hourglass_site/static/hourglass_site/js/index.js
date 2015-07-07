@@ -981,6 +981,18 @@
     }
   }
 
+
+  function isNumberOrPeriodKey(evt){
+      var charCode = (evt.which) ? evt.which : event.keyCode;
+      if (charCode === 46) {
+        return true;
+      }
+      if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+        return false;
+      }
+      return true;
+    }
+
   /*
     Dropdown with Multiple checkbox select with jQuery - May 27, 2013
     (c) 2013 @ElmahdiMahmoud
@@ -1091,7 +1103,7 @@
 
   // restrict proposed price input to be numeric only
   $('.proposed-price input').keypress(function (e) {
-    if(!isNumberKey(e)) {
+    if(!isNumberOrPeriodKey(e)) {
       e.preventDefault();
     }
   })
