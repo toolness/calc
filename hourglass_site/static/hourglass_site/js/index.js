@@ -269,6 +269,7 @@
 
     if($('.proposed-price input').val()) {
       res.proposedPrice = $('.proposed-price input').val();
+      $('.proposed-price-highlight').html('$' + $('.proposed-price input').val());
     }
     else {
       res.proposedPrice = 0;
@@ -333,7 +334,8 @@
           .attr("preserveAspectRatio", "xMinYMid meet"),
         formatDollars = function(n) {
           return "$" + formatPrice(n);
-        };
+        },
+        stdMinus, stdPlus;
 
     var extent = [data.minimum, data.maximum],
         bins = data.wage_histogram,
@@ -346,9 +348,9 @@
           .range([0, 1, bottom - top]);
     console.log('count extent:', countExtent);
 
+
     d3.select("#avg-price-highlight")
       .text(formatDollars(data.average));
-
 
     var stdDevMin = data.average - data.first_standard_deviation,
         stdDevMax = data.average + data.first_standard_deviation;
@@ -400,6 +402,30 @@
       stdDevLabelsText.append("tspan")
         .attr("class", "stddev-text-label");
     }
+
+    stdMinus = data.average - data.first_standard_deviation;
+    stdPlus = data.average + data.first_standard_deviation;
+
+    if(isNaN(stdMinus)) {
+      stdMinus = "$0";
+    }
+    else {
+      stdMinus = formatDollars(stdMinus);
+    }
+    if(isNaN(stdPlus)) {
+      stdPlus = "$0";
+    }
+    else {
+      stdPlus = formatDollars(stdPlus);
+    }
+
+
+    d3.select("#standard-deviation-minus-highlight")
+      .text(stdMinus);
+
+    d3.select("#standard-deviation-plus-highlight")
+      .text(stdPlus);
+
 
     var xAxis = svg.select(".axis.x");
     if (xAxis.empty()) {
@@ -1119,6 +1145,18 @@
     }
   }
 
+
+  function isNumberOrPeriodKey(evt){
+      var charCode = (evt.which) ? evt.which : event.keyCode;
+      if (charCode === 46) {
+        return true;
+      }
+      if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+        return false;
+      }
+      return true;
+    }
+
   /*
     Dropdown with Multiple checkbox select with jQuery - May 27, 2013
     (c) 2013 @ElmahdiMahmoud
@@ -1229,7 +1267,7 @@
 
   // restrict proposed price input to be numeric only
   $('.proposed-price input').keypress(function (e) {
-    if(!isNumberKey(e)) {
+    if(!isNumberOrPeriodKey(e)) {
       e.preventDefault();
     }
   })
