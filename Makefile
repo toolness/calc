@@ -1,6 +1,6 @@
 manage ?= python manage.py
 port ?= 8081
-default_options ?= --nologcapture --liveserver=localhost:$(port)
+default_options ?= --nologcapture --liveserver=localhost:$(port) --verbosity=3
 lt_run ?= ./node_modules/.bin/lt-run
 options ?=
 
