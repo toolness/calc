@@ -270,9 +270,11 @@
     if($('.proposed-price input').val()) {
       res.proposedPrice = $('.proposed-price input').val();
       $('.proposed-price-highlight').html('$' + $('.proposed-price input').val());
+      $('.proposed-price-block').fadeIn();
     }
     else {
       res.proposedPrice = 0;
+      $('.proposed-price-block').fadeOut();
     }
 
     if (res && res.results && res.results.length) {
