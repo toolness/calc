@@ -35,6 +35,8 @@ From there, you're just a hop, skip and a jump away from your own dev server:
 
 ## API
 
+If you're interested in the underlying data, please see (https://github.com/18F/calc/blob/master/updating_data.md)
+
 ### Rates API
 You can access rate information at `http://localhost:8000/api/rates/`.
 
