@@ -23,5 +23,5 @@ deploy:
   organization: oasis
   space: hourglass
   on:
-    condition: "$CALC_AUTO_DEPLOY = 'true'"
+    condition: "$CALC_AUTO_DEPLOY = true"
 sudo: required
