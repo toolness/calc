@@ -24,5 +24,5 @@ deploy:
   space: hourglass
   on:
     branch: master
-    condition: $CALC_AUTO_DEPLOY = 'true'
+    condition: "$CALC_AUTO_DEPLOY = true"
 sudo: required
