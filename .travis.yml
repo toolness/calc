@@ -23,5 +23,6 @@ deploy:
   organization: oasis
   space: hourglass
   on:
-    condition: "$CALC_AUTO_DEPLOY = \"true\""
+    branch: master
+    condition: "$CALC_AUTO_DEPLOY = true"
 sudo: required
