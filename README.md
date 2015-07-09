@@ -33,6 +33,9 @@ From there, you're just a hop, skip and a jump away from your own dev server:
 ./manage.py runserver
 ```
 
+If you are managing https://calc.gsa.gov, see https://github.com/18F/calc/blob/master/deploy.md.
+
+
 ## API
 
 If you're interested in the underlying data, please see https://github.com/18F/calc/blob/master/updating_data.md
