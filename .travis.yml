@@ -21,8 +21,5 @@ deploy:
     secure: RP8TOaPeKnG+MPAL7+2iDh5YAS2uOL+8R4Can1zsz+itgGjATkCYKvuIq2ADHDaRHaP4PQUuDBuGAA2E620Zxon5+VP/ntwJzOZvntYyC/uXUK0+YnBNu/vMlxfq+vky+GPfCNStlrqNWW7SDAYU5fJP4MvxllXt3bOsi5gOfIw=
   api: https://api.18f.gov
   organization: oasis
-  space: hourglass
-  on:
-    branch: master
-    condition: "$CALC_AUTO_DEPLOY = true"
+  space: calc-dev
 sudo: required
