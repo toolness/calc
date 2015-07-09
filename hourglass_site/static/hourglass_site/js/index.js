@@ -57,6 +57,20 @@
       return true;
   }
 
+  function getSigFigs(num) {
+    if (!isFinite(Number(num))) {
+      return -1;
+    }
+    var n = String(num).trim(),
+    FIND_FRONT_ZEROS_SIGN_DOT_EXP = /^[\D0]+|\.|([e][^e]+)$/g,
+    FIND_RIGHT_ZEROS = /0+$/g;
+
+    if (!/\./.test(num)) {
+      n = n.replace(FIND_RIGHT_ZEROS, "");
+    }
+    return n.replace(FIND_FRONT_ZEROS_SIGN_DOT_EXP, "").length;
+  };
+
   // JFYI
   var HISTOGRAM_BINS = 12;
 
@@ -472,11 +486,20 @@
       pp.append("line");
     }
 
+    if (getSigFigs(data.proposedPrice) > 3) {
+      pp.select("rect").attr("width", 130);
+      pp.select("text").attr("dx", 10);
+    }
+    else {
+      pp.select("rect").attr("width", 110);
+      pp.select("text").attr("dx", 0);
+    }
+
     pp.select("line")
       .attr("y1", ppOffset)
       .attr("y2", bottom - top + 8);
     pp.select(".value")
-      .text(formatDollars(data.proposedPrice) + ' proposed');
+      .text("$" + data.proposedPrice + ' proposed');
 
     if(data.proposedPrice == 0) {
       pp.style("opacity", 0);
@@ -1287,16 +1310,22 @@
   });
 
 
-if(getUrlParameterByName('proposed-price').length) {
-  $('.proposed-price-highlight').html('$' + getUrlParameterByName('proposed-price'));
-  $('.proposed-price-block').show();
-}
+  if(getUrlParameterByName('proposed-price').length) {
+    $('.proposed-price-highlight').html('$' + getUrlParameterByName('proposed-price'));
+    $('.proposed-price-block').show();
+  }
 
   $(document).keypress(function (e) {
     if(e.which == 13) {
       $('.proposed-price button').trigger('click');
     }
   });
+
+ $('.two-decimal-places').keyup(function(){
+    if(!(/^\d+(\.{0,1}\d{0,2})?$/.test(this.value))){
+      this.value = this.value.substring(0, this.value.length - 1);
+    }
+ });
 
 })(this);
 
