@@ -22,4 +22,6 @@ deploy:
   api: https://api.18f.gov
   organization: oasis
   space: calc-dev
+  on:
+    branch: master
 sudo: required
