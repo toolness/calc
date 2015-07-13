@@ -472,11 +472,21 @@
       pp.append("line");
     }
 
+    // widen proposed price rect if more than 3 digits long
+    if (data.proposedPrice.toString().replace('.', '').length > 3) {
+      pp.select("rect").attr("width", 130);
+      pp.select("text").attr("dx", 10);
+    }
+    else {
+      pp.select("rect").attr("width", 110);
+      pp.select("text").attr("dx", 0);
+    }
+
     pp.select("line")
       .attr("y1", ppOffset)
       .attr("y2", bottom - top + 8);
     pp.select(".value")
-      .text(formatDollars(data.proposedPrice) + ' proposed');
+      .text("$" + data.proposedPrice + ' proposed');
 
     if(data.proposedPrice == 0) {
       pp.style("opacity", 0);
@@ -1287,14 +1297,22 @@
   });
 
 
-if(getUrlParameterByName('proposed-price').length) {
-  $('.proposed-price-highlight').html('$' + getUrlParameterByName('proposed-price'));
-  $('.proposed-price-block').show();
-}
+  if(getUrlParameterByName('proposed-price').length) {
+    $('.proposed-price-highlight').html('$' + getUrlParameterByName('proposed-price'));
+    $('.proposed-price-block').show();
+  }
 
   $(document).keypress(function (e) {
     if(e.which == 13) {
       $('.proposed-price button').trigger('click');
+    }
+  });
+
+  $('.two-decimal-places').keyup(function(){
+    // regex checks if there are more than 2 numbers after decimal point
+    if(!(/^\d+(\.{0,1}\d{0,2})?$/.test(this.value))) {
+      // cut off and prevent user from inputting more than 2 numbers after decimal place
+      this.value = this.value.substring(0, this.value.length - 1);
     }
   });
 
