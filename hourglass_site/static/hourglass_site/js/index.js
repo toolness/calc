@@ -1132,7 +1132,7 @@
     svg = serializer.serializeToString(svg);
 
     // convert svg into canvas
-    canvg(canvas, svg, {ignoreMouse: true, scaleWidth: 640, scaleHeight: 200});
+    canvg(canvas, svg, {ignoreMouse: true, scaleWidth: 720, scaleHeight: 300});
 
     if (typeof Blob !== 'undefined') {
       canvas.toBlob(function(blob) {
