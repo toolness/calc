@@ -51,6 +51,7 @@ INSTALLED_APPS = (
     'api',
     'djorm_pgfulltext',
     'rest_framework',
+    'rest_framework_swagger',
 
     'django_nose',
     'corsheaders',
