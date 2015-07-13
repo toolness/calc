@@ -466,8 +466,7 @@
 
       var ppText = pp.append("text")
         .attr("text-anchor", "middle")
-        .attr("dy", ppOffset - 6);
-      ppText.append("tspan")
+        .attr("dy", ppOffset - 6)
         .attr("class", "value proposed");
       pp.append("line");
     }
@@ -513,8 +512,7 @@
 
       var avgText = avg.append("text")
         .attr("text-anchor", "middle")
-        .attr("dy", avgOffset - 7);
-      avgText.append("tspan")
+        .attr("dy", avgOffset - 7)
         .attr("class", "value average");
       avg.append("line");
     }
