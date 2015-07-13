@@ -126,7 +126,7 @@
         if (autoCompReq) autoCompReq.abort();
         var data = form.getData();
         autoCompReq = api.get({
-          uri: "search/",
+          uri: "categories/",
           data: {
             q: term,
             query_type: data.query_type
