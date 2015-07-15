@@ -442,7 +442,7 @@ a.focus-input {
   }
 
 #price-histogram {
-  max-height: 220px;
+  max-height: 300px;
 }
 
 /* graph container */

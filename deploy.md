@@ -1,17 +1,38 @@
-If you don’t already have one, request a Cloud Foundry account and download the Cloud Foundry CLI according to the instructions here:
+### Deploying to Cloud Foundry
+###### Only of interest to 18F team members
+If you don’t already have one, request a Cloud Foundry account in #devops in Slack and download the Cloud Foundry CLI according to the instructions here:
 https://docs.18f.gov/getting-started/setup/
 
-Then, target the hourglass space inside the oasis org:
-`cf target -o oasis -s hourglass`
+#### CF Structure
+Organization: `oasis`
+Spaces: `calc-dev`, `calc-prod`
+Apps:
+  calc-dev space:
+    calc-dev
+  calc-prod space:
+    calc-deploy
+    calc-prod
+    
+Routes:
+  calc-dev.18f.gov -> calc-dev space, calc-dev app
+  calc-prod.18f.gov -> calc-prod space, calc-prod app
+  calc-deploy.18f.gov -> calc-prod space, calc-deploy app
+  calc.gsa.gov -> calc-prod space, calc-prod or calc-deploy spaces
+  
+To start, target the org and space you want to work with. For example, if you wanted to work with the production space:
+`cf target -o oasis -s calc-prod`
 
 You can edit the app attributes in the `manifest.yml` file, including what domains the site deploys to, how many instances are running, and how much memory they have. 
 
-Pushing to the Dev Server:
+#### Dev Server
+The development server updates automatically when changes are merged into the master branch. Check out `.travis.yml` for details.
 
-This you can push to directly, with just:
+Should you need to, you can push directly to calc-dev.18f.gov with the following:
 `cf push calc-dev`.
+Remember to target the `calc-dev` space first.
 
-Pushing to Production with Blue-Green Deploys
+#### Production Servers
+##### Pushing to Production with Blue-Green Deploys
 
 Full CF docs are here: http://docs.cloudfoundry.org/devguide/deploy-apps/blue-green.html
 
