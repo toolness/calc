@@ -133,7 +133,7 @@
         if (autoCompReq) autoCompReq.abort();
         var data = form.getData();
         autoCompReq = api.get({
-          uri: "categories/",
+          uri: "search/",
           data: {
             q: term,
             query_type: data.query_type
