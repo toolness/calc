@@ -397,6 +397,23 @@ a.focus-input {
   border-bottom: 1px dotted;
 }
 
+.contract-year ul {
+  list-style: none;
+}
+
+.contract-year li {
+  display: inline-block;
+}
+
+.contract-year input {
+  margin-bottom: 1rem;
+  margin-right: 10px;
+}
+
+.contract-year .radio {
+  padding: 0 24%;
+}
+
 #reset-button {
   background: #fff;
 }
