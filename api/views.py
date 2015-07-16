@@ -42,6 +42,7 @@ def get_contracts_queryset(request_params, wage_field):
         min_experience (int): filter by minimum years of experience
         max_experience (int): filter by maximum years of experience
         min_education (str): filter by a minimum level of education (see EDUCATION_CHOICES)
+        education (str): filter by multiple education levels (see EDUCATION_CHOICES)
         schedule (str): filter by GSA schedule
         site (str): filter by worksite
         business_size (str): filter by 's'(mall) or 'o'(ther)
@@ -163,6 +164,101 @@ def quantize(num, precision=2):
   return Decimal(num).quantize(Decimal(10) ** -precision)
 
 class GetRates(APIView):
+    """
+    This endpoint returns labor category records that match the query
+    and parameters passed in via the request. The response also includes
+    average, minimum, maximum and first standard deviation calculations
+    given the rates in the result set.
+
+    Education level options (for `min_education` and `education`):
+
+    * `HS`: High School
+    * `AA`: Associates Degree
+    * `BA`: Bachelors Degree
+    * `MS`: Masters Degree
+    * `PHD`: PhD
+
+
+    GSA Schedule options (for `schedule`):
+
+    * `AIMS`
+    * `Consolidated`
+    * `Environmental`
+    * `Logistics`
+    * `Language Services`
+    * `MOBIS`
+    * `PES`
+
+    Worksite options (for `site`):
+
+    * `customer`
+    * `contractor`
+    * `both`
+
+    Business size options (for `business_size`):
+
+    * `s`: small
+    * `o`: other
+    ---
+    GET:
+        parameters:
+            - name: q
+              type: string
+              description: a comma-separated list of labor categories to search for
+            - name: query_type
+              type: string
+              description: defines how the search query should be evaluated. \
+                           defaults to 'match_all'. see Implementation Details \
+                           for accepted values
+            - name: experience_range
+              type: string
+              description: filter by a range of years of experience. example '5,10'
+            - name: min_experience
+              type: integer
+              description: filter by minimum years of experience
+            - name: max_experience
+              type: integer
+              description: filter by maximum years of experience
+            - name: min_education
+              type: string
+              description: filter by a minimum level of education. \
+                           see implementation notes for accepted values
+            - name: education
+              type: string
+              description: filter by specific education levels. example 'AA,BA'. \
+                           see implementation notes for accepted values
+            - name: schedule
+              type: string
+              description: filter by GSA schedule. see implementation notes \
+                           for accepted values
+            - name: site
+              type: string
+              description: filter by worksite. see implementation notes for \
+                           accepted values
+            - name: business_size
+              type: string
+              description: filter by business size. see implementation notes \
+                           for accepted values
+            - name: price
+              type: decimal
+              description: filter by exact rate. example '45.34'
+            - name: price__gte
+              type: decimal
+              description: match records where the rate is greater than or \
+                           equal to this integer
+            - name: price_lte
+              type: decimal
+              description: match records where the rate is less than or \
+                           equal to this integer
+            - name: sort
+              type: string
+              description: field to sort on, defaults to wage_field
+            - name: exclude
+              type: string
+              description: a comma-separated list of IDs to exclude from response
+
+        response_serializer: api.serializers.ContractSerializer
+    """
 
     def get(self, request):
 

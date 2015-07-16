@@ -53,6 +53,7 @@ INSTALLED_APPS = (
     'rest_framework',
     'rest_framework_swagger',
 
+    'markdown',
     'django_nose',
     'corsheaders',
     'djangosecure',
