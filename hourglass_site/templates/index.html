@@ -247,6 +247,31 @@
               </select>
             </div>
 
+            <div class="filter">
+              <label for="contract_year">Contract Year:</label>
+
+              <ul>
+                <li>
+                  <label for="current-year" class="radio">
+                    <input id="current-year" type="radio" checked name="year" value="current" tabindex="0">
+                    <span tabindex="-1" class="checkbox-focus"></span>0
+                  </label>
+                </li>
+                <li>
+                  <label for="one-year-out" class="radio">
+                    <input id="one-year-out" type="radio" name="year" value="1" tabindex="0">
+                    <span tabindex="-1" class="checkbox-focus"></span>1
+                  </label>
+                </li>
+                <li>
+                  <label for="two-years-out" class="radio">
+                    <input id="size-large" type="radio" name="year" value="2" tabindex="0">
+                    <span tabindex="-1" class="checkbox-focus"></span>2
+                  </label>
+                </li>
+              </ul>              
+            </div>
+
             <!--
             <div class="filter">
               <label for="fiscal_year">Fiscal Year:</label>
