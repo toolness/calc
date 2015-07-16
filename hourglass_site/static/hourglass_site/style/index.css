@@ -306,7 +306,7 @@ input[type="checkbox"]:checked ~ label {
 
 
 .rates-help-text {
-  color: #999;
+  color: #757575;
   clear: both;
 }
 
@@ -378,7 +378,7 @@ td.column-min_years_experience i {
 
 td.column-min_years_experience .years {
   font-style: italic;
-  color: #bbb;
+  color: #757575;
 }
 
 .document-icon {
