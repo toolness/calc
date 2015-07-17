@@ -342,6 +342,27 @@ div.filters .filter {
   width: 50%;
   float: left;
 }
+.filters {
+  text-transform: lowercase;
+}
+.filters .filter a {
+  text-transform: none;
+}
+.filters .filter:after,
+.filters .education-levels span:after {
+  content: ", ";
+}
+.filters .filter:last-child:after,
+.filters .education-levels span:last-child:after {
+  content: "";
+}
+
+.labor-category a:before {
+  content: '“';
+}
+.labor-category a:after {
+  content : '”'
+}
 
 label[for=schedule] {
   display: inline-block;
