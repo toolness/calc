@@ -1,22 +1,27 @@
 language: python
 python:
-  - 3.4
-
+- 3.4
 addons:
   postgresql: 9.3
-
 matrix:
-  # finish on the first failure
   fast_finish: true
-
 install:
-  - pip install -r requirements.txt
-
+- pip install -r requirements.txt
 script:
-  - cp hourglass/local_settings{.travis,}.py
-  - phantomjs --version
-  - make test
-
-# don't spam us with emails
+- cp hourglass/local_settings{.travis,}.py
+- phantomjs --version
+- make test
 notifications:
   email: false
+deploy:
+  edge: true
+  provider: cloudfoundry
+  username: deploy-hourglass
+  password:
+    secure: RP8TOaPeKnG+MPAL7+2iDh5YAS2uOL+8R4Can1zsz+itgGjATkCYKvuIq2ADHDaRHaP4PQUuDBuGAA2E620Zxon5+VP/ntwJzOZvntYyC/uXUK0+YnBNu/vMlxfq+vky+GPfCNStlrqNWW7SDAYU5fJP4MvxllXt3bOsi5gOfIw=
+  api: https://api.18f.gov
+  organization: oasis
+  space: calc-dev
+  on:
+    branch: master
+sudo: required

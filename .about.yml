@@ -1,0 +1,17 @@
+---
+name: CALC
+full_name: CALC
+short_name: calc
+type: app
+owner_type: project
+status: active
+stage: live
+testable: true
+mission: >
+CALC is a tool that enables government contracting personnel to conduct market research on professional service labor categories more quickly and easily.  It helps save the government money by allowing the acquisition community to make more informed decisions when buying professional services.
+links:
+- url: https://calc.gsa.gov/
+  text: CALC production instance
+- url: https:/calc-dev.18f.gov/
+  text: CALC development instance
+tasks: https://github.com/18F/calc/issues

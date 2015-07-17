@@ -272,8 +272,8 @@
 
           <h4>Hourly Rate Data</h4>
 
-          <div class="proposed-price hidden">
-            <input type="number" name="proposed-price" placeholder="Proposed price" />
+          <div class="proposed-price">
+            <input type="number" step="0.01" name="proposed-price" placeholder="Proposed price" class="two-decimal-places" />
             <button class="button-primary go" />Go</button>
           </div>
 
@@ -283,14 +283,45 @@
           </div>
 
           <div class="graph">
+
+
             <svg id="price-histogram" class="graph histogram has-data" aria-description="A histogram showing the distribution of labor category prices. Each bar represents a range within that distribution">
               <style>
+                /* styles here for download graph compatibility */
+
                 * {
                   vector-effect: non-scaling-stroke;
                 }
 
+                .stddev-rect {
+                  position: absolute;;
+                }
+
+                .bars .bar rect {
+                  fill: #17779f;
+                }
+
+                .range-fill {
+                  fill: #eeeeee;
+                }
+
+                .range-rule {
+                  stroke: #595959;
+                  fill: none;
+                  stroke-dasharray: 5,5;
+                  stroke-width: 1;
+                }
+
+                .label-rule {
+                  stroke: #595959;
+                }
+
+                .stddev-text {
+                  fill: #595959;
+                }
+
                 .axis .label {
-                  fill: #666;
+                  fill: #595959;
                   font-style: italic;
                 }
 
@@ -306,9 +337,19 @@
                   font-size: 13px;
                 }
 
-                .avg .value,
+                .stddev-text-label {
+                  font-size: 12px;
+                  fill: #595959;
+                }
+
+                .avg .value, .pp .value,
                 .axis .tick.primary text {
                   font-weight: bold;
+                  -webkit-font-smoothing: antialiased;
+                }
+
+                .average, .proposed {
+                  fill: #fff;
                 }
 
                 rect {
@@ -318,11 +359,17 @@
                   shape-rendering: crispEdges;
                 }
 
-                .avg line {
+                .avg-label-box, .pp-label-box {
+                  fill: #000;
+                  stroke: none;
+                }
+
+                .avg line, .pp line {
                   stroke-width: 1;
                   stroke: #000;
                 }
               </style>
+
             </svg>
           </div>
 

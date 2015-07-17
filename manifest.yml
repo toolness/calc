@@ -14,6 +14,11 @@ applications:
   buildpack: https://github.com/cloudfoundry/python-buildpack.git
   memory: 256M
   command: bash cf.sh
+  env:
+    NEW_RELIC_ENV: development
+    NEW_RELIC_CONFIG_FILE: newrelic.ini
+    NEW_RELIC_APP_NAME: CALC (development)
+    NEW_RELIC_LOG: stdout
 
 - name: calc-prod
 # commenting these out so an accidental straight deploy to calc.gsa.gov doesn't happen
