@@ -91,7 +91,7 @@ span.dollars {
   color: #6E6E6E;
 }
 
-.schedule-info {
+.filter-more-info {
   float: right;
   font-size: 70%;
 }
@@ -642,6 +642,11 @@ input[type="radio"]:focus + .checkbox-focus {
 
 .contract-last-year-span {
   border-radius: 0 4px 4px 0
+}
+
+.contract-year legend {
+  float: left;
+  margin-bottom: 10px;
 }
 
 /* tooltips test 2 */
