@@ -414,6 +414,28 @@ a.focus-input {
   padding: 0 24%;
 }
 
+.contract-year-block {
+  background-color: #fff;
+  border: 1px solid #D1D1D1;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.contract-year-item {
+  border-right: 1px solid #D1D1D1;
+  margin-bottom: 0;
+  padding: 1px 8px;
+}
+
+.contract-year-selected {
+  background-color: #17779f;
+  color: #fff;
+}
+
+.contract-year-item:last-of-type {
+  border: none;
+}
+
 #reset-button {
   background: #fff;
 }
