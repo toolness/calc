@@ -116,13 +116,20 @@
   function initialize() {
     popstate();
 
-    var autoCompReq;
-    $search.autoComplete({
+    var autoCompReq, searchTerms = '';
+
+    $("#labor_category").autoComplete({
       minChars: 2,
       delay: 5,
       cache: true,
       source: function(term, done) {
-        // console.log("search:", term);
+        // save inputted search terms for display later
+        searchTerms = term;
+
+        // search only last comma separated term
+        var pieces = term.split(/[\s,]+/);
+        term = pieces[pieces.length-1];
+
         if (autoCompReq) autoCompReq.abort();
         var data = form.getData();
         autoCompReq = api.get({
@@ -152,6 +159,20 @@
             '<span class="count">', item.count, '</span>',
           '</div>'
         ].join("");
+      },
+      onSelect : function (e, term, item) {
+        // check if search value has terms already
+        if(searchTerms.indexOf(",") !== -1) {
+          var termSplit = searchTerms.split(", ");
+          // remove last typed input
+          termSplit.pop();
+
+          // combine existing search terms with new one
+          $('#labor_category').val(termSplit.join(", ") + ", " + term + ", ");
+        }
+        else {
+          $("#labor_category").val($("#labor_category").val() + ", ");
+        }
       }
     });
   }
