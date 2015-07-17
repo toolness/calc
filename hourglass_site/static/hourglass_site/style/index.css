@@ -536,6 +536,114 @@ svg.graph {
   z-index: 98;
 }
 
+/* Contract Year Filter */
+
+label.checkbox,
+label.radio {
+  display: inline-block;
+  font-weight: 400;
+  margin-bottom: 0.5em;
+}
+
+label.checkbox input[type="checkbox"] + span,
+label.radio input[type="checkbox"] + span {
+  border-radius: 0.4rem;
+  display: inline-block;
+  height: 1.8rem;
+  margin-top: 0;
+  margin-right: 0.5em;
+  margin-bottom: 0;
+  vertical-align: -4px;
+  padding-top: 4px;
+  width: 1.8rem;
+}
+
+label.checkbox input[type="radio"] + span,
+label.radio input[type="radio"] + span {
+  display: inline-block;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+label.checkbox :checked + span {
+  background-color: #0071bc;
+  box-shadow: 0 0 0 0 #ffffff;
+  position: relative;
+}
+
+label.checkbox :checked + span:after {
+  color: #ffffff;
+  font-family: "FontAwesome";
+  content: x;
+  position: relative;
+  left: 2px;
+  top: -5px;
+}
+
+label.radio :checked + span {
+  background-color: #17779f;
+  color: #fff;
+  position: relative;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  -o-appearance: none;
+  appearance: none;
+  display: inline-block;
+  height: 1.8rem;
+  width: 1.8rem;
+  vertical-align: -4px;
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+input[type="checkbox"]:focus + .checkbox-focus,
+input[type="radio"]:focus + .checkbox-focus {
+  outline: none
+}
+
+.fieldset-inputs label {
+  margin: 0;
+  cursor: pointer;
+}
+
+.checkbox-focus {
+  background-color: #fff;
+  padding: 1px 8px;
+}
+
+.contract-list-item {
+  margin-bottom: 0;
+  border-right: 1px solid #D1D1D1;
+}
+
+.contract-list-item:last-of-type {
+  border: none;
+  margin-right: -1px;  
+}
+
+.contract-list-item:not(:first-child) {
+  margin-left: -3px
+}
+
+.contract-current-year-span {
+  border-radius: 4px 0 0 4px
+}
+
+.contract-last-year-span {
+  border-radius: 0 4px 4px 0
+}
+
 /* tooltips test 2 */
 
 .tooltips {
@@ -1018,111 +1126,4 @@ th:hover.tooltips span {
 }
 [disabled] .noUi-handle {
   cursor: not-allowed;
-}
-
-
-label.checkbox,
-label.radio {
-  display: inline-block;
-  font-weight: 400;
-  margin-bottom: 0.5em;
-}
-
-label.checkbox input[type="checkbox"] + span,
-label.radio input[type="checkbox"] + span {
-  border-radius: 0.4rem;
-  display: inline-block;
-  height: 1.8rem;
-  margin-top: 0;
-  margin-right: 0.5em;
-  margin-bottom: 0;
-  vertical-align: -4px;
-  padding-top: 4px;
-  width: 1.8rem;
-}
-
-label.checkbox input[type="radio"] + span,
-label.radio input[type="radio"] + span {
-  display: inline-block;
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
-label.checkbox :checked + span {
-  background-color: #0071bc;
-  box-shadow: 0 0 0 0 #ffffff;
-  position: relative;
-}
-
-label.checkbox :checked + span:after {
-  color: #ffffff;
-  font-family: "FontAwesome";
-  content: x;
-  position: relative;
-  left: 2px;
-  top: -5px;
-}
-
-label.radio :checked + span {
-  background-color: #17779f;
-  color: #fff;
-  position: relative;
-}
-
-input[type="checkbox"],
-input[type="radio"] {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  -ms-appearance: none;
-  -o-appearance: none;
-  appearance: none;
-  display: inline-block;
-  height: 1.8rem;
-  width: 1.8rem;
-  vertical-align: -4px;
-  border: 0;
-  clip: rect(0 0 0 0);
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  padding: 0;
-  position: absolute;
-  width: 1px;
-}
-
-input[type="checkbox"]:focus + .checkbox-focus,
-input[type="radio"]:focus + .checkbox-focus {
-  outline: none
-}
-
-.fieldset-inputs label {
-  margin: 0;
-  cursor: pointer;
-}
-
-.checkbox-focus {
-  background-color: #fff;
-  padding: 1px 8px;
-}
-
-.contract-list-item {
-  margin-bottom: 0;
-  border-right: 1px solid #D1D1D1;
-}
-
-.contract-list-item:last-of-type {
-  border: none;
-  margin-right: -1px;  
-}
-
-.contract-list-item:not(:first-child) {
-  margin-left: -3px
-}
-
-.contract-current-year-span {
-  border-radius: 4px 0 0 4px
-}
-
-.contract-last-year-span {
-  border-radius: 0 4px 4px 0
 }
