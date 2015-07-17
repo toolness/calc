@@ -248,40 +248,34 @@
             </div>
 
             <div class="filter contract-year">
-              <label for="contract_year">Contract Year:</label>
 
-              <ul>
-                <li>
-                  <label for="current-year" class="radio">
-                    <input id="current-year" type="radio" checked name="year" value="current" tabindex="0">
-                    <span tabindex="-1" class="checkbox-focus"></span>0
-                  </label>
-                </li>
-                <li>
-                  <label for="one-year-out" class="radio">
-                    <input id="one-year-out" type="radio" name="year" value="1" tabindex="0">
-                    <span tabindex="-1" class="checkbox-focus"></span>1
-                  </label>
-                </li>
-                <li>
-                  <label for="two-years-out" class="radio">
-                    <input id="size-large" type="radio" name="year" value="2" tabindex="0">
-                    <span tabindex="-1" class="checkbox-focus"></span>2
-                  </label>
-                </li>
-              </ul>
+              <fieldset class="fieldset-inputs">
 
-              <ul class="contract-year-block">
-                <li class="contract-year-item contract-year-selected">
-                  <span>Current</span>
-                </li>
-                <li class="contract-year-item">
-                  <span>1</span>
-                </li>
-                <li class="contract-year-item">
-                  <span>2</span>
-                </li>
-              </ul>
+                <legend class"sr-only">Contract Year:</legend>
+                <h3 class="sr-only">Contract Year</h3>
+
+                <ul class="contract-year-block">
+                  <li class="contract-list-item">
+                    <label for="frito-pie" class="radio">
+                      <input id="frito-pie" type="radio" checked name="pie" value="frito" tabindex="0">
+                      <span tabindex="-1" class="contract-current-year-span checkbox-focus">Current</span>
+                    </label>
+                  </li>
+                  <li class="contract-list-item">
+                    <label for="strawberry-pie" class="radio">
+                      <input id="strawberry-pie" type="radio" name="pie" value="strawberry" tabindex="0">
+                      <span tabindex="-1" class="checkbox-focus">+1</span>
+                    </label>
+                  </li>
+                  <li class="contract-list-item">
+                    <label for="apple-pie" class="radio">
+                      <input id="apple-pie" type="radio" name="pie" value="apple" tabindex="0">
+                      <span tabindex="-1" class="contract-last-year-span checkbox-focus">+2</span>
+                    </label>
+                  </li>
+                </ul>
+
+              </fieldset>
 
             </div>
 
