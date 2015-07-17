@@ -258,19 +258,22 @@
                   <li class="contract-list-item">
                     <label for="current-year" class="radio">
                       <input id="current-year" type="radio" checked name="contract-year" value="current" tabindex="0">
-                      <span tabindex="-1" class="contract-current-year-span checkbox-focus">Current</span>
+                      <span tabindex="-1" class="contract-current-year-span checkbox-focus" aria-hidden="true">Current</span>
+                      <span class="sr-only">Current year</span>
                     </label>
                   </li>
                   <li class="contract-list-item">
                     <label for="one-year-out" class="radio">
                       <input id="one-year-out" type="radio" name="contract-year" value="one-year-out" tabindex="0">
-                      <span tabindex="-1" class="checkbox-focus">+1</span>
+                      <span tabindex="-1" class="checkbox-focus" aria-hidden="true">+1</span>
+                      <span class="sr-only">One year out</span>
                     </label>
                   </li>
                   <li class="contract-list-item">
                     <label for="two-years-out" class="radio">
                       <input id="two-years-out" type="radio" name="contract-year" value="two-years-out" tabindex="0">
-                      <span tabindex="-1" class="contract-last-year-span checkbox-focus">+2</span>
+                      <span tabindex="-1" class="contract-last-year-span checkbox-focus" aria-hidden="true">+2</span>
+                      <span class="sr-only">Two years out</span>
                     </label>
                   </li>
                 </ul>
