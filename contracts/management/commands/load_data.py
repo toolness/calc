@@ -73,13 +73,24 @@ class Command(BaseCommand):
                     for count, rate in enumerate(line[2:6]):
                         if rate and rate.strip() != '':
                             setattr(contract, 'hourly_rate_year' + str(count+2), contract.normalize_rate(rate))
-                    
-                    # don't create current price for records where the rate
-                    # is under the federal minimum contract rate
-                    current_price = getattr(contract, 'hourly_rate_year' + str(line[14]))
-                    if current_price and current_price >= FEDERAL_MIN_CONTRACT_RATE:
-                        contract.current_price = current_price
-                        
+
+                    if line[14] and line[14] != '':
+                        price_fields = {
+                            'current_price': getattr(contract, 'hourly_rate_year' + str(line[14]), 0)
+                        }
+                        current_year = int(line[14])
+                        if current_year < 5:
+                            price_fields['next_year_price'] = getattr(contract, 'hourly_rate_year' + str(current_year + 1), 0)
+                        if current_year < 4:
+                            price_fields['second_year_price'] = getattr(contract, 'hourly_rate_year' + str(current_year + 2), 0)
+
+                        # don't create display prices for records where the rate
+                        # is under the federal minimum contract rate
+                        for field in price_fields:
+                            price = price_fields.get(field)
+                            if price and price >= FEDERAL_MIN_CONTRACT_RATE:
+                                setattr(contract, field, price)
+                                            
                     contract.contractor_site = line[9]
                     
                     contracts.append(contract)

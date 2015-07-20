@@ -57,6 +57,7 @@ def get_contracts_queryset(request_params, wage_field):
     """
 
     query = request_params.get('q', None)
+    year = request_params.get('year', None)
     experience_range = request_params.get('experience_range', None)
     min_experience = request_params.get('min_experience', None)
     max_experience = request_params.get('max_experience', None)
@@ -88,6 +89,9 @@ def get_contracts_queryset(request_params, wage_field):
         else:
             query = convert_to_tsquery(query)
             contracts = contracts.search(query, raw=True)
+
+    if year in ['1', '2']:
+        contracts = contracts.exclude(**{wage_field + '__isnull': True})
 
     if experience_range:
         years = experience_range.split(',')
@@ -169,7 +173,7 @@ class GetRates(APIView):
         page = request.QUERY_PARAMS.get('page', 1)
         bins = request.QUERY_PARAMS.get('histogram', None)
 
-        wage_field = 'current_price'
+        wage_field = self.get_wage_field(request.QUERY_PARAMS.get('year'))
         contracts_all = self.get_queryset(request.QUERY_PARAMS, wage_field)
         
         paginator = Paginator(contracts_all, settings.PAGINATION)
@@ -183,7 +187,8 @@ class GetRates(APIView):
         page_stats['average'] = quantize(contracts_all.aggregate(Avg(wage_field))[wage_field + '__avg'])
 
         for rate in contracts_all.values(wage_field):
-            current_rates.append(rate[wage_field])
+            if rate.get(wage_field):
+                current_rates.append(rate[wage_field])
         page_stats['first_standard_deviation'] = np.std(current_rates)
 
         #use paginator count method
@@ -200,6 +205,13 @@ class GetRates(APIView):
 
         else:
             return Response({'count': 0, 'results': []})
+
+    def get_wage_field(self, year):
+        wage_fields = ['current_price', 'next_year_price', 'second_year_price'] 
+        if year in ['1', '2']:
+            return wage_fields[int(year)]
+        else:
+            return 'current_price'
 
     def get_queryset(self, request, wage_field):
         return get_contracts_queryset(request, wage_field)
