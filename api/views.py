@@ -81,6 +81,9 @@ def get_contracts_queryset(request_params, wage_field):
         exclude = exclude[0].split(',')
         contracts = contracts.exclude(id__in=exclude)
 
+    # excludes records w/o rates for the selected contract period
+    contracts = contracts.exclude(**{wage_field + '__isnull': True})
+
     if query:
         if query_type == 'match_phrase':
             contracts = contracts.filter(labor_category__icontains=query)
@@ -89,9 +92,6 @@ def get_contracts_queryset(request_params, wage_field):
         else:
             query = convert_to_tsquery(query)
             contracts = contracts.search(query, raw=True)
-
-    if year in ['1', '2']:
-        contracts = contracts.exclude(**{wage_field + '__isnull': True})
 
     if experience_range:
         years = experience_range.split(',')
