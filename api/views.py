@@ -37,7 +37,6 @@ def get_contracts_queryset(request_params, wage_field):
         wage_field (str): the name of the field currently being used for wage calculations and sorting
 
     Query Params:
-        year: return rates for this year of each contract [ current_price (default) | 1 | 2 ]
         q (str): keywords to search by
         experience_range(str): filter by a range of years of experience
         min_experience (int): filter by minimum years of experience
@@ -57,7 +56,6 @@ def get_contracts_queryset(request_params, wage_field):
         QuerySet: a filtered and sorted QuerySet to retrieve Contract objects
     """
 
-    year = request_params.get('year', None)
     query = request_params.get('q', None)
     experience_range = request_params.get('experience_range', None)
     min_experience = request_params.get('min_experience', None)
