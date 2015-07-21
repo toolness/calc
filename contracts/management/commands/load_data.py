@@ -79,10 +79,11 @@ class Command(BaseCommand):
                             'current_price': getattr(contract, 'hourly_rate_year' + str(line[14]), 0)
                         }
                         current_year = int(line[14])
+                        # we have up to five years of rate data
                         if current_year < 5:
                             price_fields['next_year_price'] = getattr(contract, 'hourly_rate_year' + str(current_year + 1), 0)
-                        if current_year < 4:
-                            price_fields['second_year_price'] = getattr(contract, 'hourly_rate_year' + str(current_year + 2), 0)
+                            if current_year < 4:
+                                price_fields['second_year_price'] = getattr(contract, 'hourly_rate_year' + str(current_year + 2), 0)
 
                         # don't create display prices for records where the rate
                         # is under the federal minimum contract rate

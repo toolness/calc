@@ -188,6 +188,7 @@ class GetRates(APIView):
         page_stats['average'] = quantize(contracts_all.aggregate(Avg(wage_field))[wage_field + '__avg'])
 
         for rate in contracts_all.values(wage_field):
+            # its common for the wage_field to have an empty value
             if rate.get(wage_field):
                 current_rates.append(rate[wage_field])
         page_stats['first_standard_deviation'] = np.std(current_rates)
