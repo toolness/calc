@@ -85,6 +85,8 @@ def get_contracts_queryset(request_params, wage_field):
 
         if query_type not in ('match_phrase', 'match_exact'):
             queries = [convert_to_tsquery(q) for q in qs]
+            # remove empty strings, most commonly from trailing commas
+            queries = filter(None, queries)
             contracts = contracts.search(" | ".join(queries), raw=True)
         else:
             q_objs = Q()
