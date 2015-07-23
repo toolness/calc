@@ -172,7 +172,7 @@ class GetRates(APIView):
         page = request.QUERY_PARAMS.get('page', 1)
         bins = request.QUERY_PARAMS.get('histogram', None)
 
-        wage_field = self.get_wage_field(request.QUERY_PARAMS.get('year'))
+        wage_field = self.get_wage_field(request.QUERY_PARAMS.get('contract-year'))
         contracts_all = self.get_queryset(request.QUERY_PARAMS, wage_field)
         
         paginator = Paginator(contracts_all, settings.PAGINATION)
