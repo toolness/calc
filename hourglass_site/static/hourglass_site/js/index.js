@@ -719,7 +719,19 @@
       .data(function(d) {
         return columns.map(function(column) {
           var key = column.key,
-              value = d[key];
+              value = d[key],
+              priceFields = ['current_price', 'next_year_price', 'second_year_price'],
+              yearField;
+
+          // check if we need to be loading a future price
+          // and, if so, the price value should reflect the filter choice
+          if (column.key == 'current_price') {
+            yearField = form.getData()['contract-year'];
+            if (!isNaN(yearField)) {
+              value = d[priceFields[yearField]];
+            } 
+          }
+
           return {
             column: column,
             row: d,
