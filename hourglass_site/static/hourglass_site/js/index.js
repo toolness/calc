@@ -163,22 +163,28 @@
       },
       onSelect : function (e, term, item, autocompleteSuggestion) {
 
-        // check if search value has terms already
+        var selectedInput;
+
+        // check if search field has terms already
         if(searchTerms.indexOf(",") !== -1) {
           var termSplit = searchTerms.split(", ");
-          // remove last typed input
+          // remove last typed (incomplete) input
           termSplit.pop();
-
           // combine existing search terms with new one
-          $('#labor_category').val(termSplit.join(", ") + ", " + term + ", ");
+          selectedInput = termSplit.join(", ") + ", " + term + ", ";
         }
+        // if search field doesn't have terms
+        // but has selected an autocomplete suggestion,
+        // then just show term and comma delimiter
         else if(autocompleteSuggestion) {
-          $("#labor_category").val(term + ", ");
+          selectedInput = term + ", ";
         }
         else {
-          $("#labor_category").val($("#labor_category").val() + ", ");
+          selectedInput = $("#labor_category").val() + ", "
         }
 
+        // update the search input field accordingly
+        $("#labor_category").val(selectedInput);
       }
     });
   }
