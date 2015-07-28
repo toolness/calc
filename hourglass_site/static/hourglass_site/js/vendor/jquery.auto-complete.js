@@ -106,6 +106,9 @@
 
             that.on('keydown.autocomplete', function(e){
                 // down (40), up (38)
+
+                // commented out any input value updating of current selected item in autocomplete suggestions so it works with multi-search functionality
+                // - xtine
                 if ((e.which == 40 || e.which == 38) && that.sc.html()) {
                     var next, sel = $('.autocomplete-suggestion.selected', that.sc);
                     if (!sel.length) {
