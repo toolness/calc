@@ -5,6 +5,8 @@
     License: http://www.opensource.org/licenses/mit-license.php
 */
 
+// edits to source by Christine Cheung (noted in comments by - xtine)
+
 (function($){
     $.fn.autoComplete = function(options){
         var o = $.extend({}, $.fn.autoComplete.defaults, options);
@@ -104,25 +106,53 @@
 
             that.on('keydown.autocomplete', function(e){
                 // down (40), up (38)
+
+                // commented out any input value updating of current selected item in autocomplete suggestions so it works with multi-search functionality
+                // - xtine
                 if ((e.which == 40 || e.which == 38) && that.sc.html()) {
                     var next, sel = $('.autocomplete-suggestion.selected', that.sc);
                     if (!sel.length) {
                         next = (e.which == 40) ? $('.autocomplete-suggestion', that.sc).first() : $('.autocomplete-suggestion', that.sc).last();
-                        that.val(next.addClass('selected').data('val'));
+                        // that.val(next.addClass('selected').data('val'));
+                        next.addClass('selected');
                     } else {
                         next = (e.which == 40) ? sel.next('.autocomplete-suggestion') : sel.prev('.autocomplete-suggestion');
-                        if (next.length) { sel.removeClass('selected'); that.val(next.addClass('selected').data('val')); }
-                        else { sel.removeClass('selected'); that.val(that.last_val); next = 0; }
+                        if (next.length) {
+                            sel.removeClass('selected');
+                            // that.val(next.addClass('selected').data('val')); }
+                            next.addClass('selected');
+                        }
+                        else {
+                            sel.removeClass('selected');
+                            // that.val(that.last_val);
+                            next = 0;
+                        }
                     }
                     that.updateSC(0, next);
                     return false;
                 }
                 // esc
-                else if (e.which == 27) that.val(that.last_val).sc.hide();
+                else if (e.which == 27) {
+                    that.val(that.last_val).sc.hide();
+
+                    // clear autocomplete suggestions after close - xtine
+                    $('.autocomplete-suggestions').empty();
+                }
                 // enter
                 else if (e.which == 13) {
+
                     var sel = $('.autocomplete-suggestion.selected', that.sc);
-                    if (sel.length) { o.onSelect(e, sel.data('val'), sel); setTimeout(function(){ that.sc.hide(); }, 10); }
+
+                    if (sel.length) {
+                        // send selected autocomplete suggestions to input
+                        // pass "autocompleteSuggestion = True" so onSelect function handles accordingly
+                        o.onSelect(e, sel.data('val'), sel, "True");
+                    }
+
+                    that.sc.hide();
+
+                    // clear autocomplete suggestions after selected term - xtine
+                    $('.autocomplete-suggestions').empty();
                 }
             });
 

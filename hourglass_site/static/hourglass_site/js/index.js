@@ -120,8 +120,9 @@
 
     $("#labor_category").autoComplete({
       minChars: 2,
-      delay: 5,
-      cache: true,
+      // delay: 5,
+      delay: 0,
+      cache: false,
       source: function(term, done) {
         // save inputted search terms for display later
         searchTerms = term;
@@ -160,19 +161,30 @@
           '</div>'
         ].join("");
       },
-      onSelect : function (e, term, item) {
-        // check if search value has terms already
+      onSelect : function (e, term, item, autocompleteSuggestion) {
+
+        var selectedInput;
+
+        // check if search field has terms already
         if(searchTerms.indexOf(",") !== -1) {
           var termSplit = searchTerms.split(", ");
-          // remove last typed input
+          // remove last typed (incomplete) input
           termSplit.pop();
-
           // combine existing search terms with new one
-          $('#labor_category').val(termSplit.join(", ") + ", " + term + ", ");
+          selectedInput = termSplit.join(", ") + ", " + term + ", ";
+        }
+        // if search field doesn't have terms
+        // but has selected an autocomplete suggestion,
+        // then just show term and comma delimiter
+        else if(autocompleteSuggestion) {
+          selectedInput = term + ", ";
         }
         else {
-          $("#labor_category").val($("#labor_category").val() + ", ");
+          selectedInput = $("#labor_category").val() + ", "
         }
+
+        // update the search input field accordingly
+        $("#labor_category").val(selectedInput);
       }
     });
   }
@@ -231,7 +243,7 @@
 
     data['experience_range'] = $('#min_experience').val() + "," + $('#max_experience').val();
 
-    console.log("submitting:", data);
+    // console.log("submitting:", data);
 
     search.classed("loaded", false);
     search.classed("loading", true);
@@ -283,7 +295,7 @@
       search.classed("error", false);
     }
 
-    console.log("update:", res);
+    // console.log("update:", res);
     search.classed("loaded", true);
 
     updateDescription(res);
@@ -369,7 +381,7 @@
         heightScale = d3.scale.linear()
           .domain([0].concat(countExtent))
           .range([0, 1, bottom - top]);
-    console.log('count extent:', countExtent);
+    // console.log('count extent:', countExtent);
 
 
     d3.select("#avg-price-highlight")
