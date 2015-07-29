@@ -396,6 +396,27 @@ class ContractsTest(TestCase):
            'contractor_site': None,
            'business_size': None}])
 
+    def test_filter_by_year_out(self):
+        get_contract_recipe().make(_quantity=1)
+        resp = self.c.get(self.path, {'current-year': '2'})
+        self.assertEqual(resp.status_code, 200)
+
+        self.prettyPrint(resp.data['results'])
+        self.assertResultsEqual(resp.data['results'],
+         [{'id': 28,
+          'idv_piid': 'ABC1231',
+          'vendor_name': 'CompanyName1',
+          'labor_category': 'Business Analyst II',
+          'education_level': None,
+          'min_years_experience': 6,
+          'hourly_rate_year1': 21.00,
+          'current_price': 21.00,
+          'next_year_price': 31.00,
+          'second_year_price': 41.00,
+          'schedule': 'MOBIS',
+          'contractor_site': None,
+          'business_size': None}])
+
     def test_filter_by_max_experience(self):
         self.make_test_set()
         resp = self.c.get(self.path, {'max_experience': '3'})
