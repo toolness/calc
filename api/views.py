@@ -256,12 +256,12 @@ class GetRatesCSV(APIView):
         response = HttpResponse(content_type="text/csv")
         response['Content-Disposition'] = 'attachment; filename="pricing_results.csv"'
         writer = csv.writer(response)
-        writer.writerow(("Search Query", "Minimum Education Level", "Minimum Years Experience", "Worksite", "Business Size", "", "", "", "", "", "", ""))
-        writer.writerow((q, min_education, min_experience, site, business_size, "", "", "", "", "", "", "")) 
-        writer.writerow(("Contract #", "Business Size", "Schedule", "Site", "Begin Date", "End Date", "SIN", "Vendor Name", "Labor Category", "education Level", "Minimum Years Experience", "Current Year Labor Price"))
+        writer.writerow(("Search Query", "Minimum Education Level", "Minimum Years Experience", "Worksite", "Business Size", "", "", "", "", "", "", "", "", ""))
+        writer.writerow((q, min_education, min_experience, site, business_size, "", "", "", "", "", "", "", "", "")) 
+        writer.writerow(("Contract #", "Business Size", "Schedule", "Site", "Begin Date", "End Date", "SIN", "Vendor Name", "Labor Category", "education Level", "Minimum Years Experience", "Current Year Labor Price", "Next Year Labor Price", "Second Year Labor Price"))
 
         for c in contracts_all:
-            writer.writerow((c.idv_piid, c.get_readable_business_size(), c.schedule, c.contractor_site, c.contract_start, c.contract_end, c.sin, c.vendor_name, c.labor_category, c.get_education_level_display(), c.min_years_experience, c.current_price ))
+            writer.writerow((c.idv_piid, c.get_readable_business_size(), c.schedule, c.contractor_site, c.contract_start, c.contract_end, c.sin, c.vendor_name, c.labor_category, c.get_education_level_display(), c.min_years_experience, c.current_price, c.next_year_price, c.second_year_price ))
         
         return response
 
