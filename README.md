@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/18F/calc.svg)](https://travis-ci.org/18F/calc)
 
-CALC (formerly known as "Hourglass"), which stands for Contracts Awarded Labor Category, is a tool to help contracting personnel estimate their per-hour labor costs for a contract, based on historical pricing information. The tool is in the very early stages of development. You can track our progress on our [trello board](https://trello.com/b/LjXJaVbZ/prices) or file an issue on this repo. 
+CALC (formerly known as "Hourglass"), which stands for Contracts Awarded Labor Category, is a tool to help contracting personnel estimate their per-hour labor costs for a contract, based on historical pricing information. The tool is live at [https://calc.gsa.gov](https://calc.gsa.gov). You can track our progress on our [trello board](https://trello.com/b/LjXJaVbZ/prices) or file an issue on this repo. 
 
 ## Setup
 
@@ -57,6 +57,12 @@ You can change the way that labor categories are searched by using the
 * `match_words` (the default), which matches all words in the query;
 * `match_phrase`, which matches the query as a phrase; or
 * `match_exact`, which matches labor categories exactly
+
+You can search for multiple labor categories separated by a comma.
+
+```
+http://localhost:8000/api/rates/?q=trainer,instructor
+```
 
 All of the query types are case-insenstive.
 

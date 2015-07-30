@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.core.paginator import Paginator
 from django.conf import settings
-from django.db.models import Avg, Max, Min, Count
+from django.db.models import Avg, Max, Min, Count, Q
 from decimal import Decimal
 
 from rest_framework.response import Response
@@ -81,13 +81,21 @@ def get_contracts_queryset(request_params, wage_field):
         contracts = contracts.exclude(id__in=exclude)
 
     if query:
-        if query_type == 'match_phrase':
-            contracts = contracts.filter(labor_category__icontains=query)
-        elif query_type == 'match_exact':
-            contracts = contracts.filter(labor_category__iexact=query)
+        qs = query.split(',')
+
+        if query_type not in ('match_phrase', 'match_exact'):
+            queries = [convert_to_tsquery(q) for q in qs]
+            # remove empty strings, most commonly from trailing commas
+            queries = filter(None, queries)
+            contracts = contracts.search(" | ".join(queries), raw=True)
         else:
-            query = convert_to_tsquery(query)
-            contracts = contracts.search(query, raw=True)
+            q_objs = Q()
+            for q in qs:
+                if query_type == 'match_phrase':
+                    q_objs.add(Q(labor_category__icontains=q), Q.OR)
+                elif query_type == 'match_exact':
+                    q_objs.add(Q(labor_category__iexact=q.strip()), Q.OR)
+            contracts = contracts.filter(q_objs)
 
     if experience_range:
         years = experience_range.split(',')
