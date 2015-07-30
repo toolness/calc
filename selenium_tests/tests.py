@@ -270,6 +270,18 @@ class FunctionalTests(LiveServerTestCase):
         self.assertIsNone(re.search(r'4 years of experience\d+', driver.page_source))
         self.assertIsNotNone(re.search(r'5 years of experience\d+', driver.page_source))
 
+    def test_filter_year_out(self):
+        get_contract_recipe().make(_quantity=1, second_year_price=23.45)
+        driver = self.load_and_wait()
+        form = self.get_form()
+
+        self.set_form_value(form, 'contract-year', "2")
+        self.submit_form_and_wait()
+        self.assert_results_count(driver, 1)
+
+        rate = driver.find_element_by_xpath('//*[@id="results-table"]/tbody/tr[1]/td[4]')
+        self.assertEqual(rate.text, '$23.45')
+
     def test_contract_link(self):
         get_contract_recipe().make(_quantity=1, idv_piid='GS-23F-0062P')
         driver = self.load_and_wait()
