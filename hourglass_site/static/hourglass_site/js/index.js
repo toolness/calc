@@ -1072,9 +1072,10 @@
           }
         };
 
-    filters.empty();
-    filters.append('with ');
-    filters.removeClass('hidden');
+    filters.empty().removeClass('hidden').append('with ');
+
+    // fade effect for transitions during description update
+    $('#description').hide().fadeIn();
 
     // first count of results
     d3.select('#description-count')
@@ -1109,7 +1110,6 @@
         }
       }
     }
-
   }
 
   function templatize(str, undef) {
