@@ -116,13 +116,21 @@
   function initialize() {
     popstate();
 
-    var autoCompReq;
-    $search.autoComplete({
+    var autoCompReq, searchTerms = '';
+
+    $("#labor_category").autoComplete({
       minChars: 2,
-      delay: 5,
-      cache: true,
+      // delay: 5,
+      delay: 0,
+      cache: false,
       source: function(term, done) {
-        // console.log("search:", term);
+        // save inputted search terms for display later
+        searchTerms = term;
+
+        // search only last comma separated term
+        var pieces = term.split(/[\s,]+/);
+        term = pieces[pieces.length-1];
+
         if (autoCompReq) autoCompReq.abort();
         var data = form.getData();
         autoCompReq = api.get({
@@ -152,6 +160,31 @@
             '<span class="count">', item.count, '</span>',
           '</div>'
         ].join("");
+      },
+      onSelect : function (e, term, item, autocompleteSuggestion) {
+
+        var selectedInput;
+
+        // check if search field has terms already
+        if(searchTerms.indexOf(",") !== -1) {
+          var termSplit = searchTerms.split(", ");
+          // remove last typed (incomplete) input
+          termSplit.pop();
+          // combine existing search terms with new one
+          selectedInput = termSplit.join(", ") + ", " + term + ", ";
+        }
+        // if search field doesn't have terms
+        // but has selected an autocomplete suggestion,
+        // then just show term and comma delimiter
+        else if(autocompleteSuggestion) {
+          selectedInput = term + ", ";
+        }
+        else {
+          selectedInput = $("#labor_category").val() + ", "
+        }
+
+        // update the search input field accordingly
+        $("#labor_category").val(selectedInput);
       }
     });
   }
@@ -1013,7 +1046,29 @@
     var total = res ? formatCommas(res.count) : '0',
         data = form.getData(),
         filters = $('.filters'),
-        laborCategory = $('#labor_category').val();
+        laborCategoryValue = $('#labor_category').val(),
+        lookup = {
+          'education' : {
+            'label' : 'education level',
+            'html' : $('.multiSel').html()
+          },
+          'min_experience' : {
+            'label' : 'experience',
+            'html' : $('#min_experience option:selected').text() + " - " + $('#max_experience option:selected').text() + " years"
+          },
+          'site' : {
+            'label' : 'worksite',
+            'html' : $('.filter-site option:selected').text()
+          },
+          'business_size' : {
+            'label' : 'business size',
+            'html' : $('.filter-business_size option:selected').text()
+          },
+          'schedule' : {
+            'label' : 'schedule',
+            'html' : $('.filter-schedule option:selected').text()
+          }
+        };
 
     filters.empty();
 
@@ -1021,47 +1076,35 @@
     d3.select('#description-count')
       .text(formatCommas(res.results.length));
 
-    if(laborCategory) {
+    // labor category results
+    if(laborCategoryValue) {
       var laborEl = $(document.createElement('span')).addClass('filter');
       filters.append(laborEl);
       laborEl.append(
-        $(document.createElement('a')).addClass('focus-input').attr('href', '#').html(laborCategory)
+        $(document.createElement('a')).addClass('focus-input').attr('href', '#').html(laborCategoryValue)
       );
     }
 
-    // loop through optional filters for description setting
-    $.each(data, function(key, value) {
+    for(dataKey in data) {
+      for(var lookupKey in lookup) {
+        if(dataKey == lookupKey) {
 
-      if(key !== 'sort' && key !== 'query_type' && key !== "q") {
-        // education levels
-        if(key == 'education') {
-          var eduEl = $(document.createElement('span')).addClass('filter').addClass('education-levels').html("education level: ");
-          filters.append(eduEl);
-          // populate description of education levels from multiselect div
-          eduEl.append(
-            $(document.createElement('a')).addClass('focus-input').attr('href', '#').html($('.multiSel').html())
-          );
-        }
-        // Y - Z years of experience
-        else if (key == 'min_experience') {
-          var expEl = $(document.createElement('span')).addClass('filter').html("experience: ")
-          filters.append(expEl);
-          expEl.append(
-            $(document.createElement('a')).addClass('focus-input').attr('href', '#').html(data.min_experience + " - " + data.max_experience + " years")
-          );
-        }
-        // worksite, business size, schedule
-        else if (key !== 'max_experience') {
-          var filterClass = $(".filter-" + key)
-              filterEl = $(document.createElement('span')).addClass('filter').html(filterClass.find('label').html() + " ")
+          // create a span element filter label
+          var filterEl = $(document.createElement('span'))
+              .addClass('filter ' + dataKey + '-filter')
+              .html(lookup[dataKey]['label'] + ": ");
+
           filters.append(filterEl);
+
+          // append text of selected filter as anchor elements
           filterEl.append(
-            $(document.createElement('a')).addClass('focus-input').attr('href', '#').html(filterClass.find("option:selected").text())
+            $(document.createElement('a')).addClass('focus-input')
+              .attr('href', '#')
+              .html(lookup[dataKey]['html'])
           );
         }
       }
-
-    });
+    }
 
   }
 

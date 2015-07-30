@@ -345,15 +345,15 @@ div.filters .filter {
 .filters {
   text-transform: lowercase;
 }
-.filters .filter a {
+.filters .education-filter a {
   text-transform: none;
 }
 .filters .filter:after,
-.filters .education-levels span:after {
+.filters .education-filter span:after {
   content: ", ";
 }
 .filters .filter:last-child:after,
-.filters .education-levels span:last-child:after {
+.filters .education-filter span:last-child:after {
   content: "";
 }
 
