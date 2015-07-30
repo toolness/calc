@@ -1092,7 +1092,7 @@
           // create a span element filter label
           var filterEl = $(document.createElement('span'))
               .addClass('filter ' + dataKey + '-filter')
-              .html(lookup[dataKey]['label'] + ": ");
+              .html(" " + lookup[dataKey]['label'] + ": ");
 
           filters.append(filterEl);
 
