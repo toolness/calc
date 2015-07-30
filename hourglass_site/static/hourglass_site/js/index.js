@@ -297,7 +297,9 @@
 
     search.classed("loaded", true);
 
-    updateDescription(res);
+    if (window.location.search !== "") {
+      updateDescription(res);
+    }
 
     if($('.proposed-price input').val()) {
       res.proposedPrice = $('.proposed-price input').val();
@@ -1071,6 +1073,8 @@
         };
 
     filters.empty();
+    filters.append('with ');
+    filters.removeClass('hidden');
 
     // first count of results
     d3.select('#description-count')
