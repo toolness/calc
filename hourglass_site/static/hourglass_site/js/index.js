@@ -297,9 +297,7 @@
 
     search.classed("loaded", true);
 
-    if (window.location.search !== "") {
-      updateDescription(res);
-    }
+    updateDescription(res);
 
     if($('.proposed-price input').val()) {
       res.proposedPrice = $('.proposed-price input').val();
