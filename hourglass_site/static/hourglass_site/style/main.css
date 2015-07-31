@@ -332,3 +332,7 @@ footer {
 :-ms-input-placeholder {  
    color: #757575;  
 }
+
+fieldset {
+  margin: 0;
+}

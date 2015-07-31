@@ -80,6 +80,9 @@ def get_contracts_queryset(request_params, wage_field):
         exclude = exclude[0].split(',')
         contracts = contracts.exclude(id__in=exclude)
 
+    # excludes records w/o rates for the selected contract period
+    contracts = contracts.exclude(**{wage_field + '__isnull': True})
+
     if query:
         qs = query.split(',')
 
@@ -177,7 +180,7 @@ class GetRates(APIView):
         page = request.QUERY_PARAMS.get('page', 1)
         bins = request.QUERY_PARAMS.get('histogram', None)
 
-        wage_field = 'current_price'
+        wage_field = self.get_wage_field(request.QUERY_PARAMS.get('contract-year'))
         contracts_all = self.get_queryset(request.QUERY_PARAMS, wage_field)
         
         paginator = Paginator(contracts_all, settings.PAGINATION)
@@ -191,7 +194,9 @@ class GetRates(APIView):
         page_stats['average'] = quantize(contracts_all.aggregate(Avg(wage_field))[wage_field + '__avg'])
 
         for rate in contracts_all.values(wage_field):
-            current_rates.append(rate[wage_field])
+            # its common for the wage_field to have an empty value
+            if rate.get(wage_field):
+                current_rates.append(rate[wage_field])
         page_stats['first_standard_deviation'] = np.std(current_rates)
 
         #use paginator count method
@@ -208,6 +213,13 @@ class GetRates(APIView):
 
         else:
             return Response({'count': 0, 'results': []})
+
+    def get_wage_field(self, year):
+        wage_fields = ['current_price', 'next_year_price', 'second_year_price'] 
+        if year in ['1', '2']:
+            return wage_fields[int(year)]
+        else:
+            return 'current_price'
 
     def get_queryset(self, request, wage_field):
         return get_contracts_queryset(request, wage_field)
@@ -244,12 +256,12 @@ class GetRatesCSV(APIView):
         response = HttpResponse(content_type="text/csv")
         response['Content-Disposition'] = 'attachment; filename="pricing_results.csv"'
         writer = csv.writer(response)
-        writer.writerow(("Search Query", "Minimum Education Level", "Minimum Years Experience", "Worksite", "Business Size", "", "", "", "", "", "", ""))
-        writer.writerow((q, min_education, min_experience, site, business_size, "", "", "", "", "", "", "")) 
-        writer.writerow(("Contract #", "Business Size", "Schedule", "Site", "Begin Date", "End Date", "SIN", "Vendor Name", "Labor Category", "education Level", "Minimum Years Experience", "Current Year Labor Price"))
+        writer.writerow(("Search Query", "Minimum Education Level", "Minimum Years Experience", "Worksite", "Business Size", "", "", "", "", "", "", "", "", ""))
+        writer.writerow((q, min_education, min_experience, site, business_size, "", "", "", "", "", "", "", "", "")) 
+        writer.writerow(("Contract #", "Business Size", "Schedule", "Site", "Begin Date", "End Date", "SIN", "Vendor Name", "Labor Category", "education Level", "Minimum Years Experience", "Current Year Labor Price", "Next Year Labor Price", "Second Year Labor Price"))
 
         for c in contracts_all:
-            writer.writerow((c.idv_piid, c.get_readable_business_size(), c.schedule, c.contractor_site, c.contract_start, c.contract_end, c.sin, c.vendor_name, c.labor_category, c.get_education_level_display(), c.min_years_experience, c.current_price ))
+            writer.writerow((c.idv_piid, c.get_readable_business_size(), c.schedule, c.contractor_site, c.contract_start, c.contract_end, c.sin, c.vendor_name, c.labor_category, c.get_education_level_display(), c.min_years_experience, c.current_price, c.next_year_price, c.second_year_price ))
         
         return response
 
