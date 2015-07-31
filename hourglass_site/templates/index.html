@@ -235,7 +235,7 @@
 
             <div class="filter">
               <label for="schedule">Schedule:</label>
-              <a href="/about#schedules" class="schedule-info">What's this?</a>
+              <a href="/about#schedules" class="filter-more-info">What's this?</a>
               <select id="schedule" name="schedule">
                 <option value="">(all)</option>
                 <option value="AIMS">AIMS</option>
@@ -246,6 +246,42 @@
                 <option value="MOBIS">MOBIS</option>
                 <option value="PES">PES</option>
               </select>
+            </div>
+
+            <div class="filter contract-year">
+
+              <fieldset class="fieldset-inputs">
+
+                <legend>Contract Year:</legend>
+                <a href="javascript:void(0)" class="tooltip filter-more-info" aria-label="All five years of pricing are available in the export">What's this?</a>
+                <h3 class="sr-only">Contract Year</h3>
+
+                <ul class="contract-year-block">
+                  <li class="contract-list-item">
+                    <label for="current-year" class="radio">
+                      <input id="current-year" type="radio" checked name="contract-year" value="current" tabindex="0">
+                      <span tabindex="-1" class="contract-current-year-span checkbox-focus" aria-hidden="true">Current</span>
+                      <span class="sr-only">Current year</span>
+                    </label>
+                  </li>
+                  <li class="contract-list-item">
+                    <label for="one-year-out" class="radio">
+                      <input id="one-year-out" type="radio" name="contract-year" value="1" tabindex="0">
+                      <span tabindex="-1" class="checkbox-focus" aria-hidden="true">+1</span>
+                      <span class="sr-only">One year out</span>
+                    </label>
+                  </li>
+                  <li class="contract-list-item">
+                    <label for="two-years-out" class="radio">
+                      <input id="two-years-out" type="radio" name="contract-year" value="2" tabindex="0">
+                      <span tabindex="-1" class="contract-last-year-span checkbox-focus" aria-hidden="true">+2</span>
+                      <span class="sr-only">Two years out</span>
+                    </label>
+                  </li>
+                </ul>
+
+              </fieldset>
+
             </div>
 
             <!--
