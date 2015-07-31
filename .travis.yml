@@ -9,7 +9,6 @@ install:
 - pip install -r requirements.txt
 script:
 - cp hourglass/local_settings{.travis,}.py
-- echo $API_HOST
 - phantomjs --version
 - make test
 notifications:
