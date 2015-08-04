@@ -28,7 +28,8 @@
         .call(setupColumnHeader),
       loadingIndicator = search.select(".loading-indicator"),
       histogramDownloadLink = document.getElementById('download-histogram'),
-      request;
+      request,
+      updateCounter = 0;
 
   // set default options for all future tooltip instantiations
   $.fn.tooltipster('setDefaults', {
@@ -88,7 +89,6 @@
         $('.multiSelect input:checked').attr('checked', false);
       }
       $('.slider').val([0, 45]);
-
     });
 
   inputs.on("change", function onchange() {
@@ -298,6 +298,7 @@
     search.classed("loaded", true);
 
     updateDescription(res);
+    updateCounter++;
 
     if($('.proposed-price input').val()) {
       res.proposedPrice = $('.proposed-price input').val();
@@ -740,7 +741,7 @@
             yearField = form.getData()['contract-year'];
             if (!isNaN(yearField)) {
               value = d[priceFields[yearField]];
-            } 
+            }
           }
 
           return {
@@ -1082,7 +1083,9 @@
           }
         };
 
-    filters.empty().removeClass('hidden').append('with ');
+    if(updateCounter) {
+      filters.empty().removeClass('hidden').append('with ');
+    }
 
     // fade effect for transitions during description update
     $('#description').hide().fadeIn();
