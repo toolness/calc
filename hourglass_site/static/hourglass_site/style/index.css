@@ -608,8 +608,8 @@ label.radio :checked + span {
   position: relative;
 }
 
-input[type="checkbox"],
-input[type="radio"] {
+.contract-list-item input[type="checkbox"],
+.contract-list-item input[type="radio"] {
   -webkit-appearance: none;
   -moz-appearance: none;
   -ms-appearance: none;
