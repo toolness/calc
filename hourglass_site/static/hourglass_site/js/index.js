@@ -295,7 +295,6 @@
       search.classed("error", false);
     }
 
-    // console.log("update:", res);
     search.classed("loaded", true);
 
     updateDescription(res);
@@ -1057,102 +1056,70 @@
 
   function updateDescription(res) {
     var total = res ? formatCommas(res.count) : '0',
-        data = form.getData();
+        data = form.getData(),
+        filters = $('.filters'),
+        laborCategoryValue = $('#labor_category').val(),
+        lookup = {
+          'education' : {
+            'label' : 'education level',
+            'html' : $('.multiSel').html()
+          },
+          'min_experience' : {
+            'label' : 'experience',
+            'html' : $('#min_experience option:selected').text() + " - " + $('#max_experience option:selected').text() + " years"
+          },
+          'site' : {
+            'label' : 'worksite',
+            'html' : $('.filter-site option:selected').text()
+          },
+          'business_size' : {
+            'label' : 'business size',
+            'html' : $('.filter-business_size option:selected').text()
+          },
+          'schedule' : {
+            'label' : 'schedule',
+            'html' : $('.filter-schedule option:selected').text()
+          }
+        };
 
-    data = arrayToCSV(data);
+    filters.empty().removeClass('hidden').append('with ');
 
-    /*
-     * build a list of inputs that map to
-     * descriptive filters. The 'name' key is the
-     * 'name' attribute of the corresponding input,
-     * and the 'template' key is an HTML string
-     * suitable for use with templatize(), which
-     * replaces {key} with d[key] for the input.
-     */
-    var inputs = ([
-      {name: 'q', template: '&ldquo;<a>{value}</a>&rdquo;'},
-      {name: 'education', template: 'education level: <a>{label}</a>'},
-      {name: 'experience_range', template: '<a>{label}</a> of experience'},
-      {name: 'site', template: 'worksite: <a>{value}</a>'},
-      {name: 'business_size', template: 'size: <a>{label}</a>'},
-      {name: 'schedule', template: 'schedule: <a>{value}</a>'}
-    ])
-    .map(function(d) {
-      d.value = data[d.name];
-      d.ref = document.getElementsByName(d.name)[0];
-      d.active = !!d.value;
-      if (d.active) {
-        var ref = d.ref;
-        d.label = ref.nodeName === 'SELECT'
-          ? getRefLabel(ref)
-          : d.value;
-      }
-      return d;
-    });
+    // fade effect for transitions during description update
+    $('#description').hide().fadeIn();
 
-    function getRefLabel(select) {
-      var option = select.options[select.selectedIndex];
-      return option.getAttribute('data-label') || option.text;
+    // first count of results
+    d3.select('#description-count')
+      .text(formatCommas(res.results.length));
+
+    // labor category results
+    if(laborCategoryValue) {
+      var laborEl = $(document.createElement('span')).addClass('filter');
+      filters.append(laborEl);
+      laborEl.append(
+        $(document.createElement('a')).addClass('focus-input').attr('href', '#').html(laborCategoryValue)
+      );
     }
 
-    // key/value pairs for generic descriptive
-    // elements
-    var keys = {
-      total: total,
-      count: formatCommas(res.results.length),
-      results: 'result' + (total === 1 ? '' : 's')
-    };
+    for(dataKey in data) {
+      for(var lookupKey in lookup) {
+        if(dataKey == lookupKey) {
 
-    var desc = d3.select('#description');
-    // update all of the generic descriptive elements
-    desc.selectAll('[data-key]')
-      .datum(function() {
-        return this.getAttribute('data-key');
-      })
-      .text(function(key) {
-        return keys[key] || '';
-      });
+          // create a span element filter label
+          var filterEl = $(document.createElement('span'))
+              .addClass('filter ' + dataKey + '-filter')
+              .html(" " + lookup[dataKey]['label'] + ": ");
 
-    // get only the active inputs
-    var filters = inputs.filter(function(d) {
-      return d.active;
-    });
+          filters.append(filterEl);
 
-    // build the filters list
-    var f = desc.select('.filters')
-      .classed('empty', !filters.length)
-      .selectAll('.filter')
-      .data(filters);
-    f.exit().remove();
-    f.enter().append('span')
-      .attr('class', 'filter')
-      .attr('data-name', function(d) {
-        return d.name;
-      });
-
-    // update the HTML for each filter
-    var flen = filters.length,
-        multiple = flen > 1,
-        last = flen - 1;
-    f.html(function(d, i) {
-      // add a comma between filters, and the word
-      // 'and' for the last one
-      var comma = (i > 0 && flen > 2 && i !== last) ? ', ' : ' ',
-          and = comma + ((multiple && i === last)
-            ? 'and '
-            : ''),
-          tmpl = templatize(and + d.template);
-      // XXX we should never see "???"
-      return tmpl(d, '???');
-    })
-    .select('a')
-      .attr('href', '#')
-      .classed('focus-input', true)
-      .on('click', function(d) {
-        d3.event.preventDefault();
-        d.ref.focus();
-        return false;
-      });
+          // append text of selected filter as anchor elements
+          filterEl.append(
+            $(document.createElement('a')).addClass('focus-input')
+              .attr('href', '#')
+              .html(lookup[dataKey]['html'])
+          );
+        }
+      }
+    }
   }
 
   function templatize(str, undef) {
