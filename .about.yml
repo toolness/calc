@@ -1,7 +1,6 @@
 ---
-name: CALC
+name: calc
 full_name: CALC
-short_name: calc
 type: app
 owner_type: project
 status: active
@@ -9,9 +8,42 @@ stage: live
 testable: true
 mission: >
   CALC is a tool that enables government contracting personnel to conduct market research on professional service labor categories more quickly and easily.  It helps save the government money by allowing the acquisition community to make more informed decisions when buying professional services.
+description: >
+  CALC is a tool to help contracting personnel estimate their per-hour labor costs for a contract, based on historical pricing information.
+mpact: >
+  All federal acquisition personnel involved in buying professional services
+milestones:
+- 'November 2014: Initial discovery stage begins'
+- 'November 2014: Begin building alpha'
+- 'March 2015: Name changed from "Hourglass" to "CALC"'
+- 'May 2015: Public beta launched'
+contact:
+- nicholas.brethauer@gsa.gov
+stack:
+- Python
+- Django
+- JavaScript
+- Postgres
+licenses:
+  mirage:
+    name: Public Domain (CC0)
+    url: https://creativecommons.org/publicdomain/zero/1.0/ 
 links:
 - url: https://calc.gsa.gov/
   text: CALC production instance
 - url: https:/calc-dev.18f.gov/
   text: CALC development instance
+partners:
+- General Services Administration
+team:
+- github: shawnbot
+- github: maya
+- github: brethauer
+- github: xtine
+- github: kaitlin
+- github: arowla
+- github: jmcarp
+- github: theresaanna
 tasks: https://github.com/18F/calc/issues
+github:
+- 18F/calc
