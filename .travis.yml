@@ -5,6 +5,10 @@ addons:
   postgresql: 9.3
 matrix:
   fast_finish: true
+before_install:
+  - pip install codecov
+after_success:
+  - codecov
 install:
 - pip install -r requirements.txt
 script:
