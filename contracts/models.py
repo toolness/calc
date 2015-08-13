@@ -82,7 +82,7 @@ class Contract(models.Model):
 
     #use a manager that filters by current contracts with a valid current_price
     objects = CurrentContractManager(
-        fields=('labor_category',),
+        fields=('labor_category', 'vendor_name',),
         config = 'pg_catalog.english',
         search_field='search_index',
         auto_update_search_field = True

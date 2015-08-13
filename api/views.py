@@ -71,6 +71,8 @@ def get_contracts_queryset(request_params, wage_field):
     sort = request_params.get('sort', wage_field)
     # query_type can be: [ match_all (default) | match_phrase | match_exact ]
     query_type = request_params.get('query_type', 'match_all')
+    # search_term_type can be: [ labor_category (default) | idv_piid | vendor_name ]
+    search_term_type = request_params.get('search_term_type', 'labor_category')
     exclude = request_params.getlist('exclude')
 
     contracts = Contract.objects.all()
@@ -90,14 +92,14 @@ def get_contracts_queryset(request_params, wage_field):
             queries = [convert_to_tsquery(q) for q in qs]
             # remove empty strings, most commonly from trailing commas
             queries = filter(None, queries)
-            contracts = contracts.search(" | ".join(queries), raw=True)
+            contracts = contracts.search(" | ".join(queries), rank_field=search_term_type, raw=True)
         else:
             q_objs = Q()
             for q in qs:
                 if query_type == 'match_phrase':
-                    q_objs.add(Q(labor_category__icontains=q), Q.OR)
+                    q_objs.add(Q(**{search_term_type + '__icontains': q}), Q.OR)
                 elif query_type == 'match_exact':
-                    q_objs.add(Q(labor_category__iexact=q.strip()), Q.OR)
+                    q_objs.add(Q(**{search_term_type + '__iexact': q.strip()}), Q.OR)
             contracts = contracts.filter(q_objs)
 
     if experience_range:
