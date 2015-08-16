@@ -68,8 +68,10 @@
 }
 
 input[type="text"]:focus,
-select:focus, .filter_focus {
-  box-shadow: 0 0 5px #33C3F0;
+input[type="number"]:focus,
+select:focus,
+.filter_focus {
+  box-shadow: 0 0 0 1px #33c3f0, 0 0 10px #33C3F0;
 }
 
 main h5 {
@@ -158,8 +160,8 @@ span.dollars {
 }
 
 .dropdown dt a:focus {
-  border: 2px solid #33c3f0 !important;
-  box-shadow: 0 0 5px #33c3f0;
+  border: 1px solid #33c3f0 !important;
+  box-shadow: 0 0 0 1px #33c3f0, 0 0 10px #33C3F0;
 }
 
 .multiSelect label:hover {
