@@ -69,7 +69,6 @@
 
 input[type="text"]:focus,
 select:focus, .filter_focus {
-  border: 2px solid #33C3F0 !important;
   box-shadow: 0 0 5px #33C3F0;
 }
 
