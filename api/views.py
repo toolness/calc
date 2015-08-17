@@ -92,7 +92,7 @@ def get_contracts_queryset(request_params, wage_field):
             queries = [convert_to_tsquery(q) for q in qs]
             # remove empty strings, most commonly from trailing commas
             queries = filter(None, queries)
-            contracts = contracts.search(" | ".join(queries), rank_field=search_term_type, raw=True)
+            contracts = contracts.search(" | ".join(queries), raw=True)
         else:
             q_objs = Q()
             for q in qs:
