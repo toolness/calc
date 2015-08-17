@@ -69,9 +69,12 @@
 
 input[type="text"]:focus,
 input[type="number"]:focus,
-select:focus,
-.filter_focus {
+select:focus {
   box-shadow: 0 0 0 1px #33c3f0, 0 0 10px #33C3F0;
+}
+
+.filter_focus {
+  border: 2px solid #33C3F0 !important;
 }
 
 main h5 {
