@@ -181,13 +181,13 @@ class FunctionalTests(LiveServerTestCase):
         self.assertEqual(inputs[-2].get_attribute('name'), 'price__gte')
         self.assertEqual(inputs[-1].get_attribute('name'), 'price__lte')
 
-    # TODO bring this back!
+    # see https://travis-ci.org/18F/calc/builds/76802593
     # many of the filter and search tests aren't running. some of them were
     # Xed before me, some of them I am Xing out now because they are seemingly
-    # suddenly failing as a result of getting an empty result set back. as
-    # we're transitioning off the project, I can't dig in now.
+    # suddenly failing and getting an empty result set back.
+    # we're transitioning off the project, so I can't dig in now.
     # I suspect there is a thread of fragility through these tests, and I have 
-    # not managed to get them working in my time on the project. I think they
+    # not managed to get them working dependably in my time on the project. I think they
     # need looking at by someone very experienced in Selenium testing. 8/25/15 [TS]
     def xtest_form_submit_loading(self):
         get_contract_recipe().make(_quantity=1, labor_category=seq("Architect"))
