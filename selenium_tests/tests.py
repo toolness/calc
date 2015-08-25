@@ -6,10 +6,10 @@ See https://travis-ci.org/18F/calc/builds/77211412.
 The original author of the tests and I could not solve this problem. I've
 watched the timeouts happen on specific tests by increasing nose's verbosity,
 and I have seen them on these tests:
-x2test_no_filter_shows_all_sizes_of_business
+test_no_filter_shows_all_sizes_of_business
 test_filter_to_only_large_businesses
-x2test_schedule_column_is_open_by_default
-x2test_contract_link
+test_schedule_column_is_open_by_default
+test_contract_link
 
 8/25/15 [TS]
 """
