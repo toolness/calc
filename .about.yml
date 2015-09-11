@@ -24,6 +24,19 @@ stack:
 - Django
 - JavaScript
 - Postgres
+
+# Services used to supply project status information
+# Items:
+# - name: Name of the service
+#   category: Type of the service
+#   url: URL for detailed information
+#   badge: URL for the status badge
+services:
+- name: Travis CI
+  category: CI
+  url: https://travis-ci.org/18F/calc
+  badge: https://travis-ci.org/18F/calc.svg
+
 licenses:
   mirage:
     name: Public Domain (CC0)
