@@ -10,7 +10,7 @@ mission: >
   CALC is a tool that enables government contracting personnel to conduct market research on professional service labor categories more quickly and easily.  It helps save the government money by allowing the acquisition community to make more informed decisions when buying professional services.
 description: >
   CALC is a tool to help contracting personnel estimate their per-hour labor costs for a contract, based on historical pricing information.
-mpact: >
+impact: >
   All federal acquisition personnel involved in buying professional services
 milestones:
 - 'November 2014: Initial discovery stage begins'
@@ -24,6 +24,19 @@ stack:
 - Django
 - JavaScript
 - Postgres
+
+# Services used to supply project status information
+# Items:
+# - name: Name of the service
+#   category: Type of the service
+#   url: URL for detailed information
+#   badge: URL for the status badge
+services:
+- name: Travis CI
+  category: CI
+  url: https://travis-ci.org/18F/calc
+  badge: https://travis-ci.org/18F/calc.svg
+
 licenses:
   mirage:
     name: Public Domain (CC0)
@@ -33,6 +46,9 @@ links:
   text: CALC production instance
 - url: https:/calc-dev.18f.gov/
   text: CALC development instance
+- url: https://trello.com/b/LjXJaVbZ/hourglass
+  text: Sprint board
+
 partners:
 - General Services Administration
 team:
