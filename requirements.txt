@@ -9,7 +9,7 @@ model_mommy
 numpy==1.9.1
 nose
 django_nose
-waitress==0.8.9
+waitress==0.8.10
 django-cors-headers
 newrelic
 django-secure
