@@ -1,9 +1,14 @@
+---
 languages:
   JavaScript: true
   Python: true
 exclude_paths:
-- "hourglass_site/static/hourglass_site/js/vendor/*"
-- "contracts/migrations/*"
-- "hourglass_site/static/hourglass_site/tests/*"
-- "selenium_tests/*"
-
+- hourglass_site/static/hourglass_site/js/vendor/*
+- contracts/migrations/*
+- hourglass_site/static/hourglass_site/tests/*
+- selenium_tests/*
+engines:
+  eslint:
+    enabled: true
+  csslint:
+    enabled: true
