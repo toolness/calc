@@ -53,8 +53,9 @@
   function isNumberKey(evt){
       var charCode = (evt.which) ? evt.which : event.keyCode;
 
-      if (charCode > 31 && (charCode < 48 || charCode > 57))
+      if (charCode > 31 && (charCode < 48 || charCode > 57)){
         return false;
+      }
       return true;
   }
 
@@ -131,7 +132,7 @@
         var pieces = term.split(/[\s,]+/);
         term = pieces[pieces.length-1];
 
-        if (autoCompReq) autoCompReq.abort();
+        if (autoCompReq) {autoCompReq.abort();}
         var data = form.getData();
         autoCompReq = api.get({
           uri: "search/",
@@ -141,7 +142,7 @@
           },
         }, function(error, result) {
           autoCompReq = null;
-          if (error) return done([]);
+          if (error) {return done([]);}
           var categories = result.slice(0, 20).map(function(d) {
             return {
               term: d.labor_category,
@@ -180,7 +181,7 @@
           selectedInput = term + ", ";
         }
         else {
-          selectedInput = $("#labor_category").val() + ", "
+          selectedInput = $("#labor_category").val() + ", ";
         }
 
         // update the search input field accordingly
@@ -219,7 +220,7 @@
   function arrayToCSV(data) {
     // turns any array input data into a comma separated string
     // in use for the education filter
-    for (filter in data) {
+    for (var filter in data) {
       if (Array.isArray(data[filter])) {
         data[filter] = data[filter].join(',');
       }
@@ -241,7 +242,7 @@
         return !!this.value;
       });
 
-    data['experience_range'] = $('#min_experience').val() + "," + $('#max_experience').val();
+    data.experience_range = $('#min_experience').val() + "," + $('#max_experience').val();
 
     // console.log("submitting:", data);
 
@@ -268,7 +269,7 @@
       });
 
     if (pushState) {
-      var href = "?" + hourglass.qs.format(data)
+      var href = "?" + hourglass.qs.format(data);
       history.pushState(null, null, href);
     }
 
@@ -495,7 +496,7 @@
         .attr("width", 110)
         .attr("height", 26)
         .attr("rx", 4)
-        .attr("ry", 4)
+        .attr("ry", 4);
 
       var ppText = pp.append("text")
         .attr("text-anchor", "middle")
@@ -520,11 +521,11 @@
     pp.select(".value")
       .text("$" + data.proposedPrice + ' proposed');
 
-    if(data.proposedPrice == 0) {
+    if(data.proposedPrice === 0) {
       pp.style("opacity", 0);
     }
     else {
-      pp.style("opacity", 1)
+      pp.style("opacity", 1);
     }
 
     // draw average line
@@ -541,7 +542,7 @@
         .attr("width", 110)
         .attr("height", 26)
         .attr("rx", 4)
-        .attr("ry", 4)
+        .attr("ry", 4);
 
       var avgText = avg.append("text")
         .attr("text-anchor", "middle")
@@ -596,7 +597,7 @@
         stdDevTop = 85;
     stdDev = t.select(".stddev");
     stdDev
-      .attr("transform", "translate(" + [x(stdDevMin), stdDevTop] + ")")
+      .attr("transform", "translate(" + [x(stdDevMin), stdDevTop] + ")");
 
     stdDev.select("rect.range-fill")
       .attr("width", stdDevWidth)
@@ -614,7 +615,7 @@
       .attr({x : -8, dy : '15px'});
 
     stdDev.select(".label.max")
-      .attr("transform", "translate(" + [stdDevWidth, 0] + ")")
+      .attr("transform", "translate(" + [stdDevWidth, 0] + ")");
 
     stdDev.select(".label.max .stddev-text-label")
       .text("+1 std dev")
@@ -678,7 +679,7 @@
       .attr('class', 'label')
       .attr('transform', 'translate(' + [left + (right - left) / 2, 45] + ')')
       .attr('text-anchor', 'middle')
-      .text('Ceiling price (hourly rate)')
+      .text('Ceiling price (hourly rate)');
 
     var yd = d3.extent(heightScale.domain());
     var ya = d3.svg.axis()
@@ -695,7 +696,7 @@
       .attr('class', 'label')
       .attr('transform', 'translate(' + [-25, height / 2 + 25] + ') rotate(-90)')
       .attr('text-anchor', 'middle')
-      .text('# of results')
+      .text('# of results');
 
     histogramUpdated = true;
   }
@@ -819,7 +820,7 @@
       .each(function(){
         $(this).tooltipster({
           position: 'bottom'
-        })
+        });
       });
 
 
@@ -835,7 +836,7 @@
           return 'Exclude ' + d.row.labor_category + ' from your search';
       })
       .each(function(){
-        $(this).tooltipster('content', this.getAttribute('aria-label'))
+        $(this).tooltipster('content', this.getAttribute('aria-label'));
       })
 
       .on('click', function(d) {
@@ -967,7 +968,7 @@
         .attr('aria-label', title)
         .each(function (){
           $(this).tooltipster('content', this.getAttribute ('aria-label'));
-        })
+        });
 
     resultsTable.selectAll('tbody td')
       .classed('sorted', function(c) {
@@ -992,7 +993,7 @@
           updateCollapsed.apply(this.parentNode, arguments);
         });
 
-    headers.each(updateCollapsed)
+    headers.each(updateCollapsed);
 
     function updateCollapsed(d) {
       var title = [
@@ -1103,7 +1104,7 @@
       );
     }
 
-    for(dataKey in data) {
+    for(var dataKey in data) {
       for(var lookupKey in lookup) {
         if(dataKey == lookupKey) {
 
@@ -1243,7 +1244,7 @@
 
     $('.eduSelect').hide();
 
-    for(key in parameters) {
+    for(var key in parameters) {
       title = $('.multiSelect input[type=checkbox][value=' + parameters[key] + ']').attr('checked', true).next().html();
 
       $('.multiSel').append('<span title="' + title + '">' + title + '</span>');
@@ -1276,7 +1277,7 @@
 
       submit(true);
 
-      if($('#min_experience').val() == 0 && $('#max_experience').val() == 45) {
+      if($('#min_experience').val() === 0 && $('#max_experience').val() == 45) {
         $('#min_experience, #max_experience').removeClass('filter_active');
       }
     }
@@ -1287,7 +1288,7 @@
 
   // load experience range if query string exists
   if(getUrlParameterByName('max_experience').length) {
-    $('.slider').val([getUrlParameterByName('min_experience'), getUrlParameterByName('max_experience')])
+    $('.slider').val([getUrlParameterByName('min_experience'), getUrlParameterByName('max_experience')]);
   }
 
   // restrict proposed price input to be numeric only
