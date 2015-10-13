@@ -36,6 +36,22 @@ From there, you're just a hop, skip and a jump away from your own dev server:
 
 If you are managing https://calc.gsa.gov, see https://github.com/18F/calc/blob/master/deploy.md.
 
+## Testing
+
+To run all tests:
+```sh
+make test
+```
+
+To run only unit tests:
+```sh
+make test-backend
+```
+
+To run only Selenium tests:
+```sh
+make test-frontend
+```
 
 ## API
 
