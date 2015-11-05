@@ -94,13 +94,14 @@ class Contract(models.Model):
         else:
             return 'other than small business'
 
-    def get_education_code(self, text):
-
+    @staticmethod
+    def get_education_code(text):
         for pair in EDUCATION_CHOICES:
             if text.strip() in pair[1]:
                 return pair[0]
 
         return None
 
-    def normalize_rate(self, rate):
+    @staticmethod
+    def normalize_rate(rate):
         return float(rate.replace(',', '').replace('$', ''))
