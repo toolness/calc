@@ -118,7 +118,7 @@ class LoadS70TestCase(TestCase):
         self.assertEquals(contract.labor_category, 'Messy Category')
 
     def test_sets_hourly1_and_current_price(self):
-        price = 99.99
+        price = 999.99
         c = Schedule70Loader.make_contract(self.make_row(price=str(price)))
         self.assertEquals(c.hourly_rate_year1, price)
         self.assertEquals(c.current_price, price)
