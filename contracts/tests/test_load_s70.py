@@ -117,20 +117,14 @@ class LoadS70TestCase(TestCase):
         contract = Schedule70Loader.make_contract(row_messy_category)
         self.assertEquals(contract.labor_category, 'Messy Category')
 
-    def test_sets_all_year_prices(self):
+    def test_sets_hourly1_and_current_price(self):
         price = 99.99
         c = Schedule70Loader.make_contract(self.make_row(price=str(price)))
+        self.assertEquals(c.hourly_rate_year1, price)
         self.assertEquals(c.current_price, price)
-        self.assertEquals(c.next_year_price, price)
-        self.assertEquals(c.second_year_price, price)
-        for year in range(1, 6):
-            self.assertEquals(getattr(c, 'hourly_rate_year%s' % year), price)
 
-    def test_no_display_prices_if_too_low(self):
+    def test_no_display_price_if_too_low(self):
         price = FEDERAL_MIN_CONTRACT_RATE - 1.0
         c = Schedule70Loader.make_contract(self.make_row(price=str(price)))
+        self.assertEquals(c.hourly_rate_year1, price)
         self.assertIsNone(c.current_price)
-        self.assertIsNone(c.next_year_price)
-        self.assertIsNone(c.second_year_price)
-        for year in range(1, 6):
-            self.assertEquals(getattr(c, 'hourly_rate_year%s' % year), price)
