@@ -167,7 +167,7 @@ Here is an example with all three parameters (`schedule`, `site`, and
 http://localhost:8000/api/rates/?schedule=mobis&site=customer&business_size=s
 ```
 
-For schedules, there are 7 different values that will return results (case
+For schedules, there are 8 different values that will return results (case
 insensitive):
  
  - Environmental
@@ -177,6 +177,7 @@ insensitive):
  - PES
  - MOBIS
  - Consolidated
+ - IT Schedule 70
 
 For site, there are only 3 values (also case insensitive):
 

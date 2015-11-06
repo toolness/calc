@@ -75,6 +75,31 @@ Must be an integer from 1-5. Cannot be empty.
 ##### Contract Start Date and Contract End Date
 Month/Day/Year Ex: "12/3/14"
 
+## Schedule 70 data
+
+Schedule 70 contracts have a slightly different data format and are imported through a separate process.
+
+https://github.com/18F/calc/tree/master/contracts/docs/s70 has all versions of Schedule 70 data that have been imported to date.
+
+https://github.com/18F/calc/blob/master/contracts/docs/s70/s70_data.csv is the most recent data.
+
+The files that we get are also in .xlsx format. They need to be converted to CSV. It uses the same columns as above, but in a slightly different order:
+
+- SIN number
+- Labor Category
+- Education level
+- Minimum years of experience
+- Unit of issue (currently ignored)
+- Base rate
+- Contract number
+- Company Name
+- Business size
+- Schedule (always "IT Schedule 70")
+- Location
+- Current contract year
+- Contract begin date
+- Contract end date
+
 ## Updating the contract data
 
 Save a copy of the CSV as the next version of the data in https://github.com/18F/calc/tree/master/contracts/docs. Overwrite `hourly_prices.csv` with the new file.
@@ -82,6 +107,14 @@ Save a copy of the CSV as the next version of the data in https://github.com/18F
 Run `./manage.py load_data`
 
 This will replace all existing records with the ones in the CSV.
+
+Save a copy of the Schedule 70 CSV as the next version of the data in https://github.com/18F/calc/tree/master/contracts/s70/docs. Overwrite `s70_data.csv` with the new file.
+
+Run `./manage.py load_s70`
+
+This will replace all existing Schedule 70 records with the ones in the CSV.
+
+For more information on the Schedule 70 data loader and its configuration options, run `./manage.py load_s70 --help`
 
 Should the format of the file we import ever change, run `./manage.py makemigrations` and alert the team that they will need to run migrations on their local environments. 
 

@@ -1,0 +1,22 @@
+SIN(s) PROPOSED,SERVICE PROPOSED (e.g. Job Title/Task),MINIMUM EDUCATION/ CERTIFICATION LEVEL,MINIMUM YEARS OF EXPERIENCE,"UNIT OF ISSUE (e.g. Hour, Task, Sq ft)",PRICE OFFERED TO GSA (including IFF),CONTRACT NUMBER,VENDOR NAME,BUSINESS SIZE,SCHEDULE,WORKSITE,CURRENT CONTRACT YEAR,CONTRACT START DATE ,CONTRACT END DATE
+Dash,Spell out the entire labor category,"Only use degrees spelled out as Associates, Bachelors, Masters, or Ph.D",Whole numbers only. No range. ,Hour,Price with two decimal places,Must be full contract number,Spelled out ,S or O for small or other than small,IT Schedule 70,"Customer, contractor, or both",Must be an integer from 1-5.,Month/Day/Year,Month/Day/Year
+132-51,Product Manager,Bachelors,5,Hour,$125.44,GS-35F-376CA,"Pink Frog Interactive, Inc.",S,IT Schedule 70,Both,1,6/24/15,6/23/20
+132-51,Interaction Designer,Bachelors,5,Hour,$125.44,GS-35F-376CA,"Pink Frog Interactive, Inc.",S,IT Schedule 70,Both,1,6/24/15,6/23/20
+132-51,User Researcher,Bachelors,5,Hour,$125.44,GS-35F-376CA,"Pink Frog Interactive, Inc.",S,IT Schedule 70,Both,1,6/24/15,6/23/20
+132-51,Usability Tester,Bachelors,5,Hour,$125.44,GS-35F-376CA,"Pink Frog Interactive, Inc.",S,IT Schedule 70,Both,1,6/24/15,6/23/20
+132-51,Visual Designer,Bachelors,5,Hour,$125.44,GS-35F-376CA,"Pink Frog Interactive, Inc.",S,IT Schedule 70,Both,1,6/24/15,6/23/20
+132-51,Writer,Bachelors,5,Hour,$125.44,GS-35F-376CA,"Pink Frog Interactive, Inc.",S,IT Schedule 70,Both,1,6/24/15,6/23/20
+132-51,Content Designer,Bachelors,5,Hour,$125.44,GS-35F-376CA,"Pink Frog Interactive, Inc.",S,IT Schedule 70,Both,1,6/24/15,6/23/20
+132-51,Content Strategist,Bachelors,5,Hour,$125.44,GS-35F-376CA,"Pink Frog Interactive, Inc.",S,IT Schedule 70,Both,1,6/24/15,6/23/20
+132-51,Frontend Web Developer,Bachelors,5,Hour,$125.44,GS-35F-376CA,"Pink Frog Interactive, Inc.",S,IT Schedule 70,Both,1,6/24/15,6/23/20
+132-51,Senior Web Developer,Bachelors,6,Hour,$110.83,GS-35F-309CA,"Telemarc Concepts, Inc",S,IT Schedule 70,Both,1,4/29/15,4/28/20
+132-51,Program Manager I,Bachelors,9,Hour,$178.01,GS-35F-308CA,"I-Link Solutions, Inc",S,IT Schedule 70,Both,1,4/29/15,4/28/20
+132-51,Project Manager II,Bachelors,12,Hour,$130.01,GS-35F-308CA,"I-Link Solutions, Inc",S,IT Schedule 70,Both,1,4/29/15,4/28/20
+132-51,Administrative Assistant II,Bachelors,5,Hour,$69.00,GS-35F-308CA,"I-Link Solutions, Inc",S,IT Schedule 70,Both,1,4/29/15,4/28/20
+132-51,Business Analyst II,Bachelors,5,Hour,$138.01,GS-35F-308CA,"I-Link Solutions, Inc",S,IT Schedule 70,Both,1,4/29/15,4/28/20
+132-51,Business Analyst I,Bachelors,2,Hour,$108.00,GS-35F-308CA,"I-Link Solutions, Inc",S,IT Schedule 70,Both,1,4/29/15,4/28/20
+132-51,Architect III,Bachelors,12,Hour,$179.00,GS-35F-308CA,"I-Link Solutions, Inc",S,IT Schedule 70,Both,1,4/29/15,4/28/20
+132-51,Architect II,Bachelors,9,Hour,$147.00,GS-35F-308CA,"I-Link Solutions, Inc",S,IT Schedule 70,Both,1,4/29/15,4/28/20
+132-51,Software Engineer II,Bachelors,5,Hour,$122.01,GS-35F-308CA,"I-Link Solutions, Inc",S,IT Schedule 70,Both,1,4/29/15,4/28/20
+132-51,QA Analyst III,Bachelors,12,Hour,$134.01,GS-35F-308CA,"I-Link Solutions, Inc",S,IT Schedule 70,Both,1,4/29/15,4/28/20
+132-51,QA Analyst II,Bachelors,9,Hour,$109.00,GS-35F-308CA,"I-Link Solutions, Inc",S,IT Schedule 70,Both,1,4/29/15,4/28/20
