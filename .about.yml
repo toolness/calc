@@ -9,14 +9,14 @@ testable: true
 mission: >
   CALC is a tool that enables government contracting personnel to conduct market research on professional service labor categories more quickly and easily.  It helps save the government money by allowing the acquisition community to make more informed decisions when buying professional services.
 description: >
-  CALC is a tool to help contracting personnel estimate their per-hour labor costs for a contract, based on historical pricing information.
+  The Contract Awarded Labor Category (CALC) tool helps the federal contracting community make smarter, faster buying decisions by allowing them to search for hourly labor rates across numerous government contracts. The CALC tool is helping contracting officers move from paper-based research to simple, efficient online search.
 impact: >
-  All federal acquisition personnel involved in buying professional services
+  Saves contracting officers in the federal government hours of work every week and provides them with better data. By having a tool that understands fair and reasonable prices, contracting officers will be better equipped to negotiate with vendors, which will ensure that the government is spending taxpayer dollars wisely and in the most efficient way.
 milestones:
-- 'November 2014: Initial discovery stage begins'
-- 'November 2014: Begin building alpha'
-- 'March 2015: Name changed from "Hourglass" to "CALC"'
-- 'May 2015: Public beta launched'
+- 'November 2014: The initial discovery stage for CALC begins.'
+- 'November 2014: We begin building an alpha version of the site, known as Hourglass.'
+- 'March 2015: The name of the site changes from "Hourglass" to "CALC," which stands for "Contract Awarded Labor Category" tool.'
+- 'May 2015: We launched the public beta.'
 contact:
 - nicholas.brethauer@gsa.gov
 stack:
@@ -48,6 +48,10 @@ links:
   text: CALC development instance
 - url: https://trello.com/b/LjXJaVbZ/hourglass
   text: Sprint board
+  
+blogTag:
+- procurement
+- federal acquisitions
 
 partners:
 - General Services Administration
