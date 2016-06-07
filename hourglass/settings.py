@@ -179,9 +179,10 @@ SECURE_SSL_REDIRECT = True
 # Amazon ELBs pass on X-Forwarded-Proto.
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
-try:
-    from hourglass.local_settings import *
-except:
-    pass
-
-
+if 'IS_RUNNING_IN_DOCKER' in os.environ:
+    from hourglass.docker_settings import *
+else:
+    try:
+        from hourglass.local_settings import *
+    except ImportError:
+        pass

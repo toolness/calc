@@ -48,9 +48,4 @@ if __name__ == '__main__':
             ])
         os.environ['HOME'] = '/home/%s' % pwd.getpwuid(HOST_UID).pw_name
         os.setuid(HOST_UID)
-
-    if not os.path.exists('hourglass/local_settings.py'):
-        shutil.copyfile('hourglass/local_settings.docker.py',
-                        'hourglass/local_settings.py')
-
     os.execvp(sys.argv[1], sys.argv[1:])
