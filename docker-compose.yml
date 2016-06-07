@@ -1,0 +1,19 @@
+app:
+  build: .
+  volumes:
+    - .:/calc
+  links:
+    - db
+  working_dir: /calc
+  entrypoint: python /calc/entrypoint.py
+  environment:
+    - PYTHONUNBUFFERED=yup
+    - DATABASE_URL=postgres://calc_user@db/calc
+  command: python manage.py runserver 0.0.0.0:8000
+  ports:
+    - "8000:8000"
+db:
+  image: postgres:9.4
+  environment:
+    - POSTGRES_DB=calc
+    - POSTGRES_USER=calc_user
