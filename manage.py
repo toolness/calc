@@ -74,7 +74,7 @@ def wait_for_db(max_attempts=15, seconds_between_attempts=1):
 if __name__ == "__main__":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "hourglass.settings")
 
-    if os.getcwd() == '/calc':
+    if 'IS_RUNNING_IN_DOCKER' in os.environ:
         setup_docker_sigterm_handler()
         wait_for_db()
 
