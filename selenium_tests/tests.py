@@ -29,11 +29,15 @@ from itertools import cycle
 import re
 import time
 import os
+import socket
 from datetime import datetime
 
 TESTING_KEY = 'REMOTE_TESTING'
 REMOTE_TESTING = hasattr(settings, TESTING_KEY) and getattr(settings, TESTING_KEY) or {}
 TESTING_URL = os.environ.get('LOCAL_TUNNEL_URL', REMOTE_TESTING.get('url'))
+
+PHANTOMJS_TIMEOUT = 3
+WEBDRIVER_TIMEOUT_LOAD_ATTEMPTS = 10
 
 def _get_testing_config(key, default=None):
     return REMOTE_TESTING.get(key, os.environ.get('%s_%s' % (TESTING_KEY, key.upper()), default))
@@ -57,7 +61,10 @@ class FunctionalTests(LiveServerTestCase):
     @classmethod
     def get_driver(cls):
         if not REMOTE_TESTING or not TESTING_URL:
-            return _get_webdriver(os.environ.get('TESTING_BROWSER', 'phantomjs'))
+            driver = _get_webdriver(os.environ.get('TESTING_BROWSER',
+                                                   'phantomjs'))
+            driver.command_executor.set_timeout(PHANTOMJS_TIMEOUT)
+            return driver
 
         if REMOTE_TESTING.get('enabled') == False:
             pass
@@ -127,7 +134,19 @@ class FunctionalTests(LiveServerTestCase):
     def load(self, uri='/'):
         url = self.base_url + uri
         print('loading URL: %s' % url)
-        self.driver.get(url)
+
+        attempts = 0
+
+        while True:
+            try:
+                self.driver.get(url)
+                break
+            except socket.timeout:
+                if attempts >= WEBDRIVER_TIMEOUT_LOAD_ATTEMPTS:
+                    raise
+                print("Socket timeout, trying again.")
+                attempts += 1
+
         # self.driver.execute_script('$("body").addClass("selenium")')
         return self.driver
 
