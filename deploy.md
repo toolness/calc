@@ -4,20 +4,19 @@ If you don’t already have one, request a Cloud Foundry account in #devops in S
 https://docs.18f.gov/getting-started/setup/
 
 #### CF Structure
-Organization: `oasis`
-Spaces: `calc-dev`, `calc-prod`
-Apps:
-  calc-dev space:
-    calc-dev
-  calc-prod space:
-    calc-deploy
-    calc-prod
-    
-Routes:
-  calc-dev.18f.gov -> calc-dev space, calc-dev app
-  calc-prod.18f.gov -> calc-prod space, calc-prod app
-  calc-deploy.18f.gov -> calc-prod space, calc-deploy app
-  calc.gsa.gov -> calc-prod space, calc-prod or calc-deploy spaces
+- Organization: `oasis`
+- Spaces: `calc-dev`, `calc-prod`
+- Apps:
+  - calc-dev space:
+    - calc-dev
+  - calc-prod space:
+    - calc-deploy
+    - calc-prod
+- Routes:
+  - calc-dev.18f.gov -> calc-dev space, calc-dev app
+  - calc-prod.18f.gov -> calc-prod space, calc-prod app
+  - calc-deploy.18f.gov -> calc-prod space, calc-deploy app
+  - calc.gsa.gov -> calc-prod space, calc-prod or calc-deploy spaces
   
 To start, target the org and space you want to work with. For example, if you wanted to work with the production space:
 `cf target -o oasis -s calc-prod`
