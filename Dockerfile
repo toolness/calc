@@ -11,6 +11,10 @@ RUN \
   mv /tmp/phantomjs-$PHANTOMJS_VERSION-linux-x86_64/ /srv/var/phantomjs && \
   ln -s /srv/var/phantomjs/bin/phantomjs /usr/bin/phantomjs
 
+RUN apt-get update && \
+  apt-get install -y ruby-full rubygems && \
+  gem install sass
+
 COPY requirements.txt /calc/
 
 RUN pip install -r /calc/requirements.txt

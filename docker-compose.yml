@@ -18,3 +18,10 @@ db:
   environment:
     - POSTGRES_DB=calc
     - POSTGRES_USER=calc_user
+sass:
+  build: .
+  volumes:
+    - .:/calc
+  working_dir: /calc/hourglass_site/static/hourglass_site
+  entrypoint: python /calc/entrypoint.py
+  command: make watch-style
