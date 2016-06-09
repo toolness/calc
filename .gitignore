@@ -13,6 +13,7 @@ ghostdriver.log
 *.log
 node_modules
 selenium_tests/screenshot.png
+manifest-sandbox.yml
 
 .Python
 /bin
@@ -20,3 +21,4 @@ selenium_tests/screenshot.png
 /lib
 pip-selfcheck.json
 /src
+
