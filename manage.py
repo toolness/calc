@@ -82,6 +82,17 @@ if __name__ == "__main__":
         from django.core.management import execute_from_command_line
     except ImportError as e:
         # Assume the user wants to run us in docker.
+        if len(sys.argv) > 1 and sys.argv[1] == 'runserver':
+            # Even with --service-ports, by default runserver only exposes
+            # itself on 127.0.0.1, which docker can't expose to the
+            # host through its networking stack. It's easiest to just
+            # tell the developer to use 'docker-compose up' instead.
+            print(
+                "\x1b[31;1m"  # Red
+                "WARNING: You should probably be using 'docker-compose up' "
+                "to run the server."
+                "\x1b[0m"     # Reset colors
+            )
         try:
             os.execvp('docker-compose', [
                 'docker-compose', 'run', 'app', 'python'
