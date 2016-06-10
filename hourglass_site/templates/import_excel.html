@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+html {
+  font-family: cursive;
+}
+</style>
+<title>XLS import spike</title>
+<h1>XLS import spike</h1>
+<h2>Upload a Proposed Price List XLS</h2>
+
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  <input type="file" name="xls">
+  <button type="submit">Submit</button>
+</form>
+
+{% if cats %}
+
+<table border="1">
+  <thead>
+    <tr>
+    {% for col in cats.0 %}
+      <th>{{ col }}</th>
+    {% endfor %}
+    </tr>
+  </thead>
+
+  <tbody>
+    {% for cat in cats %}
+      <tr>
+        {% for colname, val in cat.items %}
+          <td>{{ val }}</td>
+        {% endfor %}
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endif %}

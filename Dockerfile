@@ -14,3 +14,5 @@ RUN \
 COPY requirements.txt /calc/
 
 RUN pip install -r /calc/requirements.txt
+
+RUN pip install xlrd
