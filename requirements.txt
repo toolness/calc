@@ -13,4 +13,4 @@ waitress==0.8.10
 django-cors-headers
 newrelic
 django-secure
-
+xlrd==1.0.0
