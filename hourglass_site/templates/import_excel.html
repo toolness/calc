@@ -1,13 +1,16 @@
-<!DOCTYPE html>
-<meta charset="utf-8">
-<style>
-html {
-  font-family: cursive;
-}
-</style>
-<title>XLS import spike</title>
-<h1>XLS import spike</h1>
-<h2>Upload a Proposed Price List XLS</h2>
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+<div class="container">
+  <div class="row">
+    <div class="six-columns">
+<h2>XLS Import Demo</h2>
+
+<h3>Upload a Proposed Price List Excel Spreadsheet</h3>
 
 <form method="post" enctype="multipart/form-data">
   {% csrf_token %}
@@ -17,10 +20,10 @@ html {
 
 {% if cats %}
 
-<table border="1">
+<table>
   <thead>
     <tr>
-    {% for col in cats.0 %}
+    {% for col in colnames %}
       <th>{{ col }}</th>
     {% endfor %}
     </tr>
@@ -38,3 +41,5 @@ html {
 </table>
 
 {% endif %}
+
+{% endblock %}

@@ -34,13 +34,19 @@ def get_labor_categories(book):
     return cats
 
 def import_xls(request):
+    cats = None
+    colnames = None
+
     if request.method == 'POST':
         f = request.FILES['xls']
         book = xlrd.open_workbook(file_contents=f.read())
         cats = get_labor_categories(book)
-    else:
-        cats = None
+        if cats:
+            colnames = [
+                name.replace('_', ' ') for name in cats[0]
+            ]
 
     return render(request, 'import_excel.html', {
-        'cats': cats
+        'cats': cats,
+        'colnames': colnames
     })
