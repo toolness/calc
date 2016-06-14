@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+<div class="container">
+  <div class="row">
+    <div class="six-columns">
+
+<h2>XLS Import Demo - Step 2</h2>
+
+<form method="post">
+  {% csrf_token %}
+  <input type="hidden" name="step" value="2">
+  <input type="hidden" name="num_rows" value="{{ rows | length }}">
+
+  {{ form.as_p }}
+
+  <table>
+    <thead>
+      <tr>
+        <td>{{ header_row.sin.label }}</td>
+        <td>{{ header_row.labor_category.label }}</td>
+        <td>{{ header_row.education_level.label }}</td>
+        <td>{{ header_row.min_years_experience.label }}</td>
+        <td>{{ header_row.current_price.label }}</td>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in rows %}
+      <tr>
+        <td>
+          {{ row.sin.errors }}
+          {{ row.sin }}
+        </td>
+        <td>
+          {{ row.labor_category.errors }}
+          {{ row.labor_category }}
+        </td>
+        <td>
+          {{ row.education_level.errors }}
+          {{ row.education_level }}
+        </td>
+        <td>
+          {{ row.min_years_experience.errors }}
+          {{ row.min_years_experience }}
+        </td>
+        <td>
+          {{ row.current_price.errors }}
+          {{ row.current_price }}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <button type="submit">Submit</button>
+</form>
+
+{% endblock %}

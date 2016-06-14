@@ -16,6 +16,7 @@
 
 <form method="post" enctype="multipart/form-data">
   {% csrf_token %}
+  <input type="hidden" name="step" value="1">
 
   {{ form.xls.errors }}
   {{ form.xls.label_tag }}
@@ -23,29 +24,5 @@
 
   <button type="submit">Submit</button>
 </form>
-
-{% if cats %}
-
-<table>
-  <thead>
-    <tr>
-    {% for col in colnames %}
-      <th>{{ col }}</th>
-    {% endfor %}
-    </tr>
-  </thead>
-
-  <tbody>
-    {% for cat in cats %}
-      <tr>
-        {% for colname, val in cat.items %}
-          <td>{{ val }}</td>
-        {% endfor %}
-      </tr>
-    {% endfor %}
-  </tbody>
-</table>
-
-{% endif %}
 
 {% endblock %}

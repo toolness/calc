@@ -2,7 +2,7 @@ from collections import OrderedDict
 from django.shortcuts import render
 import xlrd
 
-from .forms import XlsForm
+from .forms import XlsForm, ProposedPriceListRow, ContractDetailsForm
 
 def get_labor_categories(book):
     sheet = book.sheet_by_name('(3)Labor Categories')
@@ -35,26 +35,63 @@ def get_labor_categories(book):
 
     return cats
 
+def import_xls_step_2(request, cats=None):
+    rows = []
+
+    if cats is None:
+        form = ContractDetailsForm(
+            request.POST,
+            prefix='contract_details'
+        )
+        num_rows = int(request.POST['num_rows'])
+        is_valid = True
+        for i in range(num_rows):
+            row = ProposedPriceListRow(
+                request.POST,
+                prefix='xls_row_%d' % i
+            )
+            rows.append(row)
+            if not row.is_valid():
+                is_valid = False
+        if is_valid:
+            raise NotImplementedError("TODO: Commit data to db")
+    else:
+        form = ContractDetailsForm(prefix='contract_details')
+        for cat in cats:
+            initial_data = dict(
+                sin=cat['sin'],
+                labor_category=cat['service'],
+                education_level=cat['min_education'],
+                min_years_experience=cat['min_years_experience'],
+                current_price=cat['price_including_iff']
+            )
+            row = ProposedPriceListRow(
+                initial=initial_data,
+                prefix='xls_row_%d' % len(rows)
+            )
+            rows.append(row)
+
+    return render(request, 'import_xls_step_2.html', {
+        'form': form,
+        'header_row': ProposedPriceListRow(),
+        'rows': rows
+    })
+
 def import_xls(request):
-    cats = None
-    colnames = None
-
-
     if request.method == 'POST':
-        form = XlsForm(request.POST, request.FILES)
-        if form.is_valid():
-            f = request.FILES['xls']
-            book = xlrd.open_workbook(file_contents=f.read())
-            cats = get_labor_categories(book)
-            if cats:
-                colnames = [
-                    name.replace('_', ' ') for name in cats[0]
-                ]
+        step = request.POST.get('step', '1')
+        if step == '1':
+            form = XlsForm(request.POST, request.FILES)
+            if form.is_valid():
+                f = request.FILES['xls']
+                book = xlrd.open_workbook(file_contents=f.read())
+                cats = get_labor_categories(book)
+                return import_xls_step_2(request, cats)
+        elif step == '2':
+            return import_xls_step_2(request)
     else:
         form = XlsForm()
 
     return render(request, 'import_xls.html', {
         'form': form,
-        'cats': cats,
-        'colnames': colnames
     })
