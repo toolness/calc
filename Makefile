@@ -1,7 +1,6 @@
 manage ?= python manage.py
 port ?= 8081
 default_options ?= --nologcapture --liveserver=localhost:$(port)
-lt_run ?= ./node_modules/.bin/lt-run
 options ?=
 
 test: static
@@ -19,16 +18,6 @@ test-frontend: static
 		-x --noinput \
 		$(default_options) \
 		$(options)
-
-test-sauce: static node_modules
-	$(lt_run) --port $(port) \
-		-- $(manage) test selenium_tests \
-		-x --noinput \
-		$(default_options) \
-		$(options)
-
-node_modules:
-	npm install
 
 static:
 	@# using --link allows us to work on the JS and CSS
