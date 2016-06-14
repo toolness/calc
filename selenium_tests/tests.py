@@ -80,7 +80,6 @@ class FunctionalTests(LiveServerTestCase):
         desired_cap['platform'] = _get_testing_config('platform', 'Windows 7')
         desired_cap['browserName'] = _get_testing_config('browser', 'internet explorer')
         desired_cap['version'] = _get_testing_config('browser_version', '9.0')
-        # this shows up in the left-hand column of Sauce tests
         desired_cap['name'] = 'CALC'
         other_caps = REMOTE_TESTING.get('capabilities')
         if other_caps:
@@ -220,7 +219,7 @@ class FunctionalTests(LiveServerTestCase):
     # Xed before me, some of them I am Xing out now because they are seemingly
     # suddenly failing and getting an empty result set back.
     # we're transitioning off the project, so I can't dig in now.
-    # I suspect there is a thread of fragility through these tests, and I have 
+    # I suspect there is a thread of fragility through these tests, and I have
     # not managed to get them working dependably in my time on the project. I think they
     # need looking at by someone very experienced in Selenium testing. 8/25/15 [TS]
     def xtest_form_submit_loading(self):
