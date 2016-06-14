@@ -20,25 +20,28 @@ class ContractDetailsForm(forms.Form):
     schedule = forms.CharField(
         label="Schedule"
     )
-    contractor_site = forms.CharField(
+    contractor_site = forms.ChoiceField(
         label="Worksite",
-        required=True
-        # TODO: Validate this is customer, contractor, or both.
+        required=True,
+        choices=[
+            ('customer', 'customer'),
+            ('contractor', 'contractor'),
+            ('both', 'both')
+        ]
     )
     contract_year = forms.IntegerField(
         label="Current contract year",
-        required=True
-        # TODO: Ensure this is between 1 and 5.
+        required=True,
+        min_value=1,
+        max_value=5
     )
-    contract_start = forms.CharField(
+    contract_start = forms.DateField(
         label="Contract start date",
         required=True
-        # TODO: Make this a date field.
     )
-    contract_end = forms.CharField(
+    contract_end = forms.DateField(
         label="Contract end date",
         required=True
-        # TODO: Make this a date field.
     )
 
 
