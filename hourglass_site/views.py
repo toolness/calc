@@ -2,6 +2,8 @@ from collections import OrderedDict
 from django.shortcuts import render
 import xlrd
 
+from .forms import XlsForm
+
 def get_labor_categories(book):
     sheet = book.sheet_by_name('(3)Labor Categories')
 
@@ -37,16 +39,22 @@ def import_xls(request):
     cats = None
     colnames = None
 
+
     if request.method == 'POST':
-        f = request.FILES['xls']
-        book = xlrd.open_workbook(file_contents=f.read())
-        cats = get_labor_categories(book)
-        if cats:
-            colnames = [
-                name.replace('_', ' ') for name in cats[0]
-            ]
+        form = XlsForm(request.POST, request.FILES)
+        if form.is_valid():
+            f = request.FILES['xls']
+            book = xlrd.open_workbook(file_contents=f.read())
+            cats = get_labor_categories(book)
+            if cats:
+                colnames = [
+                    name.replace('_', ' ') for name in cats[0]
+                ]
+    else:
+        form = XlsForm()
 
     return render(request, 'import_xls.html', {
+        'form': form,
         'cats': cats,
         'colnames': colnames
     })
