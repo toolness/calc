@@ -17,8 +17,8 @@ def get_labor_categories(book):
 
         cat = OrderedDict()
         cat['sin'] = sin
-        cat['service'] = sheet.cell_value(rownum, 1)
-        cat['min_education'] = sheet.cell_value(rownum, 2)
+        cat['labor_category'] = sheet.cell_value(rownum, 1)
+        cat['education_level'] = sheet.cell_value(rownum, 2)
         cat['min_years_experience'] = sheet.cell_value(rownum, 3)
         cat['commercial_list_price'] = sheet.cell_value(rownum, 4)
         cat['unit_of_issue'] = sheet.cell_value(rownum, 5)
@@ -44,7 +44,7 @@ def import_xls_step_2(request, cats=None):
             prefix='contract_details'
         )
         num_rows = int(request.POST['num_rows'])
-        is_valid = True
+        is_valid = form.is_valid()
         for i in range(num_rows):
             row = ProposedPriceListRow(
                 request.POST,
@@ -58,15 +58,30 @@ def import_xls_step_2(request, cats=None):
     else:
         form = ContractDetailsForm(prefix='contract_details')
         for cat in cats:
-            initial_data = dict(
-                sin=cat['sin'],
-                labor_category=cat['service'],
-                education_level=cat['min_education'],
-                min_years_experience=cat['min_years_experience'],
-                current_price=cat['price_including_iff']
-            )
+            initial_data = {}
+
+            def set_field(field, cat_field=None, type_coercer=str):
+                if cat_field is None:
+                    cat_field = field
+
+                key = 'xls_row_%d-%s' % (len(rows), field)
+                val = cat[cat_field]
+
+                try:
+                    val = type_coercer(val)
+                except ValueError:
+                    pass
+
+                initial_data[key] = val
+
+            set_field('sin')
+            set_field('labor_category')
+            set_field('education_level')
+            set_field('min_years_experience', type_coercer=int)
+            set_field('current_price', cat_field='price_including_iff')
+
             row = ProposedPriceListRow(
-                initial=initial_data,
+                data=initial_data,
                 prefix='xls_row_%d' % len(rows)
             )
             rows.append(row)
