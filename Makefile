@@ -1,22 +1,22 @@
 manage ?= python manage.py
+test_cmd ?= py.test
 port ?= 8081
-default_options ?= --nologcapture --liveserver=localhost:$(port)
+test_default_options ?= --liveserver=localhost:$(port)
 options ?=
 
 test: static
-	$(manage) test \
-		$(default_options) \
+	$(test_cmd) \
+		$(test_default_options) \
 		$(options)
 
 test-backend:
-	$(manage) test api contracts \
-		$(default_options) \
+	$(test_cmd) api contracts \
+		$(test_default_options) \
 		$(options)
 
 test-frontend: static
-	$(manage) test selenium_tests \
-		-x --noinput \
-		$(default_options) \
+	$(test_cmd) selenium_tests -x \
+		$(test_default_options) \
 		$(options)
 
 static:
