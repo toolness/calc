@@ -439,7 +439,7 @@ class ContractsTest(TestCase):
         resp = self.c.get(self.path, {'experience_range': '6,8'})
         self.assertEqual(resp.status_code, 200)
 
-        self.assertResultsEqual(resp.data['results'], 
+        self.assertResultsEqual(resp.data['results'],
          [{'idv_piid': 'ABC1231',
            'vendor_name': 'CompanyName1',
            'labor_category': 'Business Analyst II',
@@ -792,7 +792,7 @@ class ContractsTest(TestCase):
         get_contract_recipe().make(id=100)
         get_contract_recipe().make(id=101)
         get_contract_recipe().make(id=102)
-        
+
         resp = self.c.get(self.path, {'exclude': '102,100'})
         self.assertEqual(resp.status_code, 200)
         self.assertResultsEqual(resp.data['results'],
@@ -870,4 +870,3 @@ class ContractsTest(TestCase):
         """
         import pprint; pp = pprint.PrettyPrinter(indent=4)
         pp.pprint(thing)
-
