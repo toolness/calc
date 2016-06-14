@@ -1,4 +1,6 @@
 from django import forms
+from django.core.exceptions import ValidationError
+
 
 class XlsForm(forms.Form):
     xls = forms.FileField(
@@ -45,6 +47,13 @@ class ContractDetailsForm(forms.Form):
     )
 
 
+def validate_education_level(value):
+    values = ['Associates', 'Bachelors', 'Masters', 'Ph.D']
+    if value not in values:
+        raise ValidationError('This field must contain one of the '
+                              'following values: %s' % (', '.join(values)))
+
+
 class ProposedPriceListRow(forms.Form):
     sin = forms.CharField(
         label="SIN",
@@ -56,8 +65,8 @@ class ProposedPriceListRow(forms.Form):
     )
     education_level = forms.CharField(
         label="Minimum education / certification level",
-        required=True
-        # TODO: validate this is Associates, Bachelors, Masters, or Ph.D.
+        required=True,
+        validators=[validate_education_level]
     )
     min_years_experience = forms.IntegerField(
         label="Minimum years of experience",
