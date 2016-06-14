@@ -21,3 +21,5 @@ manifest-sandbox.yml
 /lib
 pip-selfcheck.json
 /src
+.ruby-version
+.sass-cache/
