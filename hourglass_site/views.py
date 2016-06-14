@@ -46,7 +46,7 @@ def import_xls(request):
                 name.replace('_', ' ') for name in cats[0]
             ]
 
-    return render(request, 'import_excel.html', {
+    return render(request, 'import_xls.html', {
         'cats': cats,
         'colnames': colnames
     })
