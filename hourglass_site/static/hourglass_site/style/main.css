@@ -368,3 +368,7 @@ ul.errorlist li {
   background: #044364;
   color: white;
 }
+
+form > table > tbody {
+  vertical-align: bottom;
+}
