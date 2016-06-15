@@ -142,8 +142,12 @@ def import_xls(request):
             form = XlsForm(request.POST, request.FILES)
             if form.is_valid():
                 f = request.FILES['xls']
-                book = xlrd.open_workbook(file_contents=f.read())
-                cats = get_labor_categories(book)
+                try:
+                    book = xlrd.open_workbook(file_contents=f.read())
+                    cats = get_labor_categories(book)
+                except:
+                    # TODO: Log error.
+                    cats = None
                 if cats:
                     return import_xls_step_2(request, cats)
                 messages.add_message(
