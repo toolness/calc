@@ -1,4 +1,5 @@
 @import url(tables.css);
+@import 'variables';
 
 .loading-indicator,
 .has-data {
@@ -13,12 +14,12 @@
   display: none;
   z-index: 9999;
   overflow: hidden;
-  background: #fff;
+  background: $white;
 
   max-height: 29.4rem;
   overflow: hidden;
   overflow-y: auto;
-  border: 1px solid #ccc;
+  border: 1px solid $light-gray;
 }
 
 .autocomplete-suggestion {
@@ -33,8 +34,8 @@
 }
 
 .autocomplete-suggestion.selected {
-  color: #fff;
-  background: #1EAEDB;
+  color: $white;
+  background: $light-blue;
 }
 
 .loading .has-data {
@@ -60,7 +61,7 @@
   }
 
 .filter_active  {
-  border: 2px solid #ffd855 !important;
+  border: 2px solid $yellow !important;
 }
 
 .sr-only {
@@ -70,11 +71,11 @@
 input[type="text"]:focus,
 input[type="number"]:focus,
 select:focus {
-  box-shadow: 0 0 0 1px #33c3f0, 0 0 10px #33C3F0;
+  box-shadow: 0 0 0 1px $light-blue, 0 0 10px $light-blue;
 }
 
 .filter_focus {
-  border: 2px solid #33C3F0 !important;
+  border: 2px solid $light-blue !important;
 }
 
 main h5 {
@@ -92,7 +93,7 @@ input.price {
 }
 
 span.dollars {
-  color: #6E6E6E;
+  color: $dark-gray;
 }
 
 .filter-more-info {
@@ -109,7 +110,7 @@ span.dollars {
 }
 
 .filter-block {
-  background: #F3F3F3;
+  background: $off-white;
   border-radius: 4px;
   margin-bottom: 2em;
   padding: 1rem 2rem;
@@ -150,8 +151,8 @@ span.dollars {
 }
 
 .dropdown dt a {
-  background-color: #fff;
-  border: 1px solid #d1d1d1;
+  background-color: $white;
+  border: 1px solid $light-gray;
   border-radius: 4px;
   box-shadow: none;
   box-sizing: border-box;
@@ -163,8 +164,8 @@ span.dollars {
 }
 
 .dropdown dt a:focus {
-  border: 1px solid #33c3f0 !important;
-  box-shadow: 0 0 0 1px #33c3f0, 0 0 10px #33C3F0;
+  border: 1px solid $light-blue !important;
+  box-shadow: 0 0 0 1px $light-blue, 0 0 10px $light-blue;
 }
 
 .multiSelect label:hover {
@@ -197,7 +198,7 @@ input[type="checkbox"]:checked ~ label {
 }
 
 .dropdown dd ul {
-  background-color: #fff;
+  background-color: $white;
   border:0;
   color:#000;
   display:none;
@@ -223,7 +224,7 @@ input[type="checkbox"]:checked ~ label {
 }
 
 .dropdown dd ul li a:hover {
-  background-color:#fff;
+  background-color:$white;
 }
 
 .dropdown li {
@@ -243,8 +244,8 @@ input[type="checkbox"]:checked ~ label {
 }
 
 .price-block {
-  background: #f9f9f9;
-  border: 1px solid #e1e1e1;
+  background: $off-white;
+  border: 1px solid $light-gray;
   border-radius: 4px;
 }
 
@@ -255,8 +256,8 @@ input[type="checkbox"]:checked ~ label {
 }
 
 .avg-price-block {
-  border-left: 1px solid #e1e1e1;
-  border-right: 1px solid #e1e1e1;
+  border-left: 1px solid $light-gray;
+  border-right: 1px solid $light-gray;
 }
 
 .avg-price-block,
@@ -269,8 +270,8 @@ input[type="checkbox"]:checked ~ label {
 }
 
 .proposed-price-block {
-  background: #f9f9f9;
-  border: 1px solid #e1e1e1;
+  background: $off-white;
+  border: 1px solid $light-gray;
   border-radius: 4px;
   padding: 1.1em 2em .5em 2em;
   margin: 0 20px 0 0;
@@ -283,7 +284,7 @@ input[type="checkbox"]:checked ~ label {
 
 #avg-price-highlight,
 .sd-highlight, .proposed-price-highlight {
-  color: #17779f;
+  color: $blue;
   font-weight: 400;
 }
 
@@ -310,8 +311,8 @@ input[type="checkbox"]:checked ~ label {
 
 
 .help-text {
-  clear: both;  
-  color: #757575;
+  clear: both;
+  color: $dark-gray;
   margin-bottom: 1em;
 }
 
@@ -395,27 +396,27 @@ th.column-education_level {
 td.column-idv_piid {
   white-space: nowrap;
 }
-
+/* I think this may not be used */
 td.column-min_years_experience i {
   font-style: normal;
   font-size: .75em;
-  color: #999;
+  color: $dark-gray;
 }
 
 td.column-min_years_experience .years {
   font-style: italic;
-  color: #757575;
+  color: $dark-gray;
 }
 
 .document-icon {
-  fill: #17779f;
+  fill: $blue;
   height: 12px;
   margin-left: 3px;
   width: 12px;
 }
 
 .column-idv_piid:hover .document-icon {
-  fill: #0c4c6f;
+  fill: $dark-blue;
 }
 
 a.focus-input {
@@ -437,21 +438,21 @@ a.focus-input {
 }
 
 .contract-year-block {
-  background-color: #fff;
-  border: 1px solid #D1D1D1;
+  background-color: $white;
+  border: 1px solid $light-gray;
   border-radius: 4px;
   display: inline-block;
 }
 
 .contract-year-item {
-  border-right: 1px solid #D1D1D1;
+  border-right: 1px solid $light-gray;
   margin-bottom: 0;
   padding: 1px 8px;
 }
 
 .contract-year-selected {
-  background-color: #17779f;
-  color: #fff;
+  background-color: $blue;
+  color: $white;
 }
 
 .contract-year-item:last-of-type {
@@ -459,7 +460,7 @@ a.focus-input {
 }
 
 #reset-button {
-  background: #fff;
+  background: $white;
 }
 
 #export-data {
@@ -467,7 +468,7 @@ a.focus-input {
 }
 
 #description {
-  color: #333;
+  color: $off-black;
   font-weight: normal;
   font-size: 2rem;
 }
@@ -492,15 +493,15 @@ a.focus-input {
   padding: 0 1rem;
 }
 
-  #query-types label {
-    display: inline-block;
-    font-weight: normal;
-    margin: 0 1rem 0 0;
-  }
+#query-types label {
+  display: inline-block;
+  font-weight: normal;
+  margin: 0 1rem 0 0;
+}
 
-  #query-types label input {
-    margin-right: .5rem;
-  }
+#query-types label input {
+  margin-right: .5rem;
+}
 
 #price-histogram {
   max-height: 300px;
@@ -539,7 +540,7 @@ svg.graph {
 
 .xtooltip:hover:before {
   border: solid;
-  border-color: #333 transparent;
+  border-color: $off-black transparent;
   border-width: 6px 6px 0 6px;
   bottom: 20px;
   content: "";
@@ -552,7 +553,7 @@ svg.graph {
   background: none repeat scroll 0 0 rgba(0, 0, 0, 0.8);
   border-radius: 5px;
   bottom: 26px;
-  color: #fff;
+  color: $white;
   content: attr(aria-label);
   left: 0;
   padding: 3px 15px;
@@ -592,13 +593,13 @@ label.radio input[type="radio"] + span {
 }
 
 label.checkbox :checked + span {
-  background-color: #0071bc;
-  box-shadow: 0 0 0 0 #ffffff;
+  background-color: $blue;
+  box-shadow: 0 0 0 0 $white;
   position: relative;
 }
 
 label.checkbox :checked + span:after {
-  color: #ffffff;
+  color: $white;
   font-family: "FontAwesome";
   content: x;
   position: relative;
@@ -607,8 +608,8 @@ label.checkbox :checked + span:after {
 }
 
 label.radio :checked + span {
-  background-color: #17779f;
-  color: #fff;
+  background-color: $blue;
+  color: $white;
   position: relative;
 }
 
@@ -635,7 +636,7 @@ label.radio :checked + span {
 
 input[type="checkbox"]:focus + .checkbox-focus,
 input[type="radio"]:focus + .checkbox-focus {
-  -webkit-box-shadow: 0px 0px 5px 2px rgba(51,195,240,1);
+  -webkit-box-shadow: 0px 0px 5px 2px argba(51,195,240,1);
   -moz-box-shadow: 0px 0px 5px 2px rgba(51,195,240,1);
   box-shadow: 0px 0px 5px 2px rgba(51,195,240,1);
 }
@@ -646,18 +647,18 @@ input[type="radio"]:focus + .checkbox-focus {
 }
 
 .checkbox-focus {
-  background-color: #fff;
+  background-color: $white;
   padding: 1px 8px;
 }
 
 .contract-list-item {
   margin-bottom: 0;
-  border-right: 1px solid #D1D1D1;
+  border-right: 1px solid $light-gray;
 }
 
 .contract-list-item:last-of-type {
   border: none;
-  margin-right: -1px;  
+  margin-right: -1px;
 }
 
 .contract-list-item:not(:first-child) {
@@ -686,7 +687,7 @@ input[type="radio"]:focus + .checkbox-focus {
 .tooltips span {
   position: absolute;
   width:140px;
-  color: #FFFFFF;
+  color: $white;
   background: #000000;
   height: 30px;
   line-height: 30px;

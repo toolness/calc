@@ -244,6 +244,7 @@ input[type="submit"] {
   vertical-align: middle;
   white-space: nowrap; }
 
+/*same as rgba(51,195,240,1);*/
 .container {
   max-width: 68em;
   margin-left: auto;

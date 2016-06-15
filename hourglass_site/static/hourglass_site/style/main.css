@@ -1,3 +1,4 @@
+/*same as rgba(51,195,240,1);*/
 @import url(skeleton/normalize.css);
 @import url(skeleton/skeleton.css);
 body {
@@ -79,7 +80,7 @@ input.button-primary[type="button"]:focus {
 }
 */
 #banner {
-  color: #d9d9d9;
+  color: #e1e1e1;
   font-size: 85%;
   background: #323A45;
   padding: .2rem 0;
@@ -105,7 +106,7 @@ input.button-primary[type="button"]:focus {
     float: right; } }
 header {
   padding-top: 2rem;
-  color: #fff;
+  color: #ffffff;
   background: #044364;
   background-image: url(../images/background-header.png);
   background-repeat: repeat;
@@ -116,7 +117,7 @@ header {
   width: 140px; }
 
 .description-main {
-  color: #fff;
+  color: #ffffff;
   font-size: 2.2em;
   font-weight: 400;
   margin-bottom: .3em;
@@ -179,7 +180,7 @@ nav ul:after {
 nav ul li a {
   background: none repeat scroll 0 0 rgba(255, 255, 255, 0.15);
   border-radius: 4px;
-  color: #fff;
+  color: #ffffff;
   display: inline-block;
   font-size: 0.9em;
   font-weight: bold;
@@ -188,7 +189,7 @@ nav ul li a {
 
 nav ul li a:hover {
   background: none repeat scroll 0 0 rgba(255, 255, 255, 0.25);
-  color: #fff; }
+  color: #ffffff; }
 
 nav ul li:first-child {
   margin-left: -1.5rem; }
@@ -205,8 +206,8 @@ main h4 {
   margin-bottom: 0; }
 
 footer {
-  color: #fff;
-  background: #444749;
+  color: #ffffff;
+  background: #333333;
   padding: 2rem 0;
   line-height: 1.4;
   font-weight: 300;
@@ -216,10 +217,10 @@ footer {
 
 footer a,
 footer a:hover {
-  color: #fff; }
+  color: #ffffff; }
 
 footer h3 {
-  color: #ff0;
+  color: #ffd855;
   font-size: 3rem;
   letter-spacing: 0;
   font-weight: 600;
@@ -227,23 +228,23 @@ footer h3 {
 
 #footer_nav {
   padding-top: 15px;
-  color: #FFF;
+  color: #ffffff;
   list-style-type: none;
   float: left; }
 
 #footer_nav a, #site-status a {
-  color: #FFF;
+  color: #ffffff;
   list-style-type: none; }
 
 #footer_nav ul {
-  color: #FFF;
+  color: #ffffff;
   list-style-type: none;
   font-weight: 300;
   padding-left: 0; }
 
 .email_us {
   margin-top: 15px;
-  color: #CCCCCC;
+  color: #e1e1e1;
   font-size: 1.5em; }
 
   /*
@@ -258,7 +259,7 @@ footer h3 {
 /*
  * this doesn't work because the column heights vary
 footer .columns + .columns {
-  border-left: 1px solid #808183;
+  border-left: 1px solid $dark-gray;
 }
 */
 #logos {
@@ -273,18 +274,18 @@ footer .columns + .columns {
   height: 85px; }
 
 ::-webkit-input-placeholder {
-  color: #757575; }
+  color: #6E6E6E; }
 
 :-moz-placeholder {
   /* Firefox 18- */
-  color: #757575; }
+  color: #6E6E6E; }
 
 ::-moz-placeholder {
   /* Firefox 19+ */
-  color: #757575; }
+  color: #6E6E6E; }
 
 :-ms-input-placeholder {
-  color: #757575; }
+  color: #6E6E6E; }
 
 fieldset {
   margin: 0; }

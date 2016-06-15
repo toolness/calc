@@ -1,4 +1,5 @@
 @charset 'utf-8';
+@import 'variables';
 @import url(skeleton/normalize.css);
 @import url(skeleton/skeleton.css);
 
@@ -13,34 +14,34 @@ body {
 }
 
 a {
-  color: #17779f;
+  color: $blue;
 }
 
 a:hover {
-  color: #0c4c6f;
+  color: $dark-blue;
 }
 
-.button.button-primary, 
-button.button-primary, 
-input.button-primary[type="submit"], 
-input.button-primary[type="reset"], 
+.button.button-primary,
+button.button-primary,
+input.button-primary[type="submit"],
+input.button-primary[type="reset"],
 input.button-primary[type="button"] {
-  background-color: #17779f;
-  border-color: #17779f;
+  background-color: $blue;
+  border-color: $blue;
 }
 
-.button.button-primary:hover, 
-button.button-primary:hover, 
-input.button-primary[type="submit"]:hover, 
-input.button-primary[type="reset"]:hover, 
-input.button-primary[type="button"]:hover, 
-.button.button-primary:focus, 
-button.button-primary:focus, 
-input.button-primary[type="submit"]:focus, 
-input.button-primary[type="reset"]:focus, 
+.button.button-primary:hover,
+button.button-primary:hover,
+input.button-primary[type="submit"]:hover,
+input.button-primary[type="reset"]:hover,
+input.button-primary[type="button"]:hover,
+.button.button-primary:focus,
+button.button-primary:focus,
+input.button-primary[type="submit"]:focus,
+input.button-primary[type="reset"]:focus,
 input.button-primary[type="button"]:focus {
-  background-color: #0c4c6f;
-  border-color: #0c4c6f;
+  background-color: $dark-blue;
+  border-color: $dark-blue;
 }
 .container {
   width: 100%;
@@ -93,7 +94,7 @@ input.button-primary[type="button"]:focus {
 */
 
 #banner {
-  color: #d9d9d9;
+  color: $light-gray;
   font-size: 85%;
   background: #323A45;
   padding: .2rem 0;
@@ -127,7 +128,7 @@ input.button-primary[type="button"]:focus {
 
 header {
   padding-top: 2rem;
-  color: #fff;
+  color: $white;
   background: #044364;
   background-image: url(../images/background-header.png);
   background-repeat: repeat;
@@ -138,7 +139,7 @@ header {
   width:140px;
 }
 .description-main {
-  color: #fff;
+  color: $white;
   font-size: 2.2em;
   font-weight: 400;
   margin-bottom: .3em;
@@ -212,7 +213,7 @@ nav ul {
   nav ul li a {
     background: none repeat scroll 0 0 rgba(255, 255, 255, 0.15);
     border-radius: 4px;
-    color: #fff;
+    color: $white;
     display: inline-block;
     font-size: 0.9em;
     font-weight: bold;
@@ -221,8 +222,8 @@ nav ul {
   }
 
   nav ul li a:hover {
-    background: none repeat scroll 0 0 rgba(255, 255, 255, 0.25);    
-    color: #fff;
+    background: none repeat scroll 0 0 rgba(255, 255, 255, 0.25);
+    color: $white;
   }
 
   nav ul li:first-child {
@@ -243,8 +244,8 @@ main h4 {
 }
 
 footer {
-  color: #fff;
-  background: #444749;
+  color: $white;
+  background: $off-black;
   padding: 2rem 0;
   line-height: 1.4;
   font-weight: 300;
@@ -255,11 +256,11 @@ footer {
 
   footer a,
   footer a:hover {
-    color: #fff;
+    color: $white;
   }
 
   footer h3 {
-    color: #ff0;
+    color: $yellow;
     font-size: 3rem;
     letter-spacing: 0;
     font-weight: 600;
@@ -267,23 +268,23 @@ footer {
   }
 #footer_nav {
     padding-top: 15px;
-    color: #FFF;
+    color: $white;
     list-style-type: none;
     float: left;
 }
 #footer_nav a, #site-status a {
-    color: #FFF;
-    list-style-type: none;   
+    color: $white;
+    list-style-type: none;
 }
 #footer_nav ul {
-    color: #FFF;
+    color: $white;
     list-style-type: none;
     font-weight: 300;
     padding-left: 0;
 }
 .email_us {
     margin-top: 15px;
-    color: #CCCCCC;
+    color: $light-gray;
     font-size: 1.5em;
  }
   /*
@@ -299,7 +300,7 @@ footer {
   /*
    * this doesn't work because the column heights vary
   footer .columns + .columns {
-    border-left: 1px solid #808183;
+    border-left: 1px solid $dark-gray;
   }
   */
 
@@ -318,19 +319,19 @@ footer {
 }
 
 ::-webkit-input-placeholder {
-   color: #757575;
+   color: $dark-gray;
 }
 
 :-moz-placeholder { /* Firefox 18- */
-   color: #757575;  
+   color: $dark-gray;
 }
 
 ::-moz-placeholder {  /* Firefox 19+ */
-   color: #757575;  
+   color: $dark-gray;
 }
 
-:-ms-input-placeholder {  
-   color: #757575;  
+:-ms-input-placeholder {
+   color: $dark-gray;
 }
 
 fieldset {

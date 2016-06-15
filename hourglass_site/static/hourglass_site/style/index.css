@@ -1,5 +1,6 @@
 @charset "UTF-8";
 @import url(tables.css);
+/*same as rgba(51,195,240,1);*/
 .loading-indicator,
 .has-data {
   -webkit-transition: opacity .5s, height .5s;
@@ -12,11 +13,11 @@
   display: none;
   z-index: 9999;
   overflow: hidden;
-  background: #fff;
+  background: #ffffff;
   max-height: 29.4rem;
   overflow: hidden;
   overflow-y: auto;
-  border: 1px solid #ccc; }
+  border: 1px solid #e1e1e1; }
 
 .autocomplete-suggestion {
   position: relative;
@@ -28,8 +29,8 @@
   text-align: right; }
 
 .autocomplete-suggestion.selected {
-  color: #fff;
-  background: #1EAEDB; }
+  color: #ffffff;
+  background: #33C3F0; }
 
 .loading .has-data {
   opacity: .2; }
@@ -58,7 +59,7 @@
 input[type="text"]:focus,
 input[type="number"]:focus,
 select:focus {
-  box-shadow: 0 0 0 1px #33c3f0, 0 0 10px #33C3F0; }
+  box-shadow: 0 0 0 1px #33C3F0, 0 0 10px #33C3F0; }
 
 .filter_focus {
   border: 2px solid #33C3F0 !important; }
@@ -88,7 +89,7 @@ span.dollars {
   padding-bottom: .3em; }
 
 .filter-block {
-  background: #F3F3F3;
+  background: #f9f9f9;
   border-radius: 4px;
   margin-bottom: 2em;
   padding: 1rem 2rem; }
@@ -119,8 +120,8 @@ span.dollars {
   font-size: 14px; }
 
 .dropdown dt a {
-  background-color: #fff;
-  border: 1px solid #d1d1d1;
+  background-color: #ffffff;
+  border: 1px solid #e1e1e1;
   border-radius: 4px;
   box-shadow: none;
   box-sizing: border-box;
@@ -131,8 +132,8 @@ span.dollars {
   padding: 6px 10px; }
 
 .dropdown dt a:focus {
-  border: 1px solid #33c3f0 !important;
-  box-shadow: 0 0 0 1px #33c3f0, 0 0 10px #33C3F0; }
+  border: 1px solid #33C3F0 !important;
+  box-shadow: 0 0 0 1px #33C3F0, 0 0 10px #33C3F0; }
 
 .multiSelect label:hover {
   cursor: pointer; }
@@ -159,7 +160,7 @@ input[type="checkbox"]:checked ~ label {
   content: ""; }
 
 .dropdown dd ul {
-  background-color: #fff;
+  background-color: #ffffff;
   border: 0;
   color: #000;
   display: none;
@@ -182,7 +183,7 @@ input[type="checkbox"]:checked ~ label {
   margin-bottom: 0; }
 
 .dropdown dd ul li a:hover {
-  background-color: #fff; }
+  background-color: #ffffff; }
 
 .dropdown li {
   margin-bottom: 0; }
@@ -255,7 +256,7 @@ input[type="checkbox"]:checked ~ label {
     margin: 10px 0 0 0; } }
 .help-text {
   clear: both;
-  color: #757575;
+  color: #6E6E6E;
   margin-bottom: 1em; }
 
 .filter select {
@@ -343,14 +344,15 @@ th.column-education_level {
 td.column-idv_piid {
   white-space: nowrap; }
 
+/* I think this may not be used */
 td.column-min_years_experience i {
   font-style: normal;
   font-size: .75em;
-  color: #999; }
+  color: #6E6E6E; }
 
 td.column-min_years_experience .years {
   font-style: italic;
-  color: #757575; }
+  color: #6E6E6E; }
 
 .document-icon {
   fill: #17779f;
@@ -376,31 +378,31 @@ a.focus-input {
   margin-right: 10px; }
 
 .contract-year-block {
-  background-color: #fff;
-  border: 1px solid #D1D1D1;
+  background-color: #ffffff;
+  border: 1px solid #e1e1e1;
   border-radius: 4px;
   display: inline-block; }
 
 .contract-year-item {
-  border-right: 1px solid #D1D1D1;
+  border-right: 1px solid #e1e1e1;
   margin-bottom: 0;
   padding: 1px 8px; }
 
 .contract-year-selected {
   background-color: #17779f;
-  color: #fff; }
+  color: #ffffff; }
 
 .contract-year-item:last-of-type {
   border: none; }
 
 #reset-button {
-  background: #fff; }
+  background: #ffffff; }
 
 #export-data {
   margin: 0; }
 
 #description {
-  color: #333;
+  color: #333333;
   font-weight: normal;
   font-size: 2rem; }
 
@@ -460,7 +462,7 @@ svg.graph {
 
 .xtooltip:hover:before {
   border: solid;
-  border-color: #333 transparent;
+  border-color: #333333 transparent;
   border-width: 6px 6px 0 6px;
   bottom: 20px;
   content: "";
@@ -472,7 +474,7 @@ svg.graph {
   background: none repeat scroll 0 0 rgba(0, 0, 0, 0.8);
   border-radius: 5px;
   bottom: 26px;
-  color: #fff;
+  color: #ffffff;
   content: attr(aria-label);
   left: 0;
   padding: 3px 15px;
@@ -507,7 +509,7 @@ label.radio input[type="radio"] + span {
   margin-bottom: 0; }
 
 label.checkbox :checked + span {
-  background-color: #0071bc;
+  background-color: #17779f;
   box-shadow: 0 0 0 0 #ffffff;
   position: relative; }
 
@@ -521,7 +523,7 @@ label.checkbox :checked + span:after {
 
 label.radio :checked + span {
   background-color: #17779f;
-  color: #fff;
+  color: #ffffff;
   position: relative; }
 
 .contract-list-item input[type="checkbox"],
@@ -546,7 +548,7 @@ label.radio :checked + span {
 
 input[type="checkbox"]:focus + .checkbox-focus,
 input[type="radio"]:focus + .checkbox-focus {
-  -webkit-box-shadow: 0px 0px 5px 2px #33c3f0;
+  -webkit-box-shadow: 0px 0px 5px 2px argba(51, 195, 240, 1);
   -moz-box-shadow: 0px 0px 5px 2px #33c3f0;
   box-shadow: 0px 0px 5px 2px #33c3f0; }
 
@@ -555,12 +557,12 @@ input[type="radio"]:focus + .checkbox-focus {
   cursor: pointer; }
 
 .checkbox-focus {
-  background-color: #fff;
+  background-color: #ffffff;
   padding: 1px 8px; }
 
 .contract-list-item {
   margin-bottom: 0;
-  border-right: 1px solid #D1D1D1; }
+  border-right: 1px solid #e1e1e1; }
 
 .contract-list-item:last-of-type {
   border: none;
@@ -587,7 +589,7 @@ input[type="radio"]:focus + .checkbox-focus {
 .tooltips span {
   position: absolute;
   width: 140px;
-  color: #FFFFFF;
+  color: #ffffff;
   background: #000000;
   height: 30px;
   line-height: 30px;
@@ -645,129 +647,5 @@ th:hover.tooltips span {
  */
 .ie #results-table thead th a {
   top: -20px; }
-
-/* Range Slider styles */
-/* Functional styling;
- * These styles are required for noUiSlider to function.
- * You don't need to change these rules to apply your design.
- */
-.noUi-target,
-.noUi-target * {
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -ms-touch-action: none;
-  -ms-user-select: none;
-  -moz-user-select: none;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box; }
-
-.noUi-target {
-  position: relative;
-  direction: ltr; }
-
-.noUi-base {
-  width: 100%;
-  height: 100%;
-  position: relative; }
-
-.noUi-origin {
-  position: absolute;
-  right: 0;
-  top: 0;
-  left: 0;
-  bottom: 0; }
-
-.noUi-handle {
-  position: relative;
-  z-index: 1; }
-
-.noUi-stacking .noUi-handle {
-  /* This class is applied to the lower origin when
-     its values is > 50%. */
-  z-index: 10; }
-
-.noUi-stacking + .noUi-origin {
-  /* Fix stacking order in IE7, which incorrectly
-     creates a new context for the origins. */
-  *z-index: -1; }
-
-.noUi-state-tap .noUi-origin {
-  -webkit-transition: left 0.3s, top 0.3s;
-  transition: left 0.3s, top 0.3s; }
-
-.noUi-state-drag * {
-  cursor: inherit !important; }
-
-/* Painting and performance;
- * Browsers can paint handles in their own layer.
- */
-.noUi-base {
-  -webkit-transform: translate3d(0, 0, 0);
-  transform: translate3d(0, 0, 0); }
-
-/* Slider size and handle placement;
- */
-.noUi-horizontal {
-  height: 10px; }
-
-.noUi-horizontal .noUi-handle {
-  /*width: 34px;*/
-  /*height: 28px;*/
-  width: 16px;
-  height: 16px;
-  left: -4px;
-  top: -4px; }
-
-/* Styling;
- */
-.noUi-background {
-  background: #FAFAFA;
-  box-shadow: inset 0 1px 1px #f0f0f0; }
-
-.noUi-connect {
-  /*background: #3FB8AF;*/
-  background: #17779f;
-  cursor: pointer;
-  box-shadow: inset 0 0 3px rgba(51, 51, 51, 0.45);
-  -webkit-transition: background 450ms;
-  transition: background 450ms; }
-
-.noUi-origin {
-  border-radius: 2px; }
-
-.noUi-target {
-  border-radius: 4px;
-  border: 1px solid #D3D3D3;
-  box-shadow: inset 0 1px 1px #F0F0F0, 0 3px 6px -5px #BBB; }
-
-.noUi-target.noUi-connect {
-  box-shadow: inset 0 0 3px rgba(51, 51, 51, 0.45), 0 3px 6px -5px #BBB; }
-
-/* Handles and cursors;
- */
-.noUi-dragable {
-  cursor: w-resize; }
-
-.noUi-vertical .noUi-dragable {
-  cursor: n-resize; }
-
-.noUi-handle {
-  border: 1px solid #999;
-  border-radius: 10px;
-  background: #FFF;
-  cursor: pointer;
-  box-shadow: inset 0 0 1px #FFF, inset 0 1px 7px #EBEBEB, 0 3px 6px -3px #BBB; }
-
-.noUi-active {
-  box-shadow: inset 0 0 1px #FFF, inset 0 1px 7px #DDD, 0 3px 6px -3px #BBB; }
-
-/* Disabled state;
- */
-[disabled].noUi-connect,
-[disabled] .noUi-connect {
-  background: #B8B8B8; }
-
-[disabled] .noUi-handle {
-  cursor: not-allowed; }
 
 /*# sourceMappingURL=index.css.map */
