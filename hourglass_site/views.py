@@ -2,6 +2,7 @@ from collections import OrderedDict
 from django.shortcuts import render
 import xlrd
 
+from contracts.models import Contract
 from .forms import XlsForm, ProposedPriceListRow, ContractDetailsForm
 
 def get_labor_categories(book):
@@ -35,6 +36,39 @@ def get_labor_categories(book):
 
     return cats
 
+def finish_import_xls(request, form, rows):
+    for row in rows:
+        contract = Contract(
+            idv_piid=form.cleaned_data['idv_piid'],
+            contract_start=form.cleaned_data['contract_start'],
+            contract_end=form.cleaned_data['contract_end'],
+            contract_year=form.cleaned_data['contract_year'],
+            vendor_name=form.cleaned_data['vendor_name'],
+            labor_category=row.cleaned_data['labor_category'],
+            education_level=row.contract_education_level(),
+            min_years_experience=row.cleaned_data['min_years_experience'],
+            hourly_rate_year1=row.hourly_rate_year1(),
+            hourly_rate_year2=None,
+            hourly_rate_year3=None,
+            hourly_rate_year4=None,
+            hourly_rate_year5=None,
+            current_price=row.current_price(),
+            next_year_price=None,
+            second_year_price=None,
+            contractor_site=form.cleaned_data['contractor_site'],
+            schedule=form.cleaned_data['schedule'],
+            business_size=form.cleaned_data['business_size'],
+            sin=row.cleaned_data['sin']
+        )
+
+        contract.full_clean(exclude=['piid'])
+
+        contract.save()
+
+    # TODO: Redirect to homepage, show a message indicating data was added.
+    from django.http import HttpResponse
+    return HttpResponse('Thanks!')
+
 def import_xls_step_2(request, xls_cats=None):
     rows = []
 
@@ -54,18 +88,18 @@ def import_xls_step_2(request, xls_cats=None):
             if not row.is_valid():
                 is_valid = False
         if is_valid:
-            raise NotImplementedError("TODO: Commit data to db")
+            return finish_import_xls(request, form, rows)
+        else:
+            # TODO: Show a message indicating submission wasn't valid.
+            pass
     else:
         form = ContractDetailsForm(prefix='contract_details')
         for cat in xls_cats:
             initial_data = {}
 
-            def set_field(field, cat_field=None, type_coercer=str):
-                if cat_field is None:
-                    cat_field = field
-
+            def set_field(field, type_coercer=str):
                 key = 'xls_row_%d-%s' % (len(rows), field)
-                val = cat[cat_field]
+                val = cat[field]
 
                 try:
                     val = type_coercer(val)
@@ -78,7 +112,7 @@ def import_xls_step_2(request, xls_cats=None):
             set_field('labor_category')
             set_field('education_level')
             set_field('min_years_experience', type_coercer=int)
-            set_field('current_price', cat_field='price_including_iff')
+            set_field('price_including_iff')
 
             row = ProposedPriceListRow(
                 data=initial_data,

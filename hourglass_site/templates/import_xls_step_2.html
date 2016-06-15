@@ -30,7 +30,7 @@
         <td>{{ header_row.labor_category.label }}</td>
         <td>{{ header_row.education_level.label }}</td>
         <td>{{ header_row.min_years_experience.label }}</td>
-        <td>{{ header_row.current_price.label }}</td>
+        <td>{{ header_row.price_including_iff.label }}</td>
       </tr>
     </thead>
     <tbody>
@@ -53,8 +53,8 @@
           {{ row.min_years_experience }}
         </td>
         <td>
-          {{ row.current_price.errors }}
-          {{ row.current_price }}
+          {{ row.price_including_iff.errors }}
+          {{ row.price_including_iff }}
         </td>
       </tr>
       {% endfor %}

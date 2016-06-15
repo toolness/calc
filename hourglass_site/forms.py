@@ -1,6 +1,8 @@
 from django import forms
 from django.core.exceptions import ValidationError
 
+from contracts.management.commands.load_data import FEDERAL_MIN_CONTRACT_RATE
+
 
 class XlsForm(forms.Form):
     xls = forms.FileField(
@@ -52,8 +54,16 @@ class ContractDetailsForm(forms.Form):
     )
 
 
+# TODO: Ideally this should pull from contracts.models.EDUCATION_CHOICES.
+EDU_LEVELS = {
+    'Associates': 'AA',
+    'Bachelors': 'BA',
+    'Masters': 'MA',
+    'Ph.D': 'PHD'
+}
+
 def validate_education_level(value):
-    values = ['Associates', 'Bachelors', 'Masters', 'Ph.D']
+    values = EDU_LEVELS.keys()
     if value not in values:
         raise ValidationError('This field must contain one of the '
                               'following values: %s' % (', '.join(values)))
@@ -77,7 +87,17 @@ class ProposedPriceListRow(forms.Form):
         label="Minimum years of experience",
         required=True
     )
-    current_price = forms.DecimalField(
+    price_including_iff = forms.DecimalField(
         label="Price offered to GSA (including IFF)",
         required=True
     )
+
+    def contract_education_level(self):
+        return EDU_LEVELS[self.cleaned_data['education_level']]
+
+    def hourly_rate_year1(self):
+        return self.cleaned_data['price_including_iff']
+
+    def current_price(self):
+        price = self.hourly_rate_year1()
+        return price if price >= FEDERAL_MIN_CONTRACT_RATE else None
