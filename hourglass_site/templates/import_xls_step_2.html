@@ -8,15 +8,20 @@
 <div class="container">
   <div class="row">
     <div class="six-columns">
+<h2>IT Schedule 70 Data Capture</h2>
 
-<h2>XLS Import Demo - Step 2</h2>
+<h3>Step 2: Valdiate Proposed Price List</h3>
+
+<p>
+  Thanks for uploading your price list! Below is the data gleaned from the
+  <strong>(3) Labor Categories</strong> sheet. Please review it and make any
+  necessary corrections.
+</p>
 
 <form method="post">
   {% csrf_token %}
   <input type="hidden" name="step" value="2">
   <input type="hidden" name="num_rows" value="{{ rows | length }}">
-
-  {{ form.as_p }}
 
   <table>
     <thead>
@@ -55,6 +60,15 @@
       {% endfor %}
     </tbody>
   </table>
+
+  <h3>Step 3: Provide Contract Details</h3>
+
+  <p>
+    You're almost done! Now all we need are some details about the contract your
+    price list data is related to.
+  </p>
+
+  {{ form.as_p }}
 
   <button type="submit">Submit</button>
 </form>
