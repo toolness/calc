@@ -348,3 +348,8 @@ ul.errorlist li {
   color: white;
   padding: 4px;
 }
+
+.helptext {
+  display: block;
+  color: gray;
+}

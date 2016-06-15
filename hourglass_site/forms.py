@@ -11,7 +11,8 @@ class XlsForm(forms.Form):
 class ContractDetailsForm(forms.Form):
     idv_piid = forms.CharField(
         label="Contract number",
-        required=True
+        required=True,
+        help_text="This must be the full contract number, e.g. GS-35F-XXXX."
     )
     vendor_name = forms.CharField(
         label="Vendor name"
@@ -36,15 +37,18 @@ class ContractDetailsForm(forms.Form):
         label="Current contract year",
         required=True,
         min_value=1,
-        max_value=5
+        max_value=5,
+        help_text="This must be a number between 1 and 5."
     )
     contract_start = forms.DateField(
         label="Contract start date",
-        required=True
+        required=True,
+        help_text="Please specify as MM/DD/YY."
     )
     contract_end = forms.DateField(
         label="Contract end date",
-        required=True
+        required=True,
+        help_text="Please specify as MM/DD/YY."
     )
 
 
