@@ -20,7 +20,8 @@ class ContractDetailsForm(forms.Form):
         label="Business size"
     )
     schedule = forms.CharField(
-        label="Schedule"
+        label="Schedule",
+        initial="IT Schedule 70"
     )
     contractor_site = forms.ChoiceField(
         label="Worksite",
