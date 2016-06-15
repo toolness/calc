@@ -35,10 +35,10 @@ def get_labor_categories(book):
 
     return cats
 
-def import_xls_step_2(request, cats=None):
+def import_xls_step_2(request, xls_cats=None):
     rows = []
 
-    if cats is None:
+    if xls_cats is None:
         form = ContractDetailsForm(
             request.POST,
             prefix='contract_details'
@@ -57,7 +57,7 @@ def import_xls_step_2(request, cats=None):
             raise NotImplementedError("TODO: Commit data to db")
     else:
         form = ContractDetailsForm(prefix='contract_details')
-        for cat in cats:
+        for cat in xls_cats:
             initial_data = {}
 
             def set_field(field, cat_field=None, type_coercer=str):
