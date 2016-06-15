@@ -144,7 +144,13 @@ def import_xls(request):
                 f = request.FILES['xls']
                 book = xlrd.open_workbook(file_contents=f.read())
                 cats = get_labor_categories(book)
-                return import_xls_step_2(request, cats)
+                if cats:
+                    return import_xls_step_2(request, cats)
+                messages.add_message(
+                    request, messages.ERROR,
+                    'Alas, your file does not appear to contain any price '
+                    'list information.'
+                )
         elif step == '2':
             return import_xls_step_2(request)
     else:
