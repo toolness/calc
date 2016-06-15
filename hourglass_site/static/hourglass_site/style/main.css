@@ -353,3 +353,18 @@ ul.errorlist li {
   display: block;
   color: gray;
 }
+
+.alert {
+  padding: 1em;
+  border: 1px solid black;
+}
+
+.alert-error {
+  background: crimson;
+  color: white;
+}
+
+.alert-success {
+  background: #044364;
+  color: white;
+}

@@ -1,5 +1,7 @@
 from collections import OrderedDict
 from django.shortcuts import render
+from django.contrib import messages
+from django.http import HttpResponseRedirect
 import xlrd
 
 from contracts.models import Contract
@@ -65,9 +67,13 @@ def finish_import_xls(request, form, rows):
 
         contract.save()
 
-    # TODO: Redirect to homepage, show a message indicating data was added.
-    from django.http import HttpResponse
-    return HttpResponse('Thanks!')
+    messages.add_message(
+        request, messages.SUCCESS,
+        'Hooray, your data has been added to CALC!'
+    )
+
+    # TODO: Use reverse() instead of a hard-coded URL.
+    return HttpResponseRedirect('/')
 
 def import_xls_step_2(request, xls_cats=None):
     rows = []
@@ -90,8 +96,11 @@ def import_xls_step_2(request, xls_cats=None):
         if is_valid:
             return finish_import_xls(request, form, rows)
         else:
-            # TODO: Show a message indicating submission wasn't valid.
-            pass
+            messages.add_message(
+                request, messages.ERROR,
+                'Alas, your submission had some problems. Please fix them '
+                'below.'
+            )
     else:
         form = ContractDetailsForm(prefix='contract_details')
         for cat in xls_cats:
