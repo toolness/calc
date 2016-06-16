@@ -52,8 +52,6 @@ INSTALLED_APPS = (
     'api',
     'djorm_pgfulltext',
     'rest_framework',
-
-    'django_nose',
     'corsheaders',
     'djangosecure',
 )
@@ -88,9 +86,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 ROOT_URLCONF = 'hourglass.urls'
 
 WSGI_APPLICATION = 'hourglass.wsgi.application'
-
-TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/

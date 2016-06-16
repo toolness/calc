@@ -30,6 +30,10 @@ Should you need to, you can push directly to calc-dev.18f.gov with the following
 `cf push calc-dev`.
 Remember to target the `calc-dev` space first.
 
+#### Your Own Server
+
+If you want to deploy to your own sandbox, e.g. for the purpose of deploying a branch you're working on, see the wiki page on [How to Deploy to your Sandbox](https://github.com/18F/calc/wiki/How-to-Deploy-to-your-Sandbox).
+
 #### Production Servers
 ##### Pushing to Production with Blue-Green Deploys
 

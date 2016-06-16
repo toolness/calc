@@ -8,12 +8,12 @@ local_settings.py
 htmlcov
 *,cover
 venv
-.noseids
 ghostdriver.log
 *.log
 node_modules
 selenium_tests/screenshot.png
 manifest-sandbox.yml
+.cache
 
 .Python
 /bin
@@ -21,4 +21,3 @@ manifest-sandbox.yml
 /lib
 pip-selfcheck.json
 /src
-
