@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 import os
 import sys
 import dj_database_url
+
+from docker_django_management import IS_RUNNING_IN_DOCKER
+
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 API_HOST = os.environ.get('API_HOST', '/api/')
@@ -176,7 +180,7 @@ SECURE_SSL_REDIRECT = True
 # Amazon ELBs pass on X-Forwarded-Proto.
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
-if 'IS_RUNNING_IN_DOCKER' in os.environ:
+if IS_RUNNING_IN_DOCKER:
     from hourglass.docker_settings import *
 else:
     try:
