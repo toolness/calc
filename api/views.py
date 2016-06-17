@@ -1,14 +1,13 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseBadRequest
-from django.core.paginator import Paginator
-from django.conf import settings
 from django.db.models import Avg, Max, Min, Count, Q
 from decimal import Decimal
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from api.serializers import PaginatedContractSerializer
+from api.pagination import ContractPagination
+from api.serializers import ContractSerializer
 from contracts.models import Contract, EDUCATION_CHOICES
 
 import numpy as np
@@ -176,16 +175,11 @@ def quantize(num, precision=2):
 class GetRates(APIView):
 
     def get(self, request):
-
-        page = request.QUERY_PARAMS.get('page', 1)
         bins = request.QUERY_PARAMS.get('histogram', None)
 
         wage_field = self.get_wage_field(request.QUERY_PARAMS.get('contract-year'))
         contracts_all = self.get_queryset(request.QUERY_PARAMS, wage_field)
-        
-        paginator = Paginator(contracts_all, settings.PAGINATION)
-        contracts = paginator.page(page)
-        
+
         page_stats = {}
         current_rates = []
 
@@ -199,20 +193,15 @@ class GetRates(APIView):
                 current_rates.append(rate[wage_field])
         page_stats['first_standard_deviation'] = np.std(current_rates)
 
-        #use paginator count method
-        if paginator.count > 0:
-            if bins and bins.isnumeric():
-                # numpy wants these to be floats, not Decimals
-                values = contracts_all.values_list(wage_field, flat=True)
-                # see api.serializers.PaginatedContractSerializer#get_wage_histogram()
-                page_stats['wage_histogram'] = get_histogram(values, int(bins))
+        if bins and bins.isnumeric():
+            # numpy wants these to be floats, not Decimals
+            values = contracts_all.values_list(wage_field, flat=True)
+            page_stats['wage_histogram'] = get_histogram(values, int(bins))
 
-            serializer = PaginatedContractSerializer(contracts, context=page_stats)
-
-            return Response(serializer.data)
-
-        else:
-            return Response({'count': 0, 'results': []})
+        pagination = ContractPagination(page_stats)
+        results = pagination.paginate_queryset(contracts_all, request)
+        serializer = ContractSerializer(results, many=True)
+        return pagination.get_paginated_response(serializer.data)
 
     def get_wage_field(self, year):
         wage_fields = ['current_price', 'next_year_price', 'second_year_price'] 
