@@ -1,4 +1,4 @@
-from django.test import TestCase, Client
+from django.test import TestCase, Client, override_settings
 from model_mommy import mommy
 from model_mommy.recipe import seq
 from contracts.models import Contract
@@ -6,6 +6,40 @@ from contracts.mommy_recipes import get_contract_recipe
 from api.views import convert_to_tsquery
 
 from itertools import cycle
+
+
+RATES_API_PATH = '/api/rates/'
+
+
+@override_settings(PAGINATION=1)
+class ContractsPaginationTest(TestCase):
+    def setUp(self):
+        ContractsTest.make_test_set()
+        self.path = RATES_API_PATH
+
+    def absolute_uri(self, path=''):
+        return 'http://testserver' + self.path + path
+
+    def test_first_page(self):
+        resp = self.client.get(self.path)
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.data['next'], self.absolute_uri('?page=2'))
+        self.assertEqual(resp.data['previous'], None)
+
+    def test_second_page(self):
+        resp = self.client.get(self.path + '?page=2')
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.data['next'], self.absolute_uri('?page=3'))
+        self.assertEqual(resp.data['previous'], self.absolute_uri())
+
+    def test_nonexistent_page(self):
+        resp = self.client.get(self.path + '?page=99999')
+        self.assertEqual(resp.status_code, 404)
+
+    def test_nonnumeric_page(self):
+        resp = self.client.get(self.path + '?page=blarg')
+        self.assertEqual(resp.status_code, 404)
+
 
 class ContractsTest(TestCase):
     """ tests for the /api/rates endpoint """
@@ -17,7 +51,7 @@ class ContractsTest(TestCase):
         self.longMessage=True
 
         self.c = Client()
-        self.path = '/api/rates/'
+        self.path = RATES_API_PATH
 
     def test_convert_to_tsquery(self):
         self.assertEqual(convert_to_tsquery('staff  consultant'), 'staff:* & consultant:*')
@@ -804,7 +838,8 @@ class ContractsTest(TestCase):
            'current_price': 21.00
         }])
 
-    def make_test_set(self):
+    @staticmethod
+    def make_test_set():
         mommy.make(
                 Contract,
                 id=1,
