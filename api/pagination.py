@@ -5,11 +5,10 @@ from django.conf import settings
 
 
 class ContractPagination(pagination.PageNumberPagination):
-    page_size = settings.PAGINATION
-
     def __init__(self, context):
         super().__init__()
         self.context = context
+        self.page_size = settings.PAGINATION
 
     def get_paginated_response(self, data):
         return Response(OrderedDict([
