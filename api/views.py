@@ -175,10 +175,10 @@ def quantize(num, precision=2):
 class GetRates(APIView):
 
     def get(self, request):
-        bins = request.QUERY_PARAMS.get('histogram', None)
+        bins = request.query_params.get('histogram', None)
 
-        wage_field = self.get_wage_field(request.QUERY_PARAMS.get('contract-year'))
-        contracts_all = self.get_queryset(request.QUERY_PARAMS, wage_field)
+        wage_field = self.get_wage_field(request.query_params.get('contract-year'))
+        contracts_all = self.get_queryset(request.query_params, wage_field)
 
         page_stats = {}
         current_rates = []
@@ -229,11 +229,11 @@ class GetRatesCSV(APIView):
         wage_field = 'current_price'
         contracts_all = get_contracts_queryset(request.GET, wage_field)
 
-        q = request.QUERY_PARAMS.get('q', 'None')
-        min_education = request.QUERY_PARAMS.get('min_education', 'None Specified')
-        min_experience = request.QUERY_PARAMS.get('min_experience', 'None Specified')
-        site = request.QUERY_PARAMS.get('site', 'None Specified')
-        business_size = request.QUERY_PARAMS.get('business_size', 'None Specified')
+        q = request.query_params.get('q', 'None')
+        min_education = request.query_params.get('min_education', 'None Specified')
+        min_experience = request.query_params.get('min_experience', 'None Specified')
+        site = request.query_params.get('site', 'None Specified')
+        business_size = request.query_params.get('business_size', 'None Specified')
         business_size_map = {
             'o': 'other than small',
             's': 'small business'
@@ -262,8 +262,8 @@ class GetAutocomplete(APIView):
             q (str): the search query
             query_type (str): defines how the search query should work. [ match_all (default) | match_phrase ]
         """
-        q = request.QUERY_PARAMS.get('q', False)
-        query_type = request.QUERY_PARAMS.get('query_type', 'match_all')
+        q = request.query_params.get('q', False)
+        query_type = request.query_params.get('query_type', 'match_all')
 
         if q:
             if query_type == 'match_phrase':
