@@ -11,6 +11,7 @@ app:
     - DDM_IS_RUNNING_IN_DOCKER=yup
     - PYTHONUNBUFFERED=yup
     - DATABASE_URL=postgres://calc_user@db/calc
+    - SECRET_KEY="I am an insecure secret key intended ONLY for dev/testing."
   command: python manage.py runserver 0.0.0.0:8000
   ports:
     - "8000:8000"
