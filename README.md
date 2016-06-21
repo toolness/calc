@@ -53,6 +53,27 @@ To run only Selenium tests:
 make test-frontend
 ```
 
+## CSS
+
+We use [SASS][] for our CSS needs.
+
+To build SASS:
+
+```sh
+cd hourglass_site/static/hourglass_site
+make
+```
+
+To continuously watch SASS for changes and rebuild:
+
+```sh
+cd hourglass_site/static/hourglass_site
+make watch-style
+```
+
+Note that if you're using Docker for development, SASS will automatically
+be rebuilt for you.
+
 ## Using Docker (optional)
 
 A Docker setup potentially makes development and deployment easier.
@@ -246,3 +267,4 @@ for other than small business.
 [Docker Compose]: https://docs.docker.com/compose/
 [Docker goes native]: https://blog.docker.com/2016/03/docker-for-mac-windows-beta/
 [`SECRET_KEY`]: https://docs.djangoproject.com/en/1.9/ref/settings/#secret-key
+[SASS]: http://sass-lang.com/
