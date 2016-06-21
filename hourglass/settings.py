@@ -177,6 +177,8 @@ SECURE_SSL_REDIRECT = True
 # Amazon ELBs pass on X-Forwarded-Proto.
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
+SECRET_KEY = ''
+
 if IS_RUNNING_IN_DOCKER:
     from hourglass.docker_settings import *
 else:
@@ -185,5 +187,5 @@ else:
     except ImportError:
         pass
 
-if 'SECRET_KEY' not in globals():
+if not SECRET_KEY:
     SECRET_KEY = os.environ['SECRET_KEY']
