@@ -25,5 +25,5 @@ sass:
   volumes:
     - .:/calc
   working_dir: /calc/hourglass_site/static/hourglass_site
-  entrypoint: python /calc/entrypoint.py
+  entrypoint: python /calc/docker_django_management.py
   command: make watch-style
