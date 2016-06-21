@@ -63,6 +63,7 @@ class ContractsTest(TestCase):
         resp = self.c.get(self.path, {'q': 'nsfr87y3487h3rufbf'})
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.data['results'], [])
+        self.assertEqual(resp.data['first_standard_deviation'], None)
 
     def test_search_results(self):
         self.make_test_set()

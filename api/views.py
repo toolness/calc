@@ -191,7 +191,13 @@ class GetRates(APIView):
             # its common for the wage_field to have an empty value
             if rate.get(wage_field):
                 current_rates.append(rate[wage_field])
-        page_stats['first_standard_deviation'] = np.std(current_rates)
+
+        if current_rates:
+            std_dev = np.std(current_rates)
+        else:
+            std_dev = None
+
+        page_stats['first_standard_deviation'] = std_dev
 
         if bins and bins.isnumeric():
             # numpy wants these to be floats, not Decimals
