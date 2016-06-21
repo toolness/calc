@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 import os
 import sys
 import dj_database_url
+
+from docker_django_management import IS_RUNNING_IN_DOCKER
+
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 API_HOST = os.environ.get('API_HOST', '/api/')
@@ -19,9 +23,6 @@ API_HOST = os.environ.get('API_HOST', '/api/')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'i=-6!=jo-qh3sh!z=uo_2)5wf*_@ogw9eam3e0_53hp4)cp53!'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -43,6 +44,7 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
 
     'hourglass_site',
@@ -51,8 +53,6 @@ INSTALLED_APPS = (
     'api',
     'djorm_pgfulltext',
     'rest_framework',
-
-    'django_nose',
     'corsheaders',
     'djangosecure',
 )
@@ -60,6 +60,7 @@ INSTALLED_APPS = (
 
 MIDDLEWARE_CLASSES = (
     'djangosecure.middleware.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -87,9 +88,6 @@ ROOT_URLCONF = 'hourglass.urls'
 
 WSGI_APPLICATION = 'hourglass.wsgi.application'
 
-TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
-
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
 
@@ -115,7 +113,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = (
 #    os.path.join(BASE_DIR, 'static'),
 )
-STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 PAGINATION = 200
 REST_FRAMEWORK = {
@@ -179,10 +177,15 @@ SECURE_SSL_REDIRECT = True
 # Amazon ELBs pass on X-Forwarded-Proto.
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
-if 'IS_RUNNING_IN_DOCKER' in os.environ:
+SECRET_KEY = ''
+
+if IS_RUNNING_IN_DOCKER:
     from hourglass.docker_settings import *
 else:
     try:
         from hourglass.local_settings import *
     except ImportError:
         pass
+
+if not SECRET_KEY:
+    SECRET_KEY = os.environ['SECRET_KEY']

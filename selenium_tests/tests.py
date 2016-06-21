@@ -29,11 +29,15 @@ from itertools import cycle
 import re
 import time
 import os
+import socket
 from datetime import datetime
 
 TESTING_KEY = 'REMOTE_TESTING'
 REMOTE_TESTING = hasattr(settings, TESTING_KEY) and getattr(settings, TESTING_KEY) or {}
 TESTING_URL = os.environ.get('LOCAL_TUNNEL_URL', REMOTE_TESTING.get('url'))
+
+PHANTOMJS_TIMEOUT = 3
+WEBDRIVER_TIMEOUT_LOAD_ATTEMPTS = 10
 
 def _get_testing_config(key, default=None):
     return REMOTE_TESTING.get(key, os.environ.get('%s_%s' % (TESTING_KEY, key.upper()), default))
@@ -57,7 +61,10 @@ class FunctionalTests(LiveServerTestCase):
     @classmethod
     def get_driver(cls):
         if not REMOTE_TESTING or not TESTING_URL:
-            return _get_webdriver(os.environ.get('TESTING_BROWSER', 'phantomjs'))
+            driver = _get_webdriver(os.environ.get('TESTING_BROWSER',
+                                                   'phantomjs'))
+            driver.command_executor.set_timeout(PHANTOMJS_TIMEOUT)
+            return driver
 
         if REMOTE_TESTING.get('enabled') == False:
             pass
@@ -73,7 +80,6 @@ class FunctionalTests(LiveServerTestCase):
         desired_cap['platform'] = _get_testing_config('platform', 'Windows 7')
         desired_cap['browserName'] = _get_testing_config('browser', 'internet explorer')
         desired_cap['version'] = _get_testing_config('browser_version', '9.0')
-        # this shows up in the left-hand column of Sauce tests
         desired_cap['name'] = 'CALC'
         other_caps = REMOTE_TESTING.get('capabilities')
         if other_caps:
@@ -127,7 +133,19 @@ class FunctionalTests(LiveServerTestCase):
     def load(self, uri='/'):
         url = self.base_url + uri
         print('loading URL: %s' % url)
-        self.driver.get(url)
+
+        attempts = 0
+
+        while True:
+            try:
+                self.driver.get(url)
+                break
+            except socket.timeout:
+                if attempts >= WEBDRIVER_TIMEOUT_LOAD_ATTEMPTS:
+                    raise
+                print("Socket timeout, trying again.")
+                attempts += 1
+
         # self.driver.execute_script('$("body").addClass("selenium")')
         return self.driver
 
@@ -201,7 +219,7 @@ class FunctionalTests(LiveServerTestCase):
     # Xed before me, some of them I am Xing out now because they are seemingly
     # suddenly failing and getting an empty result set back.
     # we're transitioning off the project, so I can't dig in now.
-    # I suspect there is a thread of fragility through these tests, and I have 
+    # I suspect there is a thread of fragility through these tests, and I have
     # not managed to get them working dependably in my time on the project. I think they
     # need looking at by someone very experienced in Selenium testing. 8/25/15 [TS]
     def xtest_form_submit_loading(self):

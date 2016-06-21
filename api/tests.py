@@ -1,4 +1,4 @@
-from django.test import TestCase, Client
+from django.test import TestCase, Client, override_settings
 from model_mommy import mommy
 from model_mommy.recipe import seq
 from contracts.models import Contract
@@ -6,6 +6,40 @@ from contracts.mommy_recipes import get_contract_recipe
 from api.views import convert_to_tsquery
 
 from itertools import cycle
+
+
+RATES_API_PATH = '/api/rates/'
+
+
+@override_settings(PAGINATION=1)
+class ContractsPaginationTest(TestCase):
+    def setUp(self):
+        ContractsTest.make_test_set()
+        self.path = RATES_API_PATH
+
+    def absolute_uri(self, path=''):
+        return 'http://testserver' + self.path + path
+
+    def test_first_page(self):
+        resp = self.client.get(self.path)
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.data['next'], self.absolute_uri('?page=2'))
+        self.assertEqual(resp.data['previous'], None)
+
+    def test_second_page(self):
+        resp = self.client.get(self.path + '?page=2')
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.data['next'], self.absolute_uri('?page=3'))
+        self.assertEqual(resp.data['previous'], self.absolute_uri())
+
+    def test_nonexistent_page(self):
+        resp = self.client.get(self.path + '?page=99999')
+        self.assertEqual(resp.status_code, 404)
+
+    def test_nonnumeric_page(self):
+        resp = self.client.get(self.path + '?page=blarg')
+        self.assertEqual(resp.status_code, 404)
+
 
 class ContractsTest(TestCase):
     """ tests for the /api/rates endpoint """
@@ -17,7 +51,7 @@ class ContractsTest(TestCase):
         self.longMessage=True
 
         self.c = Client()
-        self.path = '/api/rates/'
+        self.path = RATES_API_PATH
 
     def test_convert_to_tsquery(self):
         self.assertEqual(convert_to_tsquery('staff  consultant'), 'staff:* & consultant:*')
@@ -29,6 +63,7 @@ class ContractsTest(TestCase):
         resp = self.c.get(self.path, {'q': 'nsfr87y3487h3rufbf'})
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.data['results'], [])
+        self.assertEqual(resp.data['first_standard_deviation'], None)
 
     def test_search_results(self):
         self.make_test_set()
@@ -401,7 +436,6 @@ class ContractsTest(TestCase):
         resp = self.c.get(self.path, {'current-year': '2'})
         self.assertEqual(resp.status_code, 200)
 
-        self.prettyPrint(resp.data['results'])
         self.assertResultsEqual(resp.data['results'],
          [{'id': 28,
           'idv_piid': 'ABC1231',
@@ -439,7 +473,7 @@ class ContractsTest(TestCase):
         resp = self.c.get(self.path, {'experience_range': '6,8'})
         self.assertEqual(resp.status_code, 200)
 
-        self.assertResultsEqual(resp.data['results'], 
+        self.assertResultsEqual(resp.data['results'],
          [{'idv_piid': 'ABC1231',
            'vendor_name': 'CompanyName1',
            'labor_category': 'Business Analyst II',
@@ -792,7 +826,7 @@ class ContractsTest(TestCase):
         get_contract_recipe().make(id=100)
         get_contract_recipe().make(id=101)
         get_contract_recipe().make(id=102)
-        
+
         resp = self.c.get(self.path, {'exclude': '102,100'})
         self.assertEqual(resp.status_code, 200)
         self.assertResultsEqual(resp.data['results'],
@@ -804,7 +838,8 @@ class ContractsTest(TestCase):
            'current_price': 21.00
         }])
 
-    def make_test_set(self):
+    @staticmethod
+    def make_test_set():
         mommy.make(
                 Contract,
                 id=1,
@@ -863,11 +898,3 @@ class ContractsTest(TestCase):
 
         for i, result in enumerate(dict_results):
             self.assertEqual(result, expected[i], "\n===== Object at index {} failed. =====".format(i))
-
-    def prettyPrint(self, thing):
-        """
-        Pretty-printing for debugging purposes.
-        """
-        import pprint; pp = pprint.PrettyPrinter(indent=4)
-        pp.pprint(thing)
-

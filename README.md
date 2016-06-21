@@ -100,6 +100,12 @@ can just run `python manage.py` directly from outside the container--the
 `manage.py` script has been modified to run itself in a Docker container
 if it detects that Django isn't installed.
 
+## Environment Variables
+
+* `SECRET_KEY` is a large random value corresponding to Django's
+  [`SECRET_KEY`][] setting. It is automatically set to a known, insecure
+  value when `DEBUG` is true.
+
 ## API
 
 If you're interested in the underlying data, please see https://github.com/18F/calc/blob/master/updating_data.md
@@ -239,3 +245,4 @@ for other than small business.
 [Docker]: https://www.docker.com/
 [Docker Compose]: https://docs.docker.com/compose/
 [Docker goes native]: https://blog.docker.com/2016/03/docker-for-mac-windows-beta/
+[`SECRET_KEY`]: https://docs.djangoproject.com/en/1.9/ref/settings/#secret-key
