@@ -435,7 +435,6 @@ class ContractsTest(TestCase):
         resp = self.c.get(self.path, {'current-year': '2'})
         self.assertEqual(resp.status_code, 200)
 
-        self.prettyPrint(resp.data['results'])
         self.assertResultsEqual(resp.data['results'],
          [{'id': 28,
           'idv_piid': 'ABC1231',
@@ -898,10 +897,3 @@ class ContractsTest(TestCase):
 
         for i, result in enumerate(dict_results):
             self.assertEqual(result, expected[i], "\n===== Object at index {} failed. =====".format(i))
-
-    def prettyPrint(self, thing):
-        """
-        Pretty-printing for debugging purposes.
-        """
-        import pprint; pp = pprint.PrettyPrinter(indent=4)
-        pp.pprint(thing)
