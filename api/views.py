@@ -195,7 +195,7 @@ class GetRates(APIView):
         if current_rates:
             std_dev = np.std(current_rates)
         else:
-            std_dev = float('nan')
+            std_dev = None
 
         page_stats['first_standard_deviation'] = std_dev
 

@@ -6,7 +6,6 @@ from contracts.mommy_recipes import get_contract_recipe
 from api.views import convert_to_tsquery
 
 from itertools import cycle
-import math
 
 
 RATES_API_PATH = '/api/rates/'
@@ -64,7 +63,7 @@ class ContractsTest(TestCase):
         resp = self.c.get(self.path, {'q': 'nsfr87y3487h3rufbf'})
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.data['results'], [])
-        self.assertTrue(math.isnan(resp.data['first_standard_deviation']))
+        self.assertEqual(resp.data['first_standard_deviation'], None)
 
     def test_search_results(self):
         self.make_test_set()
