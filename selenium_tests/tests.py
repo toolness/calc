@@ -36,7 +36,7 @@ TESTING_KEY = 'REMOTE_TESTING'
 REMOTE_TESTING = hasattr(settings, TESTING_KEY) and getattr(settings, TESTING_KEY) or {}
 TESTING_URL = os.environ.get('LOCAL_TUNNEL_URL', REMOTE_TESTING.get('url'))
 
-PHANTOMJS_TIMEOUT = 3
+PHANTOMJS_TIMEOUT = int(os.environ.get('PHANTOMJS_TIMEOUT', '3'))
 WEBDRIVER_TIMEOUT_LOAD_ATTEMPTS = 10
 
 def _get_testing_config(key, default=None):
