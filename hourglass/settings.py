@@ -24,9 +24,6 @@ API_HOST = os.environ.get('API_HOST', '/api/')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'i=-6!=jo-qh3sh!z=uo_2)5wf*_@ogw9eam3e0_53hp4)cp53!'
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
@@ -187,3 +184,6 @@ else:
         from hourglass.local_settings import *
     except ImportError:
         pass
+
+if 'SECRET_KEY' not in globals():
+    SECRET_KEY = os.environ['SECRET_KEY']

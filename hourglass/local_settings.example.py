@@ -9,6 +9,6 @@ DATABASES = {
     }
 }
 
-SECRET_KEY = ''
+SECRET_KEY = 'I am an insecure secret key intended ONLY for dev/testing.'
 
 SECURE_SSL_REDIRECT = False
