@@ -23,6 +23,41 @@ To start, target the org and space you want to work with. For example, if you wa
 
 You can edit the app attributes in the `manifest.yml` file, including what domains the site deploys to, how many instances are running, and how much memory they have. 
 
+#### Environment Variables
+
+For cloud.gov deployments, this project makes use of a
+[Custom User Provided Service (CUPS)][CUPS] to get its configuration
+variables, instead of using the local environment. You will need to create a
+CUPS called `calc-env`, provide 'credentials' to it, and link it to the
+application instance.
+
+First, create a file called `credentials.json` with all the configuration
+values specified as per the "Environment Variables" section of
+[`README.md`][]:
+
+```json
+{
+  "SECRET_KEY": "my secret key",
+  "...": "other environment variables"
+}
+```
+
+Then enter the following commands (assuming you already have an application
+instance named `calc`):
+
+```sh
+cf cups calc-env -p credentials.json
+cf bind-service calc calc-env
+cf restage calc
+```
+
+You can update the user provided service with the following commands:
+
+```sh
+cf uups calc-env -p credentials.json
+cf restage calc
+```
+
 #### Dev Server
 The development server updates automatically when changes are merged into the master branch. Check out `.travis.yml` for details.
 
@@ -59,6 +94,5 @@ Then unmap calc.gsa.gov from the original app, using:
 
 Your changes are now launched! How easy was that?
 
-
-
-
+[CUPS]: https://docs.cloudfoundry.org/devguide/services/user-provided.html
+[`README.md`]: https://github.com/18F/calc#readme
