@@ -750,3 +750,10 @@ th:hover.tooltips span {
 .ie #results-table thead th a {
   top: -20px;
 }
+
+/**
+ * no-UI overrides
+ **/
+.noUi-connect {
+  background: $blue;
+}
