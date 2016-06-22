@@ -34,7 +34,8 @@ From there, you're just a hop, skip and a jump away from your own dev server:
 ./manage.py runserver
 ```
 
-If you are managing https://calc.gsa.gov, see https://github.com/18F/calc/blob/master/deploy.md.
+If you are managing https://calc.gsa.gov or any other cloud.gov-based
+deployment, see [`deploy.md`][].
 
 ## Testing
 
@@ -268,3 +269,4 @@ for other than small business.
 [Docker goes native]: https://blog.docker.com/2016/03/docker-for-mac-windows-beta/
 [`SECRET_KEY`]: https://docs.djangoproject.com/en/1.9/ref/settings/#secret-key
 [SASS]: http://sass-lang.com/
+[`deploy.md`]: https://github.com/18F/calc/blob/master/deploy.md

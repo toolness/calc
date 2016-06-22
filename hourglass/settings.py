@@ -14,7 +14,10 @@ import sys
 import dj_database_url
 
 from docker_django_management import IS_RUNNING_IN_DOCKER
+from .settings_utils import load_cups_from_vcap_services
 
+
+load_cups_from_vcap_services('calc-env')
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
