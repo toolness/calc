@@ -20,9 +20,9 @@ class CupsTests(unittest.TestCase):
         env = self.make_vcap_services_env({
           "user-provided": [
             {
-              "label": "user-provided", 
+              "label": "user-provided",
               "name": "NOT-boop-env",
-              "syslog_drain_url": "", 
+              "syslog_drain_url": "",
               "credentials": {
                 "boop": "jones"
               },

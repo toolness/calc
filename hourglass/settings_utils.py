@@ -1,6 +1,7 @@
 import os
 import json
 
+
 def load_cups_from_vcap_services(name, env=os.environ):
     '''
     Detects if VCAP_SERVICES exists in the environment; if so, parses
