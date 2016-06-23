@@ -1,7 +1,23 @@
 import unittest
 import json
+from django.test import TestCase as DjangoTestCase
+from django.test import override_settings
 
 from .settings_utils import load_cups_from_vcap_services
+
+
+class RobotsTests(DjangoTestCase):
+    @override_settings(ENABLE_SEO_INDEXING=False)
+    def test_disable_seo_indexing_works(self):
+        res = self.client.get('/robots.txt')
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(res.content, b"User-agent: *\nDisallow: /")
+
+    @override_settings(ENABLE_SEO_INDEXING=True)
+    def test_enable_seo_indexing_works(self):
+        res = self.client.get('/robots.txt')
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(res.content, b"User-agent: *\nDisallow:")
 
 
 class CupsTests(unittest.TestCase):

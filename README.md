@@ -124,9 +124,16 @@ if it detects that Django isn't installed.
 
 ## Environment Variables
 
+**Note:** When an environment variable is described as representing a
+boolean value, if the variable exists with *any* value (even the empty
+string), the boolean is true; otherwise, it's false.
+
 * `SECRET_KEY` is a large random value corresponding to Django's
   [`SECRET_KEY`][] setting. It is automatically set to a known, insecure
   value when `DEBUG` is true.
+
+* `ENABLE_SEO_INDEXING` is a boolean value that indicates whether to
+  indicate to search engines that they can index the site.
 
 ## API
 
