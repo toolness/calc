@@ -182,6 +182,8 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 SECRET_KEY = ''
 
+ENABLE_SEO_INDEXING = 'ENABLE_SEO_INDEXING' in os.environ
+
 if IS_RUNNING_IN_DOCKER:
     from hourglass.docker_settings import *
 else:

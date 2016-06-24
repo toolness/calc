@@ -1,9 +1,9 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.views.generic import TemplateView
-from django.http import HttpResponse
 
 from api import urls as api_urls
+from .robots import robots_txt
 
 urlpatterns = patterns('',
     # Examples:
@@ -14,6 +14,5 @@ urlpatterns = patterns('',
     url(r'^api/', include(api_urls)),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^tests/$', TemplateView.as_view(template_name='tests.html')),
-    url(r'^robots.txt$', lambda r: HttpResponse("User-agent: *\nDisallow: /")),
+    url(r'^robots.txt$', robots_txt),
 )
-
