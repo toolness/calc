@@ -15,9 +15,10 @@ script:
 - phantomjs --version
 - make test
 env:
-- PHANTOMJS_TIMEOUT=15
-- DEBUG=yup
-- DATABASE_URL=postgres://postgres@localhost/hourglass
+  global:
+    - PHANTOMJS_TIMEOUT=15
+    - DEBUG=yup
+    - DATABASE_URL=postgres://postgres@localhost/hourglass
 notifications:
   email: false
 deploy:
