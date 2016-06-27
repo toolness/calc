@@ -10,27 +10,32 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-import sys
 import dj_database_url
+from dotenv import load_dotenv
 
-from docker_django_management import IS_RUNNING_IN_DOCKER
 from .settings_utils import load_cups_from_vcap_services
-
-
-load_cups_from_vcap_services('calc-env')
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-API_HOST = os.environ.get('API_HOST', '/api/')
+DOTENV_PATH = os.path.join(BASE_DIR, '.env')
 
+if os.path.exists(DOTENV_PATH):
+    load_dotenv(DOTENV_PATH)
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
+load_cups_from_vcap_services('calc-env')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = 'DEBUG' in os.environ
 
-TEMPLATE_DEBUG = False
+if DEBUG:
+    os.environ.setdefault(
+        'SECRET_KEY',
+        'I am an insecure secret key intended ONLY for dev/testing.'
+    )
+
+API_HOST = os.environ.get('API_HOST', '/api/')
+
+TEMPLATE_DEBUG = DEBUG
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'hourglass/templates'),
     os.path.join(BASE_DIR, 'hourglass_site/templates'),
@@ -69,7 +74,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    #'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+    # 'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
@@ -104,7 +109,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-#django cors headers
+# django cors headers
 CORS_ORIGIN_ALLOW_ALL = True
 
 # Static files (CSS, JavaScript, Images)
@@ -114,7 +119,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 STATICFILES_DIRS = (
-#    os.path.join(BASE_DIR, 'static'),
+    # os.path.join(BASE_DIR, 'static'),
 )
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
@@ -133,8 +138,9 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {
         'verbose': {
-            'format' : "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
-            'datefmt' : "%d/%b/%Y %H:%M:%S"
+            'format': "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] "
+                      "%(message)s",
+            'datefmt': "%d/%b/%Y %H:%M:%S"
         },
         'simple': {
             'format': '%(levelname)s %(message)s'
@@ -161,36 +167,25 @@ LOGGING = {
     },
     'loggers': {
         'django': {
-            'handlers':['console', 'file'],
+            'handlers': ['console', 'file'],
             'propagate': True,
-            'level':'INFO',
+            'level': 'INFO',
         },
         'contracts': {
             'handlers': ['console', 'contracts_file'],
             'propagate': True,
-            'level':'INFO',
+            'level': 'INFO',
         },
     },
 }
 
 DATABASES = {}
-DATABASES['default'] =  dj_database_url.config()
+DATABASES['default'] = dj_database_url.config()
 
-SECURE_SSL_REDIRECT = True
+SECURE_SSL_REDIRECT = not DEBUG
 # Amazon ELBs pass on X-Forwarded-Proto.
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
-SECRET_KEY = ''
+SECRET_KEY = os.environ['SECRET_KEY']
 
 ENABLE_SEO_INDEXING = 'ENABLE_SEO_INDEXING' in os.environ
-
-if IS_RUNNING_IN_DOCKER:
-    from hourglass.docker_settings import *
-else:
-    try:
-        from hourglass.local_settings import *
-    except ImportError:
-        pass
-
-if not SECRET_KEY:
-    SECRET_KEY = os.environ['SECRET_KEY']

@@ -12,11 +12,13 @@ after_success:
 install:
 - pip install -r requirements.txt
 script:
-- cp hourglass/local_settings{.travis,}.py
 - phantomjs --version
 - make test
 env:
-- PHANTOMJS_TIMEOUT=15
+  global:
+    - PHANTOMJS_TIMEOUT=15
+    - DEBUG=yup
+    - DATABASE_URL=postgres://postgres@localhost/hourglass
 notifications:
   email: false
 deploy:
