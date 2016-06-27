@@ -14,6 +14,7 @@ node_modules
 selenium_tests/screenshot.png
 manifest-sandbox.yml
 .cache
+.env
 
 .Python
 /bin
