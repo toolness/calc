@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>Fake UAA Provider Login</title>
+<h1>Fake UAA Provider Login</h1>
+<p>
+  Just enter an email address below and we'll log you in.
+</p>
+<form>
+  <label for="email">E-mail</label>
+  <input type="email" name="email" id="email">
+  {% for key, value in query.items %}
+    <input type="hidden" name="{{ key }}" value="{{ value }}">
+  {% endfor %}
+  <button type="submit">Log In</button>
+</form>
+<p>
+  Note that a user account with the corresponding email address needs
+  to exist in CALC's database for the login to successfully complete.
+  For more details, see the
+  <a href="https://github.com/18F/calc#readme">README</a>.
+</p>

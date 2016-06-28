@@ -17,4 +17,7 @@ selenium==2.53.5
 six==1.10.0
 waitress==0.8.10
 whitenoise==3.2
+PyJWT==1.4.0
+requests==2.10.0
 python-dotenv==0.5.1
+httmock==1.2.5

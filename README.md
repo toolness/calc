@@ -156,6 +156,25 @@ string), the boolean is true; otherwise, it's false.
 * `ENABLE_SEO_INDEXING` is a boolean value that indicates whether to
   indicate to search engines that they can index the site.
 
+* `UAA_CLIENT_ID` is your cloud.gov/Cloud Foundry UAA client ID. It
+  defaults to `calc-dev`.
+
+* `UAA_CLIENT_SECRET` is your cloud.gov/Cloud Foundry UAA client secret.
+  If this is undefined and `DEBUG` is true, then a built-in Fake UAA Provider
+  will be used to "simulate" cloud.gov login.
+
+## Staff Login
+
+Staff can log in to CALC for administrative tasks, but accounts
+for each user must be manually created either via `manage.py createsuperuser`
+or the admin UI itself.
+
+We use cloud.gov/Cloud Foundry's User Account and Authentication (UAA)
+server to authenticate users. When a user logs in via UAA, their email
+address is looked up in Django's user database; if a matching email is
+found, the user is logged in. If not, however, the user is *not* logged in,
+and will be shown an error message.
+
 ## API
 
 If you're interested in the underlying data, please see https://github.com/18F/calc/blob/master/updating_data.md

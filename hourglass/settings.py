@@ -63,8 +63,8 @@ INSTALLED_APPS = (
     'rest_framework',
     'corsheaders',
     'djangosecure',
+    'uaa_client',
 )
-
 
 MIDDLEWARE_CLASSES = (
     'djangosecure.middleware.SecurityMiddleware',
@@ -77,6 +77,10 @@ MIDDLEWARE_CLASSES = (
     # 'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+)
+
+AUTHENTICATION_BACKENDS = (
+    'uaa_client.authentication.UaaBackend',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -192,3 +196,26 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 SECRET_KEY = os.environ['SECRET_KEY']
 
 ENABLE_SEO_INDEXING = 'ENABLE_SEO_INDEXING' in os.environ
+
+UAA_AUTH_URL = 'https://login.cloud.gov/oauth/authorize'
+
+UAA_TOKEN_URL = 'https://uaa.cloud.gov/oauth/token'
+
+UAA_CLIENT_ID = os.environ.get('UAA_CLIENT_ID', 'calc-dev')
+
+UAA_CLIENT_SECRET = os.environ.get('UAA_CLIENT_SECRET')
+
+LOGIN_URL = 'uaa_client:login'
+
+LOGIN_REDIRECT_URL = '/'
+
+if DEBUG:
+    INSTALLED_APPS += ('fake_uaa_provider',)
+
+if not UAA_CLIENT_SECRET:
+    if DEBUG:
+        # We'll be using the Fake UAA Provider.
+        UAA_CLIENT_SECRET = 'fake-uaa-provider-client-secret'
+        UAA_AUTH_URL = UAA_TOKEN_URL = 'fake:'
+    else:
+        raise Exception('UAA_CLIENT_SECRET must be defined in production.')
