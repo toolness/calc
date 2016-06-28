@@ -15,6 +15,7 @@ test_contract_link
 """
 from django.conf import settings
 from django.test import LiveServerTestCase
+from django.core import management
 
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
@@ -97,6 +98,8 @@ class FunctionalTests(LiveServerTestCase):
 
     @classmethod
     def setUpClass(cls):
+        management.call_command('collectstatic', '--noinput', '--link',
+                                verbosity=0)
         cls.driver = cls.get_driver()
         cls.longMessage = True
         cls.maxDiff = None

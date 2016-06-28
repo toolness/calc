@@ -1,4 +1,4 @@
-## Contributing
+# Contributing
 
 We're so glad you're thinking about contributing to an 18F open source project!
 If you're unsure about anything, just ask — or submit the issue or pull request

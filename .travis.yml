@@ -13,7 +13,8 @@ install:
 - pip install -r requirements.txt
 script:
 - phantomjs --version
-- make test
+- echo "For details on why we're ignoring selenium tests, see https://github.com/18F/calc/issues/330"
+- py.test --ignore=selenium_tests
 env:
   global:
     - PHANTOMJS_TIMEOUT=15
