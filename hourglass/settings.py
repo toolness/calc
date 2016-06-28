@@ -123,7 +123,8 @@ STATICFILES_DIRS = (
 )
 
 if not DEBUG:
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+    STATICFILES_STORAGE = ('whitenoise.storage.'
+                           'CompressedManifestStaticFilesStorage')
 
 PAGINATION = 200
 REST_FRAMEWORK = {
