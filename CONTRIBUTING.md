@@ -1,24 +1,5 @@
-# Working with CALC
+# Contributing
 
-## Testing
-To run the tests, just run:
-
-```sh
-make test
-```
-
-If you want to run Python unit tests only:
-```sh
-make test-backend
-```
-
-### Front End Testing
-By default, front end tests are done with [Selenium] and [PhantomJS].
-To run the front end tests locally, you can just run:
-
-```sh
-make test-frontend
-```
 
 ## Public domain
 
