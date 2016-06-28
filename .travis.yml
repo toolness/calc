@@ -14,7 +14,7 @@ install:
 script:
 - phantomjs --version
 - echo "For details on why we're ignoring selenium tests, see https://github.com/18F/calc/issues/330"
-- py.test --ignore=selenium_tests --cov=codeclimate_test_reporter
+- py.test --ignore=selenium_tests --cov
 env:
   global:
     - PHANTOMJS_TIMEOUT=15
