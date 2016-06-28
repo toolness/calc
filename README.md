@@ -45,19 +45,13 @@ deployment, see [`deploy.md`][].
 ## Testing
 
 To run all tests:
+
 ```sh
-make test
+py.test
 ```
 
-To run only unit tests:
-```sh
-make test-backend
-```
-
-To run only Selenium tests:
-```sh
-make test-frontend
-```
+For more information on running only specific tests, see
+[`py.test` Usage and Invocations][pytest].
 
 ## CSS
 
@@ -107,7 +101,7 @@ directly to access the site.
 
 ### Accessing the app container
 
-You'll likely want to run `manage.py` or `make` to do other things at
+You'll likely want to run `manage.py` or `py.test` to do other things at
 some point. To do this, it's probably easiest to run:
 
 ```sh
@@ -116,7 +110,7 @@ docker-compose run app bash
 
 This will run an interactive bash session inside the main app container.
 In this container, the `/calc` directory is mapped to the root of
-the repository on your host; you can run `manage.py` or `make` from there.
+the repository on your host; you can run `manage.py` or `py.test` from there.
 
 Note that if you don't have Django installed on your host system, you
 can just run `python manage.py` directly from outside the container--the
@@ -299,3 +293,4 @@ for other than small business.
 [SASS]: http://sass-lang.com/
 [`deploy.md`]: https://github.com/18F/calc/blob/master/deploy.md
 [DJ-Database-URL schema]: https://github.com/kennethreitz/dj-database-url#url-schema
+[pytest]: https://pytest.org/latest/usage.html
