@@ -51,6 +51,12 @@ To run all tests:
 py.test
 ```
 
+To run all tests and generate a coverage report:
+
+```sh
+py.test --cov
+```
+
 For more information on running only specific tests, see
 [`py.test` Usage and Invocations][pytest].
 
