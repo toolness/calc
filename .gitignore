@@ -12,10 +12,8 @@ ghostdriver.log
 *.log
 node_modules
 selenium_tests/screenshot.png
-manifest-sandbox.yml
 .cache
 .env
-
 .Python
 /bin
 /include
@@ -24,4 +22,5 @@ pip-selfcheck.json
 /src
 .ruby-version
 .sass-cache/
-credentials.json
+*credentials*.json
+*manifest*.yml
