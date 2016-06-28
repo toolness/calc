@@ -1,5 +1,12 @@
 # Working with CALC
 
+## Coding Standards
+
+We adhere to [PEP8](https://www.python.org/dev/peps/pep-0008/) for Python code
+formatting. Before committing, please use a linter to ensure that your changes
+do not introduce any PEP8 warnings or errors. Most major code editors have a PEP8
+integration, such as [linter-pep8](https://atom.io/packages/linter-pep8) for Atom.
+
 ## Testing
 To run the tests, just run:
 
