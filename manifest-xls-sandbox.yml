@@ -9,6 +9,6 @@ applications:
   path: .
   timeout: 180
   host: xls-calc-sandbox2 # you might need to modify this to not conflict with someone else's host name
-  buildpack: https://github.com/cloudfoundry/python-buildpack.git
+  buildpack: python-buildpack
   memory: 256M
   command: bash cf.sh
