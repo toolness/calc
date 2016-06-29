@@ -2,6 +2,7 @@
 import unittest
 import math
 import random
+import decimal
 
 from api.utils import get_histogram, stdev
 
@@ -30,6 +31,14 @@ class HistogramTests(unittest.TestCase):
         self.assertEqual(bins[0]['min'], 4.5)
         self.assertEqual(bins[1]['max'], 5.5)
         self.assertEqual(bins[1]['count'], 3)
+
+    def test_works_on_decimal_values(self):
+        values = [decimal.Decimal(random.randrange(1, 101, 1))
+                  for _ in range(10000)]
+        bins = get_histogram(values, 5)
+        self.assertEqual(len(bins), 5)
+        self.assertEqual(bins[0]['min'], min(values))
+        self.assertEqual(bins[-1]['max'], max(values))
 
     def test_simple_histogram(self):
         num_bins = 3

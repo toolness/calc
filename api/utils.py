@@ -29,11 +29,15 @@ def get_histogram(values, num_bins=10):
     if (num_bins <= 0):
         raise ValueError('num_bins must be greater than 0')
 
+    # convert values to floats
+    values = [float(v) for v in values]
+
     # When input array is empty, can't determine range so use 0.0 - 1.0
     # as numpy.histogram does
     if (len(values) == 0):
         mn, mx = 0.0, 1.0
     else:
+        # find the min and max
         mn, mx = min(values), max(values)
 
     # Adjust mn and mx if they are equivalent (ie, the input array
