@@ -47,6 +47,12 @@
         <nav>
           <ul>
             <li><a href="{% url 'about' %}">About this tool</a></li>
+            {% if user.is_authenticated %}
+              {% if user.is_staff %}
+              <li><a href="{% url 'admin:index' %}">Site administration</a></li>
+              {% endif %}
+              <li><a href="{% url 'uaa_client:logout' %}">Log out {{ user.email }}</a></li>
+            {% endif %}
           </ul>
         </nav>
 
@@ -102,6 +108,9 @@
             <div id="footer_nav">
               <ul>
                 <li><a href="https://github.com/18F/calc"><img alt="GitHub Logo" src="https://mirage-gsa-gov.s3.amazonaws.com:443/mirage_site/images/github_icon.png"> View our code on GitHub</a></li>
+                {% if not user.is_authenticated %}
+                  <li><a href="{% url 'uaa_client:login' %}">Log in</a></li>
+                {% endif %}
                 <!-- <li><a href="/docs/">Read the API documentation</a></li> -->
               </ul>
 

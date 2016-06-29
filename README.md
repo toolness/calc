@@ -1,9 +1,10 @@
 # CALC
 
-[![Build Status](https://travis-ci.org/18F/calc.svg)](https://travis-ci.org/18F/calc)
+[![Build Status](https://travis-ci.org/18F/calc.svg?branch=develop)](https://travis-ci.org/18F/calc)
 [![Code Climate](https://codeclimate.com/github/18F/calc/badges/gpa.svg)](https://codeclimate.com/github/18F/calc)
+[![Test Coverage](https://codeclimate.com/github/18F/calc/badges/coverage.svg)](https://codeclimate.com/github/18F/calc/coverage)
 
-CALC (formerly known as "Hourglass"), which stands for Contracts Awarded Labor Category, is a tool to help contracting personnel estimate their per-hour labor costs for a contract, based on historical pricing information. The tool is live at [https://calc.gsa.gov](https://calc.gsa.gov). You can track our progress on our [trello board](https://trello.com/b/LjXJaVbZ/prices) or file an issue on this repo. 
+CALC (formerly known as "Hourglass"), which stands for Contracts Awarded Labor Category, is a tool to help contracting personnel estimate their per-hour labor costs for a contract, based on historical pricing information. The tool is live at [https://calc.gsa.gov](https://calc.gsa.gov). You can track our progress on our [trello board](https://trello.com/b/LjXJaVbZ/prices) or file an issue on this repo.
 
 ## Setup
 
@@ -14,9 +15,14 @@ pip install -r requirements.txt
 ```
 
 
-Currently, CALC is a basic [Django] project. You can get started by creating
-a `local_settings.py` file (based off of `local_settings.example.py`) with your
-local database configuration, and running:
+Currently, CALC is a basic [Django] project. You can configure everything
+by running:
+
+```sh
+cp .env.sample .env
+```
+
+Edit the `.env` file to contain your local database configuration, and run:
 
 ```sh
 ./manage.py syncdb
@@ -34,32 +40,53 @@ From there, you're just a hop, skip and a jump away from your own dev server:
 ./manage.py runserver
 ```
 
-If you are managing https://calc.gsa.gov, see https://github.com/18F/calc/blob/master/deploy.md.
+If you are managing https://calc.gsa.gov or any other cloud.gov-based
+deployment, see [`deploy.md`][].
 
 ## Testing
 
 To run all tests:
+
 ```sh
-make test
+py.test
 ```
 
-To run only unit tests:
+To run all tests and generate a coverage report:
+
 ```sh
-make test-backend
+py.test --cov
 ```
 
-To run only Selenium tests:
+For more information on running only specific tests, see
+[`py.test` Usage and Invocations][pytest].
+
+## CSS
+
+We use [SASS][] for our CSS needs.
+
+To build SASS:
+
 ```sh
-make test-frontend
+cd hourglass_site/static/hourglass_site
+make
 ```
+
+To continuously watch SASS for changes and rebuild:
+
+```sh
+cd hourglass_site/static/hourglass_site
+make watch-style
+```
+
+Note that if you're using Docker for development, SASS will automatically
+be rebuilt for you.
 
 ## Using Docker (optional)
 
 A Docker setup potentially makes development and deployment easier.
 
-To use it, install [Docker][] and [Docker Compose][]. (If you're on OS X or
-Windows, you'll also have to explicitly start the Docker Quickstart Terminal,
-at least until [Docker goes native][].)
+To use it, install [Docker][] and [Docker Compose][] and read the
+[18F Docker guide][] if you haven't already.
 
 Then run:
 
@@ -76,15 +103,12 @@ docker-compose up
 ```
 
 This will start up all required servers in containers and output their
-log information to stdout. If you're on Linux, you should be able
-to visit http://localhost:8000/ directly to access the site. If you're on
-OS X or Windows, you'll likely have to visit port 8000 on the IP
-address given to you by `docker-machine ip default`. (Note that this
-hassle will go away once [Docker goes native][] for OS X/Windows.)
+log information to stdout. You should be able to visit http://localhost:8000/
+directly to access the site.
 
 ### Accessing the app container
 
-You'll likely want to run `manage.py` or `make` to do other things at
+You'll likely want to run `manage.py` or `py.test` to do other things at
 some point. To do this, it's probably easiest to run:
 
 ```sh
@@ -93,12 +117,63 @@ docker-compose run app bash
 
 This will run an interactive bash session inside the main app container.
 In this container, the `/calc` directory is mapped to the root of
-the repository on your host; you can run `manage.py` or `make` from there.
+the repository on your host; you can run `manage.py` or `py.test` from there.
 
 Note that if you don't have Django installed on your host system, you
 can just run `python manage.py` directly from outside the container--the
 `manage.py` script has been modified to run itself in a Docker container
 if it detects that Django isn't installed.
+
+### Updating the containers
+
+All the project's dependencies, such as those mentioned in `requirements.txt`,
+are contained in Docker container images.  Whenever these dependencies change,
+you'll want to re-run `docker-compose build` to rebuild the containers.
+
+## Environment Variables
+
+Unlike traditional Django settings, we use environment variables
+for configuration to be compliant with [twelve-factor][] apps.
+
+You can define environment variables using your environment, or an `.env` file
+in the root directory of the repository. For more information on configuring
+environment variables on cloud.gov, see [`deploy.md`][].
+
+**Note:** When an environment variable is described as representing a
+boolean value, if the variable exists with *any* value (even the empty
+string), the boolean is true; otherwise, it's false.
+
+* `DEBUG` is a boolean value that indicates whether debugging is enabled
+  (this should always be false in production).
+
+* `SECRET_KEY` is a large random value corresponding to Django's
+  [`SECRET_KEY`][] setting. It is automatically set to a known, insecure
+  value when `DEBUG` is true.
+
+* `DATABASE_URL` is the URL for the database, as per the
+  [DJ-Database-URL schema][].
+
+* `ENABLE_SEO_INDEXING` is a boolean value that indicates whether to
+  indicate to search engines that they can index the site.
+
+* `UAA_CLIENT_ID` is your cloud.gov/Cloud Foundry UAA client ID. It
+  defaults to `calc-dev`.
+
+* `UAA_CLIENT_SECRET` is your cloud.gov/Cloud Foundry UAA client secret.
+  If this is undefined and `DEBUG` is true, then a built-in Fake UAA Provider
+  will be used to "simulate" cloud.gov login.
+
+## Staff Login
+
+Staff can log in to CALC for administrative tasks, but accounts
+for each user must be manually created either via `manage.py createsuperuser`
+or the admin UI itself.
+
+We use cloud.gov/Cloud Foundry's User Account and Authentication (UAA)
+server to authenticate users. When a user logs in via UAA, their email
+address is looked up in Django's user database; if a matching email is
+found, the user is logged in. If not, however, the user is *not* logged in,
+and will be shown an error message.
 
 ## API
 
@@ -140,7 +215,7 @@ http://localhost:8000/api/rates/?&min_experience=5&max_experience=10&q=technical
 ```
 
 Or, you can filter with a single, comma-separated range.
-For example, if you wanted results with more than five years and less 
+For example, if you wanted results with more than five years and less
 than ten years of experience:
 
 ```
@@ -216,7 +291,7 @@ http://localhost:8000/api/rates/?schedule=mobis&site=customer&business_size=s
 
 For schedules, there are 8 different values that will return results (case
 insensitive):
- 
+
  - Environmental
  - AIMS
  - Logistics
@@ -235,7 +310,13 @@ For site, there are only 3 values (also case insensitive):
 And the `small_business` parameter can be either `s` for small business, or `o`
 for other than small business.
 
+[twelve-factor]: http://12factor.net/
 [Django]: https://www.djangoproject.com/
+[18F Docker guide]: https://pages.18f.gov/dev-environment-standardization/virtualization/docker/
 [Docker]: https://www.docker.com/
 [Docker Compose]: https://docs.docker.com/compose/
-[Docker goes native]: https://blog.docker.com/2016/03/docker-for-mac-windows-beta/
+[`SECRET_KEY`]: https://docs.djangoproject.com/en/1.9/ref/settings/#secret-key
+[SASS]: http://sass-lang.com/
+[`deploy.md`]: https://github.com/18F/calc/blob/master/deploy.md
+[DJ-Database-URL schema]: https://github.com/kennethreitz/dj-database-url#url-schema
+[pytest]: https://pytest.org/latest/usage.html

@@ -10,23 +10,32 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-import sys
 import dj_database_url
+from dotenv import load_dotenv
+
+from .settings_utils import load_cups_from_vcap_services
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+
+DOTENV_PATH = os.path.join(BASE_DIR, '.env')
+
+if os.path.exists(DOTENV_PATH):
+    load_dotenv(DOTENV_PATH)
+
+load_cups_from_vcap_services('calc-env')
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = 'DEBUG' in os.environ
+
+if DEBUG:
+    os.environ.setdefault(
+        'SECRET_KEY',
+        'I am an insecure secret key intended ONLY for dev/testing.'
+    )
 
 API_HOST = os.environ.get('API_HOST', '/api/')
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'i=-6!=jo-qh3sh!z=uo_2)5wf*_@ogw9eam3e0_53hp4)cp53!'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-
-TEMPLATE_DEBUG = False
+TEMPLATE_DEBUG = DEBUG
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'hourglass/templates'),
     os.path.join(BASE_DIR, 'hourglass_site/templates'),
@@ -43,6 +52,7 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
 
     'hourglass_site',
@@ -51,23 +61,26 @@ INSTALLED_APPS = (
     'api',
     'djorm_pgfulltext',
     'rest_framework',
-
-    'django_nose',
     'corsheaders',
     'djangosecure',
+    'uaa_client',
 )
-
 
 MIDDLEWARE_CLASSES = (
     'djangosecure.middleware.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    #'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+    # 'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+)
+
+AUTHENTICATION_BACKENDS = (
+    'uaa_client.authentication.UaaBackend',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -87,9 +100,6 @@ ROOT_URLCONF = 'hourglass.urls'
 
 WSGI_APPLICATION = 'hourglass.wsgi.application'
 
-TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
-
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
 
@@ -103,7 +113,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-#django cors headers
+# django cors headers
 CORS_ORIGIN_ALLOW_ALL = True
 
 # Static files (CSS, JavaScript, Images)
@@ -113,9 +123,12 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 STATICFILES_DIRS = (
-#    os.path.join(BASE_DIR, 'static'),
+    # os.path.join(BASE_DIR, 'static'),
 )
-STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+
+if not DEBUG:
+    STATICFILES_STORAGE = ('whitenoise.storage.'
+                           'CompressedManifestStaticFilesStorage')
 
 PAGINATION = 200
 REST_FRAMEWORK = {
@@ -132,8 +145,9 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {
         'verbose': {
-            'format' : "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
-            'datefmt' : "%d/%b/%Y %H:%M:%S"
+            'format': "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] "
+                      "%(message)s",
+            'datefmt': "%d/%b/%Y %H:%M:%S"
         },
         'simple': {
             'format': '%(levelname)s %(message)s'
@@ -160,29 +174,48 @@ LOGGING = {
     },
     'loggers': {
         'django': {
-            'handlers':['console', 'file'],
+            'handlers': ['console', 'file'],
             'propagate': True,
-            'level':'INFO',
+            'level': 'INFO',
         },
         'contracts': {
             'handlers': ['console', 'contracts_file'],
             'propagate': True,
-            'level':'INFO',
+            'level': 'INFO',
         },
     },
 }
 
 DATABASES = {}
-DATABASES['default'] =  dj_database_url.config()
+DATABASES['default'] = dj_database_url.config()
 
-SECURE_SSL_REDIRECT = True
+SECURE_SSL_REDIRECT = not DEBUG
 # Amazon ELBs pass on X-Forwarded-Proto.
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
-if 'IS_RUNNING_IN_DOCKER' in os.environ:
-    from hourglass.docker_settings import *
-else:
-    try:
-        from hourglass.local_settings import *
-    except ImportError:
-        pass
+SECRET_KEY = os.environ['SECRET_KEY']
+
+ENABLE_SEO_INDEXING = 'ENABLE_SEO_INDEXING' in os.environ
+
+UAA_AUTH_URL = 'https://login.cloud.gov/oauth/authorize'
+
+UAA_TOKEN_URL = 'https://uaa.cloud.gov/oauth/token'
+
+UAA_CLIENT_ID = os.environ.get('UAA_CLIENT_ID', 'calc-dev')
+
+UAA_CLIENT_SECRET = os.environ.get('UAA_CLIENT_SECRET')
+
+LOGIN_URL = 'uaa_client:login'
+
+LOGIN_REDIRECT_URL = '/'
+
+if DEBUG:
+    INSTALLED_APPS += ('fake_uaa_provider',)
+
+if not UAA_CLIENT_SECRET:
+    if DEBUG:
+        # We'll be using the Fake UAA Provider.
+        UAA_CLIENT_SECRET = 'fake-uaa-provider-client-secret'
+        UAA_AUTH_URL = UAA_TOKEN_URL = 'fake:'
+    else:
+        raise Exception('UAA_CLIENT_SECRET must be defined in production.')

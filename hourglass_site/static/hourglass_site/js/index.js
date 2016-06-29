@@ -350,6 +350,7 @@
         maximum: .001,
         average: 0,
         count: 0,
+        proposedPrice: 0,
         results: [],
         wage_histogram: [
           {count: 0, min: 0, max: 0}
@@ -390,6 +391,9 @@
 
     var stdDevMin = data.average - data.first_standard_deviation,
         stdDevMax = data.average + data.first_standard_deviation;
+
+    if (isNaN(stdDevMin)) stdDevMin = 0;
+    if (isNaN(stdDevMax)) stdDevMax = 0;
 
     d3.select("#standard-deviation-minus-highlight")
       .text(formatDollars(stdDevMin));

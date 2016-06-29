@@ -15,6 +15,7 @@ test_contract_link
 """
 from django.conf import settings
 from django.test import LiveServerTestCase
+from django.core import management
 
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
@@ -36,7 +37,7 @@ TESTING_KEY = 'REMOTE_TESTING'
 REMOTE_TESTING = hasattr(settings, TESTING_KEY) and getattr(settings, TESTING_KEY) or {}
 TESTING_URL = os.environ.get('LOCAL_TUNNEL_URL', REMOTE_TESTING.get('url'))
 
-PHANTOMJS_TIMEOUT = 3
+PHANTOMJS_TIMEOUT = int(os.environ.get('PHANTOMJS_TIMEOUT', '3'))
 WEBDRIVER_TIMEOUT_LOAD_ATTEMPTS = 10
 
 def _get_testing_config(key, default=None):
@@ -80,7 +81,6 @@ class FunctionalTests(LiveServerTestCase):
         desired_cap['platform'] = _get_testing_config('platform', 'Windows 7')
         desired_cap['browserName'] = _get_testing_config('browser', 'internet explorer')
         desired_cap['version'] = _get_testing_config('browser_version', '9.0')
-        # this shows up in the left-hand column of Sauce tests
         desired_cap['name'] = 'CALC'
         other_caps = REMOTE_TESTING.get('capabilities')
         if other_caps:
@@ -98,6 +98,8 @@ class FunctionalTests(LiveServerTestCase):
 
     @classmethod
     def setUpClass(cls):
+        management.call_command('collectstatic', '--noinput', '--link',
+                                verbosity=0)
         cls.driver = cls.get_driver()
         cls.longMessage = True
         cls.maxDiff = None
@@ -220,7 +222,7 @@ class FunctionalTests(LiveServerTestCase):
     # Xed before me, some of them I am Xing out now because they are seemingly
     # suddenly failing and getting an empty result set back.
     # we're transitioning off the project, so I can't dig in now.
-    # I suspect there is a thread of fragility through these tests, and I have 
+    # I suspect there is a thread of fragility through these tests, and I have
     # not managed to get them working dependably in my time on the project. I think they
     # need looking at by someone very experienced in Selenium testing. 8/25/15 [TS]
     def xtest_form_submit_loading(self):

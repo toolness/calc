@@ -5,10 +5,12 @@ app:
   links:
     - db
   working_dir: /calc
-  entrypoint: python /calc/entrypoint.py
+  entrypoint: python /calc/docker_django_management.py
   environment:
-    - IS_RUNNING_IN_DOCKER=yup
+    - DDM_HOST_USER=calc_user
+    - DDM_IS_RUNNING_IN_DOCKER=yup
     - PYTHONUNBUFFERED=yup
+    - DEBUG=yup
     - DATABASE_URL=postgres://calc_user@db/calc
   command: python manage.py runserver 0.0.0.0:8000
   ports:
@@ -18,3 +20,10 @@ db:
   environment:
     - POSTGRES_DB=calc
     - POSTGRES_USER=calc_user
+sass:
+  build: .
+  volumes:
+    - .:/calc
+  working_dir: /calc/hourglass_site/static/hourglass_site
+  entrypoint: python /calc/docker_django_management.py
+  command: make watch-style
