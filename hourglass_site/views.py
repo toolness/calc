@@ -2,6 +2,7 @@ from collections import OrderedDict
 from django.shortcuts import render
 from django.contrib import messages
 from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
 import xlrd
 
 from contracts.models import Contract
@@ -135,6 +136,7 @@ def import_xls_step_2(request, xls_cats=None):
         'rows': rows
     })
 
+@login_required
 def import_xls(request):
     if request.method == 'POST':
         step = request.POST.get('step', '1')

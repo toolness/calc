@@ -110,6 +110,8 @@
                 <li><a href="https://github.com/18F/calc"><img alt="GitHub Logo" src="https://mirage-gsa-gov.s3.amazonaws.com:443/mirage_site/images/github_icon.png"> View our code on GitHub</a></li>
                 {% if not user.is_authenticated %}
                   <li><a href="{% url 'uaa_client:login' %}">Log in</a></li>
+                {% else %}
+                  <li><a href="{% url 'import_xls' %}">IT Schedule 70 Data Capture</a></li>
                 {% endif %}
                 <!-- <li><a href="/docs/">Read the API documentation</a></li> -->
               </ul>
