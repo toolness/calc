@@ -6,9 +6,9 @@ addons:
 matrix:
   fast_finish: true
 before_install:
-  - pip install codeclimate-test-reporter
+- pip install codeclimate-test-reporter
 after_success:
-  - codeclimate-test-reporter
+- codeclimate-test-reporter
 install:
 - pip install -r requirements.txt
 script:
@@ -17,9 +17,9 @@ script:
 - py.test --ignore=selenium_tests --cov
 env:
   global:
-    - PHANTOMJS_TIMEOUT=15
-    - DEBUG=yup
-    - DATABASE_URL=postgres://postgres@localhost/hourglass
+  - PHANTOMJS_TIMEOUT=15
+  - DEBUG=yup
+  - DATABASE_URL=postgres://postgres@localhost/hourglass
 notifications:
   email: false
 deploy:
@@ -27,8 +27,8 @@ deploy:
   provider: cloudfoundry
   username: deploy-hourglass
   password:
-    secure: RP8TOaPeKnG+MPAL7+2iDh5YAS2uOL+8R4Can1zsz+itgGjATkCYKvuIq2ADHDaRHaP4PQUuDBuGAA2E620Zxon5+VP/ntwJzOZvntYyC/uXUK0+YnBNu/vMlxfq+vky+GPfCNStlrqNWW7SDAYU5fJP4MvxllXt3bOsi5gOfIw=
-  api: https://api.18f.gov
+    secure: "YR1jjKUf+J0yqPpuGX4J198ZC7ibhzVEV1D+cYcX9Ti2gpBl08uo60G0stOzovH9M8E21Tv5/qkgrGy0HE4/Qc7hK8Lw68Ia6D5T8Tkt/rTlnMp2eRThRN3HXWLS0gblRiHViwUOEjpbcrJ9nH8bbAgeZlL84HMipguPsnLuv6c="
+  api: https://api.cloud.gov
   organization: oasis
   space: calc-dev
   on:
