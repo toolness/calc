@@ -8,12 +8,10 @@ from rest_framework.views import APIView
 
 from api.pagination import ContractPagination
 from api.serializers import ContractSerializer
+from api.utils import get_histogram, stdev
 from contracts.models import Contract, EDUCATION_CHOICES
 
-import numpy as np
-import sys
 import re
-
 import csv
 
 def convert_to_tsquery(query):
@@ -48,7 +46,7 @@ def get_contracts_queryset(request_params, wage_field):
         price__gte (int): price must be greater than or equal to this integer
         price__lte (int): price must be less than or equal to this integer
         sort (str): the column to sort on, defaults to wage_field
-        query_type (str): defines how the user's keyword search should work. [ match_all (default) | match_phrase | match_exact ] 
+        query_type (str): defines how the user's keyword search should work. [ match_all (default) | match_phrase | match_exact ]
         exclude: (int): comma separated list of ids to exclude from the search results
 
     Returns:
@@ -143,34 +141,12 @@ def get_contracts_queryset(request_params, wage_field):
     return contracts.order_by(*sort.split(','))
 
 
-def get_histogram(values, bins=10):
-    """
-    Get a histogram of a list of numeric values.
-
-    >>> hist = get_histogram([1, 2, 3], 3)
-    >>> len(hist)
-    3
-    >>> hist[0]
-    {'count': 1, 'max': 1.6666666666666665, 'min': 1.0}
-    >>> hist[1]
-    {'count': 1, 'max': 2.333333333333333, 'min': 1.6666666666666665}
-    >>> hist[2]
-    {'count': 1, 'max': 3.0, 'min': 2.333333333333333}
-    """
-    hist, edges = np.histogram(list(map(float, values)), bins, density=False)
-    result = []
-    for i, edge in enumerate(edges[1:]):
-        result.append({
-            'count': hist[i],
-            'min': edges[i],
-            'max': edges[i + 1]
-        })
-    return result
-
 def quantize(num, precision=2):
   if num is None:
     return None
   return Decimal(num).quantize(Decimal(10) ** -precision)
+
+
 
 class GetRates(APIView):
 
@@ -193,14 +169,13 @@ class GetRates(APIView):
                 current_rates.append(rate[wage_field])
 
         if current_rates:
-            std_dev = np.std(current_rates)
+            std_dev = stdev(current_rates)
         else:
             std_dev = None
 
         page_stats['first_standard_deviation'] = std_dev
 
         if bins and bins.isnumeric():
-            # numpy wants these to be floats, not Decimals
             values = contracts_all.values_list(wage_field, flat=True)
             page_stats['wage_histogram'] = get_histogram(values, int(bins))
 
@@ -210,7 +185,7 @@ class GetRates(APIView):
         return pagination.get_paginated_response(serializer.data)
 
     def get_wage_field(self, year):
-        wage_fields = ['current_price', 'next_year_price', 'second_year_price'] 
+        wage_fields = ['current_price', 'next_year_price', 'second_year_price']
         if year in ['1', '2']:
             return wage_fields[int(year)]
         else:
@@ -247,17 +222,17 @@ class GetRatesCSV(APIView):
         business_size_set = business_size_map.get(business_size)
         if business_size_set:
             business_size = business_size_set
-        
+
         response = HttpResponse(content_type="text/csv")
         response['Content-Disposition'] = 'attachment; filename="pricing_results.csv"'
         writer = csv.writer(response)
         writer.writerow(("Search Query", "Minimum Education Level", "Minimum Years Experience", "Worksite", "Business Size", "", "", "", "", "", "", "", "", ""))
-        writer.writerow((q, min_education, min_experience, site, business_size, "", "", "", "", "", "", "", "", "")) 
+        writer.writerow((q, min_education, min_experience, site, business_size, "", "", "", "", "", "", "", "", ""))
         writer.writerow(("Contract #", "Business Size", "Schedule", "Site", "Begin Date", "End Date", "SIN", "Vendor Name", "Labor Category", "education Level", "Minimum Years Experience", "Current Year Labor Price", "Next Year Labor Price", "Second Year Labor Price"))
 
         for c in contracts_all:
             writer.writerow((c.idv_piid, c.get_readable_business_size(), c.schedule, c.contractor_site, c.contract_start, c.contract_end, c.sin, c.vendor_name, c.labor_category, c.get_education_level_display(), c.min_years_experience, c.current_price, c.next_year_price, c.second_year_price ))
-        
+
         return response
 
 class GetAutocomplete(APIView):
