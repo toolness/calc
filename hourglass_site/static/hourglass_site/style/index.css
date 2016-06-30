@@ -2,7 +2,7 @@
 @import url(tables.css);
 @import url(vendor/no-ui.css);
 @import url(vendor/tooltipster.css);
-/*same as rgba(51,195,240,1);*/
+/*was #33C3F0, which is the same as rgba(51,195,240,1);*/
 .loading-indicator,
 .has-data {
   -webkit-transition: opacity .5s, height .5s;
@@ -19,7 +19,7 @@
   max-height: 29.4rem;
   overflow: hidden;
   overflow-y: auto;
-  border: 1px solid #e1e1e1; }
+  border: 1px solid #d6d7d9; }
 
 .autocomplete-suggestion {
   position: relative;
@@ -32,7 +32,7 @@
 
 .autocomplete-suggestion.selected {
   color: #ffffff;
-  background: #33C3F0; }
+  background: #02bfe7; }
 
 .loading .has-data {
   opacity: .2; }
@@ -53,7 +53,7 @@
   height: auto; }
 
 .filter_active {
-  border: 2px solid #ffd855 !important; }
+  border: 2px solid #f9c642 !important; }
 
 .sr-only {
   display: none; }
@@ -61,10 +61,10 @@
 input[type="text"]:focus,
 input[type="number"]:focus,
 select:focus {
-  box-shadow: 0 0 0 1px #33C3F0, 0 0 10px #33C3F0; }
+  box-shadow: 0 0 0 1px #02bfe7, 0 0 10px #02bfe7; }
 
 .filter_focus {
-  border: 2px solid #33C3F0 !important; }
+  border: 2px solid #02bfe7 !important; }
 
 main h5 {
   margin: 0 !important; }
@@ -78,7 +78,7 @@ input.price {
   margin-left: .3em; }
 
 span.dollars {
-  color: #6E6E6E; }
+  color: #5b616b; }
 
 .filter-more-info {
   float: right;
@@ -91,7 +91,7 @@ span.dollars {
   padding-bottom: .3em; }
 
 .filter-block {
-  background: #f9f9f9;
+  background: #f1f1f1;
   border-radius: 4px;
   margin-bottom: 2em;
   padding: 1rem 2rem; }
@@ -123,7 +123,7 @@ span.dollars {
 
 .dropdown dt a {
   background-color: #ffffff;
-  border: 1px solid #e1e1e1;
+  border: 1px solid #d6d7d9;
   border-radius: 4px;
   box-shadow: none;
   box-sizing: border-box;
@@ -134,8 +134,8 @@ span.dollars {
   padding: 6px 10px; }
 
 .dropdown dt a:focus {
-  border: 1px solid #33C3F0 !important;
-  box-shadow: 0 0 0 1px #33C3F0, 0 0 10px #33C3F0; }
+  border: 1px solid #02bfe7 !important;
+  box-shadow: 0 0 0 1px #02bfe7, 0 0 10px #02bfe7; }
 
 .multiSelect label:hover {
   cursor: pointer; }
@@ -201,8 +201,8 @@ input[type="checkbox"]:checked ~ label {
   position: relative; }
 
 .price-block {
-  background: #f9f9f9;
-  border: 1px solid #e1e1e1;
+  background: #f1f1f1;
+  border: 1px solid #d6d7d9;
   border-radius: 4px; }
 
 .standard-deviation-title {
@@ -211,8 +211,8 @@ input[type="checkbox"]:checked ~ label {
   padding-top: 11px; }
 
 .avg-price-block {
-  border-left: 1px solid #e1e1e1;
-  border-right: 1px solid #e1e1e1; }
+  border-left: 1px solid #d6d7d9;
+  border-right: 1px solid #d6d7d9; }
 
 .avg-price-block,
 .standard-deviation-block {
@@ -223,8 +223,8 @@ input[type="checkbox"]:checked ~ label {
   width: 32%; }
 
 .proposed-price-block {
-  background: #f9f9f9;
-  border: 1px solid #e1e1e1;
+  background: #f1f1f1;
+  border: 1px solid #d6d7d9;
   border-radius: 4px;
   padding: 1.1em 2em .5em 2em;
   margin: 0 20px 0 0;
@@ -236,7 +236,7 @@ input[type="checkbox"]:checked ~ label {
 
 #avg-price-highlight,
 .sd-highlight, .proposed-price-highlight {
-  color: #17779f;
+  color: #0071bc;
   font-weight: 400; }
 
 /* experience slider */
@@ -258,7 +258,7 @@ input[type="checkbox"]:checked ~ label {
     margin: 10px 0 0 0; } }
 .help-text {
   clear: both;
-  color: #6E6E6E;
+  color: #5b616b;
   margin-bottom: 1em; }
 
 .filter select {
@@ -350,20 +350,20 @@ td.column-idv_piid {
 td.column-min_years_experience i {
   font-style: normal;
   font-size: .75em;
-  color: #6E6E6E; }
+  color: #5b616b; }
 
 td.column-min_years_experience .years {
   font-style: italic;
-  color: #6E6E6E; }
+  color: #5b616b; }
 
 .document-icon {
-  fill: #17779f;
+  fill: #0071bc;
   height: 12px;
   margin-left: 3px;
   width: 12px; }
 
 .column-idv_piid:hover .document-icon {
-  fill: #0c4c6f; }
+  fill: #205493; }
 
 a.focus-input {
   text-decoration: none;
@@ -381,17 +381,17 @@ a.focus-input {
 
 .contract-year-block {
   background-color: #ffffff;
-  border: 1px solid #e1e1e1;
+  border: 1px solid #d6d7d9;
   border-radius: 4px;
   display: inline-block; }
 
 .contract-year-item {
-  border-right: 1px solid #e1e1e1;
+  border-right: 1px solid #d6d7d9;
   margin-bottom: 0;
   padding: 1px 8px; }
 
 .contract-year-selected {
-  background-color: #17779f;
+  background-color: #0071bc;
   color: #ffffff; }
 
 .contract-year-item:last-of-type {
@@ -404,7 +404,7 @@ a.focus-input {
   margin: 0; }
 
 #description {
-  color: #333333;
+  color: #323a45;
   font-weight: normal;
   font-size: 2rem; }
 
@@ -464,7 +464,7 @@ svg.graph {
 
 .xtooltip:hover:before {
   border: solid;
-  border-color: #333333 transparent;
+  border-color: #323a45 transparent;
   border-width: 6px 6px 0 6px;
   bottom: 20px;
   content: "";
@@ -511,7 +511,7 @@ label.radio input[type="radio"] + span {
   margin-bottom: 0; }
 
 label.checkbox :checked + span {
-  background-color: #17779f;
+  background-color: #0071bc;
   box-shadow: 0 0 0 0 #ffffff;
   position: relative; }
 
@@ -524,7 +524,7 @@ label.checkbox :checked + span:after {
   top: -5px; }
 
 label.radio :checked + span {
-  background-color: #17779f;
+  background-color: #0071bc;
   color: #ffffff;
   position: relative; }
 
@@ -564,7 +564,7 @@ input[type="radio"]:focus + .checkbox-focus {
 
 .contract-list-item {
   margin-bottom: 0;
-  border-right: 1px solid #e1e1e1; }
+  border-right: 1px solid #d6d7d9; }
 
 .contract-list-item:last-of-type {
   border: none;
@@ -649,5 +649,11 @@ th:hover.tooltips span {
  */
 .ie #results-table thead th a {
   top: -20px; }
+
+/**
+ * no-UI overrides
+ **/
+.noUi-connect {
+  background: #0071bc; }
 
 /*# sourceMappingURL=index.css.map */
