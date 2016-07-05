@@ -15,8 +15,7 @@ pip install -r requirements.txt
 ```
 
 
-Currently, CALC is a basic [Django] project. You can configure everything
-by running:
+CALC is a [Django] project. You can configure everything by running:
 
 ```sh
 cp .env.sample .env
