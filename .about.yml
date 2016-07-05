@@ -17,8 +17,12 @@ milestones:
 - 'November 2014: We begin building an alpha version of the site, known as Hourglass.'
 - 'March 2015: The name of the site changes from "Hourglass" to "CALC," which stands for "Contract Awarded Labor Category" tool.'
 - 'May 2015: We launched the public beta.'
+- 'June 2016: Work begins on the second phase of CALC, with the goal of adding price list data capture capabilities.'
 contact:
-- nicholas.brethauer@gsa.gov
+- url: mailto:alan.brouilette@gsa.gov
+  text: Alan Broulette
+- url: mailto:nicholas.brethauer@gsa.gov
+  text: Nicholas Brethauer
 stack:
 - Python
 - Django
@@ -36,19 +40,30 @@ services:
   category: CI
   url: https://travis-ci.org/18F/calc
   badge: https://travis-ci.org/18F/calc.svg
+- name: CodeClimate
+  category: Code Review
+  url: https://codeclimate.com/github/18F/calc
+  badge: https://codeclimate.com/github/18F/calc/badges/gpa.svg
+- name: QuantifiedCode
+  category: Code Review
+  url: https://www.quantifiedcode.com/app/project/2b5fdf07f0434ff7b9d0039905e55793?branch=origin%2Fdevelop
+  badge: https://www.quantifiedcode.com/api/v1/project/2b5fdf07f0434ff7b9d0039905e55793/snapshot/origin:develop:HEAD/badge.svg
+
 
 licenses:
   mirage:
     name: Public Domain (CC0)
-    url: https://creativecommons.org/publicdomain/zero/1.0/ 
+    url: https://creativecommons.org/publicdomain/zero/1.0/
 links:
 - url: https://calc.gsa.gov/
   text: CALC production instance
-- url: https:/calc-dev.18f.gov/
+- url: https:/calc-dev.apps.cloud.gov/
   text: CALC development instance
 - url: https://trello.com/b/LjXJaVbZ/hourglass
-  text: Sprint board
-  
+  text: Original project sprint board
+- url: https://trello.com/b/qiJYky5c/calc-data-capture
+  text: Data Capture project sprint board
+
 blogTag:
 - procurement
 - federal acquisitions
@@ -56,14 +71,27 @@ blogTag:
 partners:
 - General Services Administration
 team:
+- github: toolness
+- github: jseppi
+- github: hbillings
+- github: tram
+- github: abrouilette
 - github: shawnbot
+  role: alum
 - github: maya
+  role: alum
 - github: brethauer
+  role: alum
 - github: xtine
+  role: alum
 - github: kaitlin
+  role: alum
 - github: arowla
+  role: alum
 - github: jmcarp
+  role: alum
 - github: theresaanna
+  role: alum
 tasks: https://github.com/18F/calc/issues
 github:
 - 18F/calc
