@@ -14,9 +14,7 @@ To install the requirements, use:
 pip install -r requirements.txt
 ```
 
-
-Currently, CALC is a basic [Django] project. You can configure everything
-by running:
+CALC is a [Django] project. You can configure everything by running:
 
 ```sh
 cp .env.sample .env
@@ -32,6 +30,7 @@ to set up the database. After that, you can load all of the data by running:
 
 ```sh
 ./manage.py load_data
+./manage.py load_s70
 ```
 
 From there, you're just a hop, skip and a jump away from your own dev server:
