@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.org/18F/calc.svg?branch=develop)](https://travis-ci.org/18F/calc)
 [![Code Climate](https://codeclimate.com/github/18F/calc/badges/gpa.svg)](https://codeclimate.com/github/18F/calc)
 [![Test Coverage](https://codeclimate.com/github/18F/calc/badges/coverage.svg)](https://codeclimate.com/github/18F/calc/coverage)
+[![Code Issues](https://www.quantifiedcode.com/api/v1/project/68ae46ef5bd84f7db471f67ba3ca7f03/snapshot/origin:develop:HEAD/badge.svg)](https://www.quantifiedcode.com/app/project/68ae46ef5bd84f7db471f67ba3ca7f03/snapshot/origin:develop:HEAD)
 
 CALC (formerly known as "Hourglass"), which stands for Contracts Awarded Labor Category, is a tool to help contracting personnel estimate their per-hour labor costs for a contract, based on historical pricing information. The tool is live at [https://calc.gsa.gov](https://calc.gsa.gov). You can track our progress on our [trello board](https://trello.com/b/LjXJaVbZ/prices) or file an issue on this repo.
 

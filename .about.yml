@@ -46,8 +46,8 @@ services:
   badge: https://codeclimate.com/github/18F/calc/badges/gpa.svg
 - name: QuantifiedCode
   category: Code Review
-  url: https://www.quantifiedcode.com/app/project/2b5fdf07f0434ff7b9d0039905e55793?branch=origin%2Fdevelop
-  badge: https://www.quantifiedcode.com/api/v1/project/2b5fdf07f0434ff7b9d0039905e55793/snapshot/origin:develop:HEAD/badge.svg
+  url: https://www.quantifiedcode.com/app/project/68ae46ef5bd84f7db471f67ba3ca7f03/snapshot/origin:develop:HEAD
+  badge: https://www.quantifiedcode.com/api/v1/project/68ae46ef5bd84f7db471f67ba3ca7f03/snapshot/origin:develop:HEAD/badge.svg
 
 
 licenses:
