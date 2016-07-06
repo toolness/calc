@@ -27,10 +27,11 @@ deploy:
   provider: cloudfoundry
   username: deploy-hourglass
   password:
-    secure: "YR1jjKUf+J0yqPpuGX4J198ZC7ibhzVEV1D+cYcX9Ti2gpBl08uo60G0stOzovH9M8E21Tv5/qkgrGy0HE4/Qc7hK8Lw68Ia6D5T8Tkt/rTlnMp2eRThRN3HXWLS0gblRiHViwUOEjpbcrJ9nH8bbAgeZlL84HMipguPsnLuv6c="
+    secure: "dHsbCYyIb6GVhXioJvKaiNNcPfZuHcOKH8Ojci6EANC4gkxh3Xgtxg/fL/0I5twNM1NQFB7ERlzcsF/8f3FbhdXPYqRoTtgY4ej2t/v6POHHbNaaE9zDWe6z0jtGUWgnrwlsmv0urFigYxTBLgydtmps988/iEgNf+L0C2SjnvQ="
   api: https://api.cloud.gov
   organization: oasis
   space: calc-dev
+  manifest: manifests/manifest-staging.yml
   on:
     branch: develop
 sudo: required

@@ -23,4 +23,4 @@ pip-selfcheck.json
 .ruby-version
 .sass-cache/
 *credentials*.json
-*manifest*.yml
+/manifests
